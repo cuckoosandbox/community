@@ -34,6 +34,7 @@ class BrowserStealer(Signature):
             ".*\\\\History\\\\History\\.IE5\\\\index\\.dat\\Z(?ms)",
             ".*\\\\Temporary\\ Internet\\ Files\\\\Content\\.IE5\\\\index\\.dat\\Z(?ms)",
             ".*\\\\Application\\ Data\\\\Google\\\\Chrome\\\\.*\\Z(?ms)",
+            ".*\\\\Application\\ Data\\\\Opera\\\\.*\\Z(?ms)",
             ".*\\\\Application\\ Data\\\\Chromium\\\\.*\\Z(?ms)",
             ".*\\\\Application\\ Data\\\\ChromePlus\\\\.*\\Z(?ms)",
             ".*\\\\Application\\ Data\\\\Nichrome\\\\.*\\Z(?ms)",
