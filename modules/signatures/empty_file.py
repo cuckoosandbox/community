@@ -24,9 +24,9 @@ class EmptyFile(Signature):
     minimum = "0.4"
 
     def run(self, results):
-        for dropped_files in results["dropped"]:
-            if dropped_files["size"] == 0:
-                self.data.append({"dropped_files" : dropped_files})
+        for dropped_file in results["dropped"]:
+            if dropped_file["size"] == 0:
+                self.data.append({"dropped_file" : dropped_file})
                 return True
 
         return False
