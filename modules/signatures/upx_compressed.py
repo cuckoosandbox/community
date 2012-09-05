@@ -24,9 +24,10 @@ class UPXCompressed(Signature):
     minimum = "0.4"
 
     def run(self, results):
-        for pe_section in results["static"]["pe_sections"]:
-            if pe_section["name"].startswith("UPX"):
-                self.data.append({"pe_section" : pe_section})
-                return True
+        if "pe_sections" in results["static"]:
+            for pe_section in results["static"]["pe_sections"]:
+                if pe_section["name"].startswith("UPX"):
+                    self.data.append({"pe_section" : pe_section})
+                    return True
 
         return False

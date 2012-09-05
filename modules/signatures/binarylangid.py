@@ -18,7 +18,7 @@ class BuildLangID(Signature):
             {"language" : "Slovak", "code" : "0x041B"},
             {"language" : "Albanian", "code" : "0x041C"},
             {"language" : "Turkish", "code" : "0x041F"},
-            {"langauge" : "Simplified Chinese", "code" : "0x0804"},
+            {"language" : "Simplified Chinese", "code" : "0x0804"},
             {"language" : "Hebrew", "code" : "0x040d"}
         ]
 
