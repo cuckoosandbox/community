@@ -8,6 +8,7 @@ class CreatesAutorunInf(Signature):
     authors = ["Thomas Birn"]
     minimum = "0.4.1"
 
+    def run(self, results):
         for file_name in results["behavior"]["summary"]["files"]:
             if "autorun.inf" in file_name:
                 self.data.append({"file": file_name})
