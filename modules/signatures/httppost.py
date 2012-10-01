@@ -11,10 +11,10 @@ class httprequest(Signature):
     minimum = "0.4.2"
 
     def run(self, results):
-        if results["network"]:        	
-            for http in results["network"]['http']:
-                if http["method"] == "GET":
-                    self.data.append({"url" : http["uri"], "data" : http["body"]})
-                    return True
-		   
+		if results["network"]:        	
+			for http in results["network"]['http']:
+				if http["method"] == "POST":
+					self.data.append({"url" : http["uri"], "data" : http["body"]})
+					return True
+		
         return False
