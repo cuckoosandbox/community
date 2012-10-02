@@ -21,18 +21,20 @@ class DisableTaskMgr(Signature):
 
         ]
 
-	first = False
+	
         for key in results["behavior"]["summary"]["keys"]:
 	    for indicator in keys:
                 regexp = re.compile(indicator, re.IGNORECASE)
                 if regexp.match(key):
-			for process in results["behavior"]["processes"]:
-				for call in process["calls"]:				
-					for argument in call["arguments"]:
-						for value in values:
-							if value == argument['value']:
-								self.data.append({"value" : value})
-								return True
+                    print key
+                    for process in results["behavior"]["processes"]:
+                        for call in process["calls"]:
+                            if call['api'] == "RegSetValueExA":                            		
+                                for argument in call["arguments"]:
+                                    for value in values:
+                                         if value == argument['value']:
+                                            self.data.append({"key" : key})
+                                            return True
 	
 		
         
