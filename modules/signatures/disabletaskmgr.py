@@ -26,12 +26,12 @@ class DisableTaskMgr(Signature):
 	    for indicator in keys:
                 regexp = re.compile(indicator, re.IGNORECASE)
                 if regexp.match(key):
-                    	self.data.append({"key" : key})
 			for process in results["behavior"]["processes"]:
 				for call in process["calls"]:				
 					for argument in call["arguments"]:
 						for value in values:
 							if value == argument['value']:
+								self.data.append({"value" : value})
 								return True
 	
 		
