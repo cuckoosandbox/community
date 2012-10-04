@@ -2,10 +2,10 @@ import re
 
 from lib.cuckoo.common.abstracts import Signature
 
-class httprequest(Signature):
-    name = "httprequest"
-    description = "Performes a HTTP request"
-    severity = 2
+class httppost(Signature):
+    name = "httppost"
+    description = "Performes a HTTP POST"
+    severity = 3
     categories = ["generic"]
     authors = ["Thomas Birn"]
     minimum = "0.4.2"
