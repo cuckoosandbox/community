@@ -6,7 +6,7 @@ class CreatesAutorunInf(Signature):
     severity = 2
     categories = ["generic"]
     authors = ["Thomas Birn"]
-    minimum = "0.4.1"
+    minimum = "0.4.2"
 
     def run(self, results):
         for file_name in results["behavior"]["summary"]["files"]:
