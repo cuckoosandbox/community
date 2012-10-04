@@ -11,7 +11,7 @@ class DisableTaskRegedit(Signature):
     minimum = "0.4.2"
 
     def run(self, results):
-    indicator = ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System"
+        indicator = ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System"
 
 
 	value = "disableregistrytools"
@@ -25,5 +25,5 @@ class DisableTaskRegedit(Signature):
 					    for argument in call["arguments"]:
 						    if value == argument['value']:
 						        self.data.append({"value" : value})
-							    return True
+							return True
         return False
