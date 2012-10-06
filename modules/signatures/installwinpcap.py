@@ -24,15 +24,13 @@ class InstallsWinpcap(Signature):
     categories = ["generic"]
     authors = ["Thomas Birn"]
     minimum = "0.4.2"
-	
-
 
     def run(self, results):
         files = [
-                ".*\\\\packet.dll",
-                ".*\\\\npf.sys",
-		".*\\\\wpcap.dll"	
-	]
+            ".*\\\\packet.dll",
+            ".*\\\\npf.sys",
+		    ".*\\\\wpcap.dll"
+        ]
         
         for file_name in results["behavior"]["summary"]["files"]:
             for indicator in files:
