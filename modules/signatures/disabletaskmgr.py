@@ -19,7 +19,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class DisableTaskMgr(Signature):
     name = "disabletaskmgr"
-    description = "Disables Task Manager"
+    description = "Disables Windows' Task Manager"
     severity = 3
     categories = ["generic"]
     authors = ["Thomas Birn"]
@@ -28,17 +28,20 @@ class DisableTaskMgr(Signature):
     def run(self, results):
         indicator = ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System"
 
+        opened = False
         for key in results["behavior"]["summary"]["keys"]:
             regexp = re.compile(indicator, re.IGNORECASE)
-            if regexp.match(key):                    	
-                for process in results["behavior"]["processes"]:
+            if regexp.match(key):
+                opened = True
 
-                    for call in process["calls"]:
-                        if call["category"] != "registry":
-                            continue
+        if opened:
+            for process in results["behavior"]["processes"]:
+                for call in process["calls"]:
+                    if call["category"] != "registry":
+                        continue
 
-                        for argument in call["arguments"]:
-                            if argument["value"] == "DisableTaskMgr":
-                                return True
+                    for argument in call["arguments"]:
+                        if argument["value"] == "DisableTaskMgr":
+                            return True
 
         return False
