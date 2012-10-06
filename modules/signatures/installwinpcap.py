@@ -29,7 +29,7 @@ class InstallsWinpcap(Signature):
         files = [
             ".*\\\\packet.dll",
             ".*\\\\npf.sys",
-		    ".*\\\\wpcap.dll"
+            ".*\\\\wpcap.dll"
         ]
         
         for file_name in results["behavior"]["summary"]["files"]:
