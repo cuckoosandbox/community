@@ -23,9 +23,16 @@ class SpyEyeMutexes(Signature):
     authors = ["nex"]
 
     def run(self, results):
+        indicators = [
+            "zXeRY3a_PtW",
+            "SPYNET",
+            "__CLEANSWEEP__"
+        ]
+
         for mutex in results["behavior"]["summary"]["mutexes"]:
-            if mutex.startswith("zXeRY3a_PtW") or mutex.startswith("SPYNET"):
-                self.data.append({"mutex" : mutex})
-                return True
+            for indicator in indicators:
+                if indicator in mutex:
+                    self.data.append({"mutex" : mutex})
+                    return True
 
         return False
