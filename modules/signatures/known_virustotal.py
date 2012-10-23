@@ -9,7 +9,8 @@ class KnownVirustotal(Signature):
 
     def run(self, results):
         if "virustotal" in results:
-            if results["virustotal"]["positives"] > 0:
-                return True
+            if "positives" in results["virustotal"]:
+                if results["virustotal"]["positives"] > 0:
+                    return True
 
         return False
