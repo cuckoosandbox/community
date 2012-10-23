@@ -15,35 +15,25 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class FTPStealer(Signature):
-    name = "ftpstealer"
-    description = "Harvests credentials from local FTP client softwares"
+class AntiDBGWindows(Signature):
+    name = "antidbg_windows"
+    description = "Checks for the presence of known windows from debuggers and forensic tools"
     severity = 3
-    categories = ["infostealer", "ftp"]
+    categories = ["anti-debug"]
     authors = ["nex"]
     minimum = "0.4.1"
 
     def run(self, results):
         indicators = [
-            "CuteFTP\\sm.dat",
-            "FlashFXP\\3\\Sites.dat",
-            "FlashFXP\\4\\Sites.dat",
-            "FileZilla\\sitemanager.xml",
-            "FileZilla\\recentservers.xml",
-            "VanDyke\\Config\\Sessions",
-            "FTP Explorer"
-            "SmartFTP",
-            "TurboFTP",
-            "FTPRush",
-            "LeapFTP",
-            "FTPGetter",
-            "ALFTP"
+            "OLLYDBG",
+            "WinDbgFrameClass"
         ]
 
-        for file_name in results["behavior"]["summary"]["files"]:
-            for indicator in indicators:
-                if indicator in file_name:
-                    self.data.append({"file_name" : file_name})
-                    return True
+        for process in results["behavior"]["processes"]:
+            for call in process["calls"]:
+                for argument in call["arguments"]:
+                    for indicator in indicators:
+                        if argument["value"] == indicator:
+                            return True
 
         return False

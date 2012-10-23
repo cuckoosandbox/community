@@ -16,17 +16,17 @@
 from lib.cuckoo.common.abstracts import Signature
 
 class CreatesAutorunInf(Signature):
-    name = "createsautoruninf"
+    name = "spreading_autoruninf"
     description = "Creates an autorun.inf file"
     severity = 2
-    categories = ["generic"]
+    categories = ["spreading"]
     authors = ["Thomas Birn"]
     minimum = "0.4.2"
 
     def run(self, results):
         for file_name in results["behavior"]["summary"]["files"]:
-            if "autorun.inf" in file_name:
-                self.data.append({"file": file_name})
+            if file_name.endswith("autorun.inf"):
+                self.data.append({"file_name": file_name})
                 return True
 
         return False

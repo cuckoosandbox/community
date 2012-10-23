@@ -17,31 +17,27 @@ import re
 
 from lib.cuckoo.common.abstracts import Signature
 
-class DisableRegedit(Signature):
-    name = "disableregedit"
-    description = "Disables Windows' registry editor"
+class InstallsWinpcap(Signature):
+    name = "sniffer_winpcap"
+    description = "Installs WinPCAP"
     severity = 3
-    categories = ["generic"]
+    categories = ["sniffer"]
     authors = ["Thomas Birn"]
     minimum = "0.4.2"
 
     def run(self, results):
-        indicator = ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System"
+        indicators = [
+            ".*\\\\packet.dll",
+            ".*\\\\npf.sys",
+            ".*\\\\wpcap.dll"
+        ]
 
-        opened = False
-        for key in results["behavior"]["summary"]["keys"]:
-            regexp = re.compile(indicator, re.IGNORECASE)
-            if regexp.match(key):
-                opened = True
-
-        if opened:
-            for process in results["behavior"]["processes"]:
-                for call in process["calls"]:
-                    if call["category"] != "registry":
-                        continue
-
-                    for argument in call["arguments"]:
-                        if argument["value"] == "DisableRegistryTools":
-                            return True
+        regexps = [re.compile(indicator) for indicator in indicators]
+        
+        for file_name in results["behavior"]["summary"]["files"]:
+            for regexp in regexps:
+                if regexp.match(file_name):
+                    self.data.append({"file_name" : file_name})
+                    return True
 
         return False

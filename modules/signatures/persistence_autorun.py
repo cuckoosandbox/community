@@ -20,15 +20,15 @@ import re
 from lib.cuckoo.common.abstracts import Signature
 
 class Autorun(Signature):
-    name = "autorun"
+    name = "persistence_autorun"
     description = "Installs itself for autorun at Windows startup"
     severity = 3
-    categories = ["generic"]
+    categories = ["persistence"]
     authors = ["Michael Boman"]
     minimum = "0.4.1"
 
     def run(self, results):
-        keys = [
+        indicators = [
             ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run",
             ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnce",
             ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunServices",
@@ -39,24 +39,26 @@ class Autorun(Signature):
             ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\"
         ]
 
-        files = [
+        regexps = [re.compile(indicator) for indicator in indicators]
+
+        for key in results["behavior"]["summary"]["keys"]:
+            for regexp in regexps:
+                if regexp.match(key):
+                    self.data.append({"key" : key})
+                    return True
+
+        indicators = [
             ".*\\\\win.ini",
             ".*\\\\system.ini",
             ".*\\\\Start Menu\\\\Programs\\\\Startup"
         ]
 
-        for key in results["behavior"]["summary"]["keys"]:
-            for indicator in keys:
-                regexp = re.compile(indicator, re.IGNORECASE)
-                if regexp.match(key):
-                    self.data.append({"key" : key})
-                    return True
+        regexps = [re.compile(indicator) for indicator in indicators]
 
         for file_name in results["behavior"]["summary"]["files"]:
-            for indicator in files:
-                regexp = re.compile(indicator, re.IGNORECASE)
+            for regexp in regexps:
                 if regexp.match(file_name):
-                    self.data.append({"file" : file_name})
+                    self.data.append({"file_name" : file_name})
                     return True
 
         return False

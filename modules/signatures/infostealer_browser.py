@@ -18,10 +18,10 @@ import re
 from lib.cuckoo.common.abstracts import Signature
 
 class BrowserStealer(Signature):
-    name = "browserstealer"
+    name = "infostealer_browser"
     description = "Steals private information from local Internet browsers"
     severity = 3
-    categories = ["infostealer", "http"]
+    categories = ["infostealer"]
     authors = ["nex"]
     minimum = "0.4.1"
 
@@ -43,9 +43,10 @@ class BrowserStealer(Signature):
 
         ]
 
+        regexps = [re.compile(indicator) for indicator in indicators]
+
         for file_name in results["behavior"]["summary"]["files"]:
-            for indicator in indicators:
-                regexp = re.compile(indicator)
+            for regexp in regexps:
                 if regexp.match(file_name):
                     self.data.append({"file_name" : file_name})
                     return True

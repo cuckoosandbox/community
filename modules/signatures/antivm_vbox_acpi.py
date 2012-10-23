@@ -16,7 +16,7 @@
 from lib.cuckoo.common.abstracts import Signature
 
 class VBoxDetectACPI(Signature):
-    name = "vboxdetect_acpi"
+    name = "antivm_vbox_acpi"
     description = "Detects VirtualBox using ACPI tricks"
     severity = 3
     categories = ["anti-vm"]

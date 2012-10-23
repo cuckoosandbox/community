@@ -1,4 +1,4 @@
-# Copyright (C) 2012 Michael Boman (@mboman)
+# Copyright (C) 2012 Claudio "nex" Guarnieri (@botherder)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,18 +15,18 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class EmptyFile(Signature):
-    name = "empty_file"
-    description = "Creates a empty file"
-    severity = 2
-    categories = ["generic"]
-    authors = ["Michael Boman"]
-    minimum = "0.4"
+class DirtJumper(Signature):
+    name = "bot_dirtjumper"
+    description = "Recognized to be a DirtJumper bot"
+    severity = 3
+    categories = ["bot", "ddos"]
+    authors = ["nex"]
 
     def run(self, results):
-        for dropped_file in results["dropped"]:
-            if dropped_file["size"] == 0:
-                self.data.append({"dropped_file" : dropped_file})
-                return True
+        if results["network"]:
+            for http in results["network"]["http"]:
+                if http["method"] == "POST" and http["body"].startswith("k="):
+                    self.data.append({"url" : http["uri"], "data" : http["body"]})
+                    return True
 
         return False

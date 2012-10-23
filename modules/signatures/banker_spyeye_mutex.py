@@ -1,4 +1,4 @@
-# Copyright (C) 2012 Michael Boman (@mboman)
+# Copyright (C) 2012 Claudio "nex" Guarnieri (@botherder)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,19 +15,24 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class UPXCompressed(Signature):
-    name = "upx_compressed"
-    description = "The executable is compressed using UPX"
-    severity = 2
-    categories = ["packers"]
-    authors = ["Michael Boman"]
-    minimum = "0.4"
+class SpyEyeMutexes(Signature):
+    name = "banker_spyeye_mutexes"
+    description = "Creates known SpyEye mutexes"
+    severity = 3
+    categories = ["banker"]
+    authors = ["nex"]
 
     def run(self, results):
-        if "pe_sections" in results["static"]:
-            for pe_section in results["static"]["pe_sections"]:
-                if pe_section["name"].startswith("UPX"):
-                    self.data.append({"pe_section" : pe_section})
+        indicators = [
+            "zXeRY3a_PtW",
+            "SPYNET",
+            "__CLEANSWEEP__"
+        ]
+
+        for mutex in results["behavior"]["summary"]["mutexes"]:
+            for indicator in indicators:
+                if indicator in mutex:
+                    self.data.append({"mutex" : mutex})
                     return True
 
         return False
