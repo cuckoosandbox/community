@@ -33,7 +33,7 @@ class Flame(Signature):
                 return True
 
         for file_name in results["behavior"]["summary"]["files"]:
-            if "\\Microsoft Shared\\MSSecurityMgr\\" in file_name or file_name.endsiwth("Ef_trace.log"):
+            if "\\Microsoft Shared\\MSSecurityMgr\\" in file_name or file_name.endswith("Ef_trace.log"):
                 self.data.append({"file": file_name})
                 return True
 
