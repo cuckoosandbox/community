@@ -19,22 +19,23 @@ import re
 
 from lib.cuckoo.common.abstracts import Signature
 
-class Firewall(Signature):
-    name = "firewall"
-    description = "Change Windows Firewall settings: This executable changes some settings of windows firewall"
+class BypassFirewall(Signature):
+    name = "bypass_firewall"
+    description = "Operates on local firewall's policies and settings"
     severity = 3
-    categories = ["generic"]
+    categories = ["bypass"]
     authors = ["Anderson Tamborim"]
     minimum = "0.4.1"
 
     def run(self, results):
-        keys = [
-            ".*\\\\SYSTEM\\\\CurrentControlSet\\\\Services\\\\SharedAccess\\\\Parameters\\\\*"
+        indicators = [
+            ".*\\\\SYSTEM\\\\CurrentControlSet\\\\Services\\\\SharedAccess\\\\Parameters\\\\FirewallPolicy\\\\*"
         ]
 
+        regexps = [re.compile(indicator) for indicator in indicators]
+
         for key in results["behavior"]["summary"]["keys"]:
-            for indicator in keys:
-                regexp = re.compile(indicator, re.IGNORECASE)
+            for regexp in regexps:
                 if regexp.match(key):
                     self.data.append({"key" : key})
                     return True
