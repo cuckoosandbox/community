@@ -1,4 +1,4 @@
-# Copyright (C) 2012 Thomas "stacks" Birn (@stacksth)
+# Copyright (C) 2012 Claudio "nex" Guarnieri (@botherder)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,18 +15,25 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class CreatesAutorunInf(Signature):
-    name = "createsautoruninf"
-    description = "Creates an autorun.inf file"
-    severity = 2
-    categories = ["generic"]
-    authors = ["Thomas Birn"]
-    minimum = "0.4.2"
+class AntiDBGWindows(Signature):
+    name = "antidbg_windows"
+    description = "Checks for the presence of known windows from debuggers and forensic tools"
+    severity = 3
+    categories = ["anti-debug"]
+    authors = ["nex"]
+    minimum = "0.4.1"
 
     def run(self, results):
-        for file_name in results["behavior"]["summary"]["files"]:
-            if "autorun.inf" in file_name:
-                self.data.append({"file": file_name})
-                return True
+        indicators = [
+            "OLLYDBG",
+            "WinDbgFrameClass"
+        ]
+
+        for process in results["behavior"]["processes"]:
+            for call in process["calls"]:
+                for argument in call["arguments"]:
+                    for indicator in indicators:
+                        if argument["value"] == indicator:
+                            return True
 
         return False

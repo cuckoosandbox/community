@@ -1,4 +1,4 @@
-# Copyright (C) 2012 Claudio "nex" Guarnieri (@botherder)
+# Copyright (C) 2012 Michael Boman (@mboman)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,18 +15,17 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class DirtJumper(Signature):
-    name = "dirtjumper"
-    description = "Recognized to be a DirtJumper bot"
+class KnownVirustotal(Signature):
+    name = "antivirus_virustotal"
+    description = "File has been identified by at least one AntiVirus on VirusTotal as malicious"
     severity = 3
-    categories = ["malware", "ddos"]
-    authors = ["nex"]
+    categories = ["antivirus"]
+    authors = ["Michael Boman"]
 
     def run(self, results):
-        if results["network"]:
-            for http in results["network"]["http"]:
-                if http["method"] == "POST" and http["body"].startswith("k="):
-                    self.data.append({"url" : http["uri"], "data" : http["body"]})
+        if "virustotal" in results:
+            if "positives" in results["virustotal"]:
+                if results["virustotal"]["positives"] > 0:
                     return True
 
         return False

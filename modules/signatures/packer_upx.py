@@ -1,4 +1,4 @@
-# Copyright (C) 2012 Thomas "stacks" Birn (@stacksth)
+# Copyright (C) 2012 Michael Boman (@mboman)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,30 +13,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
-
 from lib.cuckoo.common.abstracts import Signature
 
-class InstallsWinpcap(Signature):
-    name = "installswinpcap"
-    description = "Installs WinPCAP (Network Sniffer)"
-    severity = 3
-    categories = ["generic"]
-    authors = ["Thomas Birn"]
-    minimum = "0.4.2"
+class UPXCompressed(Signature):
+    name = "packer_upx"
+    description = "The executable is compressed using UPX"
+    severity = 2
+    categories = ["packer"]
+    authors = ["Michael Boman"]
+    minimum = "0.4"
 
     def run(self, results):
-        files = [
-            ".*\\\\packet.dll",
-            ".*\\\\npf.sys",
-            ".*\\\\wpcap.dll"
-        ]
-        
-        for file_name in results["behavior"]["summary"]["files"]:
-            for indicator in files:
-                regexp = re.compile(indicator, re.IGNORECASE)
-                if regexp.match(file_name):
-                    self.data.append({"file" : file_name})
+        if "pe_sections" in results["static"]:
+            for pe_section in results["static"]["pe_sections"]:
+                if pe_section["name"].startswith("UPX"):
+                    self.data.append({"pe_section" : pe_section})
                     return True
 
         return False

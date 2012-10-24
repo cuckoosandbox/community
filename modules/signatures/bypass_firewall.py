@@ -1,4 +1,4 @@
-# Copyright (C) 2012 Claudio "nex" Guarnieri (@botherder)
+# Copyright (C) 2012 Anderson Tamborim (@y2h4ck)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,26 +13,31 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Based on information from http://antivirus.about.com/od/windowsbasics/tp/autostartkeys.htm
+
+import re
+
 from lib.cuckoo.common.abstracts import Signature
 
-class SpyEyeMutexes(Signature):
-    name = "spyeye_mutexes"
-    description = "Creates known SpyEye mutexes"
+class BypassFirewall(Signature):
+    name = "bypass_firewall"
+    description = "Operates on local firewall's policies and settings"
     severity = 3
-    categories = ["malware", "banker"]
-    authors = ["nex"]
+    categories = ["bypass"]
+    authors = ["Anderson Tamborim"]
+    minimum = "0.4.1"
 
     def run(self, results):
         indicators = [
-            "zXeRY3a_PtW",
-            "SPYNET",
-            "__CLEANSWEEP__"
+            ".*\\\\SYSTEM\\\\CurrentControlSet\\\\Services\\\\SharedAccess\\\\Parameters\\\\FirewallPolicy\\\\*"
         ]
 
-        for mutex in results["behavior"]["summary"]["mutexes"]:
-            for indicator in indicators:
-                if indicator in mutex:
-                    self.data.append({"mutex" : mutex})
+        regexps = [re.compile(indicator) for indicator in indicators]
+
+        for key in results["behavior"]["summary"]["keys"]:
+            for regexp in regexps:
+                if regexp.match(key):
+                    self.data.append({"key" : key})
                     return True
 
         return False

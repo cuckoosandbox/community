@@ -15,35 +15,26 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class FTPStealer(Signature):
-    name = "ftpstealer"
-    description = "Harvests credentials from local FTP client softwares"
+class Flame(Signature):
+    name = "targeted_flame"
+    description = "Shows some indicators associated with the Flame malware"
     severity = 3
-    categories = ["infostealer", "ftp"]
+    references = ["http://www.crysys.hu/skywiper/skywiper.pdf",
+                  "http://www.securelist.com/en/blog/208193522/The_Flame_Questions_and_Answers",
+                  "http://www.certcc.ir/index.php?name=news&file=article&sid=1894"]
+    categories = ["targeted"]
     authors = ["nex"]
     minimum = "0.4.1"
 
     def run(self, results):
-        indicators = [
-            "CuteFTP\\sm.dat",
-            "FlashFXP\\3\\Sites.dat",
-            "FlashFXP\\4\\Sites.dat",
-            "FileZilla\\sitemanager.xml",
-            "FileZilla\\recentservers.xml",
-            "VanDyke\\Config\\Sessions",
-            "FTP Explorer"
-            "SmartFTP",
-            "TurboFTP",
-            "FTPRush",
-            "LeapFTP",
-            "FTPGetter",
-            "ALFTP"
-        ]
+        for mutex in results["behavior"]["summary"]["mutexes"]:
+            if mutex.startswith("__fajb") or mutex.startswith("DVAAccessGuard") or "mssecuritymgr" in mutex:
+                self.data.append({"mutex" : mutex})
+                return True
 
         for file_name in results["behavior"]["summary"]["files"]:
-            for indicator in indicators:
-                if indicator in file_name:
-                    self.data.append({"file_name" : file_name})
-                    return True
+            if "\\Microsoft Shared\\MSSecurityMgr\\" in file_name or file_name.endswith("Ef_trace.log"):
+                self.data.append({"file": file_name})
+                return True
 
         return False

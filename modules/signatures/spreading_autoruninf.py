@@ -1,4 +1,4 @@
-# Copyright (C) 2012 Claudio "nex" Guarnieri (@botherder)
+# Copyright (C) 2012 Thomas "stacks" Birn (@stacksth)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,31 +15,18 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class AntiDBGDevices(Signature):
-    name = "antidbgdevices"
-    description = "Checks for the presence of known devices from debuggers and forensic tools"
-    severity = 3
-    categories = ["anti-debug"]
-    authors = ["nex"]
-    minimum = "0.4.1"
+class CreatesAutorunInf(Signature):
+    name = "spreading_autoruninf"
+    description = "Creates an autorun.inf file"
+    severity = 2
+    categories = ["spreading"]
+    authors = ["Thomas Birn"]
+    minimum = "0.4.2"
 
     def run(self, results):
-        indicators = [
-            "\\\\.\\SICE",
-            "\\\\.\\SIWVID",
-            "\\\\.\\NTICE",
-            "\\\\.\\REGVXG",
-            "\\\\.\\FILEVXG",
-            "\\\\.\\REGSYS",
-            "\\\\.\\FILEM",
-            "\\\\.\\TRW",
-            "\\\\.\\ICEXT"
-        ]
-
         for file_name in results["behavior"]["summary"]["files"]:
-            for indicator in indicators:
-                if file_name.upper() == indicator:
-                    self.data.append({"file" : file_name})
-                    return True
+            if file_name.endswith("autorun.inf"):
+                self.data.append({"file_name": file_name})
+                return True
 
         return False

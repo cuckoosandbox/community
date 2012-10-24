@@ -18,19 +18,19 @@ import re
 from lib.cuckoo.common.abstracts import Signature
 
 class DisableTaskMgr(Signature):
-    name = "disabletaskmgr"
+    name = "locker_taskmgr"
     description = "Disables Windows' Task Manager"
     severity = 3
-    categories = ["generic"]
+    categories = ["locker"]
     authors = ["Thomas Birn"]
     minimum = "0.4.2"
 
     def run(self, results):
         indicator = ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System"
+        regexp = re.compile(indicator, re.IGNORECASE)
 
         opened = False
         for key in results["behavior"]["summary"]["keys"]:
-            regexp = re.compile(indicator, re.IGNORECASE)
             if regexp.match(key):
                 opened = True
 
