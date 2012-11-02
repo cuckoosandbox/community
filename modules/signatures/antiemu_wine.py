@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class WineDetect(Signature):
     name = "antiemu_wine"
-    description = "Detects the presence of Wine emulatior"
+    description = "Detects the presence of Wine emulator"
     severity = 3
     categories = ["anti-emulation"]
     authors = ["nex"]
