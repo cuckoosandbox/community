@@ -20,6 +20,7 @@ class SpyEyeMutexes(Signature):
     description = "Creates known SpyEye mutexes"
     severity = 3
     categories = ["banker"]
+    families = ["spyeye"]
     authors = ["nex"]
 
     def run(self, results):

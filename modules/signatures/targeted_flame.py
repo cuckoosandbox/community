@@ -23,6 +23,7 @@ class Flame(Signature):
                   "http://www.securelist.com/en/blog/208193522/The_Flame_Questions_and_Answers",
                   "http://www.certcc.ir/index.php?name=news&file=article&sid=1894"]
     categories = ["targeted"]
+    families = ["flame", "skywiper"]
     authors = ["nex"]
     minimum = "0.4.1"
 

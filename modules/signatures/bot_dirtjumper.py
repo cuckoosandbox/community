@@ -20,6 +20,7 @@ class DirtJumper(Signature):
     description = "Recognized to be a DirtJumper bot"
     severity = 3
     categories = ["bot", "ddos"]
+    families = ["dirtjumper"]
     authors = ["nex"]
 
     def run(self, results):
