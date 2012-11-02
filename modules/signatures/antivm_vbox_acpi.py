@@ -40,8 +40,11 @@ class VBoxDetectACPI(Signature):
                         # Check if the subkey opened is the correct one.
                         elif argument["name"] == "SubKey" and argument["value"][:14].upper() == "HARDWARE\\ACPI\\":
                             # Since it could appear under different paths, check for all of them.
-                            if argument["value"][14:] in ["DSDT", "FADT", "RSDT"]:
-                                args_matched += 1
+                            if argument["value"][14:18] in ["DSDT", "FADT", "RSDT"]:
+                                if argument["value"][18:] == "\\VBOX__":
+                                    return True
+                                else:
+                                    args_matched += 1
                         # Store the generated handle.
                         elif argument["name"] == "Handle":
                             handle = argument["value"]
