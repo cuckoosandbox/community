@@ -15,23 +15,18 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class RuskillMutexes(Signature):
-    name = "ircbot_ruskill_mutex"
+class Ruskill(Signature):
+    name = "bot_russkill"
     description = "Creates known Ruskill mutexes"
     severity = 3
     alert = True
-    categories = ["ircbot"]
+    categories = ["bot", "ddos"]
     authors = ["JoseMi Holguin"]
 
     def run(self, results):
-        indicators = [
-            "FvLQ49IlzIyLjj6m"
-        ]
-
         for mutex in results["behavior"]["summary"]["mutexes"]:
-            for indicator in indicators:
-                if indicator in mutex:
-                    self.data.append({"mutex" : mutex})
-                    return True
+            if mutex == "FvLQ49IlzIyLjj6m":
+                self.data.append({"mutex" : mutex})
+                return True
 
         return False
