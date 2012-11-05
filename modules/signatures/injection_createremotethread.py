@@ -25,11 +25,12 @@ class InjectionCRT(Signature):
     def run(self, results):
         for process in results["behavior"]["processes"]:
             sequence = 0
+            process_handle = 0
             for call in process["calls"]:
                 if call["api"]  == "OpenProcess" and sequence == 0:
                     for argument in call["arguments"]:
                         if argument["name"] == "ProcessId":
-                            if argument["value"]) != process["process_id"]:
+                            if argument["value"] != process["process_id"]:
                                 sequence = 1
                                 process_handle = call["return"]
                 elif call["api"] == "VirtualAllocEx" and sequence == 1:
