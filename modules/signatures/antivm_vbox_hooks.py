@@ -15,18 +15,21 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class VBoxDetectHook(Signature):
-    name = "vboxdetect_hook"
-    description = "VirtualBox detection through module hooks"
+class VBoxDetectLibs(Signature):
+    name = "antivm_vbox_libs"
+    description = "Detects VirtualBox through the presence of a library"
     severity = 3
     categories = ["anti-vm"]
     authors = ["Anderson Tamborim"]
-    minimum = "0.4.1"
+    minimum = "0.4.2"
 
     def run(self, results):
         for process in results["behavior"]["processes"]:
             for call in process["calls"]:
-                for argument in call["arguments"]:
-                    if argument["name"] == "FileName" and argument["value"] == "VBoxHook.dll":
-                        return True
-            return False
+                if call["api"] == "LdrLoadDll":
+                    for argument in call["arguments"]:
+                        if (argument["name"] == "FileName" and 
+                            "VBoxHook.dll" in argument["value"]):
+                            return True
+
+        return False
