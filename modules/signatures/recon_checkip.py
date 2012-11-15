@@ -21,6 +21,7 @@ class CheckIP(Signature):
     severity = 2
     categories = ["recon"]
     authors = ["nex"]
+    maximum = "0.4.2"
 
     def run(self, results):
         indicators = [
