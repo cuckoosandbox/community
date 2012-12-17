@@ -22,6 +22,7 @@ class Tor(Signature):
     categories = ["network", "anonimity", "tor"]
     authors = ["nex"]
     minimum = "0.4.2"
+    maximum = "0.4.2"
 
     def run(self, results):
         indicators = [
