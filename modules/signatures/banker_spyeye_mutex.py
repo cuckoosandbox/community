@@ -22,6 +22,7 @@ class SpyEyeMutexes(Signature):
     categories = ["banker"]
     families = ["spyeye"]
     authors = ["nex"]
+    maximum = "0.4.2"
 
     def run(self, results):
         indicators = [

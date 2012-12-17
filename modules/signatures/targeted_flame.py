@@ -26,6 +26,7 @@ class Flame(Signature):
     families = ["flame", "skywiper"]
     authors = ["nex"]
     minimum = "0.4.1"
+    maximum = "0.4.2"
 
     def run(self, results):
         for mutex in results["behavior"]["summary"]["mutexes"]:

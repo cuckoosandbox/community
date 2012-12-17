@@ -21,6 +21,7 @@ class BuildLangID(Signature):
     severity = 2
     authors = ["Benjamin K.", "Kevin R.", "nex"]
     categories = ["origin"]
+    maximum = "0.4.2"
 
     def run(self, results):
         languages = [

@@ -22,6 +22,7 @@ class Ruskill(Signature):
     alert = True
     categories = ["bot", "ddos"]
     authors = ["JoseMi Holguin"]
+    maximum = "0.4.2"
 
     def run(self, results):
         for mutex in results["behavior"]["summary"]["mutexes"]:

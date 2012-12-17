@@ -22,6 +22,7 @@ class AntiVMDiskIdentifier(Signature):
     categories = ["anti-vm"]
     authors = ["nex"]
     minimum = "0.4.1"
+    maximum = "0.4.2"
 
     def run(self, results):
         indicator_registry = "0x80000002"

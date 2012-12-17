@@ -26,6 +26,7 @@ class Autorun(Signature):
     categories = ["persistence"]
     authors = ["Michael Boman"]
     minimum = "0.4.1"
+    maximum = "0.4.2"
 
     def run(self, results):
         indicators = [

@@ -24,6 +24,7 @@ class InstallsWinpcap(Signature):
     categories = ["sniffer"]
     authors = ["Thomas Birn"]
     minimum = "0.4.2"
+    maximum = "0.4.2"
 
     def run(self, results):
         indicators = [

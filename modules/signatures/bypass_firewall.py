@@ -26,6 +26,7 @@ class BypassFirewall(Signature):
     categories = ["bypass"]
     authors = ["Anderson Tamborim"]
     minimum = "0.4.1"
+    maximum = "0.4.2"
 
     def run(self, results):
         indicators = [

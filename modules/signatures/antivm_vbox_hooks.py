@@ -22,6 +22,7 @@ class VBoxDetectLibs(Signature):
     categories = ["anti-vm"]
     authors = ["Anderson Tamborim"]
     minimum = "0.4.2"
+    maximum = "0.4.2"
 
     def run(self, results):
         for process in results["behavior"]["processes"]:

@@ -21,6 +21,7 @@ class WineDetect(Signature):
     severity = 3
     categories = ["anti-emulation"]
     authors = ["nex"]
+    maximum = "0.4.2"
 
     def run(self, results):
         for key in results["behavior"]["summary"]["keys"]:

@@ -24,6 +24,7 @@ class DisableTaskMgr(Signature):
     categories = ["locker"]
     authors = ["Thomas Birn"]
     minimum = "0.4.2"
+    maximum = "0.4.2"
 
     def run(self, results):
         indicator = ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System"

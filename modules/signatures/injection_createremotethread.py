@@ -21,6 +21,7 @@ class InjectionCRT(Signature):
     severity = 2
     categories = ["injection"]
     authors = ["JoseMi Holguin"]
+    maximum = "0.4.2"
 
     def run(self, results):
         for process in results["behavior"]["processes"]:

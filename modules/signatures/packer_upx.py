@@ -22,6 +22,7 @@ class UPXCompressed(Signature):
     categories = ["packer"]
     authors = ["Michael Boman"]
     minimum = "0.4"
+    maximum = "0.4.2"
 
     def run(self, results):
         if "pe_sections" in results["static"]:

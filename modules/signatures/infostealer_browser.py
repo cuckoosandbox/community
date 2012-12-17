@@ -24,6 +24,7 @@ class BrowserStealer(Signature):
     categories = ["infostealer"]
     authors = ["nex"]
     minimum = "0.4.1"
+    maximum = "0.4.2"
 
     def run(self, results):
         indicators = [

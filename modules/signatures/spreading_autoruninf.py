@@ -22,6 +22,7 @@ class CreatesAutorunInf(Signature):
     categories = ["spreading"]
     authors = ["Thomas Birn"]
     minimum = "0.4.2"
+    maximum = "0.4.2"
 
     def run(self, results):
         for file_name in results["behavior"]["summary"]["files"]:

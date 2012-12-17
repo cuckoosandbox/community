@@ -22,6 +22,7 @@ class DirtJumper(Signature):
     categories = ["bot", "ddos"]
     families = ["dirtjumper"]
     authors = ["nex"]
+    maximum = "0.4.2"
 
     def run(self, results):
         if results["network"]:
