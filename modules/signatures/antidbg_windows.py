@@ -21,20 +21,17 @@ class AntiDBGWindows(Signature):
     severity = 3
     categories = ["anti-debug"]
     authors = ["nex"]
-    minimum = "0.4.1"
-    maximum = "0.4.2"
+    minimum = "0.5"
 
-    def run(self, results):
+    def run(self):
         indicators = [
             "OLLYDBG",
             "WinDbgFrameClass"
         ]
 
-        for process in results["behavior"]["processes"]:
-            for call in process["calls"]:
-                for argument in call["arguments"]:
-                    for indicator in indicators:
-                        if argument["value"] == indicator:
-                            return True
+        for indicator in indicators:
+            if self.check_argument(pattern=indicator, category="window"):
+                self.data.append({"window" : indicator})
+                return True
 
         return False

@@ -15,8 +15,6 @@
 
 # Based on information from http://antivirus.about.com/od/windowsbasics/tp/autostartkeys.htm
 
-import re
-
 from lib.cuckoo.common.abstracts import Signature
 
 class Autorun(Signature):
@@ -24,42 +22,33 @@ class Autorun(Signature):
     description = "Installs itself for autorun at Windows startup"
     severity = 3
     categories = ["persistence"]
-    authors = ["Michael Boman"]
-    minimum = "0.4.1"
-    maximum = "0.4.2"
+    authors = ["Michael Boman", "nex"]
+    minimum = "0.5"
 
-    def run(self, results):
+    def run(self):
         indicators = [
-            ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run",
-            ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnce",
-            ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunServices",
-            ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunServicesOnce",
-            ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon",
-            ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run",
-            ".*\\\\SOFTWARE\\\\Microsoft\\\\Active Setup\\\\Installed Components\\\\",
-            ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\"
+            ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run$",
+            ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnce$",
+            ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunServices$",
+            ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunServicesOnce$",
+            ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Winlogon$",
+            ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run$",
+            ".*\\\\SOFTWARE\\\\Microsoft\\\\Active\\ Setup\\\\Installed Components\\\\.*",
+            ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\.*"
         ]
 
-        regexps = [re.compile(indicator) for indicator in indicators]
-
-        for key in results["behavior"]["summary"]["keys"]:
-            for regexp in regexps:
-                if regexp.match(key):
-                    self.data.append({"key" : key})
-                    return True
+        for indicator in indicators:
+            if self.check_key(pattern=indicator, regex=True):
+                return True
 
         indicators = [
-            ".*\\\\win.ini",
-            ".*\\\\system.ini",
-            ".*\\\\Start Menu\\\\Programs\\\\Startup"
+            ".*\\\\win\.ini$",
+            ".*\\\\system\.ini$",
+            ".*\\\\Start Menu\\\\Programs\\\\Startup$"
         ]
 
-        regexps = [re.compile(indicator) for indicator in indicators]
-
-        for file_name in results["behavior"]["summary"]["files"]:
-            for regexp in regexps:
-                if regexp.match(file_name):
-                    self.data.append({"file_name" : file_name})
-                    return True
+        for indicator in indicators:
+            if self.check_file(pattern=indicator, regex=True):
+                return True
 
         return False

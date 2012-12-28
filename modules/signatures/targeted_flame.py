@@ -25,18 +25,26 @@ class Flame(Signature):
     categories = ["targeted"]
     families = ["flame", "skywiper"]
     authors = ["nex"]
-    minimum = "0.4.1"
-    maximum = "0.4.2"
+    minimum = "0.5"
 
-    def run(self, results):
-        for mutex in results["behavior"]["summary"]["mutexes"]:
-            if mutex.startswith("__fajb") or mutex.startswith("DVAAccessGuard") or "mssecuritymgr" in mutex:
-                self.data.append({"mutex" : mutex})
+    def run(self):
+        indicators = [
+            "__fajb.*",
+            "DVAAccessGuard.*",
+            ".*mssecuritymgr.*"
+        ]
+
+        for indicator in indicators:
+            if self.check_mutex(pattern=indicator, regex=True):
                 return True
 
-        for file_name in results["behavior"]["summary"]["files"]:
-            if "\\Microsoft Shared\\MSSecurityMgr\\" in file_name or file_name.endswith("Ef_trace.log"):
-                self.data.append({"file": file_name})
+        indicators = [
+            ".*\\\\Microsoft Shared\\\\MSSecurityMgr\\\\.*",
+            ".*\\\\Ef_trace\.log$"
+        ]
+
+        for indicator in indicators:
+            if self.check_file(pattern=indicator, regex=True):
                 return True
 
         return False

@@ -20,17 +20,11 @@ class VBoxDetectLibs(Signature):
     description = "Detects VirtualBox through the presence of a library"
     severity = 3
     categories = ["anti-vm"]
-    authors = ["Anderson Tamborim"]
-    minimum = "0.4.2"
-    maximum = "0.4.2"
+    authors = ["Anderson Tamborim", "nex"]
+    minimum = "0.5"
 
-    def run(self, results):
-        for process in results["behavior"]["processes"]:
-            for call in process["calls"]:
-                if call["api"] == "LdrLoadDll":
-                    for argument in call["arguments"]:
-                        if (argument["name"] == "FileName" and 
-                            "VBoxHook.dll" in argument["value"]):
-                            return True
-
-        return False
+    def run(self):
+        return self.check_argument(pattern=".*VBoxHook\.dll$",
+                                   name="FileName",
+                                   api="LdrLoadDll",
+                                   regex=True)

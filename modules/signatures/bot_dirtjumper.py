@@ -22,11 +22,11 @@ class DirtJumper(Signature):
     categories = ["bot", "ddos"]
     families = ["dirtjumper"]
     authors = ["nex"]
-    maximum = "0.4.2"
+    minimum = "0.5"
 
-    def run(self, results):
-        if results["network"]:
-            for http in results["network"]["http"]:
+    def run(self):
+        if "network" in self.results:
+            for http in self.results["network"]["http"]:
                 if http["method"] == "POST" and http["body"].startswith("k="):
                     self.data.append({"url" : http["uri"], "data" : http["body"]})
                     return True

@@ -21,9 +21,9 @@ class CheckIP(Signature):
     severity = 2
     categories = ["recon"]
     authors = ["nex"]
-    maximum = "0.4.2"
+    minimum = "0.5"
 
-    def run(self, results):
+    def run(self):
         indicators = [
             "checkip.dyndns.org",
             "whatismyip.org",
@@ -32,10 +32,9 @@ class CheckIP(Signature):
             "getmyip.co.uk"
         ]
 
-        if results["network"]:
-            for dns in results["network"]["dns"]:
-                if dns["hostname"] in indicators:
-                    self.data.append({"hostname" : dns["hostname"]})
-                    return True
+        for indicator in indicators:
+            if self.check_domain(pattern=indicator):
+                self.data.append({"domain" : indicator})
+                return True
 
         return False

@@ -21,24 +21,21 @@ class Tor(Signature):
     severity = 3
     categories = ["network", "anonimity", "tor"]
     authors = ["nex"]
-    minimum = "0.4.2"
-    maximum = "0.4.2"
+    minimum = "0.5"
 
-    def run(self, results):
+    def run(self):
         indicators = [
-            "\\tor\\cached-certs",
-            "\\tor\\cached-consensus",
-            "\\tor\\cached-descriptors",
-            "\\tor\\geoip",
-            "\\tor\\lock",
-            "\\tor\\state",
-            "\\tor\\torrc"
+            ".*\\\\tor\\\\cached-certs$",
+            ".*\\\\tor\\\\cached-consensus$",
+            ".*\\\\tor\\\\cached-descriptors$",
+            ".*\\\\tor\\\\geoip$",
+            ".*\\\\tor\\\\lock$",
+            ".*\\\\tor\\\\state$",
+            ".*\\\\tor\\\\torrc$"
         ]
 
-        for file_path in results["behavior"]["summary"]["files"]:
-            for indicator in indicators:
-                if file_path.lower().endswith(indicator):
-                    self.data.append({"file" : file_path})
-                    return True
+        for indicator in indicators:
+            if self.check_file(pattern=indicator, regex=True):
+                return True
 
         return False

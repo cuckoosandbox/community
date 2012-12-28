@@ -21,11 +21,10 @@ class VBoxDetectACPI(Signature):
     severity = 3
     categories = ["anti-vm"]
     authors = ["nex"]
-    minimum = "0.4.1"
-    maximum = "0.4.2"
+    minimum = "0.5"
 
-    def run(self, results):
-        for process in results["behavior"]["processes"]:
+    def run(self):
+        for process in self.results["behavior"]["processes"]:
             opened = False
             for call in process["calls"]:
                 # First I check if the malware opens the releavant registry key.

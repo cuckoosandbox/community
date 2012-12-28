@@ -21,16 +21,10 @@ class Crash(Signature):
     severity = 1
     categories = ["execution", "crash"]
     authors = ["nex"]
-    minimum = "0.4.2"
-    maximum = "0.4.2"
+    minimum = "0.5"
 
-    def run(self, results):
-        for process in results["behavior"]["processes"]:
-            for call in process["calls"]:
-                if call["api"] == "LdrLoadDll":
-                    for argument in call["arguments"]:
-                        if (argument["name"] == "FileName" and
-                            "faultrep.dll" in argument["value"]):
-                            return True
-
-        return False
+    def run(self):
+        return self.check_argument(pattern=".*faultrep\.dll$",
+                                   name="FileName",
+                                   api="LdrLoadDll",
+                                   regex=True)

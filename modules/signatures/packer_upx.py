@@ -20,15 +20,15 @@ class UPXCompressed(Signature):
     description = "The executable is compressed using UPX"
     severity = 2
     categories = ["packer"]
-    authors = ["Michael Boman"]
-    minimum = "0.4"
-    maximum = "0.4.2"
+    authors = ["Michael Boman", "nex"]
+    minimum = "0.5"
 
-    def run(self, results):
-        if "pe_sections" in results["static"]:
-            for pe_section in results["static"]["pe_sections"]:
-                if pe_section["name"].startswith("UPX"):
-                    self.data.append({"pe_section" : pe_section})
-                    return True
+    def run(self):
+        if "static" in self.results:
+            if "pe_sections" in self.results["static"]:
+                for section in self.results["static"]["pe_sections"]:
+                    if section["name"].startswith("UPX"):
+                        self.data.append({"section" : section})
+                        return True
 
         return False

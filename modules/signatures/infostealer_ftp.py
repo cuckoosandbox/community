@@ -21,30 +21,27 @@ class FTPStealer(Signature):
     severity = 3
     categories = ["infostealer"]
     authors = ["nex"]
-    minimum = "0.4.1"
-    maximum = "0.4.2"
+    minimum = "0.5"
 
-    def run(self, results):
+    def run(self):
         indicators = [
-            "CuteFTP\\sm.dat",
-            "FlashFXP\\3\\Sites.dat",
-            "FlashFXP\\4\\Sites.dat",
-            "FileZilla\\sitemanager.xml",
-            "FileZilla\\recentservers.xml",
-            "VanDyke\\Config\\Sessions",
-            "FTP Explorer"
-            "SmartFTP",
-            "TurboFTP",
-            "FTPRush",
-            "LeapFTP",
-            "FTPGetter",
-            "ALFTP"
+            ".*\\\\CuteFTP\\\\sm\.dat$",
+            ".*\\\\FlashFXP\\\\.*\\\\Sites\.dat$",
+            ".*\\\\FlashFXP\\\\.*\\\\Sites\.dat$",
+            ".*\\\\FileZilla\\\\sitemanager\.xml$",
+            ".*\\\\FileZilla\\\\recentservers\.xml$",
+            ".*\\\\VanDyke\\\\Config\\\\Sessions.*",
+            ".*\\\\FTP Explorer\\\\.*"
+            ".*\\\\SmartFTP\\\\.*",
+            ".*\\\\TurboFTP\\\\.*",
+            ".*\\\\FTPRush\\\\.*",
+            ".*\\\\LeapFTP\\\\.*",
+            ".*\\\\FTPGetter\\\\.*",
+            ".*\\\\ALFTP\\\\.*"
         ]
 
-        for file_name in results["behavior"]["summary"]["files"]:
-            for indicator in indicators:
-                if indicator in file_name:
-                    self.data.append({"file_name" : file_name})
-                    return True
+        for indicator in indicators:
+            if self.check_file(pattern=indicator, regex=True):
+                return True
 
         return False

@@ -15,8 +15,6 @@
 
 # Based on information from http://antivirus.about.com/od/windowsbasics/tp/autostartkeys.htm
 
-import re
-
 from lib.cuckoo.common.abstracts import Signature
 
 class BypassFirewall(Signature):
@@ -24,21 +22,9 @@ class BypassFirewall(Signature):
     description = "Operates on local firewall's policies and settings"
     severity = 3
     categories = ["bypass"]
-    authors = ["Anderson Tamborim"]
-    minimum = "0.4.1"
-    maximum = "0.4.2"
+    authors = ["Anderson Tamborim", "nex"]
+    minimum = "0.5"
 
-    def run(self, results):
-        indicators = [
-            ".*\\\\SYSTEM\\\\CurrentControlSet\\\\Services\\\\SharedAccess\\\\Parameters\\\\FirewallPolicy\\\\*"
-        ]
-
-        regexps = [re.compile(indicator) for indicator in indicators]
-
-        for key in results["behavior"]["summary"]["keys"]:
-            for regexp in regexps:
-                if regexp.match(key):
-                    self.data.append({"key" : key})
-                    return True
-
-        return False
+    def run(self):
+        return self.check_key(pattern=".*\\\\SYSTEM\\\\CurrentControlSet\\\\Services\\\\SharedAccess\\\\Parameters\\\\FirewallPolicy\\\\.*",
+                              regex=True)

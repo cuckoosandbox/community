@@ -22,19 +22,19 @@ class SpyEyeMutexes(Signature):
     categories = ["banker"]
     families = ["spyeye"]
     authors = ["nex"]
-    maximum = "0.4.2"
+    minimum = "0.5"
 
-    def run(self, results):
+    def run(self):
         indicators = [
-            "zXeRY3a_PtW",
+            "zXeRY3a_PtW.*",
             "SPYNET",
-            "__CLEANSWEEP__"
+            "__CLEANSWEEP__",
+            "__CLEANSWEEP_UNINSTALL__",
+            "__CLEANSWEEP_RELOADCFG__"
         ]
 
-        for mutex in results["behavior"]["summary"]["mutexes"]:
-            for indicator in indicators:
-                if indicator in mutex:
-                    self.data.append({"mutex" : mutex})
-                    return True
+        for indicator in indicators:
+            if self.check_mutex(pattern=indicator, regex=True):
+                return True
 
         return False

@@ -20,14 +20,8 @@ class CreatesAutorunInf(Signature):
     description = "Creates an autorun.inf file"
     severity = 2
     categories = ["spreading"]
-    authors = ["Thomas Birn"]
-    minimum = "0.4.2"
-    maximum = "0.4.2"
+    authors = ["Thomas Birn", "nex"]
+    minimum = "0.5"
 
-    def run(self, results):
-        for file_name in results["behavior"]["summary"]["files"]:
-            if file_name.endswith("autorun.inf"):
-                self.data.append({"file_name": file_name})
-                return True
-
-        return False
+    def run(self):
+        return self.check_file(pattern=".*\\\\autorun\.inf$", regex=True)

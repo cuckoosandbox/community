@@ -13,8 +13,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
-
 from lib.cuckoo.common.abstracts import Signature
 
 class BrowserStealer(Signature):
@@ -23,33 +21,28 @@ class BrowserStealer(Signature):
     severity = 3
     categories = ["infostealer"]
     authors = ["nex"]
-    minimum = "0.4.1"
-    maximum = "0.4.2"
+    minimum = "0.5"
 
-    def run(self, results):
+    def run(self):
         indicators = [
-            ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\.default\\\\signons\\.sqlite\\Z(?ms)",
-            ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\.default\\\\secmod\\.db\\Z(?ms)",
-            ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\.default\\\\cert8\\.db\\Z(?ms)",
-            ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\.default\\\\key3\\.db\\Z(?ms)",
-            ".*\\\\History\\\\History\\.IE5\\\\index\\.dat\\Z(?ms)",
-            ".*\\\\Temporary\\ Internet\\ Files\\\\Content\\.IE5\\\\index\\.dat\\Z(?ms)",
-            ".*\\\\Application\\ Data\\\\Google\\\\Chrome\\\\.*\\Z(?ms)",
-            ".*\\\\Application\\ Data\\\\Opera\\\\.*\\Z(?ms)",
-            ".*\\\\Application\\ Data\\\\Chromium\\\\.*\\Z(?ms)",
-            ".*\\\\Application\\ Data\\\\ChromePlus\\\\.*\\Z(?ms)",
-            ".*\\\\Application\\ Data\\\\Nichrome\\\\.*\\Z(?ms)",
-            ".*\\\\Application\\ Data\\\\Bromium\\\\.*\\Z(?ms)",
-            ".*\\\\Application\\ Data\\\\RockMelt\\\\.*\\Z(?ms)"
+            ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\signons\.sqlite$",
+            ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\secmod\.db$",
+            ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\cert8\.db$",
+            ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\key3\.db$",
+            ".*\\\\History\\\\History\.IE5\\\\index\.dat$",
+            ".*\\\\Temporary\\\\ Internet\\ Files\\\\Content\.IE5\\\\index\.dat$",
+            ".*\\\\Application\\ Data\\\\Google\\\\Chrome\\\\.*",
+            ".*\\\\Application\\ Data\\\\Opera\\\\.*",
+            ".*\\\\Application\\ Data\\\\Chromium\\\\.*",
+            ".*\\\\Application\\ Data\\\\ChromePlus\\\\.*",
+            ".*\\\\Application\\ Data\\\\Nichrome\\\\.*",
+            ".*\\\\Application\\ Data\\\\Bromium\\\\.*",
+            ".*\\\\Application\\ Data\\\\RockMelt\\\\.*"
 
         ]
 
-        regexps = [re.compile(indicator) for indicator in indicators]
-
-        for file_name in results["behavior"]["summary"]["files"]:
-            for regexp in regexps:
-                if regexp.match(file_name):
-                    self.data.append({"file_name" : file_name})
-                    return True
+        for indicator in indicators:
+            if self.check_file(pattern=indicator, regex=True):
+                return True
 
         return False

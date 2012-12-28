@@ -20,13 +20,13 @@ class KnownVirustotal(Signature):
     description = "File has been identified by at least one AntiVirus on VirusTotal as malicious"
     severity = 3
     categories = ["antivirus"]
-    authors = ["Michael Boman"]
-    maximum = "0.4.2"
+    authors = ["Michael Boman", "nex"]
+    minimum = "0.5"
 
-    def run(self, results):
-        if "virustotal" in results:
-            if "positives" in results["virustotal"]:
-                if results["virustotal"]["positives"] > 0:
+    def run(self):
+        if "virustotal" in self.results:
+            if "positives" in self.results["virustotal"]:
+                if self.results["virustotal"]["positives"] > 0:
                     return True
 
         return False

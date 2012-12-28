@@ -13,8 +13,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
-
 from lib.cuckoo.common.abstracts import Signature
 
 class InstallsWinpcap(Signature):
@@ -22,23 +20,18 @@ class InstallsWinpcap(Signature):
     description = "Installs WinPCAP"
     severity = 3
     categories = ["sniffer"]
-    authors = ["Thomas Birn"]
-    minimum = "0.4.2"
-    maximum = "0.4.2"
+    authors = ["Thomas Birn", "nex"]
+    minimum = "0.5"
 
-    def run(self, results):
+    def run(self):
         indicators = [
-            ".*\\\\packet.dll",
-            ".*\\\\npf.sys",
-            ".*\\\\wpcap.dll"
+            ".*\\\\packet\.dll$",
+            ".*\\\\npf\.sys$",
+            ".*\\\\wpcap\.dll$"
         ]
 
-        regexps = [re.compile(indicator) for indicator in indicators]
-        
-        for file_name in results["behavior"]["summary"]["files"]:
-            for regexp in regexps:
-                if regexp.match(file_name):
-                    self.data.append({"file_name" : file_name})
-                    return True
+        for indicator in indicators:
+            if self.check_file(pattern=indicator, regex=True):
+                return True
 
         return False

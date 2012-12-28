@@ -20,11 +20,11 @@ class InjectionCRT(Signature):
     description = "Code injection with CreateRemoteThread in a remote process"
     severity = 2
     categories = ["injection"]
-    authors = ["JoseMi Holguin"]
-    maximum = "0.4.2"
+    authors = ["JoseMi Holguin", "nex"]
+    minimum = "0.5"
 
-    def run(self, results):
-        for process in results["behavior"]["processes"]:
+    def run(self):
+        for process in self.results["behavior"]["processes"]:
             sequence = 0
             process_handle = 0
             for call in process["calls"]:
@@ -42,7 +42,7 @@ class InjectionCRT(Signature):
                     for argument in call["arguments"]:
                         if argument["name"] == "ProcessHandle" and argument["value"] == process_handle:
                             sequence = 3
-                elif (call["api"] == "CreateRemoteThread"  or  call["api"] == "CreateRemoteThreadEx" ) and sequence == 3:
+                elif call["api"].startswith("CreateRemoteThread") and sequence == 3:
                     for argument in call["arguments"]:
                         if argument["name"] == "ProcessHandle" and argument["value"] == process_handle:
                             return True

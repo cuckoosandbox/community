@@ -13,8 +13,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
-
 from lib.cuckoo.common.abstracts import Signature
 
 class DisableRegedit(Signature):
@@ -22,27 +20,14 @@ class DisableRegedit(Signature):
     description = "Disables Windows' Registry Editor"
     severity = 3
     categories = ["locker"]
-    authors = ["Thomas Birn"]
-    minimum = "0.4.2"
-    maximum = "0.4.2"
+    authors = ["Thomas Birn", "nex"]
+    minimum = "0.5"
 
-    def run(self, results):
-        indicator = ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System"
-        regexp = re.compile(indicator, re.IGNORECASE)
-
-        opened = False
-        for key in results["behavior"]["summary"]["keys"]:
-            if regexp.match(key):
-                opened = True
-
-        if opened:
-            for process in results["behavior"]["processes"]:
-                for call in process["calls"]:
-                    if call["category"] != "registry":
-                        continue
-
-                    for argument in call["arguments"]:
-                        if argument["value"] == "DisableRegistryTools":
-                            return True
+    def run(self):
+        if self.check_key(pattern=".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System$",
+                          regex=True):
+            if self.check_argument(pattern="DisableRegistryTools",
+                                   category="registry"):
+                return True
 
         return False
