@@ -15,8 +15,8 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class AntiVMDiskIdentifier(Signature):
-    name = "antivm_disk_identifier"
+class AntiVMSCSI(Signature):
+    name = "antivm_generic_scsi"
     description = "Detects virtualization software with SCSI Disk Identifier trick"
     severity = 3
     categories = ["anti-vm"]
