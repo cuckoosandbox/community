@@ -27,6 +27,7 @@ class ADS(Signature):
         for file_path in self.results["behavior"]["summary"]["files"]:
             file_name = file_path.split("\\")[-1]
             if ":" in file_name:
+                self.data.append({"file" : file_path})
                 return True
 
         return False
