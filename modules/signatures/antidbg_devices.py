@@ -25,20 +25,20 @@ class AntiDBGDevices(Signature):
 
     def run(self):
         indicators = [
-            "\\\\.\\SICE",
-            "\\\\.\\SIWVID",
-            "\\\\.\\NTICE",
-            "\\\\.\\REGVXG",
-            "\\\\.\\FILEVXG",
-            "\\\\.\\REGSYS",
-            "\\\\.\\FILEM",
-            "\\\\.\\TRW",
-            "\\\\.\\ICEXT"
+            ".*SICE$",
+            ".*SIWVID$",
+            ".*SIWDEBUG$",
+            ".*NTICE$",
+            ".*REGVXG$",
+            ".*FILEVXG$",
+            ".*REGSYS$",
+            ".*FILEM$",
+            ".*TRW$",
+            ".*ICEXT$"
         ]
 
         for indicator in indicators:
-            if self.check_file(pattern=indicator):
-                self.data.append({"file" : indicator})
+            if self.check_file(pattern=indicator, regex=True):
                 return True
 
         return False
