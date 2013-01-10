@@ -16,7 +16,7 @@
 from lib.cuckoo.common.abstracts import Signature
 
 class DiskInformation(Signature):
-    name = "antivm_diskinfo"
+    name = "antivm_generic_diskinfo"
     description = "Queries information on disks, possibly for anti-virtualization"
     severity = 3
     categories = ["anti-vm"]
@@ -47,8 +47,14 @@ class DiskInformation(Signature):
                             handle = None
                 else:
                     if call["api"] == "DeviceIoControl":
+                        matched = 0
                         for argument in call["arguments"]:
                             if argument["name"] == "DeviceHandle" and argument["value"] == handle:
-                                return True
+                                matched += 1
+                            elif argument["name"] == "IoControlCode" and argument["value"] == "2954240":
+                                matched += 1
+
+                        if matched == 2:
+                            return True
 
         return False
