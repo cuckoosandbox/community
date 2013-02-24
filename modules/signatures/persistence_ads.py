@@ -25,8 +25,10 @@ class ADS(Signature):
 
     def run(self):
         for file_path in self.results["behavior"]["summary"]["files"]:
-            file_name = file_path.split("\\")[-1]
-            if ":" in file_name:
+            if len(file_path) <= 3:
+                continue
+
+            if ":" in file_path.split("\\")[-1]:
                 self.data.append({"file" : file_path})
                 return True
 
