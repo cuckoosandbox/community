@@ -24,6 +24,11 @@ class Tor(Signature):
     minimum = "0.5"
 
     def run(self):
+        if self.check_argument(pattern="Tor Win32 Service",
+                               api="CreateServiceA",
+                               category="services"):
+            return True
+
         indicators = [
             ".*\\\\tor\\\\cached-certs$",
             ".*\\\\tor\\\\cached-consensus$",
