@@ -30,7 +30,7 @@ class AntiDBGWindows(Signature):
         ]
 
         for indicator in indicators:
-            if self.check_argument(pattern=indicator, category="window"):
+            if self.check_argument(pattern=indicator, category="windows"):
                 self.data.append({"window" : indicator})
                 return True
 
