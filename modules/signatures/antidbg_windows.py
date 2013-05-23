@@ -26,11 +26,17 @@ class AntiDBGWindows(Signature):
     def run(self):
         indicators = [
             "OLLYDBG",
-            "WinDbgFrameClass"
+            "WinDbgFrameClass",
+            "pediy06",
+            "GBDYLLO",
+            "FilemonClass",
+            "PROCMON_WINDOW_CLASS",
+            "File Monitor - Sysinternals: www.sysinternals.com",
+            "Process Monitor - Sysinternals: www.sysinternals.com",
         ]
 
         for indicator in indicators:
-            if self.check_argument(pattern=indicator, category="window"):
+            if self.check_argument(pattern=indicator, category="windows"):
                 self.data.append({"window" : indicator})
                 return True
 
