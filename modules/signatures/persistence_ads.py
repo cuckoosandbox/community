@@ -24,12 +24,13 @@ class ADS(Signature):
     minimum = "0.5"
 
     def run(self):
+        result = False
         for file_path in self.results["behavior"]["summary"]["files"]:
             if len(file_path) <= 3:
                 continue
 
-            if ":" in file_path.split("\\")[-1]:
+            if ":" in file_path.replace("/", "\\").split("\\")[-1]:
                 self.data.append({"file" : file_path})
-                return True
+                result = True
 
-        return False
+        return result
