@@ -17,12 +17,16 @@ from lib.cuckoo.common.abstracts import Signature
 
 class NetworkBIND(Signature):
     name = "network_bind"
-    description = "Starts a server listening on {0}:{1}"
+    description = "Starts servers listening on {0}"
     severity = 2
     categories = ["bind"]
     authors = ["nex"]
     minimum = "1.0"
     evented = True
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.binds = []
 
     def event_apicall(self, call, process):
         if call["api"] != "bind":
@@ -38,5 +42,10 @@ class NetworkBIND(Signature):
                 port = argument["value"]
         
         if ip and port:
-            self.description = self.description.format(ip, port)
+            self.binds.append((ip, port))
+
+    def stop(self):
+        if self.binds:
+            bindstr = ", ".join("{0}:{1}".format(ip, port) for ip, port in self.binds)
+            self.description = self.description.format(bindstr)
             return True
