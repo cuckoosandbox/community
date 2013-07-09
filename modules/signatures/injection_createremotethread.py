@@ -21,30 +21,34 @@ class InjectionCRT(Signature):
     severity = 2
     categories = ["injection"]
     authors = ["JoseMi Holguin", "nex"]
-    minimum = "0.5"
+    minimum = "1.0"
+    evented = True
 
-    def run(self):
-        for process in self.results["behavior"]["processes"]:
-            sequence = 0
-            process_handle = 0
-            for call in process["calls"]:
-                if call["api"]  == "OpenProcess" and sequence == 0:
-                    for argument in call["arguments"]:
-                        if argument["name"] == "ProcessId":
-                            if argument["value"] != process["process_id"]:
-                                sequence = 1
-                                process_handle = call["return"]
-                elif call["api"] == "VirtualAllocEx" and sequence == 1:
-                    for argument in call["arguments"]:
-                        if argument["name"] == "ProcessHandle" and argument["value"] == process_handle:
-                            sequence = 2
-                elif (call["api"] == "NtWriteVirtualMemory" or call["api"] == "WriteProcessMemory") and sequence == 2:
-                    for argument in call["arguments"]:
-                        if argument["name"] == "ProcessHandle" and argument["value"] == process_handle:
-                            sequence = 3
-                elif call["api"].startswith("CreateRemoteThread") and sequence == 3:
-                    for argument in call["arguments"]:
-                        if argument["name"] == "ProcessHandle" and argument["value"] == process_handle:
-                            return True
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.lastprocess = None
 
-        return False
+    def event_apicall(self, call, process):
+        if process != self.lastprocess:
+            self.sequence = 0
+            self.process_handle = 0
+            self.lastprocess = process
+
+        if call["api"]  == "OpenProcess" and self.sequence == 0:
+            for argument in call["arguments"]:
+                if argument["name"] == "ProcessId":
+                    if argument["value"] != process["process_id"]:
+                        self.sequence = 1
+                        self.process_handle = call["return"]
+        elif call["api"] == "VirtualAllocEx" and self.sequence == 1:
+            for argument in call["arguments"]:
+                if argument["name"] == "ProcessHandle" and argument["value"] == self.process_handle:
+                    self.sequence = 2
+        elif (call["api"] == "NtWriteVirtualMemory" or call["api"] == "WriteProcessMemory") and self.sequence == 2:
+            for argument in call["arguments"]:
+                if argument["name"] == "ProcessHandle" and argument["value"] == self.process_handle:
+                    self.sequence = 3
+        elif call["api"].startswith("CreateRemoteThread") and self.sequence == 3:
+            for argument in call["arguments"]:
+                if argument["name"] == "ProcessHandle" and argument["value"] == self.process_handle:
+                    return True

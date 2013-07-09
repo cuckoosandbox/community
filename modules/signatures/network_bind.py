@@ -21,25 +21,22 @@ class NetworkBIND(Signature):
     severity = 2
     categories = ["bind"]
     authors = ["nex"]
-    minimum = "0.5"
+    minimum = "1.0"
+    evented = True
 
-    def run(self):
-        for process in self.results["behavior"]["processes"]:
-            for call in process["calls"]:
-                if call["api"] != "bind":
-                    continue
+    def event_apicall(self, call, process):
+        if call["api"] != "bind":
+            return
 
-                ip = None
-                port = None
+        ip = None
+        port = None
 
-                for argument in call["arguments"]:
-                    if argument["name"] == "ip":
-                        ip = argument["value"]
-                    elif argument["name"] == "port":
-                        port = argument["value"]
-                
-                if ip and port:
-                    self.description = self.description.format(ip, port)
-                    return True
-
-        return False
+        for argument in call["arguments"]:
+            if argument["name"] == "ip":
+                ip = argument["value"]
+            elif argument["name"] == "port":
+                port = argument["value"]
+        
+        if ip and port:
+            self.description = self.description.format(ip, port)
+            return True

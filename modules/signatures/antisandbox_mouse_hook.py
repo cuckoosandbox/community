@@ -21,22 +21,19 @@ class HookMouse(Signature):
     severity = 3
     categories = ["hooking", "anti-sandbox"]
     authors = ["nex"]
-    minimum = "0.5"
+    minimum = "1.0"
+    evented = True
 
-    def run(self):
-        for process in self.results["behavior"]["processes"]:
-            for call in process["calls"]:
-                if not call["api"].startswith("SetWindowsHookEx"):
-                    continue
+    def event_apicall(self, call, process):
+        if not call["api"].startswith("SetWindowsHookEx"):
+            return
 
-                arguments = 0
-                for argument in call["arguments"]:
-                    if argument["name"] == "HookIdentifier" and int(argument["value"]) in [7, 14]:
-                        arguments += 1
-                    elif argument["name"] == "ThreadId" and int(argument["value"]) == 0:
-                        arguments += 1
+        arguments = 0
+        for argument in call["arguments"]:
+            if argument["name"] == "HookIdentifier" and int(argument["value"]) in [7, 14]:
+                arguments += 1
+            elif argument["name"] == "ThreadId" and int(argument["value"]) == 0:
+                arguments += 1
 
-                if arguments == 2:
-                    return True
-
-        return False
+        if arguments == 2:
+            return True

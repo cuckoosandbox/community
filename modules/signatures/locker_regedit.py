@@ -21,13 +21,20 @@ class DisableRegedit(Signature):
     severity = 3
     categories = ["locker"]
     authors = ["Thomas Birn", "nex"]
-    minimum = "0.5"
+    minimum = "1.0"
+    evented = True
 
-    def run(self):
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.saw_disable = False
+
+    def event_apicall(self, call, process):
+        if self.check_argument_call(call, pattern="DisableRegistryTools",
+                               category="registry"):
+            self.saw_disable = True
+
+    def stop(self):
         if self.check_key(pattern=".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System$",
                           regex=True):
-            if self.check_argument(pattern="DisableRegistryTools",
-                                   category="registry"):
+            if self.saw_disable:
                 return True
-
-        return False

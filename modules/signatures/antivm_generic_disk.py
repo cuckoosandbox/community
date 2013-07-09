@@ -21,40 +21,44 @@ class DiskInformation(Signature):
     severity = 3
     categories = ["anti-vm"]
     authors = ["nex"]
-    minimum = "0.5"
+    minimum = "1.0"
+    evented = True
 
-    def run(self):
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.lastprocess = None
+
+    def event_apicall(self, call, process):
         indicators = [
             "scsi0",
             "physicaldrive0"
         ]
 
-        for process in self.results["behavior"]["processes"]:
-            handle = None
-            for call in process["calls"]:
-                if not handle:
-                    if call["api"] == "NtCreateFile":
-                        correct = False
-                        for argument in call["arguments"]:
-                            if argument["name"] == "FileName":
-                                for indicator in indicators:
-                                    if indicator in argument["value"].lower():
-                                        correct = True
-                            elif argument["name"] == "FileHandle":
-                                handle = argument["value"]
+        if process != self.lastprocess:
+            self.handle = None
+            self.lastprocess = process
 
-                        if not correct:
-                            handle = None
-                else:
-                    if call["api"] == "DeviceIoControl":
-                        matched = 0
-                        for argument in call["arguments"]:
-                            if argument["name"] == "DeviceHandle" and argument["value"] == handle:
-                                matched += 1
-                            elif argument["name"] == "IoControlCode" and argument["value"] == "2954240":
-                                matched += 1
+        if not self.handle:
+            if call["api"] == "NtCreateFile":
+                correct = False
+                for argument in call["arguments"]:
+                    if argument["name"] == "FileName":
+                        for indicator in indicators:
+                            if indicator in argument["value"].lower():
+                                correct = True
+                    elif argument["name"] == "FileHandle":
+                        self.handle = argument["value"]
 
-                        if matched == 2:
-                            return True
+                if not correct:
+                    self.handle = None
+        else:
+            if call["api"] == "DeviceIoControl":
+                matched = 0
+                for argument in call["arguments"]:
+                    if argument["name"] == "DeviceHandle" and argument["value"] == handle:
+                        matched += 1
+                    elif argument["name"] == "IoControlCode" and argument["value"] == "2954240":
+                        matched += 1
 
-        return False
+                if matched == 2:
+                    return True

@@ -21,12 +21,11 @@ class AntiVMBios(Signature):
     severity = 3
     categories = ["anti-vm"]
     authors = ["nex"]
-    minimum = "0.5"
+    minimum = "1.0"
+    evented = True
 
-    def run(self):
-        if self.check_key(pattern="HKEY_LOCAL_MACHINE\\HARDWARE\\DESCRIPTION\\System"):
-            if (self.check_argument(pattern="SystemBiosVersion", name="ValueName", category="registry") or
-                self.check_argument(pattern="VideoBiosVersion", name="ValueName", category="registry")):
-                return True
-
-        return False
+    def event_apicall(self, call, process):
+        #if self.check_key(pattern="HKEY_LOCAL_MACHINE\\HARDWARE\\DESCRIPTION\\System"):
+        if (self.check_argument_call(call, pattern="SystemBiosVersion", name="ValueName", category="registry") or
+            self.check_argument_call(call, pattern="VideoBiosVersion", name="ValueName", category="registry")):
+            return True
