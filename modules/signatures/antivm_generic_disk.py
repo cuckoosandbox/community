@@ -55,7 +55,7 @@ class DiskInformation(Signature):
             if call["api"] == "DeviceIoControl":
                 matched = 0
                 for argument in call["arguments"]:
-                    if argument["name"] == "DeviceHandle" and argument["value"] == handle:
+                    if argument["name"] == "DeviceHandle" and argument["value"] == self.handle:
                         matched += 1
                     elif argument["name"] == "IoControlCode" and argument["value"] == "2954240":
                         matched += 1
