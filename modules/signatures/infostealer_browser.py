@@ -24,6 +24,9 @@ class BrowserStealer(Signature):
     minimum = "0.5"
 
     def run(self):
+        if self.results["info"]["category"] != "file":
+            return False
+
         indicators = [
             ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\signons\.sqlite$",
             ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\secmod\.db$",
