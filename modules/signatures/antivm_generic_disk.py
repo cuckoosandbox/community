@@ -34,6 +34,11 @@ class DiskInformation(Signature):
             "physicaldrive0"
         ]
 
+        ioctls = [
+            "2954240", # IOCTL_STORAGE_QUERY_PROPERTY
+            "458752" # IOCTL_DISK_GET_DRIVE_GEOMETRY
+        ]
+
         if process != self.lastprocess:
             self.handle = None
             self.lastprocess = process
@@ -57,8 +62,9 @@ class DiskInformation(Signature):
                 for argument in call["arguments"]:
                     if argument["name"] == "DeviceHandle" and argument["value"] == self.handle:
                         matched += 1
-                    elif argument["name"] == "IoControlCode" and argument["value"] == "2954240":
-                        matched += 1
+                    elif argument["name"] == "IoControlCode":
+                        if  argument["value"] in ioctls:
+                            matched += 1
 
                 if matched == 2:
                     return True
