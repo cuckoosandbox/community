@@ -36,17 +36,14 @@ class AntiVMServices(Signature):
         if not self.handle:
             if call["api"].startswith("RegOpenKeyEx"):
                 correct = False
-                for argument in call["arguments"]:
-                    if argument["name"] == "SubKey":
-                        if argument["value"] == "SYSTEM\\ControlSet001\\Services":
-                            correct = True
-                    elif argument["name"] == "Handle":
-                        self.handle = argument["value"]
+                if self.get_argument(call,"SubKey") == "SYSTEM\\ControlSet001\\Services":
+                    correct = True
+                else:
+                    self.handle = self.get_argument(call,"Handle")
 
                 if not correct:
                     self.handle = None
         else:
             if call["api"].startswith("RegEnumKeyEx"):
-                for argument in call["arguments"]:
-                    if argument["name"] == "Handle" and argument["value"] == self.handle:
-                        return True
+                if self.get_argument(call,"Handle") == self.handle:
+                    return True

@@ -44,16 +44,15 @@ class AntiVMSCSI(Signature):
             args_matched = 0
             # Store the handle used to open the key.
             self.handle = ""
-            for argument in call["arguments"]:
-                # Check if the registry is HKEY_LOCAL_MACHINE.
-                if argument["name"] == "Registry" and argument["value"] == indicator_registry:
-                    args_matched += 1
-                # Check if the subkey opened is the correct one.
-                elif argument["name"] == "SubKey" and argument["value"] == indicator_key:
-                    args_matched += 1
-                # Store the generated handle.
-                elif argument["name"] == "Handle":
-                    self.handle = argument["value"]
+            # Check if the registry is HKEY_LOCAL_MACHINE.
+            if self.get_argument(call,"Registry") == indicator_registry:
+                args_matched += 1
+            # Check if the subkey opened is the correct one.
+            elif self.get_argument(call,"SubKey") == indicator_key:
+                args_matched += 1
+            # Store the generated handle.
+            else:
+                self.handle = self.get_argument(call,"Handle")
             
             # If both arguments are matched, I consider the key to be successfully opened.
             if args_matched == 2:
@@ -66,11 +65,10 @@ class AntiVMSCSI(Signature):
 
             # Verify the arguments.
             args_matched = 0
-            for argument in call["arguments"]:
-                if argument["name"] == "Handle" and argument["value"] == self.handle:
-                    args_matched += 1
-                elif argument["name"] == "ValueName" and argument["value"] == indicator_name:
-                    args_matched += 1
+            if self.get_argument(call,"Handle") == self.handle:
+                args_matched += 1
+            elif self.get_argument(call,"ValueName") == indicator_name:
+                args_matched += 1
 
             # Finally, if everything went well, I consider the signature as matched.
             if args_matched == 2:
