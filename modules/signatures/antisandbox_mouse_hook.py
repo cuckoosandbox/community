@@ -29,11 +29,10 @@ class HookMouse(Signature):
             return
 
         arguments = 0
-        for argument in call["arguments"]:
-            if argument["name"] == "HookIdentifier" and int(argument["value"]) in [7, 14]:
-                arguments += 1
-            elif argument["name"] == "ThreadId" and int(argument["value"]) == 0:
-                arguments += 1
+        if int(self.get_argument(call,"HookIdentifier")) in [7, 14]:
+            arguments += 1
+        elif int(self.get_argument(call,"ThreadId")) == 0:
+            arguments += 1
 
         if arguments == 2:
             return True

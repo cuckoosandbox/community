@@ -35,11 +35,8 @@ class NetworkBIND(Signature):
         ip = None
         port = None
 
-        for argument in call["arguments"]:
-            if argument["name"] == "ip":
-                ip = argument["value"]
-            elif argument["name"] == "port":
-                port = argument["value"]
+        ip = self.get_argument(call, "ip")
+        port = self.get_argument(call, "port")
         
         if ip and port:
             self.binds.append((ip, port))
