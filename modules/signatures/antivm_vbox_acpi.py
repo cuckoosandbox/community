@@ -29,7 +29,7 @@ class VBoxDetectACPI(Signature):
         self.lastprocess = None
 
     def event_apicall(self, call, process):
-        if process not self.lastprocess:
+        if process is not self.lastprocess:
             self.opened = False
             self.handle = ""
             self.lastprocess = process

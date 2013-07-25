@@ -33,7 +33,7 @@ class AntiVMSCSI(Signature):
         indicator_key = "HARDWARE\\DEVICEMAP\\Scsi\\Scsi Port 0\\Scsi Bus 0\\Target Id 0\\Logical Unit Id 0"
         indicator_name = "Identifier"
 
-        if process not self.lastprocess:
+        if process is not self.lastprocess:
             self.handle = ""
             self.opened = False
             self.lastprocess = process

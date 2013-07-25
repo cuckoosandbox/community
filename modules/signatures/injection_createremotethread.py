@@ -29,7 +29,7 @@ class InjectionCRT(Signature):
         self.lastprocess = None
 
     def event_apicall(self, call, process):
-        if process not self.lastprocess:
+        if process is not self.lastprocess:
             self.sequence = 0
             self.process_handle = 0
             self.lastprocess = process
