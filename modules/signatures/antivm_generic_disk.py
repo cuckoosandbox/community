@@ -16,7 +16,7 @@
 from lib.cuckoo.common.abstracts import Signature
 
 class DiskInformation(Signature):
-    name = "antivm_generic_diskinfo"
+    name = "antivm_generic_disk"
     description = "Queries information on disks, possibly for anti-virtualization"
     severity = 3
     categories = ["anti-vm"]
@@ -36,7 +36,8 @@ class DiskInformation(Signature):
 
         ioctls = [
             "2954240", # IOCTL_STORAGE_QUERY_PROPERTY
-            "458752" # IOCTL_DISK_GET_DRIVE_GEOMETRY
+            "458752", # IOCTL_DISK_GET_DRIVE_GEOMETRY
+            "315400" #IOCTL_SCSI_MINIPORT
         ]
 
         if process is not self.lastprocess:
@@ -45,26 +46,12 @@ class DiskInformation(Signature):
 
         if not self.handle:
             if call["api"] == "NtCreateFile":
-                correct = False
-                for argument in call["arguments"]:
-                    if argument["name"] == "FileName":
-                        for indicator in indicators:
-                            if indicator in argument["value"].lower():
-                                correct = True
-                    elif argument["name"] == "FileHandle":
-                        self.handle = argument["value"]
-
-                if not correct:
-                    self.handle = None
+                file_name = self.get_argument(call, "FileName")
+                for indicator in indicators:
+                    if indicator in file_name.lower():
+                        self.handle = self.get_argument(call, "FileHandle")
         else:
             if call["api"] == "DeviceIoControl":
-                matched = 0
-                for argument in call["arguments"]:
-                    if argument["name"] == "DeviceHandle" and argument["value"] == self.handle:
-                        matched += 1
-                    elif argument["name"] == "IoControlCode":
-                        if  argument["value"] in ioctls:
-                            matched += 1
-
-                if matched == 2:
-                    return True
+                if self.get_argument(call, "DeviceHandle") == self.handle:
+                    if str(self.get_argument(call, "IoControlCode")) in ioctls:
+                        return True
