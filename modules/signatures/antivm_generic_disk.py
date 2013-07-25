@@ -39,7 +39,7 @@ class DiskInformation(Signature):
             "458752" # IOCTL_DISK_GET_DRIVE_GEOMETRY
         ]
 
-        if process != self.lastprocess:
+        if process not self.lastprocess:
             self.handle = None
             self.lastprocess = process
 
