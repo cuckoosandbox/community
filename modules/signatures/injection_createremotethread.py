@@ -35,20 +35,15 @@ class InjectionCRT(Signature):
             self.lastprocess = process
 
         if call["api"]  == "OpenProcess" and self.sequence == 0:
-            for argument in call["arguments"]:
-                if argument["name"] == "ProcessId":
-                    if argument["value"] != process["process_id"]:
-                        self.sequence = 1
-                        self.process_handle = call["return"]
+            if self.get_argument(call, "ProcessId") != process["process_id"]:
+                self.sequence = 1
+                self.process_handle = call["return"]
         elif call["api"] == "VirtualAllocEx" and self.sequence == 1:
-            for argument in call["arguments"]:
-                if argument["name"] == "ProcessHandle" and argument["value"] == self.process_handle:
-                    self.sequence = 2
+            if self.get_argument(call, "ProcessHandle") == self.process_handle:
+                self.sequence = 2
         elif (call["api"] == "NtWriteVirtualMemory" or call["api"] == "WriteProcessMemory") and self.sequence == 2:
-            for argument in call["arguments"]:
-                if argument["name"] == "ProcessHandle" and argument["value"] == self.process_handle:
-                    self.sequence = 3
+            if self.get_argument(call, "ProcessHandle") == self.process_handle:
+                self.sequence = 3
         elif call["api"].startswith("CreateRemoteThread") and self.sequence == 3:
-            for argument in call["arguments"]:
-                if argument["name"] == "ProcessHandle" and argument["value"] == self.process_handle:
-                    return True
+            if self.get_argument(call, "ProcessHandle") == self.process_handle:
+                return True
