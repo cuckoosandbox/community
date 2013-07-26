@@ -28,11 +28,6 @@ class HookMouse(Signature):
         if not call["api"].startswith("SetWindowsHookEx"):
             return
 
-        arguments = 0
-        if int(self.get_argument(call,"HookIdentifier")) in [7, 14]:
-            arguments += 1
-        elif int(self.get_argument(call,"ThreadId")) == 0:
-            arguments += 1
-
-        if arguments == 2:
-            return True
+        if int(self.get_argument(call, "HookIdentifier")) in [7, 14]:
+            if int(self.get_argument(call, "ThreadId")) == 0:
+                return True
