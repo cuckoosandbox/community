@@ -25,7 +25,10 @@ class Crash(Signature):
     evented = True
 
     def on_call(self, call, process):
-        return self.check_argument_call(call, pattern=".*faultrep\.dll$",
-                                   name="FileName",
-                                   api="LdrLoadDll",
-                                   regex=True)
+        return self.check_argument_call(
+            call,
+            pattern=".*faultrep\.dll$",
+            name="FileName",
+            api="LdrLoadDll",
+            regex=True
+        )

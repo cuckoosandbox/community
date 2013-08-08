@@ -25,9 +25,10 @@ class Tor(Signature):
     evented = True
 
     def on_call(self, call, process):
-        if self.check_argument_call(call, pattern="Tor Win32 Service",
-                               api="CreateServiceA",
-                               category="services"):
+        if self.check_argument_call(call,
+                                    pattern="Tor Win32 Service",
+                                    api="CreateServiceA",
+                                    category="services"):
             return True
 
     def run(self):

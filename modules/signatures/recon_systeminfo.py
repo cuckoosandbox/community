@@ -25,7 +25,9 @@ class SystemInfo(Signature):
     evented = True
 
     def on_call(self, call, process):
-        return self.check_argument_call(call, pattern="(^cmd\.exe).*[(systeminfo)|(ipconfig)|(netstat)]",
-                                   name="CommandLine",
-                                   category="process",
-                                   regex=True)
+        return self.check_argument_call(
+            call, pattern="(^cmd\.exe).*[(systeminfo)|(ipconfig)|(netstat)]",
+            name="CommandLine",
+            category="process",
+            regex=True
+        )
