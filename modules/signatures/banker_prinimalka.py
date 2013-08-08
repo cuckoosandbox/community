@@ -25,7 +25,7 @@ class Prinimalka(Signature):
     minimum = "1.0"
     evented = True
 
-    def event_apicall(self, call, process):
+    def on_call(self, call, process):
         if call["api"].startswith("RegSetValueEx"):
             if self.get_argument(call, "ValueName").endswith("_opt_server1"):
                 server = self.get_argument(call, "Buffer").rstrip("\\x00")

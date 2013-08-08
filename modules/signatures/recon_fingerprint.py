@@ -29,7 +29,7 @@ class Fingerprint(Signature):
         self.threshold = 3
         self.matches = 0
 
-    def event_apicall(self, call, process):
+    def on_call(self, call, process):
         indicators = [
             "MachineGuid",
             "DigitalProductId",

@@ -24,7 +24,7 @@ class AntiVMBios(Signature):
     minimum = "1.0"
     evented = True
 
-    def event_apicall(self, call, process):
+    def on_call(self, call, process):
         #if self.check_key(pattern="HKEY_LOCAL_MACHINE\\HARDWARE\\DESCRIPTION\\System"):
         if (self.check_argument_call(call, pattern="SystemBiosVersion", name="ValueName", category="registry") or
             self.check_argument_call(call, pattern="VideoBiosVersion", name="ValueName", category="registry")):

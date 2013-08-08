@@ -24,13 +24,13 @@ class Tor(Signature):
     minimum = "1.0"
     evented = True
 
-    def event_apicall(self, call, process):
+    def on_call(self, call, process):
         if self.check_argument_call(call, pattern="Tor Win32 Service",
                                api="CreateServiceA",
                                category="services"):
             return True
 
-    def stop(self):
+    def run(self):
         indicators = [
             ".*\\\\tor\\\\cached-certs$",
             ".*\\\\tor\\\\cached-consensus$",

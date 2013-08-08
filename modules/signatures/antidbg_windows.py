@@ -24,7 +24,7 @@ class AntiDBGWindows(Signature):
     minimum = "1.0"
     evented = True
 
-    def event_apicall(self, call, process):
+    def on_call(self, call, process):
         indicators = [
             "OLLYDBG",
             "WinDbgFrameClass",

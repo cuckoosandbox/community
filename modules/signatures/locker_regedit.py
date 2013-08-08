@@ -28,12 +28,12 @@ class DisableRegedit(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.saw_disable = False
 
-    def event_apicall(self, call, process):
+    def on_call(self, call, process):
         if self.check_argument_call(call, pattern="DisableRegistryTools",
                                category="registry"):
             self.saw_disable = True
 
-    def stop(self):
+    def run(self):
         if self.check_key(pattern=".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System$",
                           regex=True):
             if self.saw_disable:

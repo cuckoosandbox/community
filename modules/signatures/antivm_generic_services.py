@@ -28,7 +28,7 @@ class AntiVMServices(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.lastprocess = None
 
-    def event_apicall(self, call, process):
+    def on_call(self, call, process):
         if process is not self.lastprocess:
             self.handle = None
             self.lastprocess = process

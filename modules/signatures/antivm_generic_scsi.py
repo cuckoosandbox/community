@@ -28,7 +28,7 @@ class AntiVMSCSI(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.lastprocess = None
 
-    def event_apicall(self, call, process):
+    def on_call(self, call, process):
         indicator_registry = "0x80000002"
         indicator_key = "HARDWARE\\DEVICEMAP\\Scsi\\Scsi Port 0\\Scsi Bus 0\\Target Id 0\\Logical Unit Id 0"
         indicator_name = "Identifier"

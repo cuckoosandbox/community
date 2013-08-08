@@ -24,7 +24,7 @@ class SystemInfo(Signature):
     minimum = "1.0"
     evented = True
 
-    def event_apicall(self, call, process):
+    def on_call(self, call, process):
         return self.check_argument_call(call, pattern="(^cmd\.exe).*[(systeminfo)|(ipconfig)|(netstat)]",
                                    name="CommandLine",
                                    category="process",

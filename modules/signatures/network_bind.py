@@ -28,21 +28,15 @@ class NetworkBIND(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.binds = []
 
-    def event_apicall(self, call, process):
+    def on_call(self, call, process):
         if call["api"] != "bind":
             return
 
-        ip = None
-        port = None
+        bind = "{0}:{1}".format(self.get_argument(call, "ip"), self.get_argument(call, "port"))
+        if bind not in self.binds:
+            self.binds.append(bind)
 
-        ip = self.get_argument(call, "ip")
-        port = self.get_argument(call, "port")
-        
-        if ip and port:
-            self.binds.append((ip, port))
-
-    def stop(self):
+    def on_complete(self):
         if self.binds:
-            bindstr = ", ".join("{0}:{1}".format(ip, port) for ip, port in self.binds)
-            self.description = self.description.format(bindstr)
+            self.description = self.description.format(", ".join(self.binds))
             return True
