@@ -48,17 +48,16 @@ class AntiVMSCSI(Signature):
             if self.get_argument(call,"Registry") == indicator_registry:
                 args_matched += 1
             # Check if the subkey opened is the correct one.
-            elif self.get_argument(call,"SubKey") == indicator_key:
+            if self.get_argument(call,"SubKey") == indicator_key:
                 args_matched += 1
-            # Store the generated handle.
-            else:
-                self.handle = self.get_argument(call,"Handle")
-            
+
             # If both arguments are matched, I consider the key to be successfully opened.
             if args_matched == 2:
                 self.opened = True
+                # Store the generated handle.
+                self.handle = self.get_argument(call,"Handle")
         # Now I check if the malware verified the value of the key.
-        elif call["api"].startswith("RegQueryValueEx"):
+        if call["api"].startswith("RegQueryValueEx"):
             # Verify if the key was actually opened.
             if not self.opened:
                 return
@@ -67,7 +66,7 @@ class AntiVMSCSI(Signature):
             args_matched = 0
             if self.get_argument(call,"Handle") == self.handle:
                 args_matched += 1
-            elif self.get_argument(call,"ValueName") == indicator_name:
+            if self.get_argument(call,"ValueName") == indicator_name:
                 args_matched += 1
 
             # Finally, if everything went well, I consider the signature as matched.
