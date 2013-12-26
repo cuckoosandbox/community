@@ -14,20 +14,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from lib.cuckoo.common.abstracts import Signature
+import re
 
-class DirtJumper(Signature):
-    name = "bot_dirtjumper"
-    description = "Recognized to be a DirtJumper bot"
+class Drive2(Signature):
+    name = "bot_drive2"
+    description = "Recognized to be a Drive2 bot"
     severity = 3
     categories = ["bot", "ddos"]
-    families = ["dirtjumper"]
-    authors = ["nex","jjones"]
+    families = ["drive2"]
+    authors = ["jjones"]
     minimum = "0.5"
 
     def run(self):
+        drive_ua_re = re.compile('Mozilla/5.0 \(Windows NT [56].1; (WOW64; )?rv:(9|1[0-7]).0\) Gecko/20100101 Firefox/(9|1[0-7]).0|Mozilla/4.0 \(compatible; MSIE 8.0; Windows NT [56].1; (WOW64; )Trident/4.0; SLCC2; .NET CLR 2.0.[0-9]{6}; .NET CLR 3.5.[0-9]{6}; .NET CLR 3.0.[0-9]{6}|Opera/9.80 \(Windows NT [56].1; (WOW64; )U; Edition [a-zA-Z]+ Local; ru\) Presto/2.10.289 Version/([5-9]|1[0-2]).0[0-9]')
         if "network" in self.results:
             for http in self.results["network"]["http"]:
-                if http["method"] == "POST" and http["body"].startswith("k=") and http.get('user-agent','') == 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US)':
+                if http["method"] == "POST" and (http["body"].startswith("req=") or http["body"].startswith("newd=1")) and drive_ua_re.search(http.get('user-agent','')):
                     self.data.append({"url" : http["uri"], "data" : http["body"]})
                     return True
 
