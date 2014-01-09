@@ -1,4 +1,4 @@
-# Copyright (C) 2013 Claudio "nex" Guarnieri (@botherder)
+# Copyright (C) 2013 David Maciejak
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,17 +15,17 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class AntiVMBios(Signature):
-    name = "antivm_generic_bios"
-    description = "Checks the version of Bios, possibly for anti-virtualization"
-    severity = 3
-    categories = ["anti-vm"]
-    authors = ["nex"]
+class NetworkICMP(Signature):
+    name = "network_icmp"
+    description = "Generates some ICMP traffic"
+    severity = 4
+    categories = ["icmp"]
+    authors = ["David Maciejak"]
     minimum = "1.0"
-    evented = True
 
-    def on_call(self, call, process):
-        #if self.check_key(pattern="HKEY_LOCAL_MACHINE\\HARDWARE\\DESCRIPTION\\System"):
-        if (self.check_argument_call(call, pattern="SystemBiosVersion", name="ValueName", category="registry") or
-            self.check_argument_call(call, pattern="VideoBiosVersion", name="ValueName", category="registry")):
-            return True
+    def run(self):
+        if "icmp" in self.results["network"]:
+            if len(self.results["network"]["icmp"]) > 0:
+                return True
+
+        return False

@@ -21,10 +21,14 @@ class Crash(Signature):
     severity = 1
     categories = ["execution", "crash"]
     authors = ["nex"]
-    minimum = "0.5"
+    minimum = "1.0"
+    evented = True
 
-    def run(self):
-        return self.check_argument(pattern=".*faultrep\.dll$",
-                                   name="FileName",
-                                   api="LdrLoadDll",
-                                   regex=True)
+    def on_call(self, call, process):
+        return self.check_argument_call(
+            call,
+            pattern=".*faultrep\.dll$",
+            name="FileName",
+            api="LdrLoadDll",
+            regex=True
+        )

@@ -21,52 +21,54 @@ class AntiVMSCSI(Signature):
     severity = 3
     categories = ["anti-vm"]
     authors = ["nex"]
-    minimum = "0.5"
+    minimum = "1.0"
+    evented = True
 
-    def run(self):
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.lastprocess = None
+
+    def on_call(self, call, process):
         indicator_registry = "0x80000002"
         indicator_key = "HARDWARE\\DEVICEMAP\\Scsi\\Scsi Port 0\\Scsi Bus 0\\Target Id 0\\Logical Unit Id 0"
         indicator_name = "Identifier"
 
-        for process in self.results["behavior"]["processes"]:
-            opened = False
-            for call in process["calls"]:
-                # First I check if the malware opens the releavant registry key.
-                if call["api"].startswith("RegOpenKeyEx"):
-                    # Store the number of arguments matched.
-                    args_matched = 0
-                    # Store the handle used to open the key.
-                    handle = ""
-                    for argument in call["arguments"]:
-                        # Check if the registry is HKEY_LOCAL_MACHINE.
-                        if argument["name"] == "Registry" and argument["value"] == indicator_registry:
-                            args_matched += 1
-                        # Check if the subkey opened is the correct one.
-                        elif argument["name"] == "SubKey" and argument["value"] == indicator_key:
-                            args_matched += 1
-                        # Store the generated handle.
-                        elif argument["name"] == "Handle":
-                            handle = argument["value"]
-                    
-                    # If both arguments are matched, I consider the key to be successfully opened.
-                    if args_matched == 2:
-                        opened = True
-                # Now I check if the malware verified the value of the key.
-                elif call["api"].startswith("RegQueryValueEx"):
-                    # Verify if the key was actually opened.
-                    if not opened:
-                        continue
+        if process is not self.lastprocess:
+            self.handle = ""
+            self.opened = False
+            self.lastprocess = process
 
-                    # Verify the arguments.
-                    args_matched = 0
-                    for argument in call["arguments"]:
-                        if argument["name"] == "Handle" and argument["value"] == handle:
-                            args_matched += 1
-                        elif argument["name"] == "ValueName" and argument["value"] == indicator_name:
-                            args_matched += 1
+        # First I check if the malware opens the releavant registry key.
+        if call["api"].startswith("RegOpenKeyEx"):
+            # Store the number of arguments matched.
+            args_matched = 0
+            # Store the handle used to open the key.
+            self.handle = ""
+            # Check if the registry is HKEY_LOCAL_MACHINE.
+            if self.get_argument(call,"Registry") == indicator_registry:
+                args_matched += 1
+            # Check if the subkey opened is the correct one.
+            if self.get_argument(call,"SubKey") == indicator_key:
+                args_matched += 1
 
-                    # Finally, if everything went well, I consider the signature as matched.
-                    if args_matched == 2:
-                        return True
+            # If both arguments are matched, I consider the key to be successfully opened.
+            if args_matched == 2:
+                self.opened = True
+                # Store the generated handle.
+                self.handle = self.get_argument(call,"Handle")
+        # Now I check if the malware verified the value of the key.
+        if call["api"].startswith("RegQueryValueEx"):
+            # Verify if the key was actually opened.
+            if not self.opened:
+                return
 
-        return False
+            # Verify the arguments.
+            args_matched = 0
+            if self.get_argument(call,"Handle") == self.handle:
+                args_matched += 1
+            if self.get_argument(call,"ValueName") == indicator_name:
+                args_matched += 1
+
+            # Finally, if everything went well, I consider the signature as matched.
+            if args_matched == 2:
+                return True

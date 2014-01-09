@@ -15,17 +15,18 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class AntiVMBios(Signature):
-    name = "antivm_generic_bios"
-    description = "Checks the version of Bios, possibly for anti-virtualization"
+class GetProductID(Signature):
+    name = "antisandbox_productid"
+    description = "Retrieves Windows ProductID, probably to fingerprint the sandbox"
     severity = 3
-    categories = ["anti-vm"]
+    categories = ["anti-sandbox"]
     authors = ["nex"]
     minimum = "1.0"
     evented = True
 
     def on_call(self, call, process):
-        #if self.check_key(pattern="HKEY_LOCAL_MACHINE\\HARDWARE\\DESCRIPTION\\System"):
-        if (self.check_argument_call(call, pattern="SystemBiosVersion", name="ValueName", category="registry") or
-            self.check_argument_call(call, pattern="VideoBiosVersion", name="ValueName", category="registry")):
+        if not call["api"].startswith("RegQueryValueEx"):
+            return
+
+        if self.get_argument(call, "ValueName") == "ProductId":
             return True

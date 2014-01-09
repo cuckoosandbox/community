@@ -15,17 +15,19 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class AntiVMBios(Signature):
-    name = "antivm_generic_bios"
-    description = "Checks the version of Bios, possibly for anti-virtualization"
+class Prinimalka(Signature):
+    name = "banker_prinimalka"
+    description = "Detected Prinimalka banking trojan"
     severity = 3
-    categories = ["anti-vm"]
+    categories = ["banker"]
+    families = ["prinimalka"]
     authors = ["nex"]
     minimum = "1.0"
     evented = True
 
     def on_call(self, call, process):
-        #if self.check_key(pattern="HKEY_LOCAL_MACHINE\\HARDWARE\\DESCRIPTION\\System"):
-        if (self.check_argument_call(call, pattern="SystemBiosVersion", name="ValueName", category="registry") or
-            self.check_argument_call(call, pattern="VideoBiosVersion", name="ValueName", category="registry")):
-            return True
+        if call["api"].startswith("RegSetValueEx"):
+            if self.get_argument(call, "ValueName").endswith("_opt_server1"):
+                server = self.get_argument(call, "Buffer").rstrip("\\x00")
+                self.description += " (C&C: {0})".format(server)
+                return True

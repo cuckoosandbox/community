@@ -21,28 +21,29 @@ class AntiVMServices(Signature):
     severity = 3
     categories = ["anti-vm"]
     authors = ["nex"]
-    minimum = "0.5"
+    minimum = "1.0"
+    evented = True
 
-    def run(self):
-        for process in self.results["behavior"]["processes"]:
-            handle = None
-            for call in process["calls"]:
-                if not handle:
-                    if call["api"].startswith("RegOpenKeyEx"):
-                        correct = False
-                        for argument in call["arguments"]:
-                            if argument["name"] == "SubKey":
-                                if argument["value"] == "SYSTEM\\ControlSet001\\Services":
-                                    correct = True
-                            elif argument["name"] == "Handle":
-                                handle = argument["value"]
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.lastprocess = None
 
-                        if not correct:
-                            handle = None
+    def on_call(self, call, process):
+        if process is not self.lastprocess:
+            self.handle = None
+            self.lastprocess = process
+
+        if not self.handle:
+            if call["api"].startswith("RegOpenKeyEx"):
+                correct = False
+                if self.get_argument(call,"SubKey") == "SYSTEM\\ControlSet001\\Services":
+                    correct = True
                 else:
-                    if call["api"].startswith("RegEnumKeyEx"):
-                        for argument in call["arguments"]:
-                            if argument["name"] == "Handle" and argument["value"] == handle:
-                                return True
+                    self.handle = self.get_argument(call,"Handle")
 
-        return False
+                if not correct:
+                    self.handle = None
+        else:
+            if call["api"].startswith("RegEnumKeyEx"):
+                if self.get_argument(call,"Handle") == self.handle:
+                    return True

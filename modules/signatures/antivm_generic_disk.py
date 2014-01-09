@@ -16,45 +16,42 @@
 from lib.cuckoo.common.abstracts import Signature
 
 class DiskInformation(Signature):
-    name = "antivm_generic_diskinfo"
+    name = "antivm_generic_disk"
     description = "Queries information on disks, possibly for anti-virtualization"
     severity = 3
     categories = ["anti-vm"]
     authors = ["nex"]
-    minimum = "0.5"
+    minimum = "1.0"
+    evented = True
 
-    def run(self):
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.lastprocess = None
+
+    def on_call(self, call, process):
         indicators = [
             "scsi0",
             "physicaldrive0"
         ]
 
-        for process in self.results["behavior"]["processes"]:
-            handle = None
-            for call in process["calls"]:
-                if not handle:
-                    if call["api"] == "NtCreateFile":
-                        correct = False
-                        for argument in call["arguments"]:
-                            if argument["name"] == "FileName":
-                                for indicator in indicators:
-                                    if indicator in argument["value"].lower():
-                                        correct = True
-                            elif argument["name"] == "FileHandle":
-                                handle = argument["value"]
+        ioctls = [
+            "2954240", # IOCTL_STORAGE_QUERY_PROPERTY
+            "458752", # IOCTL_DISK_GET_DRIVE_GEOMETRY
+            "315400" #IOCTL_SCSI_MINIPORT
+        ]
 
-                        if not correct:
-                            handle = None
-                else:
-                    if call["api"] == "DeviceIoControl":
-                        matched = 0
-                        for argument in call["arguments"]:
-                            if argument["name"] == "DeviceHandle" and argument["value"] == handle:
-                                matched += 1
-                            elif argument["name"] == "IoControlCode" and argument["value"] == "2954240":
-                                matched += 1
+        if process is not self.lastprocess:
+            self.handle = None
+            self.lastprocess = process
 
-                        if matched == 2:
-                            return True
-
-        return False
+        if not self.handle:
+            if call["api"] == "NtCreateFile":
+                file_name = self.get_argument(call, "FileName")
+                for indicator in indicators:
+                    if indicator in file_name.lower():
+                        self.handle = self.get_argument(call, "FileHandle")
+        else:
+            if call["api"] == "DeviceIoControl":
+                if self.get_argument(call, "DeviceHandle") == self.handle:
+                    if str(self.get_argument(call, "IoControlCode")) in ioctls:
+                        return True
