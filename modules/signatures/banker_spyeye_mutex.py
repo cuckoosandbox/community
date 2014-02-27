@@ -26,7 +26,7 @@ class SpyEyeMutexes(Signature):
 
     def run(self):
         indicators = [
-            "zXeRY3a_PtW.*",
+            ".*zXeRY3a_PtW.*",          ## https://malwr.com/analysis/ZmMzNTk0YWU5OGM4NDUzNjg2YmEzYjcxNTFjNTBkM2I/
             "SPYNET",
             "__CLEANSWEEP__",
             "__CLEANSWEEP_UNINSTALL__",
