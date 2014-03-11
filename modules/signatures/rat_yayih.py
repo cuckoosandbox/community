@@ -28,5 +28,5 @@ class Yayih(Signature):
     def on_call(self, call, process):
         if call["api"].startswith("RegSetValueEx"):
             if self.get_argument(call, "ValueName").endswith("MicrosoftInfo"):
-            	## https://malwr.com/analysis/ZDEyYzE3ZTMwNjkxNDk4Mzg3OTg2ZDAyMTczZWZmMDY/
+				## https://malwr.com/analysis/ZDEyYzE3ZTMwNjkxNDk4Mzg3OTg2ZDAyMTczZWZmMDY/
 				return True
