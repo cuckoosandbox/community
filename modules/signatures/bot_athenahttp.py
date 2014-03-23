@@ -14,20 +14,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from lib.cuckoo.common.abstracts import Signature
+import re
 
-class DirtJumper(Signature):
-    name = "bot_dirtjumper"
-    description = "Recognized to be a DirtJumper bot"
+class AthenaHttp(Signature):
+    name = "bot_athenahttp"
+    description = "Recognized to be an Athena Http bot"
     severity = 3
     categories = ["bot", "ddos"]
-    families = ["dirtjumper"]
-    authors = ["nex","jjones"]
+    families = ["athenahttp"]
+    authors = ["jjones"]
     minimum = "0.5"
 
     def run(self):
+	athena_http_re = re.compile('a=(%[A-Fa-f0-9]{2})+&b=[-A-Za-z0-9+/]+(%3[dD])*&c=(%[A-Fa-f0-9]{2})+')
         if "network" in self.results:
             for http in self.results["network"]["http"]:
-                if http["method"] == "POST" and http["body"].startswith("k=") and http.get('user-agent','') == 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US)':
+		print http
+                if http["method"] == "POST" and athena_http_re.search(http["body"]):
                     self.data.append({"url" : http["uri"], "data" : http["body"]})
                     return True
 
