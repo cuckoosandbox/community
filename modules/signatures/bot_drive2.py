@@ -36,7 +36,7 @@ class Drive2(Signature):
         drive_ua_re = re.compile(regexp)
         if "network" in self.results:
             for http in self.results["network"]["http"]:
-                if (http["method"] == "POST" and (http["body"].startswith("req=") or http["body"].startswith("newd=1")) and drive_ua_re.search(http.get("user-agent", "")):
+                if http["method"] == "POST" and (http["body"].startswith("req=") or http["body"].startswith("newd=1")) and drive_ua_re.search(http.get("user-agent", "")):
                     self.data.append({"url" : http["uri"], "data" : http["body"]})
                     return True
 
