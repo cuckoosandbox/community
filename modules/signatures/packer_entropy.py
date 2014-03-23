@@ -15,32 +15,30 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class SectionsEntropy(Signature):
-    name = "sections_entropy"
+class PackerEntropy(Signature):
+    name = "packer_entropy"
     description = "Is a high likelihood that the file is encrypted or contains compressed data."
     severity = 3
     categories = ["packer"]
-    authors = ["Robby Zeitfuchs", "@robbyFux"]
+    authors = ["Robby Zeitfuchs", "nex"]
     minimum = "0.6"
     references = ["http://www.forensickb.com/2013/03/file-entropy-explained.html", 
                   "http://virii.es/U/Using%20Entropy%20Analysis%20to%20Find%20Encrypted%20and%20Packed%20Malware.pdf"]
 
     def run(self):
-        hasSignificantAmountOfCompressedData = False
-        
         if "static" in self.results:
             if "pe_sections" in self.results["static"]:
-                totalCompressedData = 0
-                totalPEDataLength = 0
+                total_compressed = 0
+                total_pe_data = 0
                 
                 for section in self.results["static"]["pe_sections"]:
-                    totalPEDataLength += int(section["size_of_data"], 16)
+                    total_pe_data += int(section["size_of_data"], 16)
                      
                     if section["entropy"] > 6.8:
                         self.data.append({"section" : section})
-                        totalCompressedData += int(section["size_of_data"], 16)
+                        total_compressed += int(section["size_of_data"], 16)
                 
-                if ((1.0 * totalCompressedData)/totalPEDataLength) > .2:
-                    hasSignificantAmountOfCompressedData = True
+                if ((1.0 * total_compressed) / total_pe_data) > .2:
+                    return True
 
-        return hasSignificantAmountOfCompressedData
+        return False
