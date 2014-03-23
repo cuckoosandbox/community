@@ -1,4 +1,4 @@
-# Copyright (C) 2012 @threatlead
+# Copyright (C) 2014 @threatlead
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,32 +21,36 @@ class SpynetRat(Signature):
     severity = 3
     categories = ["rat"]
     families = ["spynet"]
-    authors = ["threatlead"]
+    authors = ["threatlead", "nex"]
+    references = [
+        "https://malwr.com/analysis/ZDQ1NjBhNWIzNTdkNDRhNjhkZTFmZTBkYTU2YjMwNzg/",
+        "https://malwr.com/analysis/MjkxYmE2YzczNzcwNGJiZjljNDcwMzA2ZDkyNDU2Y2M/",
+        "https://malwr.com/analysis/N2E3NWRiNDMyYjIwNGE0NTk3Y2E5NWMzN2UwZTVjMzI/",
+        "https://malwr.com/analysis/N2Q2NWY0Y2MzOTM0NDEzNmE1MTdhOThiNTQxMzhiNzk/"   
+    ]
     minimum = "0.5"
 
     def run(self):
-    	## Mutex
         indicators = [
-            ".*CYBERGATEUPDATE",	## https://malwr.com/analysis/ZDQ1NjBhNWIzNTdkNDRhNjhkZTFmZTBkYTU2YjMwNzg/
-            ".*\(\(SpyNet\)\).*",	## https://malwr.com/analysis/MjkxYmE2YzczNzcwNGJiZjljNDcwMzA2ZDkyNDU2Y2M/
-            ".*Spy-Net.*",			## https://malwr.com/analysis/N2E3NWRiNDMyYjIwNGE0NTk3Y2E5NWMzN2UwZTVjMzI/
-            ".*X_PASSWORDLIST_X.*",	## https://malwr.com/analysis/N2Q2NWY0Y2MzOTM0NDEzNmE1MTdhOThiNTQxMzhiNzk/
-            ".*X_BLOCKMOUSE_X.*",	## https://malwr.com/analysis/N2Q2NWY0Y2MzOTM0NDEzNmE1MTdhOThiNTQxMzhiNzk/
-            ".*PERSIST",			## https://malwr.com/analysis/N2Q2NWY0Y2MzOTM0NDEzNmE1MTdhOThiNTQxMzhiNzk/
-            ".*_SAIR",				## https://malwr.com/analysis/N2Q2NWY0Y2MzOTM0NDEzNmE1MTdhOThiNTQxMzhiNzk/
+            ".*CYBERGATEUPDATE",
+            ".*\(\(SpyNet\)\).*",
+            ".*Spy-Net.*",
+            ".*X_PASSWORDLIST_X.*",
+            ".*X_BLOCKMOUSE_X.*",
+            ".*PERSIST",
+            ".*_SAIR",
         ]
 
         for indicator in indicators:
             if self.check_mutex(pattern=indicator, regex=True):
                 return True
 
-        ## Registry
-        regkeys = [
+        keys = [
             ".*\\SpyNet\\.*",
         ]
 
-        for regkey in regkeys:
-            if self.check_key(pattern=regkey, regex=True):
+        for key in keys:
+            if self.check_key(pattern=key, regex=True):
                 return True
-		
-		return False
+        
+        return False

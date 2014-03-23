@@ -1,4 +1,4 @@
-# Copyright (C) 2012 @threatlead
+# Copyright (C) 2014 @threatlead
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,11 +22,12 @@ class FynloskiMutexes(Signature):
     categories = ["rat"]
     families = ["fynloski"]
     authors = ["threatlead"]
+    references = ["https://malwr.com/analysis/ODVlOWEyNDU3NzBhNDE3OWJkZjE0ZjIxNTdiMzU1YmM/"]
     minimum = "0.5"
 
     def run(self):
         indicators = [
-            ".*DC_MUTEX-.*"			## https://malwr.com/analysis/ODVlOWEyNDU3NzBhNDE3OWJkZjE0ZjIxNTdiMzU1YmM/
+            "DC_MUTEX-.*"
         ]
 
         for indicator in indicators:

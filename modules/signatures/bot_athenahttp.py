@@ -26,7 +26,7 @@ class AthenaHttp(Signature):
     minimum = "0.5"
 
     def run(self):
-	    athena_http_re = re.compile('a=(%[A-Fa-f0-9]{2})+&b=[-A-Za-z0-9+/]+(%3[dD])*&c=(%[A-Fa-f0-9]{2})+')
+        athena_http_re = re.compile('a=(%[A-Fa-f0-9]{2})+&b=[-A-Za-z0-9+/]+(%3[dD])*&c=(%[A-Fa-f0-9]{2})+')
         if "network" in self.results:
             for http in self.results["network"]["http"]:
                 if http["method"] == "POST" and athena_http_re.search(http["body"]):

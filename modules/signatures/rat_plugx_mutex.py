@@ -1,4 +1,4 @@
-# Copyright (C) 2012 @threatlead
+# Copyright (C) 2014 @threatlead
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,16 +21,17 @@ class PlugxMutexes(Signature):
     severity = 3
     categories = ["rat"]
     families = ["plugx"]
-    authors = ["threatlead"]
+    authors = ["threatlead", "nex"]
+    references = ["https://malwr.com/analysis/YTZjYmUwMzNlNzkwNGU5YmIxNDQwYTcyYjFkYWI0NWE/"]
     minimum = "0.5"
 
     def run(self):
         indicators = [
-            ".*DoInstPrepare",	## https://malwr.com/analysis/YTZjYmUwMzNlNzkwNGU5YmIxNDQwYTcyYjFkYWI0NWE/
+            "DoInstPrepare",
         ]
 
         for indicator in indicators:
-            if self.check_mutex(pattern=indicator, regex=True):
+            if self.check_mutex(pattern=indicator):
                 return True
 
         return False

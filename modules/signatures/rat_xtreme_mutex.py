@@ -1,4 +1,4 @@
-# Copyright (C) 2012 @threatlead
+# Copyright (C) 2014 @threatlead
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,13 +21,17 @@ class XtremeMutexes(Signature):
     severity = 3
     categories = ["rat"]
     families = ["xtremerat"]
-    authors = ["threatlead"]
+    authors = ["threatlead", "nex"]
+    references = [
+        "https://malwr.com/analysis/ZWM4YjI2MzI1MmQ2NDBkMjkwNzI3NzhjNWM5Y2FhY2U/",
+        "https://malwr.com/analysis/MWY5YTAwZWI1NDc3NDJmMTgyNDA4ODc0NTk0MWIzNjM/"
+    ]
     minimum = "0.5"
 
     def run(self):
         indicators = [
-            ".*XTREMEUPDATE",		## https://malwr.com/analysis/ZWM4YjI2MzI1MmQ2NDBkMjkwNzI3NzhjNWM5Y2FhY2U/
-            ".*\(\(Mutex\)\)"		## https://malwr.com/analysis/MWY5YTAwZWI1NDc3NDJmMTgyNDA4ODc0NTk0MWIzNjM/
+            "XTREMEUPDATE",
+            "\(\(Mutex\)\).*"
         ]
 
         for indicator in indicators:

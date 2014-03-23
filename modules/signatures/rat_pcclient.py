@@ -1,4 +1,4 @@
-# Copyright (C) 2012 @threatlead
+# Copyright (C) 2014 @threatlead
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,27 +20,26 @@ class PcClientMutexes(Signature):
     description = "Creates known PcClient mutex and/or file changes."
     severity = 3
     categories = ["rat"]
-    families = ["pcclient"]
+    families = ["pcclient", "nex"]
     authors = ["threatlead"]
+    references = ["https://malwr.com/analysis/MDIxN2NhMjg4MTg2NDY4MWIyNTE0Zjk5MTY1OGU4YzE/"]
     minimum = "0.5"
     
     def run(self):
-		## Mutex
         indicators = [
-            ".*BKLANG.*",			## https://malwr.com/analysis/MDIxN2NhMjg4MTg2NDY4MWIyNTE0Zjk5MTY1OGU4YzE/
-			".*VSLANG.*",
+            "BKLANG.*",
+            "VSLANG.*",
         ]
         
         for indicator in indicators:
             if self.check_mutex(pattern=indicator, regex=True):
                 return True
 
-		## Files
-		indicators = [
-            ".*\\\\syslog.dat",		# https://malwr.com/analysis/MDIxN2NhMjg4MTg2NDY4MWIyNTE0Zjk5MTY1OGU4YzE/
-            ".*\\\\.*_lang.ini",	# https://malwr.com/analysis/MDIxN2NhMjg4MTg2NDY4MWIyNTE0Zjk5MTY1OGU4YzE/
-            ".*\\\\[0-9]+_lang.dll",# https://malwr.com/analysis/MDIxN2NhMjg4MTg2NDY4MWIyNTE0Zjk5MTY1OGU4YzE/
-            ".*\\\\[0-9]+_res.tmp", # https://malwr.com/analysis/MDIxN2NhMjg4MTg2NDY4MWIyNTE0Zjk5MTY1OGU4YzE/
+        indicators = [
+            ".*\\\\syslog.dat",
+            ".*\\\\.*_lang.ini",
+            ".*\\\\[0-9]+_lang.dll",
+            ".*\\\\[0-9]+_res.tmp",
         ]
 
         for indicator in indicators:

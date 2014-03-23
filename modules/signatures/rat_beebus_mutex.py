@@ -21,14 +21,17 @@ class BeebusMutexes(Signature):
     severity = 3
     categories = ["rat"]
     families = ["beebus"]
-    authors = ["threatlead"]
+    authors = ["threatlead", "nex"]
     minimum = "0.5"
-    references = ["http://www.fireeye.com/blog/technical/malware-research/2013/04/the-mutter-backdoor-operation-beebus-with-new-targets.html",]
+    references = [
+        "http://www.fireeye.com/blog/technical/malware-research/2013/04/the-mutter-backdoor-operation-beebus-with-new-targets.html",
+        "https://malwr.com/analysis/MjhmNmJhZjdjOWM4NDExZDkzOWMyMDQ2YzUzN2QwZDI/"
+    ]
 
     def run(self):
         indicators = [
-            ".*mqe45tex13fw14op0",	## https://malwr.com/analysis/MjhmNmJhZjdjOWM4NDExZDkzOWMyMDQ2YzUzN2QwZDI/
-            ".*654234576804d",		## fireeye report
+            ".*mqe45tex13fw14op0",
+            ".*654234576804d",
         ]
 
         for indicator in indicators:
