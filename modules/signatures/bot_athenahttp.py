@@ -26,6 +26,20 @@ class AthenaHttp(Signature):
     minimum = "0.5"
 
     def run(self):
+        indicators = [
+            "UPDATE__",
+            "MAIN_.*",
+            "BACKUP_.*"
+        ]
+
+        count = 0
+        for indicator in indicators:
+            if self.check_mutex(pattern=indicator, regex=True):
+                count += 1
+
+        if count == len(indicators):
+            return True
+
         athena_http_re = re.compile("a=(%[A-Fa-f0-9]{2})+&b=[-A-Za-z0-9+/]+(%3[dD])*&c=(%[A-Fa-f0-9]{2})+")
 
         if "network" in self.results:
