@@ -18,7 +18,7 @@ from lib.cuckoo.common.abstracts import Signature
 class PackerEntropy(Signature):
     name = "packer_entropy"
     description = "The binary likely contains encrypted or compressed data."
-    severity = 3
+    severity = 2
     categories = ["packer"]
     authors = ["Robby Zeitfuchs", "nex"]
     minimum = "0.6"
