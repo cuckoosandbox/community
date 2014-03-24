@@ -18,7 +18,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class AthenaHttp(Signature):
     name = "bot_athenahttp"
-    description = "Recognized to be an Athena Http bot"
+    description = "Recognized to be an Athena HTTP bot"
     severity = 3
     categories = ["bot", "ddos"]
     families = ["athenahttp"]
