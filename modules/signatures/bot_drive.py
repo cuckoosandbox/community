@@ -26,7 +26,7 @@ class Drive(Signature):
     minimum = "0.5"
 
     def run(self):
-        drive_ua_re = re.compile('Mozilla/5.0 \(Windows NT [56].1; (WOW64; )?rv:(9|1[0-7]).0\) Gecko/20100101 Firefox/(9|1[0-7]).0|Mozilla/4.0 \(compatible; MSIE 8.0; Windows NT [56].1; (WOW64; )Trident/4.0; SLCC2; .NET CLR 2.0.[0-9]{6}; .NET CLR 3.5.[0-9]{6}; .NET CLR 3.0.[0-9]{6}|Opera/9.80 \(Windows NT [56].1; (WOW64; )U; Edition [a-zA-Z]+ Local; ru\) Presto/2.10.289 Version/([5-9]|1[0-2]).0[0-9]')
+        drive_ua_re = re.compile("Mozilla/5.0 (Windows NT [56].1; (WOW64; )?rv:(9|1[0-7]).0) Gecko/20100101 Firefox/(9|1[0-7]).0|Mozilla/4.0 (compatible; MSIE 8.0; Windows NT [56].1; (WOW64; )?Trident/4.0; SLCC2; .NET CLR 2.0.[0-9]{6}; .NET CLR 3.5.[0-9]{6}; .NET CLR 3.0.[0-9]{6}|Opera/9.80 (Windows NT [56].1; (WOW64; )?U; Edition [a-zA-Z]+ Local; ru) Presto/2.10.289 Version/([5-9]|1[0-2]).0[0-9]")
         if "network" in self.results:
             for http in self.results["network"]["http"]:
                 if http["method"] == "POST" and http["body"].startswith("k=") and drive_ua_re.search(http.get("user-agent", "")):
