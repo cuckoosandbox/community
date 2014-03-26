@@ -29,6 +29,9 @@ class AntiVMServices(Signature):
         self.lastprocess = None
 
     def on_call(self, call, process):
+        if call["api"].startswith("EnumServicesStatus"):
+            return True
+            
         if process is not self.lastprocess:
             self.handle = None
             self.lastprocess = process
