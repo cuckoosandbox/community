@@ -24,7 +24,7 @@ class FTPStealer(Signature):
     minimum = "0.5"
 
     def run(self):
-        indicators = [
+        file_indicators = [
             ".*\\\\CuteFTP\\\\sm\.dat$",
             ".*\\\\FlashFXP\\\\.*\\\\Sites\.dat$",
             ".*\\\\FlashFXP\\\\.*\\\\Sites\.dat$",
@@ -37,11 +37,22 @@ class FTPStealer(Signature):
             ".*\\\\FTPRush\\\\.*",
             ".*\\\\LeapFTP\\\\.*",
             ".*\\\\FTPGetter\\\\.*",
-            ".*\\\\ALFTP\\\\.*"
+            ".*\\\\ALFTP\\\\.*",
+            ".*\\\\Ipswitch\\\\WS_FTP.*",
+        ]
+        registry_indicators = [
+            ".*Software\\Far*\\Hosts$",
+            ".*Software\\Far*\\FTPHost$",
+            ".*Software\\Ghisler\\Windows Commander$",
+            ".*Software\\Ghisler\\Total Commander$",
+            ".*Software\\BPFTP\\$",
+            ".*Software\\BulletProof Software\BulletProof FTP Client\\$"
         ]
 
-        for indicator in indicators:
+        for indicator in file_indicators:
             if self.check_file(pattern=indicator, regex=True):
                 return True
-
+        for indicator in registry_indicators:
+            if self.check_key(pattern=indicator, regex=True):
+                return True
         return False
