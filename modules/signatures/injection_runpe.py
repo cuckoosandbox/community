@@ -36,8 +36,8 @@ class InjectionRUNPE(Signature):
 
         if call["api"]  == "CreateProcessInternalW" and self.sequence == 0:
             self.sequence = 1
-            # FIXME: self.process_handle = self.get_argument(call, "lpStartupInfo").hProcess
-            # FIXME: self.thread_handle = self.get_argument(call, "lpStartupInfo").hThread
+            self.process_handle = self.get_argument(call, "ProcessHandle")
+            self.thread_handle = self.get_argument(call, "ThreadHandle")
         elif call["api"] == "NtUnmapViewOfSection" and self.sequence == 1:
             if self.get_argument(call, "ProcessHandle") == self.process_handle:
                 self.sequence = 2
@@ -46,4 +46,7 @@ class InjectionRUNPE(Signature):
                 self.sequence = 3
         elif (call["api"].startswith("SetThreadContext") and self.sequence == 3:
             if self.get_argument(call, "ThreadHandle") == self.thread_handle:
+                self.sequence = 4
+        elif call["api"] == "NtSuspendThread" and self.sequence == 4:
+            if self.get_argument(call, "ThreadHandle") == self.thread_handle
                 return True
