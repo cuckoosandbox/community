@@ -47,6 +47,6 @@ class InjectionRUNPE(Signature):
         elif (call["api"].startswith("SetThreadContext") and self.sequence == 3:
             if self.get_argument(call, "ThreadHandle") == self.thread_handle:
                 self.sequence = 4
-        elif call["api"] == "NtSuspendThread" and self.sequence == 4:
+        elif call["api"] == "NtResumeThread" and self.sequence == 4:
             if self.get_argument(call, "ThreadHandle") == self.thread_handle
                 return True
