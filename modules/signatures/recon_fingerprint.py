@@ -26,7 +26,7 @@ class Fingerprint(Signature):
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.threshold = 3
+        self.threshold = 4 # easiest way to disable this plugin
         self.matches = 0
 
     def on_call(self, call, process):
