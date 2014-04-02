@@ -32,8 +32,9 @@ class NetworkBIND(Signature):
         if call["api"] != "bind":
             return
 
-        bind = "{0}:{1}".format(self.get_argument(call, "ip"), self.get_argument(call, "port"))
-        if bind not in self.binds:
+        port = self.get_argument(call, "port")
+        bind = "{0}:{1}".format(self.get_argument(call, "ip"), port)
+        if int(port) > 0 and (bind not in self.binds): # Don't catch bind 0
             self.binds.append(bind)
 
     def on_complete(self):
