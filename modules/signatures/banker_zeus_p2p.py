@@ -33,28 +33,32 @@ class ZeusP2P(Signature):
                   "https://www.virustotal.com/de/file/301fcadf53e6a6167e559c84d6426960af8626d12b2e25aa41de6dce511d0568/analysis/#behavioural-info"]
 
     def run(self):
-            #Check zeus synchronization-mutex
-            #regexp pattern for zeus synchronization-mutex such as for example 2CCB0BFE-ECAB-89CD-0261-B06D1C10937F
-            exp = re.compile(".*[A-Z0-9]{8}-([A-Z0-9]{4}-){3}[A-Z0-9]{12}", re.IGNORECASE)
-            mutexes = self.results["behavior"]["summary"]["mutexes"]
-            
-            count = 0
-            for mutex in mutexes:
-            	if exp.match(mutex):  
-            		self.data.append({"mutex": mutex})
-            		count += 1 
-            		
-            if count < 5:
-            	return False
-            
-            #Check for UDP Traffic on remote port greater than 1024
-            count = 0
-            if "network" in self.results:
-            	for udp in self.results["network"]["udp"]:
-            		if udp["dport"] > 1024:
-            			count += 1
-                
-            if count < 4:
-                return False
+        # Check zeus synchronization-mutex.
+        # Regexp pattern for zeus synchronization-mutex such as for example:
+        # 2CCB0BFE-ECAB-89CD-0261-B06D1C10937F
+        exp = re.compile(".*[A-Z0-9]{8}-([A-Z0-9]{4}-){3}[A-Z0-9]{12}", re.IGNORECASE)
+        mutexes = self.results["behavior"]["summary"]["mutexes"]
         
-            return True
+        count = 0
+        for mutex in mutexes:
+            if exp.match(mutex):  
+                self.data.append({"mutex": mutex})
+                count += 1 
+
+        # Check if there are at least 5 mutexes opened matching the pattern?   
+        if count < 5:
+            return False
+        
+        # Check for UDP Traffic on remote port greater than 1024.
+        # TODO: this might be faulty without checking whether the destination
+        # IP is really valid.
+        count = 0
+        if "network" in self.results:
+            for udp in self.results["network"]["udp"]:
+                if udp["dport"] > 1024:
+                    count += 1
+            
+        if count < 4:
+            return False
+    
+        return True
