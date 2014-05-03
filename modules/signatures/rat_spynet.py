@@ -37,7 +37,7 @@ class SpynetRat(Signature):
             ".*Spy-Net.*",
             ".*X_PASSWORDLIST_X.*",
             ".*X_BLOCKMOUSE_X.*",
-            ".*PERSIST",
+            #".*PERSIST", # Causes false positive detection on XtremeRAT samples.
             ".*_SAIR",
         ]
 
