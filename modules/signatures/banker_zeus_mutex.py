@@ -16,7 +16,7 @@
 from lib.cuckoo.common.abstracts import Signature
 
 class ZeusMutexes(Signature):
-    name = "banker_zeus_mutexes"
+    name = "banker_zeus_mutex"
     description = "Creates Zeus (Banking Trojan) mutexes"
     severity = 3
     categories = ["banker"]
@@ -39,7 +39,8 @@ class ZeusMutexes(Signature):
             "_SOSI_.*",                                  
             ".*MSIdent Logon",                            
             ".*MPSWabDataAccessMutex",                    
-            ".*MPSWABOlkStoreNotifyMutex"]
+            ".*MPSWABOlkStoreNotifyMutex"
+        ]
             
         for indicator in indicators:
             match = self.check_mutex(pattern=indicator, regex=True)
