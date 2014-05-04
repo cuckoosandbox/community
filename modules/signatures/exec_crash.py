@@ -32,6 +32,6 @@ class Crash(Signature):
             api="LdrLoadDll",
             regex=True
         )
+
         if res:
             return True
-        return None
