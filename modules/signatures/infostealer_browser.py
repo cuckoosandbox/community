@@ -1,4 +1,4 @@
-# Copyright (C) 2012 Claudio "nex" Guarnieri (@botherder)
+# Copyright (C) 2012-2014 Claudio "nex" Guarnieri (@botherder)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,6 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import re
+
 from lib.cuckoo.common.abstracts import Signature
 
 class BrowserStealer(Signature):
@@ -21,31 +23,42 @@ class BrowserStealer(Signature):
     severity = 3
     categories = ["infostealer"]
     authors = ["nex"]
-    minimum = "0.5"
+    minimum = "1.0"
+    evented = True
 
-    def run(self):
-        if self.results["info"]["category"] != "file":
-            return False
+    indicators = [
+        re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\signons\.sqlite$"),
+        re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\secmod\.db$"),
+        re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\cert8\.db$"),
+        re.compile(".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\key3\.db$"),
+        re.compile(".*\\\\History\\\\History\.IE5\\\\index\.dat$"),
+        re.compile(".*\\\\Temporary\\\\ Internet\\ Files\\\\Content\.IE5\\\\index\.dat$"),
+        re.compile(".*\\\\Application\\ Data\\\\Google\\\\Chrome\\\\.*"),
+        re.compile(".*\\\\Application\\ Data\\\\Opera\\\\.*"),
+        re.compile(".*\\\\Application\\ Data\\\\Chromium\\\\.*"),
+        re.compile(".*\\\\Application\\ Data\\\\ChromePlus\\\\.*"),
+        re.compile(".*\\\\Application\\ Data\\\\Nichrome\\\\.*"),
+        re.compile(".*\\\\Application\\ Data\\\\Bromium\\\\.*"),
+        re.compile(".*\\\\Application\\ Data\\\\RockMelt\\\\.*")
 
-        indicators = [
-            ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\signons\.sqlite$",
-            ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\secmod\.db$",
-            ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\cert8\.db$",
-            ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\key3\.db$",
-            ".*\\\\History\\\\History\.IE5\\\\index\.dat$",
-            ".*\\\\Temporary\\\\ Internet\\ Files\\\\Content\.IE5\\\\index\.dat$",
-            ".*\\\\Application\\ Data\\\\Google\\\\Chrome\\\\.*",
-            ".*\\\\Application\\ Data\\\\Opera\\\\.*",
-            ".*\\\\Application\\ Data\\\\Chromium\\\\.*",
-            ".*\\\\Application\\ Data\\\\ChromePlus\\\\.*",
-            ".*\\\\Application\\ Data\\\\Nichrome\\\\.*",
-            ".*\\\\Application\\ Data\\\\Bromium\\\\.*",
-            ".*\\\\Application\\ Data\\\\RockMelt\\\\.*"
+    ]
 
-        ]
+    def on_call(self, call, process):
+        # If the current process appears to be a browser, continue.
+        if process["process_name"].lower() in ("iexplore.exe", "firefox.exe", "chrome.exe"):
+            return None
 
-        for indicator in indicators:
-            if self.check_file(pattern=indicator, regex=True):
-                return True
+        # If the call category is not filesystem, continue.
+        if call["category"] != "filesystem":
+            return None
 
-        return False
+        for argument in call["arguments"]:
+            if argument["name"] == "FileName":
+                for indicator in self.indicators:
+                    if indicator.match(argument["value"]):
+                        self.data.append({
+                            "file" : argument["value"],
+                            "process_id" : process["process_id"],
+                            "process_name" : process["process_name"]}
+                        )
+                        return True
