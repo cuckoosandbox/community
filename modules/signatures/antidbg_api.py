@@ -14,50 +14,50 @@ class SystemMetrics(Signature):
     evented = True
 
     def on_call(self, call, process):
-	  if call["api"].startswith("IsDebuggerPresent"):
-      return True
+	if call["api"].startswith("IsDebuggerPresent"):
+      		return True
 
-	  if call["api"].startswith("IsDebugger"):
-      return True
+	if call["api"].startswith("IsDebugger"):
+      		return True
 
-    if call["api"].startswith("NtQueryInformationProcess"):
-      return True
+    	if call["api"].startswith("NtQueryInformationProcess"):
+      		return True
 
-    if call["api"].startswith("CheckRemoteDebuggerPresent"):
-      return True
+    	if call["api"].startswith("CheckRemoteDebuggerPresent"):
+      		return True
 
-    if call["api"].startswith("SetInformationThread"):
-      return True
+    	if call["api"].startswith("SetInformationThread"):
+      		return True
 
-    if call["api"].startswith("DebugActiveProcess"):
-      return True
+    	if call["api"].startswith("DebugActiveProcess"):
+      		return True
 
-    if call["api"].startswith("QueryPerformanceCounter"):
-      return True
+    	if call["api"].startswith("QueryPerformanceCounter"):
+      		return True
 
-    if call["api"].startswith("GetTickCount"):
-      return True
+    	if call["api"].startswith("GetTickCount"):
+      		return True
 
-    if call["api"].startswith("OutputDebugString"):
-      return True
+    	if call["api"].startswith("OutputDebugString"):
+      		return True
 
-    if call["api"].startswith("SetUnhandledExceptionFilter"):
-      return True
+    	if call["api"].startswith("SetUnhandledExceptionFilter"):
+      		return True
 
-    if call["api"].startswith("GenerateConsoleCtrlEvent"):
-      return True
+	if call["api"].startswith("GenerateConsoleCtrlEvent"):
+      		return True
 
-    if call["api"].startswith("SetConsoleCtrlHandler"):
-      return True
+    	if call["api"].startswith("SetConsoleCtrlHandler"):
+      		return True
 
-    if call["api"].startswith("SetThreadContext"):
-      return True
+    	if call["api"].startswith("SetThreadContext"):
+      		return True
+	
+    	if call["api"].startswith("AddVectoredExceptionHandler"):
+      		return True
 
-    if call["api"].startswith("AddVectoredExceptionHandler"):
-      return True
+    	if call["api"].startswith("RemoveVectoredExceptionHandler"):
+      		return True
 
-    if call["api"].startswith("RemoveVectoredExceptionHandler"):
-      return True
-
-    if call["api"].startswith("RemoveVectoredExceptionHandler"):
-      return True
+    	if call["api"].startswith("RemoveVectoredExceptionHandler"):
+      		return True
