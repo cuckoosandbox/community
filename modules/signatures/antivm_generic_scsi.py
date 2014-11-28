@@ -21,12 +21,13 @@ class AntiVMSCSI(Signature):
     severity = 3
     categories = ["anti-vm"]
     authors = ["nex"]
-    minimum = "1.0"
+    minimum = "1.2"
     evented = True
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.lastprocess = None
+        self.signs = []
 
     def on_call(self, call, process):
         indicator_registry = "0x80000002"
@@ -56,6 +57,8 @@ class AntiVMSCSI(Signature):
                 self.opened = True
                 # Store the generated handle.
                 self.handle = self.get_argument(call,"Handle")
+                # Store the API call in the signs
+                self.signs.append(call)
         # Now I check if the malware verified the value of the key.
         if call["api"].startswith("RegQueryValueEx"):
             # Verify if the key was actually opened.
@@ -71,4 +74,7 @@ class AntiVMSCSI(Signature):
 
             # Finally, if everything went well, I consider the signature as matched.
             if args_matched == 2:
+                # Store the API call in the signs
+                self.signs.append(call)
+                self.add_match(process, 'api', self.signs)
                 return True

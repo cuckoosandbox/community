@@ -29,7 +29,7 @@ class Polymorphic(Signature):
     severity = 3
     categories = ["packer"]
     authors = ["lordr"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
         if self.results["target"]["category"] == "file":
@@ -53,8 +53,8 @@ class Polymorphic(Signature):
 
                 try:
                     if pydeep.compare(target_ssdeep, drop_ssdeep) > 20:
-                        return True
+                        self.add_match(None, 'dropped file', drop)
                 except:
                     continue
 
-        return False
+        return self.has_matches()

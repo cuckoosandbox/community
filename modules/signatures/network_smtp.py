@@ -21,11 +21,11 @@ class NetworkSMTP(Signature):
     severity = 3
     categories = ["smtp", "spam"]
     authors = ["nex"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
         if "smtp" in self.results["network"]:
             if len(self.results["network"]["smtp"]) > 0:
-                return True
+                self.add_match(None, 'smtp', self.results["network"]["smtp"])
 
-        return False
+        return self.has_matches()

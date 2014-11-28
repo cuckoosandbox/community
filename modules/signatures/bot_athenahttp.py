@@ -23,7 +23,7 @@ class AthenaHttp(Signature):
     categories = ["bot", "ddos"]
     families = ["athenahttp"]
     authors = ["jjones", "nex"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
         indicators = [
@@ -34,7 +34,9 @@ class AthenaHttp(Signature):
 
         count = 0
         for indicator in indicators:
-            if self.check_mutex(pattern=indicator, regex=True):
+            subject = self.check_mutex(pattern=indicator, regex=True)
+            if subject:
+                self.add_match(None, 'mutex', subject)
                 count += 1
 
         if count == len(indicators):
@@ -45,7 +47,7 @@ class AthenaHttp(Signature):
         if "network" in self.results:
             for http in self.results["network"]["http"]:
                 if http["method"] == "POST" and athena_http_re.search(http["body"]):
-                    self.data.append({"url" : http["uri"], "data" : http["body"]})
+                    self.add_match(None, 'http', http)
                     return True
 
         return False

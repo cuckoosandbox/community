@@ -21,7 +21,7 @@ class GetProductID(Signature):
     severity = 3
     categories = ["anti-sandbox"]
     authors = ["nex"]
-    minimum = "1.0"
+    minimum = "1.2"
     evented = True
 
     def on_call(self, call, process):
@@ -29,4 +29,7 @@ class GetProductID(Signature):
             return
 
         if self.get_argument(call, "ValueName") == "ProductId":
-            return True
+            self.add_match(process, 'api', call)
+    
+    def on_complete(self):
+        return self.has_matches()

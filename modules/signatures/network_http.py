@@ -21,11 +21,11 @@ class NetworkHTTP(Signature):
     severity = 2
     categories = ["http"]
     authors = ["nex"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
         if "http" in self.results["network"]:
             if len(self.results["network"]["http"]) > 0:
-                return True
+                self.add_match(None, 'http', self.results["network"]["http"])
 
-        return False
+        return self.has_matches()

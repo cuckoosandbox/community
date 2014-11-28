@@ -21,12 +21,12 @@ class Tor2Web(Signature):
     severity = 3
     categories = ["network"]
     authors = ["nex"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
         domain = self.check_domain(pattern="^.*\.tor2web\.([a-z]{2,3})$", regex=True)
         if domain:
-            self.data.append({"domain" : domain})
+            self.add_match(None, "domain", domain)
             return True
 
         return False

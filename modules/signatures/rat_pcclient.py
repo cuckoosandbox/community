@@ -23,7 +23,7 @@ class PcClientMutexes(Signature):
     families = ["pcclient", "nex"]
     authors = ["threatlead"]
     references = ["https://malwr.com/analysis/MDIxN2NhMjg4MTg2NDY4MWIyNTE0Zjk5MTY1OGU4YzE/"]
-    minimum = "0.5"
+    minimum = "1.2"
     
     def run(self):
         indicators = [
@@ -32,8 +32,9 @@ class PcClientMutexes(Signature):
         ]
         
         for indicator in indicators:
-            if self.check_mutex(pattern=indicator, regex=True):
-                return True
+            subject = self.check_mutex(pattern=indicator, regex=True)
+            if subject:
+                self.add_match(None, 'mutex', subject)
 
         indicators = [
             ".*\\\\syslog.dat",
@@ -43,7 +44,8 @@ class PcClientMutexes(Signature):
         ]
 
         for indicator in indicators:
-            if self.check_file(pattern=indicator, regex=True):
-                return True
+            subject = self.check_file(pattern=indicator, regex=True)
+            if subject:
+                self.add_match(None, 'file', subject)
 
-        return False
+        return self.has_matches()

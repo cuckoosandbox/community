@@ -23,7 +23,7 @@ class PlugxMutexes(Signature):
     families = ["plugx"]
     authors = ["threatlead", "nex"]
     references = ["https://malwr.com/analysis/YTZjYmUwMzNlNzkwNGU5YmIxNDQwYTcyYjFkYWI0NWE/"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
         indicators = [
@@ -31,7 +31,8 @@ class PlugxMutexes(Signature):
         ]
 
         for indicator in indicators:
-            if self.check_mutex(pattern=indicator):
-                return True
+            subject = self.check_mutex(pattern=indicator)
+            if subject:
+                self.add_match(None, 'mutex', subject)
 
-        return False
+        return self.has_matches()

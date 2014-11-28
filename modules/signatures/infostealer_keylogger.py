@@ -22,7 +22,7 @@ class Keylogger(Signature):
     severity = 3
     categories = ["generic"]
     authors = ["Thomas Birn", "nex"]
-    minimum = "1.0"
+    minimum = "1.2"
     evented = True
 
     filter_apinames = set(["SetWindowsHookExA", "SetWindowsHookExW"])
@@ -30,4 +30,7 @@ class Keylogger(Signature):
     def on_call(self, call, process):
         if int(self.get_argument(call, "HookIdentifier")) in [2, 13]:
             if int(self.get_argument(call, "ThreadId")) == 0:
-                return True
+                self.add_match(process, 'api', call)
+    
+    def on_complete(self):
+        return self.has_matches()

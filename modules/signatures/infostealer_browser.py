@@ -23,7 +23,7 @@ class BrowserStealer(Signature):
     severity = 3
     categories = ["infostealer"]
     authors = ["nex"]
-    minimum = "1.0"
+    minimum = "1.2"
     evented = True
 
     indicators = [
@@ -56,9 +56,7 @@ class BrowserStealer(Signature):
             if argument["name"] == "FileName":
                 for indicator in self.indicators:
                     if indicator.match(argument["value"]):
-                        self.data.append({
-                            "file" : argument["value"],
-                            "process_id" : process["process_id"],
-                            "process_name" : process["process_name"]}
-                        )
-                        return True
+                        self.add_match(process, 'api', call)
+
+    def on_complete(self):
+        return self.has_matches()

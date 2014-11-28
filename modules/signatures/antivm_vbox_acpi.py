@@ -21,7 +21,7 @@ class VBoxDetectACPI(Signature):
     severity = 3
     categories = ["anti-vm"]
     authors = ["nex"]
-    minimum = "1.0"
+    minimum = "1.2"
     evented = True
 
     def __init__(self, *args, **kwargs):
@@ -31,33 +31,24 @@ class VBoxDetectACPI(Signature):
     def on_call(self, call, process):
         if process is not self.lastprocess:
             self.opened = False
-            self.handle = ""
+            self.handle = None
             self.lastprocess = process
+            self.signs = []
 
-        # First I check if the malware opens the releavant registry key.
+        # First I check if the malware opens the relevant registry key.
         if call["api"].startswith("RegOpenKeyEx"):
-            # Store the number of arguments matched.
-            args_matched = 0
-            # Store the handle used to open the key.
-            self.handle = ""
             # Check if the registry is HKEY_LOCAL_MACHINE.
-            if self.get_argument(call,"Registry") == "0x80000002":
-                args_matched += 1
+            if (self.get_argument(call, "Registry") == "0x80000002"
             # Check if the subkey opened is the correct one.
-            elif self.get_argument(call,"SubKey")[:14].upper() == "HARDWARE\\ACPI\\":
-                # Since it could appear under different paths, check for all of them.
-                if self.get_argument(call,"SubKey")[14:18] in ["DSDT", "FADT", "RSDT"]:
-                    if self.get_argument(call,"SubKey")[18:] == "\\VBOX__":
-                        return True
-                    else:
-                        args_matched += 1
-            # Store the generated handle.
-            else:
-                self.handle = self.get_argument(call,"Handle")
-            
-            # If both arguments are matched, I consider the key to be successfully opened.
-            if args_matched == 2:
-                self.opened = True
+            and self.get_argument(call, "SubKey")[:14].upper() == "HARDWARE\\ACPI\\"
+            # Since it could appear under different paths, check for all of them.
+            and self.get_argument(call, "SubKey")[14:18] in ["DSDT", "FADT", "RSDT"]):
+                if self.get_argument(call, "SubKey")[18:] == "\\VBOX__":
+                    self.add_match(process, 'api', call)
+                else:
+                    self.opened = True
+                    self.handle = self.get_argument(call,"Handle")
+                    seld.signs.append(call)
         # Now I check if the malware verified the value of the key.
         elif call["api"].startswith("RegEnumKeyEx"):
             # Verify if the key was actually opened.
@@ -65,12 +56,10 @@ class VBoxDetectACPI(Signature):
                 return
 
             # Verify the arguments.
-            args_matched = 0
-            if self.get_argument(call,"Handle") == self.handle:
-                args_matched += 1
-            elif self.get_argument(call,"Name") == "VBOX__":
-                args_matched += 1
+            if (self.get_argument(call, "Handle") == self.handle
+            and self.get_argument(call, "Name") == "VBOX__"):
+                self.signs.append(call)
+                self.add_match(process, 'api', self.signs)
 
-            # Finally, if everything went well, I consider the signature as matched.
-            if args_matched == 2:
-                return True
+    def on_complete(self):
+        return self.has_matches()

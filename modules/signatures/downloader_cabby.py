@@ -22,30 +22,32 @@ class DownloaderCabby(Signature):
     categories = ["downloader"]
     families = ["downloader"]
     authors = ["Robby Zeitfuchs"]
-    minimum = "0.5"
+    minimum = "1.2"
     references = ["https://malwr.com/analysis/MmM0NDA5NWU5NjVmNDE5OGJmZmQ1MTdiZWVkMmU2ZDE/", 
                   "https://malwr.com/analysis/MmNmM2YxOWJhY2QxNDYyYTk3Y2IyNzI4NjQ0ZTEzOGY/"]
 
-    def run(self):            
+    def run(self):
+            signs = {}        
             match_mutex = self.check_mutex(pattern=".*[0-9]{8}", regex=True)          
             
             if match_mutex:
-                self.data.append({"mutex": match_mutex})            
+                signs['mutex'] = match_mutex
             else:
                 return False
         
             match_cab_file = self.check_file(pattern=".*\\\\Temp\\\\temp_cab_[0-9]*\.cab", regex=True)
         
             if match_cab_file:
-                self.data.append({"cab_file": match_cab_file})
+                signs['cab_file'] = match_cab_file
             else:
                 return False
             
             match_connectivity_check = self.check_domain(pattern="windowsupdate.microsoft.com")
 
             if match_connectivity_check:
-                self.data.append({"connectivity_check": match_connectivity_check})
+                signs['connectivity_check'] = match_connectivity_check['domain']
             else:
                 return False
         
+            self.add_match(None, 'cabby_ioc', signs)
             return True

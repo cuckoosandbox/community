@@ -21,7 +21,7 @@ class DisableTaskMgr(Signature):
     severity = 3
     categories = ["locker"]
     authors = ["Thomas Birn", "nex"]
-    minimum = "1.0"
+    minimum = "1.2"
     evented = True
 
     def __init__(self, *args, **kwargs):
@@ -30,10 +30,11 @@ class DisableTaskMgr(Signature):
 
     def on_call(self, call, process):
         if self.check_argument_call(call, pattern="DisableTaskMgr",
-                               category="registry"):
+                                    category="registry"):
             self.saw_disable = True
+            self.add_match(process, 'api', call)
 
-    def run(self):
+    def on_complete(self):
         if self.check_key(pattern=".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System$",
                           regex=True):
             if self.saw_disable:

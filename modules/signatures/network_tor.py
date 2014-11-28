@@ -21,7 +21,7 @@ class Tor(Signature):
     severity = 3
     categories = ["network", "anonimity", "tor"]
     authors = ["nex"]
-    minimum = "1.0"
+    minimum = "1.2"
     evented = True
 
     def on_call(self, call, process):
@@ -29,7 +29,10 @@ class Tor(Signature):
                                     pattern="Tor Win32 Service",
                                     api="CreateServiceA",
                                     category="services"):
-            return True
+            self.add_match(process, 'api', call)
+
+    def on_complete(self):
+        return self.has_matches()
 
     def run(self):
         indicators = [
@@ -43,5 +46,8 @@ class Tor(Signature):
         ]
 
         for indicator in indicators:
-            if self.check_file(pattern=indicator, regex=True):
-                return True
+            subject = self.check_file(pattern=indicator, regex=True)
+            if subject:
+                self.add_match(None, 'file', subject)
+
+        return self.has_matches()

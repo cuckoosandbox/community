@@ -21,7 +21,7 @@ class Crash(Signature):
     severity = 1
     categories = ["execution", "crash"]
     authors = ["nex"]
-    minimum = "1.0"
+    minimum = "1.2"
     evented = True
 
     def on_call(self, call, process):
@@ -34,4 +34,7 @@ class Crash(Signature):
         )
 
         if res:
-            return True
+            self.add_match(process, 'api', call)
+
+    def on_complete(self):
+        return self.has_matches()

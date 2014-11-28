@@ -21,12 +21,13 @@ class InjectionCRT(Signature):
     severity = 3
     categories = ["injection"]
     authors = ["JoseMi Holguin", "nex", "Accuvant"]
-    minimum = "1.0"
+    minimum = "1.2"
     evented = True
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.lastprocess = None
+        self.signs = []
         filter_categories = set(["process","threading"])
 
     def on_call(self, call, process):
@@ -35,27 +36,38 @@ class InjectionCRT(Signature):
             self.process_handles = set()
             self.process_pids = set()
             self.lastprocess = process
+            self.signs = []
 
         if call["api"] == "OpenProcess" and call["status"] == True:
             if self.get_argument(call, "ProcessId") != process["process_id"]:
                 self.process_handles.add(call["return"])
                 self.process_pids.add(self.get_argument(call, "ProcessId"))
+                self.signs.append(call)
         elif call["api"] == "NtOpenProcess" and call["status"] == True:
             if self.get_argument(call, "ProcessIdentifier") != process["process_id"]:
                 self.process_handles.add(self.get_argument(call, "ProcessHandle"))
                 self.process_pids.add(self.get_argument(call, "ProcessIdentifier"))
+                self.signs.append(call)
         elif (call["api"] == "NtMapViewOfSection") and self.sequence == 0:
             if self.get_argument(call, "ProcessHandle") in self.process_handles:
                 self.sequence = 2
+                self.signs.append(call)
         elif (call["api"] == "VirtualAllocEx" or call["api"] == "NtAllocateVirtualMemory") and self.sequence == 0:
             if self.get_argument(call, "ProcessHandle") in self.process_handles:
                 self.sequence = 1
+                self.signs.append(call)
         elif (call["api"] == "NtWriteVirtualMemory" or call["api"] == "WriteProcessMemory") and self.sequence == 1:
             if self.get_argument(call, "ProcessHandle") in self.process_handles:
                 self.sequence = 2
+                self.signs.append(call)
         elif call["api"].startswith("CreateRemoteThread") and self.sequence == 2:
             if self.get_argument(call, "ProcessHandle") in self.process_handles:
-                return True
+                self.signs.append(call)
+                self.add_match(process, 'api', self.signs)
         elif call["api"] == "NtQueueApcThread" and self.sequence == 2:
             if self.get_argument(call, "ProcessId") in self.process_pids:
-                return True
+                self.signs.append(call)
+                self.add_match(process, 'api', self.signs)
+
+    def on_complete(self):
+        return self.has_matches()

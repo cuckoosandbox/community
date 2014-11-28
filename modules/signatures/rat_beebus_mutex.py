@@ -22,7 +22,7 @@ class BeebusMutexes(Signature):
     categories = ["rat"]
     families = ["beebus"]
     authors = ["threatlead", "nex"]
-    minimum = "0.5"
+    minimum = "1.2"
     references = [
         "http://www.fireeye.com/blog/technical/malware-research/2013/04/the-mutter-backdoor-operation-beebus-with-new-targets.html",
         "https://malwr.com/analysis/MjhmNmJhZjdjOWM4NDExZDkzOWMyMDQ2YzUzN2QwZDI/"
@@ -35,7 +35,8 @@ class BeebusMutexes(Signature):
         ]
 
         for indicator in indicators:
-            if self.check_mutex(pattern=indicator, regex=True):
-                return True
+            subject = self.check_mutex(pattern=indicator, regex=True)
+            if subject:
+                self.add_match(None, 'mutex', subject)
 
-        return False
+        return self.has_matches()

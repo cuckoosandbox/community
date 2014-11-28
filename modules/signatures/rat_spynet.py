@@ -28,7 +28,7 @@ class SpynetRat(Signature):
         "https://malwr.com/analysis/N2E3NWRiNDMyYjIwNGE0NTk3Y2E5NWMzN2UwZTVjMzI/",
         "https://malwr.com/analysis/N2Q2NWY0Y2MzOTM0NDEzNmE1MTdhOThiNTQxMzhiNzk/"   
     ]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
         indicators = [
@@ -42,15 +42,17 @@ class SpynetRat(Signature):
         ]
 
         for indicator in indicators:
-            if self.check_mutex(pattern=indicator, regex=True):
-                return True
+            subject = self.check_mutex(pattern=indicator, regex=True)
+            if subject:
+                self.add_match(None, 'mutex', subject)
 
         keys = [
             ".*\\SpyNet\\.*",
         ]
 
         for key in keys:
-            if self.check_key(pattern=key, regex=True):
-                return True
+            subject = self.check_key(pattern=key, regex=True)
+            if subject:
+                self.add_match(None, 'registry', subject)
         
-        return False
+        return self.has_matches()

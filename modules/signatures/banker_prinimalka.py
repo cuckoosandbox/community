@@ -22,7 +22,7 @@ class Prinimalka(Signature):
     categories = ["banker"]
     families = ["prinimalka"]
     authors = ["nex"]
-    minimum = "1.0"
+    minimum = "1.2"
     evented = True
 
     def on_call(self, call, process):
@@ -30,4 +30,5 @@ class Prinimalka(Signature):
             if self.get_argument(call, "ValueName").endswith("_opt_server1"):
                 server = self.get_argument(call, "Buffer").rstrip("\\x00")
                 self.description += " (C&C: {0})".format(server)
+                self.add_match(process, 'api', call)
                 return True

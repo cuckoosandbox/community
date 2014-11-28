@@ -21,7 +21,7 @@ class InstallsWinpcap(Signature):
     severity = 3
     categories = ["sniffer"]
     authors = ["Thomas Birn", "nex"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
         indicators = [
@@ -31,9 +31,8 @@ class InstallsWinpcap(Signature):
         ]
 
         for indicator in indicators:
-            file_path = self.check_file(pattern=indicator, regex=True)
-            if file_path:
-                self.data.append({"file" : file_path})
-                return True
+            subject = self.check_file(pattern=indicator, regex=True)
+            if subject:
+                self.add_match(None, 'file', subject)
 
-        return False
+        return self.has_matches()

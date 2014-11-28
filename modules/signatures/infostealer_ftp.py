@@ -21,7 +21,7 @@ class FTPStealer(Signature):
     severity = 3
     categories = ["infostealer"]
     authors = ["nex"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
         file_indicators = [
@@ -51,15 +51,13 @@ class FTPStealer(Signature):
         ]
 
         for indicator in file_indicators:
-            file_name = self.check_file(pattern=indicator, regex=True)
-            if file_name:
-                self.data.append({"file" : file_name})
-                return True
-
+            subject = self.check_file(pattern=indicator, regex=True)
+            if subject:
+                self.add_match(None, 'file', subject)
+                
         for indicator in registry_indicators:
-            key_name = self.check_key(pattern=indicator, regex=True)
-            if key_name:
-                self.data.append({"key" : key_name})
-                return True
+            subject = self.check_key(pattern=indicator, regex=True)
+            if subject:
+                self.add_match(None, 'registry', subject)
 
-        return False
+        return self.has_matches()
