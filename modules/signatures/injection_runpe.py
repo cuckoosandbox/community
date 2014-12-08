@@ -1,4 +1,4 @@
-# Copyright (C) 2014 glysbays
+# Copyright (C) 2014 glysbays, Accuvant
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,9 +18,9 @@ from lib.cuckoo.common.abstracts import Signature
 class InjectionRUNPE(Signature):
     name = "injection_runpe"
     description = "Executed a process and injected code into it, probably while unpacking"
-    severity = 2
+    severity = 3
     categories = ["injection"]
-    authors = ["glysbaysb"]
+    authors = ["glysbaysb", "Accuvant"]
     minimum = "1.0"
     evented = True
 
@@ -28,25 +28,32 @@ class InjectionRUNPE(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.lastprocess = None
 
+    filter_categories = set(["process","threading"])
+
     def on_call(self, call, process):
         if process is not self.lastprocess:
             self.sequence = 0
-            self.process_handle = 0
+            # technically we should have a separate state machine for each created process, but since this
+            # code doesn't deal with handles properly as it is, this is sufficient
+            self.process_handles = set()
+            self.thread_handles = set()
             self.lastprocess = process
 
-        if call["api"]  == "CreateProcessInternalW" and self.sequence == 0:
-            self.sequence = 1
-            self.process_handle = self.get_argument(call, "ProcessHandle")
-            self.thread_handle = self.get_argument(call, "ThreadHandle")
-        elif call["api"] == "NtUnmapViewOfSection" and self.sequence == 1:
-            if self.get_argument(call, "ProcessHandle") == self.process_handle:
-                self.sequence = 2
-        elif (call["api"] == "NtWriteVirtualMemory" or call["api"] == "WriteProcessMemory" or call["api"] == "NtMapViewOfSection") and self.sequence == 2:
-            if self.get_argument(call, "ProcessHandle") == self.process_handle:
-                self.sequence = 3
-        elif (call["api"] == "SetThreadContext" or call["api"] == "NtSetContextThread") and self.sequence == 3:
-            if self.get_argument(call, "ThreadHandle") == self.thread_handle:
-                self.sequence = 4
-        elif call["api"] == "NtResumeThread" and self.sequence == 4:
-            if self.get_argument(call, "ThreadHandle") == self.thread_handle:
+        if call["api"] == "CreateProcessInternalW":
+            self.process_handles.add(self.get_argument(call, "ProcessHandle"))
+            self.thread_handles.add(self.get_argument(call, "ThreadHandle"))
+        elif (call["api"] == "NtUnmapViewOfSection" or call["api"] == "NtAllocateVirtualMemory") and self.sequence == 0:
+            if self.get_argument(call, "ProcessHandle") in self.process_handles:
+                self.sequence = 1
+        elif call["api"] == "NtGetContextThread" and self.sequence == 0:
+           if self.get_argument(call, "ThreadHandle") in self.thread_handles:
+                self.sequence = 1
+        elif (call["api"] == "NtWriteVirtualMemory" or call["api"] == "WriteProcessMemory" or call["api"] == "NtMapViewOfSection") and (self.sequence == 1 or self.sequence == 2):
+            if self.get_argument(call, "ProcessHandle") in self.process_handles:
+                self.sequence = self.sequence + 1
+        elif (call["api"] == "SetThreadContext" or call["api"] == "NtSetContextThread") and (self.sequence == 1 or self.sequence == 2):
+            if self.get_argument(call, "ThreadHandle") in self.thread_handles:
+                self.sequence = self.sequence + 1
+        elif call["api"] == "NtResumeThread" and (self.sequence == 2 or self.sequence == 3):
+            if self.get_argument(call, "ThreadHandle") in self.thread_handles:
                 return True
