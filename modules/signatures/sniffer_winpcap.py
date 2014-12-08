@@ -31,7 +31,9 @@ class InstallsWinpcap(Signature):
         ]
 
         for indicator in indicators:
-            if self.check_file(pattern=indicator, regex=True):
+            file_path = self.check_file(pattern=indicator, regex=True):
+            if file_path:
+                self.data.append({"file" : file_path})
                 return True
 
         return False
