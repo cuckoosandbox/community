@@ -1,4 +1,4 @@
-# Copyright (C) 2013 Claudio "nex" Guarnieri (@botherder)
+# Copyright (C) 2013 Claudio "nex" Guarnieri (@botherder), Accuvant, Inc. (bspengler@accuvant.com)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,23 +20,35 @@ class NetworkBIND(Signature):
     description = "Starts servers listening on {0}"
     severity = 2
     categories = ["bind"]
-    authors = ["nex"]
+    authors = ["nex", "Accuvant"]
     minimum = "1.0"
     evented = True
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.binds = []
+        self.bindmap = dict()
+        self.listens = []
+
+    filter_apinames = set(["bind","listen"])
 
     def on_call(self, call, process):
-        if call["api"] != "bind":
-            return
-
-        bind = "{0}:{1}".format(self.get_argument(call, "ip"), self.get_argument(call, "port"))
-        if bind not in self.binds:
-            self.binds.append(bind)
+        # this isn't entirely accurate since we're not tracking sockets properly
+        if call["api"] == "bind":
+            socket = self.get_argument(call, "socket")
+            bind = "{0}:{1}".format(self.get_argument(call, "ip"), self.get_argument(call, "port"))
+            self.bindmap[socket] = bind
+        elif call["api"] == "listen":
+            socket = self.get_argument(call, "socket")
+            if socket not in self.listens:
+                self.listens.append(socket)
 
     def on_complete(self):
+        for socket in self.listens:
+            if socket in self.bindmap:
+                if self.bindmap[socket] not in self.binds:
+                    self.binds.append(self.bindmap[socket])
+
         if self.binds:
             self.description = self.description.format(", ".join(self.binds))
             return True
