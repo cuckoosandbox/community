@@ -25,7 +25,7 @@ class Tor2Web(Signature):
 
     def run(self):
         domain = self.check_domain(pattern="^.*\.tor2web\.([a-z]{2,3})$", regexp=True)
-        if tor2web:
+        if domain:
             self.data.append({"domain" : domain})
             return True
 
