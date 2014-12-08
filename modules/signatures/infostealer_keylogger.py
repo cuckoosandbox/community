@@ -1,4 +1,5 @@
 # Copyright (C) 2012 Thomas "stacks" Birn (@stacksth)
+# Copyright (C) 2014 Claudio "nex" Guarnieri (@botherder)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,22 +16,18 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-
 class Keylogger(Signature):
-    name = "keylogger"
+    name = "infostealer_keylogger"
     description = "Creates a windows hook that monitors keyboard input (keylogger)"
     severity = 3
     categories = ["generic"]
-    authors = ["Thomas Birn"]
-    minimum = "0.4.2"
+    authors = ["Thomas Birn", "nex"]
+    minimum = "1.0"
+    evented = True
 
-    def run(self):
-        for process in self.results["behavior"]["processes"]:
-            for call in process["calls"]:
-                if call["api"].startswith("SetWindowsHookExA"):
-                    for argument in call["arguments"]:
-                        if argument["name"] == "HookIdentifier" and (argument["value"] == "2" or argument["value"] == "13"):
-                            self.data.append({"HookIdentifier": argument["value"]})
-                            return True
+    filter_apinames = set(["SetWindowsHookExA", "SetWindowsHookExW"])
 
-        return False
+    def on_call(self, call, process):
+        if int(self.get_argument(call, "HookIdentifier")) in [2, 13]:
+            if int(self.get_argument(call, "ThreadId")) == 0:
+                return True
