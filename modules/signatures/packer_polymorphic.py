@@ -24,10 +24,10 @@ except ImportError:
     HAVE_SSDEEP = False
 
 class Polymorphic(Signature):
-    name = "polymorphic"
-    description = "Creates a file similar to target file"
+    name = "packer_polymorphic"
+    description = "Creates a slightly modified copy of itself"
     severity = 3
-    categories = ["persistence"]
+    categories = ["packer"]
     authors = ["lordr"]
     minimum = "0.5"
 
@@ -43,11 +43,14 @@ class Polymorphic(Signature):
             for drop in self.results["dropped"]:
                 if drop["sha1"] == target_sha1:
                     continue
+
                 if fabs(target_size - drop["size"]) >= 1024:
                     continue
+
                 drop_ssdeep = drop["ssdeep"]
                 if drop_ssdeep == "" or drop_ssdeep == None:
                     continue
+
                 try:
                     if pydeep.compare(target_ssdeep, drop_ssdeep) > 20:
                         return True
