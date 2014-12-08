@@ -30,7 +30,7 @@ class FTPStealer(Signature):
             ".*\\\\FlashFXP\\\\.*\\\\Sites\.dat$",
             ".*\\\\FileZilla\\\\sitemanager\.xml$",
             ".*\\\\FileZilla\\\\recentservers\.xml$",
-            ".*\\\\VanDyke\\\\Config\\\\Sessions.*",
+            ".*\\\\VanDyke\\\\Config\\\\Sessions\\\\.*",
             ".*\\\\FTP Explorer\\\\.*"
             ".*\\\\SmartFTP\\\\.*",
             ".*\\\\TurboFTP\\\\.*",
@@ -40,6 +40,7 @@ class FTPStealer(Signature):
             ".*\\\\ALFTP\\\\.*",
             ".*\\\\Ipswitch\\\\WS_FTP.*",
         ]
+
         registry_indicators = [
             ".*Software\\Far*\\Hosts$",
             ".*Software\\Far*\\FTPHost$",
@@ -50,9 +51,15 @@ class FTPStealer(Signature):
         ]
 
         for indicator in file_indicators:
-            if self.check_file(pattern=indicator, regex=True):
+            file_name = self.check_file(pattern=indicator, regex=True)
+            if file_name:
+                self.data.append({"file" : file_name})
                 return True
+
         for indicator in registry_indicators:
-            if self.check_key(pattern=indicator, regex=True):
+            key_name = self.check_key(pattern=indicator, regex=True)
+            if key_name:
+                self.data.append({"key" : key_name})
                 return True
+
         return False
