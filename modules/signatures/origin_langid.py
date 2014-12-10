@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class BuildLangID(Signature):
     name = "origin_langid"
-    description = "Unconventionial binary language"
+    description = "Unconventional binary language"
     severity = 2
     authors = ["Benjamin K.", "Kevin R.", "nex"]
     categories = ["origin"]
