@@ -21,12 +21,13 @@ class DiskInformation(Signature):
     severity = 3
     categories = ["anti-vm"]
     authors = ["nex"]
-    minimum = "1.0"
+    minimum = "1.2"
     evented = True
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.lastprocess = None
+        self.signs = []
 
     def on_call(self, call, process):
         indicators = [
@@ -43,6 +44,7 @@ class DiskInformation(Signature):
         if process is not self.lastprocess:
             self.handle = None
             self.lastprocess = process
+            self.signs = []
 
         if not self.handle:
             if call["api"] == "NtCreateFile":
@@ -50,8 +52,11 @@ class DiskInformation(Signature):
                 for indicator in indicators:
                     if indicator in file_name.lower():
                         self.handle = self.get_argument(call, "FileHandle")
+                        self.signs.append(call)
         else:
             if call["api"] == "DeviceIoControl":
                 if self.get_argument(call, "DeviceHandle") == self.handle:
                     if str(self.get_argument(call, "IoControlCode")) in ioctls:
+                        self.signs.append(call)
+                        self.add_match(process, 'api', self.signs)
                         return True

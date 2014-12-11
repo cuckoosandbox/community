@@ -23,7 +23,7 @@ class ZeusP2P(Signature):
     categories = ["banker"]
     families = ["zeus"]
     authors = ["Robby Zeitfuchs"]
-    minimum = "0.5"
+    minimum = "1.2"
     references = ["https://malwr.com/analysis/NmNhODg5ZWRkYjc0NDY0M2I3YTJhNDRlM2FlOTZiMjA/", 
                   "https://malwr.com/analysis/MmMwNDJlMTI0MTNkNGFjNmE0OGY3Y2I5MjhiMGI1NzI/",
                   "https://malwr.com/analysis/MzY5ZTM2NzZhMzI3NDY2YjgzMjJiODFkODZkYzIwYmQ/",
@@ -41,8 +41,8 @@ class ZeusP2P(Signature):
         
         count = 0
         for mutex in mutexes:
-            if exp.match(mutex):  
-                self.data.append({"mutex": mutex})
+            if exp.match(mutex):
+                self.add_match(None, 'mutex', mutex)
                 count += 1 
 
         # Check if there are at least 5 mutexes opened matching the pattern?   
@@ -56,6 +56,7 @@ class ZeusP2P(Signature):
         if "network" in self.results:
             for udp in self.results["network"]["udp"]:
                 if udp["dport"] > 1024:
+                    self.add_match(None, 'udp', udp)
                     count += 1
             
         if count < 4:

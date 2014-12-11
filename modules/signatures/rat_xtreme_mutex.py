@@ -26,7 +26,7 @@ class XtremeMutexes(Signature):
         "https://malwr.com/analysis/ZWM4YjI2MzI1MmQ2NDBkMjkwNzI3NzhjNWM5Y2FhY2U/",
         "https://malwr.com/analysis/MWY5YTAwZWI1NDc3NDJmMTgyNDA4ODc0NTk0MWIzNjM/"
     ]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
         indicators = [
@@ -35,7 +35,8 @@ class XtremeMutexes(Signature):
         ]
 
         for indicator in indicators:
-            if self.check_mutex(pattern=indicator, regex=True):
-                return True
+            subject = self.check_mutex(pattern=indicator, regex=True)
+            if subject:
+                self.add_match(None, 'mutex', subject)
 
-        return False
+        return self.has_matches()

@@ -21,26 +21,29 @@ class VBoxDetectLibs(Signature):
     severity = 3
     categories = ["anti-vm"]
     authors = ["nex"]
-    minimum = "1.0"
+    minimum = "1.2"
     evented = True
 
     def on_call(self, call, process):
         indicators = [
-            "VBoxDisp.dll",
-            "VBoxHook.dll",
-            "VBoxMRXNP.dll",
-            "VBoxOGL.dll",
-            "VBoxOGLarrayspu.dll",
-            "VBoxOGLcrutil.dll",
-            "VBoxOGLerrorspu.dll",
-            "VBoxOGLfeedbackspu.dll",
-            "VBoxOGLpackspu.dll",
-            "VBoxOGLpassthroughspu.dll"
+            ".*VBoxDisp.dll",
+            ".*VBoxHook.dll",
+            ".*VBoxMRXNP.dll",
+            ".*VBoxOGL.dll",
+            ".*VBoxOGLarrayspu.dll",
+            ".*VBoxOGLcrutil.dll",
+            ".*VBoxOGLerrorspu.dll",
+            ".*VBoxOGLfeedbackspu.dll",
+            ".*VBoxOGLpackspu.dll",
+            ".*VBoxOGLpassthroughspu.dll"
         ]
 
         for indicator in indicators:
             if self.check_argument_call(call,
                                         pattern=indicator,
                                         name="FileName",
-                                        api="LdrLoadDll"):
-                return True
+                                        regex=True):
+                self.add_match(process, 'api', call)
+    
+    def on_complete(self):
+        return self.has_matches()

@@ -21,11 +21,11 @@ class NetworkIRC(Signature):
     severity = 3
     categories = ["irc"]
     authors = ["nex"]
-    minimum = "0.6"
+    minimum = "1.2"
 
     def run(self):
         if "irc" in self.results["network"]:
             if len(self.results["network"]["irc"]) > 0:
-                return True
+                self.add_match(None, 'irc', self.results["network"]["irc"])
 
-        return False
+        return self.has_matches()

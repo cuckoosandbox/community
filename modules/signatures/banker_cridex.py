@@ -23,7 +23,7 @@ class Cridex(Signature):
     categories = ["Banking", "Trojan"]
     families = ["Cridex"]
     authors = ["Robby Zeitfuchs", "@robbyFux"]
-    minimum = "0.5"
+    minimum = "1.2"
     references = ["http://stopmalvertising.com/rootkits/analysis-of-cridex.html",
                   "http://sempersecurus.blogspot.de/2012/08/cridex-analysis-using-volatility.html",
                   "http://labs.m86security.com/2012/03/the-cridex-trojan-targets-137-financial-organizations-in-one-go/",
@@ -33,17 +33,19 @@ class Cridex(Signature):
     def run(self):
         indicators = [".*Local.QM.*",
                       ".*Local.XM.*"]
+        signs = {}
                       
-        match_file = self.check_file(pattern=".*\\KB[0-9]{8}\.exe", regex=True)
-        match_batch_file = self.check_file(pattern=".*\\\\Temp\\\\\S{4}\.tmp\.bat", regex=True)
+        match_file = self.check_file(pattern=".*\\\\KB[0-9]{8}\.exe", regex=True)
+        match_batch_file = self.check_file(pattern=".*\\\\Temp\\\\\S{4,5}\.tmp\.bat", regex=True)
 
         if match_file and match_batch_file:
-            self.data.append({"file": match_file})
-            self.data.append({"batchfile": match_batch_file})
+            signs['file'] = match_file
+            signs['batchfile'] = match_batch_file
             for indicator in indicators:
                 match_mutex = self.check_mutex(pattern=indicator, regex=True)
                 if match_mutex:
-                    self.data.append({"mutex": match_mutex})
+                    signs['mutex'] = match_mutex
+                    self.add_match(None, 'cridex_ioc', signs)
                     return True
 
         return False

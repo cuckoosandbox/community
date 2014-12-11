@@ -21,7 +21,7 @@ class Fingerprint(Signature):
     severity = 3
     categories = ["recon"]
     authors = ["nex"]
-    minimum = "1.0"
+    minimum = "1.2"
     evented = True
 
     def __init__(self, *args, **kwargs):
@@ -42,8 +42,9 @@ class Fingerprint(Signature):
         for argument in call["arguments"]:
             for indicator in indicators:
                 if argument["value"] == indicator:
-                    indicators.remove(indicator)
+                    self.add_match(process, 'api', call)
                     self.matches += 1
 
-        if self.matches >= self.threshold:
-            return True
+
+    def on_complete(self):
+        return self.matches >= self.threshold
