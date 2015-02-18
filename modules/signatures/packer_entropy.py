@@ -34,7 +34,7 @@ class PackerEntropy(Signature):
                 for section in self.results["static"]["pe_sections"]:
                     total_pe_data += int(section["size_of_data"], 16)
                      
-                    if section["entropy"] > 6.8:
+                    if float(section["entropy"]) > 6.8:
                         self.data.append({"section" : section})
                         total_compressed += int(section["size_of_data"], 16)
                 
