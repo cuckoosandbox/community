@@ -15,7 +15,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-REG_SUBKEY = "CurrentControlSet\Control\ComputerName\ActiveComputerName"
+REG_SUBKEY = "ActiveComputerName"
 CONFIG_BUFFER_STRINGS = ["[NAME]", "[TIME]", "iproc", "user_winmin", "user_winmax", "object_id"]
 EXPLORER_EXE = "explorer.exe"
 
