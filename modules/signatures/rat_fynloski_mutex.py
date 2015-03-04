@@ -23,7 +23,7 @@ class FynloskiMutexes(Signature):
     families = ["fynloski"]
     authors = ["threatlead"]
     references = ["https://malwr.com/analysis/ODVlOWEyNDU3NzBhNDE3OWJkZjE0ZjIxNTdiMzU1YmM/"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
         indicators = [
@@ -31,7 +31,8 @@ class FynloskiMutexes(Signature):
         ]
 
         for indicator in indicators:
-            if self.check_mutex(pattern=indicator, regex=True):
-                return True
+            subject = self.check_mutex(pattern=indicator, regex=True)
+            if subject:
+                self.add_match(None, 'mutex', subject)
 
-        return False
+        return self.has_matches()

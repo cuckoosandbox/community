@@ -25,7 +25,7 @@ class Autorun(Signature):
     severity = 3
     categories = ["persistence"]
     authors = ["Michael Boman", "nex","securitykitten"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
         indicators = [
@@ -50,8 +50,9 @@ class Autorun(Signature):
         ]
 
         for indicator in indicators:
-            if self.check_key(pattern=indicator, regex=True):
-                return True
+            subject = self.check_key(pattern=indicator, regex=True)
+            if subject:
+                self.add_match(None, 'registry', subject)
 
         indicators = [
             ".*\\\\win\.ini$",
@@ -60,7 +61,8 @@ class Autorun(Signature):
         ]
 
         for indicator in indicators:
-            if self.check_file(pattern=indicator, regex=True):
-                return True
+            subject = self.check_file(pattern=indicator, regex=True)
+            if subject:
+                self.add_match(None, 'file', subject)
 
-        return False
+        return self.has_matches()

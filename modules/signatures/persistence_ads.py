@@ -21,16 +21,15 @@ class ADS(Signature):
     severity = 3
     categories = ["persistence", "ads"]
     authors = ["nex"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
-        result = False
         for file_path in self.results["behavior"]["summary"]["files"]:
             if len(file_path) <= 3:
                 continue
 
             if ":" in file_path.replace("/", "\\").split("\\")[-1]:
                 self.data.append({"file" : file_path})
-                result = True
+                self.add_match(None, 'file', file_path)
 
-        return result
+        return self.has_matches()

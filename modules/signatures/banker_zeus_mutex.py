@@ -22,7 +22,7 @@ class ZeusMutexes(Signature):
     categories = ["banker"]
     families = ["zeus"]
     authors = ["Robby Zeitfuchs"]
-    minimum = "0.5"
+    minimum = "1.2"
     references = ["https://malwr.com/analysis/NmNhODg5ZWRkYjc0NDY0M2I3YTJhNDRlM2FlOTZiMjA/#summary_mutexes", 
                   "https://malwr.com/analysis/MmMwNDJlMTI0MTNkNGFjNmE0OGY3Y2I5MjhiMGI1NzI/#summary_mutexes",
                   "https://malwr.com/analysis/MzY5ZTM2NzZhMzI3NDY2YjgzMjJiODFkODZkYzIwYmQ/#summary_mutexes",
@@ -45,7 +45,6 @@ class ZeusMutexes(Signature):
         for indicator in indicators:
             match = self.check_mutex(pattern=indicator, regex=True)
             if match:
-                self.data.append({"mutex": match})
-                return True            
+                self.add_match(None, 'mutex', match)
         
-        return False
+        return self.has_matches()

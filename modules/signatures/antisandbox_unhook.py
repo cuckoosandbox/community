@@ -25,9 +25,11 @@ class Unhook(Signature):
     evented = True
 
     def on_call(self, call, process):
-        subcategory = self.check_argument_call(call,
-                                               api="__anomaly__",
-                                               name="Subcategory",
-                                               pattern="unhook")
-        if subcategory:
-            return True
+        if self.check_argument_call(call,
+                                    api="__anomaly__",
+                                    name="Subcategory",
+                                    pattern="unhook"):
+            self.add_match(process, 'api', call)
+    
+    def on_complete(self):
+        return self.has_matches()

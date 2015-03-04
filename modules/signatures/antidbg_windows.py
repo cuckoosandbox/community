@@ -21,7 +21,7 @@ class AntiDBGWindows(Signature):
     severity = 3
     categories = ["anti-debug"]
     authors = ["nex"]
-    minimum = "1.0"
+    minimum = "1.2"
     evented = True
 
     def on_call(self, call, process):
@@ -38,5 +38,7 @@ class AntiDBGWindows(Signature):
 
         for indicator in indicators:
             if self.check_argument_call(call, pattern=indicator, category="windows"):
-                self.data.append({"window" : indicator})
-                return True
+                self.add_match(process, 'api', call)
+
+    def on_complete(self):
+        return self.has_matches()

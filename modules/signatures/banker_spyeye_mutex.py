@@ -22,7 +22,7 @@ class SpyEyeMutexes(Signature):
     categories = ["banker"]
     families = ["spyeye"]
     authors = ["nex"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
         indicators = [
@@ -34,7 +34,8 @@ class SpyEyeMutexes(Signature):
         ]
 
         for indicator in indicators:
-            if self.check_mutex(pattern=indicator, regex=True):
-                return True
+            subject = self.check_mutex(pattern=indicator, regex=True)
+            if subject:
+                self.add_match(None, 'mutex', subject)
 
-        return False
+        return self.has_matches()

@@ -25,7 +25,7 @@ class Flame(Signature):
     categories = ["targeted"]
     families = ["flame", "skywiper"]
     authors = ["nex"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
         indicators = [
@@ -35,8 +35,9 @@ class Flame(Signature):
         ]
 
         for indicator in indicators:
-            if self.check_mutex(pattern=indicator, regex=True):
-                return True
+            subject = self.check_mutex(pattern=indicator, regex=True)
+            if subject:
+                self.add_match(None, 'mutex', subject)
 
         indicators = [
             ".*\\\\Microsoft Shared\\\\MSSecurityMgr\\\\.*",
@@ -44,7 +45,8 @@ class Flame(Signature):
         ]
 
         for indicator in indicators:
-            if self.check_file(pattern=indicator, regex=True):
-                return True
+            subject = self.check_file(pattern=indicator, regex=True)
+            if subject:
+                self.add_match(None, 'file', subject)
 
-        return False
+        return self.has_matches()

@@ -21,7 +21,7 @@ class CheckIP(Signature):
     severity = 2
     categories = ["recon"]
     authors = ["nex"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
         indicators = [
@@ -33,8 +33,8 @@ class CheckIP(Signature):
         ]
 
         for indicator in indicators:
-            if self.check_domain(pattern=indicator):
-                self.data.append({"domain" : indicator})
-                return True
+            subject = self.check_domain(pattern=indicator)
+            if subject:
+                self.add_match(None, 'domain', subject)
 
-        return False
+        return self.has_matches()

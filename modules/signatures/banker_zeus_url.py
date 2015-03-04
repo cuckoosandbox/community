@@ -21,7 +21,7 @@ class ZeusURL(Signature):
     severity = 3
     categories = ["banker"]
     authors = ["Robby Zeitfuchs"]
-    minimum = "0.5"
+    minimum = "1.2"
     references = ["https://zeustracker.abuse.ch/blocklist.php?download=compromised"]
 
     def run(self):
@@ -34,7 +34,6 @@ class ZeusURL(Signature):
         for indicator in indicators:
             match = self.check_url(pattern=indicator, regex=True)
             if match:
-                self.data.append({"url": match})
-                return True
+                self.add_match(None, 'url', match)
         
-        return False
+        return self.has_matches()

@@ -12,14 +12,13 @@ class VolMalfind1(Signature):
     alert = False
     categories = ["generic"]
     authors = ["Thorsten Sick"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
-        if ("volatility" in self.results and
-            "malfind" in self.results["volatility"]):
-            if len(self.results["volatility"]["malfind"]["data"]):
-                self.data.append(
-                    {"data": self.results["volatility"]["malfind"]["data"]})
+        if ("memory" in self.results and
+            "malfind" in self.results["memory"]):
+            if len(self.results["memory"]["malfind"]["data"]):
+                self.add_match(None, "data", self.results["memory"]["malfind"]["data"])
                 return True
 
         return False
@@ -32,18 +31,17 @@ class VolMalfind2(Signature):
     alert = False   # Very suspicious, but has detection on clean files
     categories = ["generic"]
     authors = ["Thorsten Sick"]
-    minimum = "0.5"
+    minimum = "1.2"
     families = ["ZBot", "Paelvo", "Sinowal"]
 
     def run(self):
         pids = set()
-        if ("volatility" in self.results and
-            "malfind" in self.results["volatility"]):
-            for a in self.results["volatility"]["malfind"]["data"]:
+        if ("memory" in self.results and
+            "malfind" in self.results["memory"]):
+            for a in self.results["memory"]["malfind"]["data"]:
                 pids.add(a["process_id"])
             if len(pids) > 3:
-                self.data.append(
-                    {"data": self.results["volatility"]["malfind"]["data"]})
+                self.add_match(None, "data", self.results["memory"]["malfind"]["data"])
                 return True
 
         return False
@@ -57,25 +55,23 @@ class VolLdrModules1(Signature):
     alert = False   # Skype seems to do that...
     categories = ["generic"]
     authors = ["Thorsten Sick"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     # http://mnin.blogspot.de/2011/06/examining-stuxnets-footprint-in-memory.html
 
     def run(self):
         exceptions = ["csrss.exe"]
 
-        res = False
-        if ("volatility" in self.results and
-            "ldrmodules" in self.results["volatility"]):
-            for d in self.results["volatility"]["ldrmodules"]["data"]:
+        if ("memory" in self.results and
+            "ldrmodules" in self.results["memory"]):
+            for d in self.results["memory"]["ldrmodules"]["data"]:
                 if (not d["dll_in_init"] and
                     not d["dll_in_load"] and
                     not d["dll_in_mem"] and
                     not d["process_name"].lower() in exceptions):
-                    self.data.append({"unlinked": d})
-                    res = True
+                    self.add_match(None, "unlinked", d)
 
-        return res
+        return self.has_matches()
 
 
 class VolLdrModules2(Signature):
@@ -86,20 +82,18 @@ class VolLdrModules2(Signature):
     alert = True
     categories = ["generic"]
     authors = ["Thorsten Sick"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     # http://mnin.blogspot.de/2011/06/examining-stuxnets-footprint-in-memory.html
 
     def run(self):
-        res = False
-        if ("volatility" in self.results and
-            "ldrmodules" in self.results["volatility"]):
-            for d in self.results["volatility"]["ldrmodules"]["data"]:
+        if ("memory" in self.results and
+            "ldrmodules" in self.results["memory"]):
+            for d in self.results["memory"]["ldrmodules"]["data"]:
                 if d["process_name"] == "":
-                    self.data.append({"unlinked": d})
-                    res = True
+                    self.add_match(None, "unlinked", d)
 
-        return res
+        return self.has_matches()
 
 
 class VolDevicetree1(Signature):
@@ -110,20 +104,18 @@ class VolDevicetree1(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     # http://mnin.blogspot.de/2011/10/zeroaccess-volatility-and-kernel-timers.html
 
     def run(self):
-        res = False
-        if ("volatility" in self.results and
-            "devicetree" in self.results["volatility"]):
-            for d in self.results["volatility"]["devicetree"]["data"]:
+        if ("memory" in self.results and
+            "devicetree" in self.results["memory"]):
+            for d in self.results["memory"]["devicetree"]["data"]:
                 if d["driver_name"] == "":
-                    self.data.append({"unnamed_driver": d})
-                    res = True
+                    self.add_match(None, "unnamed_driver", d)
 
-        return res
+        return self.has_matches()
 
 
 class VolSvcscan1(Signature):
@@ -134,19 +126,17 @@ class VolSvcscan1(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
-        res = False
-        if ("volatility" in self.results and
-            "svcscan" in self.results["volatility"]):
-            for s in self.results["volatility"]["svcscan"]["data"]:
+        if ("memory" in self.results and
+            "svcscan" in self.results["memory"]):
+            for s in self.results["memory"]["svcscan"]["data"]:
                 if (s["service_name"] == "SharedAccess" and
                     s["service_state"] == "SERVICE_STOPPED"):
-                    self.data.append({"stopped_service": s})
-                    res = True
+                    self.add_match(None, "stopped_service", s)
 
-        return res
+        return self.has_matches()
 
 
 class VolSvcscan2(Signature):
@@ -157,19 +147,17 @@ class VolSvcscan2(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
-        res = False
-        if ("volatility" in self.results and
-            "svcscan" in self.results["volatility"]):
-            for s in self.results["volatility"]["svcscan"]["data"]:
+        if ("memory" in self.results and
+            "svcscan" in self.results["memory"]):
+            for s in self.results["memory"]["svcscan"]["data"]:
                 if (s["service_name"] == "wscsvc" and
                     s["service_state"] == "SERVICE_STOPPED"):
-                    self.data.append({"stopped_service": s})
-                    res = True
+                    self.add_match(None, "stopped_service", s)
 
-        return res
+        return self.has_matches()
 
 
 class VolSvcscan3(Signature):
@@ -180,19 +168,17 @@ class VolSvcscan3(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
-        res = False
-        if ("volatility" in self.results and
-            "svcscan" in self.results["volatility"]):
-            for s in self.results["volatility"]["svcscan"]["data"]:
+        if ("memory" in self.results and
+            "svcscan" in self.results["memory"]):
+            for s in self.results["memory"]["svcscan"]["data"]:
                 if (s["service_name"] == "ALG" and
                     s["service_state"] == "SERVICE_STOPPED"):
-                    self.data.append({"stopped_service": s})
-                    res = True
+                    self.add_match(None, "stopped_service", s)
 
-        return res
+        return self.has_matches()
 
 
 class VolModscan1(Signature):
@@ -203,18 +189,16 @@ class VolModscan1(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
-        res = False
-        if ("volatility" in self.results and
-            "modscan" in self.results["volatility"]):
-            for m in self.results["volatility"]["modscan"]["data"]:
+        if ("memory" in self.results and
+            "modscan" in self.results["memory"]):
+            for m in self.results["memory"]["modscan"]["data"]:
                 if m["kernel_module_name"] == "":
-                    self.data.append({"mysterious_kernel_module": m})
-                    res = True
+                    self.add_match(None, "mysterious_kernel_module", m)
 
-        return res
+        return self.has_matches()
 
 
 class VolHandles1(Signature):
@@ -224,14 +208,14 @@ class VolHandles1(Signature):
     alert = False
     categories = ["generic"]
     authors = ["Thorsten Sick"]
-    minimum = "0.5"
+    minimum = "1.2"
 
     def run(self):
         threads = set()
 
-        if ("volatility" in self.results and
-            "handles" in self.results["volatility"]):
-            for h in self.results["volatility"]["handles"]["data"]:
+        if ("memory" in self.results and
+            "handles" in self.results["memory"]):
+            for h in self.results["memory"]["handles"]["data"]:
                 if h["handle_type"] == "Thread":
                     w1, t1, w2, p1 = h["handle_name"].split(" ")
                     t1 = int(t1)
@@ -241,6 +225,7 @@ class VolHandles1(Signature):
 
         if len(threads) > 5:
             self.data.append({"injections": list(threads)})
+            self.add_match(None, "injections", list(threads))
             return True
 
         return False
