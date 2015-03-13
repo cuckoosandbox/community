@@ -31,7 +31,7 @@ class CheckIP(Signature):
             "getmyip.org",
             "getmyip.co.uk",
             "icanhazip.com",
-			"whatismyipaddress.com"
+            "whatismyipaddress.com"
         ]
 
         for indicator in indicators:
