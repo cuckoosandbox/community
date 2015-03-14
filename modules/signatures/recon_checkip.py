@@ -25,6 +25,7 @@ class CheckIP(Signature):
 
     def run(self):
         indicators = [
+            "checkip.dyndns.com",
             "checkip.dyndns.org",
             "whatismyip.org",
             "whatsmyipaddress.com",
