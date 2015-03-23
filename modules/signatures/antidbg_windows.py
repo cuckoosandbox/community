@@ -34,6 +34,7 @@ class AntiDBGWindows(Signature):
             "PROCMON_WINDOW_CLASS",
             "File Monitor - Sysinternals: www.sysinternals.com",
             "Process Monitor - Sysinternals: www.sysinternals.com",
+            "Registry Monitor - Sysinternals: www.sysinternals.com",
         ]
 
         for indicator in indicators:
