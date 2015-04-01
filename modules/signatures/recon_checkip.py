@@ -34,7 +34,10 @@ class CheckIP(Signature):
             "icanhazip.com",
             "whatismyipaddress.com",
             "myipaddress.com",
-            "ip-addr.es"
+            "ip-addr.es",
+            "api.ipify.org",
+            "ipinfo.info",
+            "myexternalip.com",
         ]
 
         for indicator in indicators:
