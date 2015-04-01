@@ -27,7 +27,7 @@ class VMPPacked(Signature):
         if "static" in self.results:
             if "pe_sections" in self.results["static"]:
                 for section in self.results["static"]["pe_sections"]:
-                    if section["name"].lower().startswith("vmp"):
+                    if section["name"].lower().startswith(".vmp"):
                         self.data.append({"section" : section})
                         return True
 
