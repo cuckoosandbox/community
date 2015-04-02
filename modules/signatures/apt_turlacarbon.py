@@ -20,12 +20,12 @@ CONFIG_BUFFER_STRINGS = ["[NAME]", "[TIME]", "iproc", "user_winmin", "user_winma
 EXPLORER_EXE = "explorer.exe"
 
 class TurlaCarbon(Signature):
-    name = "apt_turlaCarbon"
-    description = "Turla-APT-Campaign: TurlaCarbon"
+    name = "apt_turlacarbon"
+    description = "Appears to be the targeted Turla Carbon malware"
     severity = 3
     alert = True
-    categories = ["APT"]
-    families = ["Turla", "Uroburos", "Snake"]
+    categories = ["apt"]
+    families = ["turla", "uroburos", "snake"]
     authors = ["Robby Zeitfuchs", "@robbyFux"]
     minimum = "1.0"
     references = ["https://blog.gdatasoftware.com/blog/article/analysis-of-project-cobra.html",
