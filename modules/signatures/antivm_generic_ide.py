@@ -25,8 +25,8 @@ class AntiVMIDE(Signature):
 
     def run(self):
         subject = self.check_key(pattern=".*\\\\SYSTEM\\\\CurrentControlSet\\\\Enum\\\\IDE$",
-                              	 regex=True)
+                                 regex=True)
         if subject:
-        	self.add_match(None, 'registry', subject)
+            self.add_match(None, 'registry', subject)
 
         return self.has_matches()

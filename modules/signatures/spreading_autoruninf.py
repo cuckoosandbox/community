@@ -26,6 +26,6 @@ class CreatesAutorunInf(Signature):
     def run(self):
         subject = self.check_file(pattern=".*\\\\autorun\.inf$", regex=True)
         if subject:
-        	self.add_match(None, 'file', subject)
+            self.add_match(None, 'file', subject)
 
         return self.has_matches()

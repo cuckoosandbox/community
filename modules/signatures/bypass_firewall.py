@@ -29,6 +29,6 @@ class BypassFirewall(Signature):
         subject = self.check_key(pattern=".*\\\\SYSTEM\\\\CurrentControlSet\\\\Services\\\\SharedAccess\\\\Parameters\\\\FirewallPolicy\\\\.*",
                                  regex=True)
         if subject:
-        	self.add_match(None, 'registry', subject)
+            self.add_match(None, 'registry', subject)
 
         return self.has_matches()

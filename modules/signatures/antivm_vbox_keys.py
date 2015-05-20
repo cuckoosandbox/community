@@ -27,7 +27,7 @@ class VBoxDetectKeys(Signature):
         key = self.check_key(pattern=".*\\\\SOFTWARE\\\\Oracle\\\\VirtualBox\\ Guest\\ Additions$",
                              regex=True)
         if key:
-        	self.add_match(None, 'registry', key)
-        	return True
+            self.add_match(None, 'registry', key)
+            return True
         else:
-        	return False
+            return False
