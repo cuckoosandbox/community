@@ -48,7 +48,7 @@ class VBoxDetectACPI(Signature):
                 else:
                     self.opened = True
                     self.handle = self.get_argument(call,"Handle")
-                    seld.signs.append(call)
+                    self.signs.append(call)
         # Now I check if the malware verified the value of the key.
         elif call["api"].startswith("RegEnumKeyEx"):
             # Verify if the key was actually opened.
