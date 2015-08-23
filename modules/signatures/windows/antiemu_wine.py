@@ -30,4 +30,6 @@ class WineDetect(Signature):
     def on_complete(self):
         for indicator in self.indicators:
             for regkey in self.check_key(pattern=indicator, all=True):
-                self.match(None, "registry", regkey=regkey)
+                self.mark_ioc("registry", regkey=regkey)
+
+        return self.has_marks()

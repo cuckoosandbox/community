@@ -30,4 +30,4 @@ class DirtJumper(Signature):
         for http in self.get_net_http():
             if http["method"] == "POST" and http["body"].startswith("k=") and \
                     http.get("user-agent", "") == self.user_agent:
-                self.match(None, "http", http)
+                self.mark_ioc("http", http)

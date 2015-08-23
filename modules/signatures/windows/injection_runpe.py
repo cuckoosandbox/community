@@ -51,5 +51,4 @@ class InjectionRunPE(Signature):
     def on_complete(self):
         for pid, functions in self.functions.items():
             if len(functions) >= len(self.filter_apinames)-2:
-                self.match(None, "injection", pid=pid)
                 return True

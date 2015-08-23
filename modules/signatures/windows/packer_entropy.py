@@ -34,8 +34,10 @@ class PackerEntropy(Signature):
             total_pe_data += int(section["size_of_data"], 16)
 
             if float(section["entropy"]) > 6.8:
-                self.match(None, "section", section)
+                self.mark(section=section, entropy=section["entropy"],
+                          description="A section with a high entropy has been found")
                 total_compressed += int(section["size_of_data"], 16)
 
         if total_pe_data and float(total_compressed) / total_pe_data > .2:
-            self.match(None, "compressed")
+            self.mark(entropy=float(total_compressed) / total_pe_data,
+                      description="Overall entropy of this PE file is high")

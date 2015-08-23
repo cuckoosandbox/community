@@ -53,9 +53,11 @@ class FTPStealer(Signature):
         for indicator in self.file_indicators:
             filepath = self.check_file(pattern=indicator, regex=True)
             if filepath:
-                self.match(None, "file", filepath=filepath)
+                self.mark_ioc("file", filepath)
 
         for indicator in self.registry_indicators:
             registry = self.check_key(pattern=indicator, regex=True)
             if registry:
-                self.match(None, "registry", registry=registry)
+                self.mark_ioc("registry", registry)
+
+        return self.has_marks()

@@ -25,4 +25,4 @@ class NetworkICMP(Signature):
 
     def on_complete(self):
         if self.get_net_icmp():
-            self.match(None, "icmp", requests=len(self.get_next_icmp()))
+            return True

@@ -56,8 +56,7 @@ class Polymorphic(Signature):
             if not drop_ssdeep:
                 continue
 
-            try:
-                if pydeep.compare(target_ssdeep, drop_ssdeep) > 20:
-                    self.match(None, "dropped file", drop)
-            except:
-                continue
+            if pydeep.compare(target_ssdeep, drop_ssdeep) > 20:
+                self.mark(file=drop, description="Possibly a polymorphic version of itself")
+
+        return self.has_marks()

@@ -18,7 +18,9 @@ class VolMalfind1(Signature):
             pids.add(row["process_id"])
 
         if pids:
-            self.match(None, "malfind", pidcount=len(pids))
+            self.mark_vol("malfind", pidcount=len(pids))
+
+        return self.has_marks()
 
 class VolLdrModules1(Signature):
     name = "volatility_ldrmodules_1"
@@ -38,7 +40,9 @@ class VolLdrModules1(Signature):
             if not row["dll_in_init"] and not row["dll_in_load"] and \
                     not row["dll_in_mem"] and \
                     not row["process_name"].lower() in exceptions:
-                self.match(None, "unlinked", row)
+                self.mark_vol("unlinked", row)
+
+        return self.has_marks()
 
 class VolLdrModules2(Signature):
     name = "volatility_ldrmodules_2"
@@ -54,7 +58,9 @@ class VolLdrModules2(Signature):
     def on_complete(self):
         for row in self.get_volatility("ldrmodules").get("data", []):
             if not row["process_name"]:
-                self.match(None, "unlinked", row)
+                self.mark_vol("unlinked", row)
+
+        return self.has_marks()
 
 class VolDevicetree1(Signature):
     name = "volatility_devicetree_1"
@@ -70,7 +76,9 @@ class VolDevicetree1(Signature):
     def on_complete(self):
         for row in self.get_volatility("devicetree").get("data", []):
             if not row["driver_name"]:
-                self.match(None, "unnamed_driver", row)
+                self.mark_vol("unnamed_driver", row)
+
+        return self.has_marks()
 
 class VolSvcscan1(Signature):
     name = "volatility_svcscan_1"
@@ -85,7 +93,9 @@ class VolSvcscan1(Signature):
         for row in self.get_volatility("svcscan").get("data", []):
             if row["service_name"] == "SharedAccess" and \
                     row["service_state"] == "SERVICE_STOPPED":
-                self.match(None, "stopped_service", row)
+                self.mark_vol("stopped_service", row)
+
+        return self.has_marks()
 
 class VolSvcscan2(Signature):
     name = "volatility_svcscan_2"
@@ -100,7 +110,9 @@ class VolSvcscan2(Signature):
         for row in self.get_volatility("svcscan").get("data", []):
             if row["service_name"] == "wscsvc" and \
                     row["service_state"] == "SERVICE_STOPPED":
-                self.match(None, "stopped_service", row)
+                self.mark_vol("stopped_service", row)
+
+        return self.has_marks()
 
 class VolSvcscan3(Signature):
     name = "volatility_svcscan_3"
@@ -115,7 +127,9 @@ class VolSvcscan3(Signature):
         for row in self.get_volatility("svcscan").get("data", []):
             if row["service_name"] == "ALG" and \
                     row["service_state"] == "SERVICE_STOPPED":
-                self.match(None, "stopped_service", row)
+                self.mark_vol("stopped_service", row)
+
+        return self.has_marks()
 
 class VolModscan1(Signature):
     name = "volatility_modscan_1"
@@ -129,7 +143,9 @@ class VolModscan1(Signature):
     def on_complete(self):
         for row in self.get_volatility("modscan").get("data", []):
             if not row["kernel_module_name"]:
-                self.match(None, "mysterious_kernel_module", row)
+                self.mark_vol("mysterious_kernel_module", row)
+
+        return self.has_marks()
 
 class VolHandles1(Signature):
     name = "volatility_handles_1"
@@ -149,4 +165,6 @@ class VolHandles1(Signature):
                     threads.add("%d -> %s/%s" % (row["process_id"], p1, t1))
 
         if threads:
-            self.match(None, "injections", threads=list(threads))
+            self.mark_vol("injections", threads=list(threads))
+
+    return self.has_marks()

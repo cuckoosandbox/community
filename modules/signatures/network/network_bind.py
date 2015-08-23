@@ -27,5 +27,5 @@ class NetworkBIND(Signature):
 
     def on_call(self, call, process):
         if call["api"] == "bind":
-            self.mark()
+            self.mark_call()
             return True

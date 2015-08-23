@@ -30,4 +30,5 @@ class BypassFirewall(Signature):
     def on_complete(self):
         regkey = self.check_key(pattern=self.indicator, regex=True)
         if regkey:
-            self.match(None, "registry", regkey=regkey)
+            self.mark_ioc("registry", regkey)
+            return True

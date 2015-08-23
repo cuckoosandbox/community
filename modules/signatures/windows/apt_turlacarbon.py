@@ -53,7 +53,6 @@ class TurlaCarbon(Signature):
         else:
             self.wrote = True
             self.mark_call()
-            return True
 
     def on_complete(self):
         if not self.check_key(self.regkey_indicator, regex=True):

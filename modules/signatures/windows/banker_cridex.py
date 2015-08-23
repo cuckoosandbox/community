@@ -38,9 +38,13 @@ class Cridex(Signature):
     ]
 
     def on_complete(self):
-
         match_file = self.check_file(pattern=".*\\\\KB[0-9]{8}\.exe", regex=True)
+        if match_file:
+            self.mark_ioc("file", match_file)
+
         match_batch_file = self.check_file(pattern=".*\\\\Temp\\\\\S{4,5}\.tmp\.bat", regex=True)
+        if match_batch_file:
+            self.mark_ioc("file", match_batch_file)
 
         if not match_file or not match_batch_file:
             return
@@ -48,7 +52,6 @@ class Cridex(Signature):
         for indicator in self.indicators:
             match_mutex = self.check_mutex(pattern=indicator, regex=True)
             if match_mutex:
-                self.match(None, "cridex_ioc",
-                           filepath=match_file,
-                           batchfile=match_batch_file,
-                           mutex=match_mutex)
+                self.mark_ioc("mutex", match_mutex)
+
+        return self.has_marks(3)

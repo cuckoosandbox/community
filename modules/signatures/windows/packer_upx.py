@@ -26,4 +26,7 @@ class UPXCompressed(Signature):
     def on_complete(self):
         for section in self.get_results("static", {}).get("pe_sections", []):
             if section["name"].startswith("UPX"):
-                self.match(None, "section", section)
+                self.mark(section=section["name"],
+                          description="Section name indicates UPX")
+
+        return self.has_marks()

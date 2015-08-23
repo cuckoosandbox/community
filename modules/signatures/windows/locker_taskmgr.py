@@ -28,4 +28,6 @@ class DisableTaskMgr(Signature):
 
     def on_complete(self):
         for regkey in self.check_key(pattern=self.indicator, regex=True, all=True):
-            self.match(None, "registry", regkey=regkey)
+            self.mark_ioc("registry", regkey)
+
+        return self.has_marks()

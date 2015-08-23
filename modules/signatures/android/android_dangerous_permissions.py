@@ -18,4 +18,4 @@ class AndroidDangerousPermissions(Signature):
         for perm in manifest.get("permissions", []):
             if "dangerous" in perm["severity"] and \
                     "Unknown" not in perm["action"]:
-                self.match(None, "permission", permission=perm["action"])
+                self.mark(permission=perm["action"])

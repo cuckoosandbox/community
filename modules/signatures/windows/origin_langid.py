@@ -45,4 +45,5 @@ class BuildLangID(Signature):
             lang, charset = info["value"].strip().split(" ")
             for language in self.languages:
                 if language["code"] == lang:
-                    self.match(None, "language", language=language["language"])
+                    self.mark(language=language["language"],
+                              description="A foreign language has been detected")

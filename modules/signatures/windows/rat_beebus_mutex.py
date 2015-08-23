@@ -37,4 +37,6 @@ class BeebusMutexes(Signature):
     def on_complete(self):
         for indicator in self.indicators:
             for mutex in self.check_mutex(pattern=indicator, regex=True, all=True):
-                self.match(None, "mutex", mutex=mutex)
+                self.mark_ioc("mutex", mutex)
+
+        return self.has_marks()

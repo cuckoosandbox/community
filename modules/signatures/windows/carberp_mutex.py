@@ -27,4 +27,5 @@ class CarberpMutexes(Signature):
     def on_complete(self):
         regkey = self.check_mutex(pattern="^(Global\\\\)?(UAC|INS|BD)NTFS\d+$", regex=True)
         if regkey:
-            self.match(None, "regkey", regkey=regkey)
+            self.mark_ioc("regkey", regkey)
+            return True

@@ -25,4 +25,5 @@ class AndroidGooglePlayDiff(Signature):
             list(set(google_permission_list) - set(apk_permission_list))
 
         if permission_diff:
-            self.match(None, "permission", diff=permission_diff)
+            self.mark(permissions=permission_diff)
+            return True

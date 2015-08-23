@@ -30,4 +30,6 @@ class Drive(Signature):
         for http in self.get_net_http():
             if http["method"] == "POST" and http["body"].startswith("k=") and \
                     self.user_agent.search(http.get("user-agent", "")):
-                self.match(None, "http", http)
+                self.mark_ioc("http", http)
+
+        return self.has_marks()

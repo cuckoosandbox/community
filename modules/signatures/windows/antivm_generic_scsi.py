@@ -29,4 +29,5 @@ class AntiVMSCSI(Signature):
 
     def on_complete(self):
         if self.check_key(pattern=self.indicator):
-            self.match(None, "registry", regkey=self.indicator)
+            self.mark_ioc("registry", regkey=self.indicator)
+            return True

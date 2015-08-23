@@ -27,4 +27,6 @@ class Tor2Web(Signature):
 
     def on_complete(self):
         for domain in self.check_domain(pattern=self.indicator, regex=True, all=True):
-            self.match(None, "domain", domain=domain)
+            self.mark_ioc("domain", domain)
+
+        return self.has_marks()

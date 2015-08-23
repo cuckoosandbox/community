@@ -34,6 +34,8 @@ class PlugxMutexes(Signature):
 
     def on_complete(self):
         for indicator in self.indicators:
-            subject = self.check_mutex(pattern=indicator)
-            if subject:
-                self.match(None, "mutex", subject)
+            mutex = self.check_mutex(pattern=indicator)
+            if mutex:
+                self.mark_ioc("mutex", mutex)
+
+        return self.has_marks()

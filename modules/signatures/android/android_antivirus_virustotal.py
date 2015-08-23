@@ -46,4 +46,4 @@ class KnownVirustotal(Signature):
                 count += 1
 
         if count:
-            self.match(None, "detection", count=count)
+            return True

@@ -25,4 +25,4 @@ class NetworkHTTP(Signature):
 
     def on_complete(self):
         if self.get_net_http():
-            self.match(None, "http", requests=len(self.get_net_http()))
+            return True

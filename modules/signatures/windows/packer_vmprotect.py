@@ -26,4 +26,7 @@ class VMPPacked(Signature):
     def on_complete(self):
         for section in self.get_results("static", {}).get("pe_sections", []):
             if section["name"].lower().startswith(".vmp"):
-                self.match(None, "section", name=section["name"])
+                self.mark(section=section["name"],
+                          description="Section name indicates VMProtect")
+
+        return self.has_marks()

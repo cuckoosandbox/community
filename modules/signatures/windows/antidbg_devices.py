@@ -39,4 +39,6 @@ class AntiDBGDevices(Signature):
     def on_complete(self):
         for indicator in self.indicators:
             for filepath in self.check_file(pattern=indicator, regex=True, all=True):
-                self.match(None, "file", filepath=filepath)
+                self.mark_ioc("file", filepath=filepath)
+
+        return self.has_marks()

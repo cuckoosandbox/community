@@ -41,4 +41,6 @@ class Drive2(Signature):
                 continue
 
             if self.user_agent.search(http.get("user-agent", "")):
-                self.match(None, "http", http)
+                self.mark_ioc("http", http)
+
+        return self.has_marks()

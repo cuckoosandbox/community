@@ -25,4 +25,4 @@ class NetworkSMTP(Signature):
 
     def on_complete(self):
         if self.get_net_smtp():
-            self.match(None, "smtp", requests=len(self.get_net_smtp()))
+            return True

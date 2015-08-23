@@ -23,9 +23,9 @@ class VBoxDetectACPI(Signature):
     authors = ["nex"]
     minimum = "2.0"
 
-    filter_categories = "registry",
-
     def on_complete(self):
         for regkey in self.check_key("HARDWARE\\\\ACPI\\\\", regex=True, all=True):
             if "vbox_" in regkey.lower():
-                self.match(None, "registry", regkey=regkey)
+                self.mark_ioc("registry", regkey)
+
+        return self.has_marks()

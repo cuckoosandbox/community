@@ -34,7 +34,6 @@ class AntiSandboxSleep(Signature):
         self.sleeps.append((process["process_name"], sleep, skip))
 
     def on_complete(self):
-        ret = False
         proc_whitelist = [
             "dwm.exe",
             "adobearm.exe",
@@ -57,14 +56,12 @@ class AntiSandboxSleep(Signature):
 
         for process_name, info in procs.items():
             if info["attempted"] >= 120000:
-                ret = True
                 actual = info["actual"] / 1000
                 attempted = info["attempted"] / 1000
-                self.data.append({"Process": "%s tried to sleep %s seconds, actually delayed analysis time by %s seconds"
-                                 % (process_name, attempted, actual)})
+                self.mark(description="%s tried to sleep %s seconds, actually delayed analysis time by %s seconds" % (process_name, attempted, actual))
 
             if info["attempted"] >= 1200000:
                 self.severity = 3
-                self.description = "A process attempted to delay the analysis task by a long amount of time."
+                self.mark(sleep_attempt=info["attempted"])
 
-        return ret
+        return self.has_marks()

@@ -33,4 +33,6 @@ class InstallsWinpcap(Signature):
         for indicator in self.indicators:
             filepath = self.check_file(pattern=indicator, regex=True)
             if filepath:
-                self.match(None, "file", filepath=filepath)
+                self.mark_ioc("file", filepath)
+
+        return self.has_marks()

@@ -15,4 +15,4 @@ class AndroidEmbeddedApk(Signature):
     def on_complete(self):
         for f in self.get_apkinfo("files", []):
             if "Android application package file" in f["type"]:
-                self.match(None, "embedded", filename=f["name"])
+                self.mark(filename=f["name"], description="Embedded APK file")

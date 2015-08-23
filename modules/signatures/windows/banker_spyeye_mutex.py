@@ -36,4 +36,6 @@ class SpyEyeMutexes(Signature):
         for indicator in self.indicators:
             mutex = self.check_mutex(pattern=indicator, regex=True)
             if mutex:
-                self.match(None, "mutex", mutex=mutex)
+                self.mark_ioc("mutex", mutex)
+
+        return self.has_marks()

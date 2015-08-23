@@ -25,4 +25,4 @@ class NetworkIRC(Signature):
 
     def on_complete(self):
         if self.get_net_irc():
-            self.match(None, "irc", requests=len(self.get_net_irc()))
+            return True

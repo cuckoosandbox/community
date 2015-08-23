@@ -27,11 +27,7 @@ class Madness(Signature):
     indicator = "\?uid\x3d[0-9]{8}&ver\x3d[0-9].[0-9]{2}&mk\x3d[0-9a-f]{6}&os\x3d[A-Za-z0-9]+&rs\x3d[a-z]+&c\x3d[0-1]&rq\x3d[0-1]"
 
     def on_complete(self):
-        for http in self.get_net_http():
-            if http["method"] != "GET":
-                continue
+        for url in self.check_url(pattern=self.indicator, regex=True, all=True):
+            self.mark_ioc("url", url)
 
-            if self._check_value(pattern=self.indicator,
-                                 subject=http["uri"],
-                                 regex=True):
-                self.match(None, "http", http)
+        return self.has_marks()

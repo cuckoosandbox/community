@@ -42,10 +42,10 @@ class ZeusP2P(Signature):
 
     def on_complete(self):
         for mutex in self.check_mutex(pattern=self.indicator, regex=True, all=True):
-            self.match(None, "mutex", mutex=mutex)
+            self.mark_ioc("mutex", mutex)
 
         # Check if there are at least 5 mutexes opened matching the pattern?
-        if len(self.data) < 5:
+        if not self.has_marks(5):
             return
 
         # Check for UDP Traffic on remote port greater than 1024.
@@ -53,4 +53,6 @@ class ZeusP2P(Signature):
         # IP is really valid.
         for udp in self.get_results("network", {})["udp"]:
             if udp["dport"] > 1024:
-                self.match(None, "udp", udp=udp)
+                self.mark_ioc("udp", udp)
+
+        return self.has_marks(9)
