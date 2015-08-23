@@ -5,4 +5,5 @@
 from lib.cuckoo.core.plugins import enumerate_plugins
 from lib.cuckoo.common.abstracts import Signature
 
-plugins = enumerate_plugins(__file__, "modules.signatures.android", globals(), Signature)
+plugins = enumerate_plugins(__file__, "modules.signatures.android",
+                            globals(), Signature, dict(platform="android"))
