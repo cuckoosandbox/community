@@ -12,21 +12,10 @@ class AndroidDangerousPermissions(Signature):
     authors = ["Check Point Software Technologies LTD"]
     minimum = "0.5"
 
-    def run(self):
-        references = []
-        try:
-            for perm in self.results["apkinfo"]["manifest"]["permissions"]:
-                if("dangerous" in perm["severity"]):
-                    if not ("Unknown" in perm["action"]):
-                        references.append(perm)
+    def on_complete(self):
+        manifest = self.get_results("apkinfo", {}).get("manifest", {})
 
-            if len(references)>0:
-                return True
-            else:
-                return False
-        except:
-            return False
-
-
-
-
+        for perm in manifest.get("permissions", []):
+            if "dangerous" in perm["severity"] and \
+                    "Unknown" not in perm["action"]:
+                self.match(None, "permission", permission=perm["action"])

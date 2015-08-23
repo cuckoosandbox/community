@@ -11,19 +11,39 @@ class KnownVirustotal(Signature):
     severity = 2
     categories = ["antivirus"]
     authors = ["Check Point Software Technologies LTD"]
-    minimum = "0.5"
+    minimum = "2.0"
 
-    def run(self):
-        AvWhiteList = ["Kingsoft","NANO-Antivirus","F-Prot","McAfee-GW-Edition","McAfee","MicroWorld-eScan","AVG","CAT-QuickHeal","F-Secure","Emsisoft","VIPRE","BitDefender","Fortinet",
-                     "Commtouch","TrendMicro-HouseCall", "DrWeb","Comodo", "Kaspersky","AntiVir","Avast","Sophos","Ikarus","GData","ESET-NOD32"]
+    av_whitelist = [
+        "Kingsoft",
+        "NANO-Antivirus",
+        "F-Prot",
+        "McAfee-GW-Edition",
+        "McAfee",
+        "MicroWorld-eScan",
+        "AVG",
+        "CAT-QuickHeal",
+        "F-Secure",
+        "Emsisoft",
+        "VIPRE",
+        "BitDefender",
+        "Fortinet",
+        "Commtouch",
+        "TrendMicro-HouseCall",
+        "DrWeb",
+        "Comodo", "Kaspersky",
+        "AntiVir",
+        "Avast",
+        "Sophos",
+        "Ikarus",
+        "GData",
+        "ESET-NOD32",
+    ]
 
-        try:
-            if ("virustotal" in self.results and "scans" in self.results["virustotal"]):
-                for key in self.results["virustotal"]["scans"].keys():
-                    if(key in AvWhiteList):
-                        if(self.results["virustotal"]["scans"][key]["detected"]==True):
-                            return True
-                return True
-        except:
-            return False
+    def on_complete(self):
+        count = 0
+        for av, scan in self.get_virustotal().get("scans", {}):
+            if av in self.av_whitelist and scan["detected"]:
+                count += 1
 
+        if count:
+            self.match(None, "detection", count=count)

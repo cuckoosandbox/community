@@ -10,13 +10,9 @@ class AndroidEmbeddedApk(Signature):
     severity = 4
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
-    minimum = "0.5"
+    minimum = "2.0"
 
-    def run(self):
-        try:
-            for file in self.results["apkinfo"]["files"]:
-                if ("Android application package file" in file["type"] ):
-                    return True
-            return False
-        except:
-            return False
+    def on_complete(self):
+        for f in self.get_apkinfo("files", []):
+            if "Android application package file" in f["type"]:
+                self.match(None, "embedded", filename=f["name"])

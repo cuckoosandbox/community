@@ -10,13 +10,8 @@ class AndroidNativeCode(Signature):
     severity = 2
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
-    minimum = "0.5"
+    minimum = "2.0"
 
-    def run(self):
-        try:
-            if self.results["apkinfo"]["static_method_calls"]["is_native_code"] is True:
-                return True
-            else:
-                return False
-        except:
-            return False
+    def on_complete(self):
+        if self.get_apkinfo("static_method_calls").get("is_native_code"):
+            return True

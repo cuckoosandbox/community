@@ -10,19 +10,19 @@ class AndroidGooglePlayDiff(Signature):
     severity = 3
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
-    minimum = "0.5"
+    minimum = "2.0"
 
     def run(self):
+        apk_permission_list = []
+        for perm in self.get_apkinfo("manifest").get("permissions", []):
+            apk_permission_list.append(perm["name"])
 
-        try:
-            apk_permission_list = []
-            for perm in self.results["apkinfo"]["manifest"]["permissions"]:
-                apk_permission_list.append(perm["name"])
+        google_permission_list = []
+        for perm in self.get_results("googleplay").get("permissions", []):
+            google_permission_list.append(perm)
 
-            diff = list(set(self.results["googleplay"]["permissions"]) - set(apk_permission_list))
-            if(len(diff)> 0):
-                return True
-            else:
-                return False
-        except:
-            return False
+        permission_diff = \
+            list(set(google_permission_list) - set(apk_permission_list))
+
+        if permission_diff:
+            self.match(None, "permission", diff=permission_diff)

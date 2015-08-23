@@ -10,14 +10,8 @@ class AndroidInstalledApps(Signature):
     severity = 2
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
-    minimum = "0.5"
+    minimum = "2.0"
 
-    def run(self):
-        try:
-            if "android/app/ApplicationPackageManager->installPackage" in self.results["droidmon"]:
-                return True
-            else:
-                return False
-        except:
-            return False
-#TODO:Add new signature
+    def on_complete(self):
+        if "android/app/ApplicationPackageManager->installPackage" in self.get_droidmon():
+            return True

@@ -10,13 +10,8 @@ class AndroidSMS(Signature):
     severity = 3
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
-    minimum = "0.5"
+    minimum = "2.0"
 
-    def run(self):
-        try:
-            if "sms" in self.results["droidmon"]:
-                return True
-            else:
-                return False
-        except:
-            return False
+    def on_complete(self):
+        if "sms" in self.get_droidmon():
+            return True

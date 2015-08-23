@@ -10,13 +10,8 @@ class AndroidAppInfo(Signature):
     severity = 2
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
-    minimum = "0.5"
+    minimum = "2.0"
 
-    def run(self):
-        try:
-            if "getInstalledPackages" in self.results["droidmon"]["data_leak"]:
-                return True
-            else:
-                return False
-        except:
-            return False
+    def on_complete(self):
+        if "getInstalledPackages" in self.get_droidmon("data_leak"):
+            return True

@@ -10,13 +10,8 @@ class AndroidPrivateInfoQuery(Signature):
     severity = 2
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
-    minimum = "0.5"
+    minimum = "2.0"
 
-    def run(self):
-        try:
-            if "ContentResolver_queries" in self.results["droidmon"]:
-                return True
-            else:
-                return False
-        except:
-            return False
+    def on_complete(self):
+        if "ContentResolver_queries" in self.get_droidmon():
+            return True
