@@ -41,7 +41,7 @@ class KnownVirustotal(Signature):
 
     def on_complete(self):
         count = 0
-        for av, scan in self.get_virustotal().get("scans", {}):
+        for av, scan in self.get_virustotal().get("scans", {}).items():
             if av in self.av_whitelist and scan["detected"]:
                 count += 1
 

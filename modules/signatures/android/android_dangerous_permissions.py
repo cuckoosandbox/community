@@ -10,7 +10,7 @@ class AndroidDangerousPermissions(Signature):
     severity = 3
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
-    minimum = "0.5"
+    minimum = "2.0"
 
     def on_complete(self):
         manifest = self.get_results("apkinfo", {}).get("manifest", {})

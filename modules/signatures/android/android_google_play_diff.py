@@ -12,13 +12,13 @@ class AndroidGooglePlayDiff(Signature):
     authors = ["Check Point Software Technologies LTD"]
     minimum = "2.0"
 
-    def run(self):
+    def on_complete(self):
         apk_permission_list = []
-        for perm in self.get_apkinfo("manifest").get("permissions", []):
+        for perm in self.get_apkinfo("manifest", {}).get("permissions", []):
             apk_permission_list.append(perm["name"])
 
         google_permission_list = []
-        for perm in self.get_results("googleplay").get("permissions", []):
+        for perm in self.get_googleplay("permissions", []):
             google_permission_list.append(perm)
 
         permission_diff = \
