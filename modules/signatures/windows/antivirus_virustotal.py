@@ -26,5 +26,5 @@ class KnownVirustotal(Signature):
     def on_complete(self):
         results = self.get_virustotal()
         if results.get("positives"):
-            self.mark_ioc("detection", positives=results["positives"])
+            self.mark(positives=results["positives"])
             return True

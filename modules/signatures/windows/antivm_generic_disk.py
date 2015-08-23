@@ -40,13 +40,17 @@ class DiskInformation(Signature):
         315400: "IOCTL_SCSI_MINIPORT",
     }
 
+    def init(self):
+        self.drive_opened = False
+
     def on_call(self, call, process):
         if call["api"] == "NtCreateFile":
             filepath = call["arguments"]["filepath"].lower()
             if "scsi0" in filepath or "physicaldrive0" in filepath:
+                self.drive_opened = True
                 self.mark_call()
 
         if call["api"] in ["DeviceIoControl", "NtDeviceIoControlFile"]:
-            if self.marked and call["arguments"]["control_code"] in self.ioctls:
+            if self.drive_opened and call["arguments"]["control_code"] in self.ioctls:
                 self.mark_call()
                 return True

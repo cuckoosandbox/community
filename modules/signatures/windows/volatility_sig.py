@@ -167,4 +167,4 @@ class VolHandles1(Signature):
         if threads:
             self.mark_vol("injections", threads=list(threads))
 
-    return self.has_marks()
+        return self.has_marks()
