@@ -23,8 +23,11 @@ class SystemInfo(Signature):
     authors = ["nex"]
     minimum = "2.0"
 
+    filter_apinames = "CreateProcessInternalW",
+
     def on_call(self, call, process):
         if self._check_value(pattern="^cmd\.exe.*(systeminfo|ipconfig|netstat)",
                              subject=call["arguments"]["command_line"],
                              regex=True):
-            self.mark()
+            self.mark_call()
+            return True

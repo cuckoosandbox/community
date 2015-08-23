@@ -49,9 +49,9 @@ class SpynetRat(Signature):
         for indicator in self.indicators:
             mutex = self.check_mutex(pattern=indicator, regex=True)
             if mutex:
-                self.add_match(None, "mutex", mutex=mutex)
+                self.match(None, "mutex", mutex=mutex)
 
         for indicator in self.indicators2:
             regkey = self.check_key(pattern=indicator, regex=True)
             if regkey:
-                self.add_match(None, "registry", regkey)
+                self.match(None, "registry", regkey)

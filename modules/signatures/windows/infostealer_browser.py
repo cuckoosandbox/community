@@ -43,4 +43,4 @@ class BrowserStealer(Signature):
         for indicator in self.indicators:
             filepath = self.check_file(pattern=indicator, regex=True)
             if filepath:
-                self.add_match(None, "file", filepath=filepath)
+                self.match(None, "file", filepath=filepath)

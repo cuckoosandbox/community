@@ -52,5 +52,4 @@ class DownloaderCabby(Signature):
         else:
             return False
 
-        self.add_match(None, 'cabby_ioc', signs)
-        return True
+        self.match(None, 'cabby_ioc', signs)

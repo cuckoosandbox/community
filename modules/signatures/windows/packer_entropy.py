@@ -34,7 +34,7 @@ class PackerEntropy(Signature):
             total_pe_data += int(section["size_of_data"], 16)
 
             if float(section["entropy"]) > 6.8:
-                self.add_match(None, "section", section)
+                self.match(None, "section", section)
                 total_compressed += int(section["size_of_data"], 16)
 
         if total_pe_data and float(total_compressed) / total_pe_data > .2:

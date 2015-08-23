@@ -52,7 +52,7 @@ class TurlaCarbon(Signature):
                 break
         else:
             self.wrote = True
-            self.mark()
+            self.mark_call()
             return True
 
     def on_complete(self):

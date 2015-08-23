@@ -26,5 +26,5 @@ class Unhook(Signature):
     filter_apinames = "__anomaly__",
 
     def on_call(self, call, process):
-        self.mark()
+        self.mark_call()
         return True

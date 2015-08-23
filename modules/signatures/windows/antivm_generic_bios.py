@@ -28,4 +28,5 @@ class AntiVMBios(Signature):
     def on_call(self, call, process):
         regkey = call["arguments"].get("regkey", "").lower()
         if regkey.endswith(("systembiosversion", "videobiosversion")):
-            self.mark()
+            self.mark_call()
+            return True

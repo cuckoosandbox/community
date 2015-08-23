@@ -58,9 +58,9 @@ class Autorun(Signature):
         for indicator in self.indicators:
             regkey = self.check_key(pattern=indicator, regex=True)
             if regkey:
-                self.add_match(None, "autorun", regkey=regkey)
+                self.match(None, "autorun", regkey=regkey)
 
         for indicator in self.indicators2:
             filepath = self.check_file(pattern=indicator, regex=True)
             if filepath:
-                self.add_match(None, "autorun", filepath=filepath)
+                self.match(None, "autorun", filepath=filepath)

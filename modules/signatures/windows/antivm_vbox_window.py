@@ -35,5 +35,5 @@ class VBoxDetectWindow(Signature):
             class_name = call["arguments"].get("class_name", "").lower()
 
             if indicator == window_name or indicator == class_name:
-                self.mark()
+                self.mark_call()
                 return True

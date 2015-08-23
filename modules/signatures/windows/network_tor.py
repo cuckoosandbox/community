@@ -41,10 +41,12 @@ class Tor(Signature):
 
         if service_name == "Tor Win32 Service" or \
                 display_name == "Tor Win32 Service":
-            self.mark()
+            self.mark_call()
+            return True
 
     def on_complete(self):
         for indicator in self.indicators:
             filepath = self.check_file(pattern=indicator, regex=True)
             if filepath:
                 self.match(None, "file", filepath=filepath)
+                return True

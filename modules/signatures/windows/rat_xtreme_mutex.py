@@ -38,4 +38,4 @@ class XtremeMutexes(Signature):
         for indicator in self.indicators:
             mutex = self.check_mutex(pattern=indicator, regex=True)
             if mutex:
-                self.add_match(None, "mutex", mutex=mutex)
+                self.match(None, "mutex", mutex=mutex)

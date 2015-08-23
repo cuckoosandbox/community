@@ -27,4 +27,4 @@ class Ruskill(Signature):
     def on_complete(self):
         mutex = self.check_mutex(pattern="FvLQ49IlzIyLjj6m")
         if mutex:
-            self.add_match(None, "mutex", mutex=mutex)
+            self.match(None, "mutex", mutex=mutex)

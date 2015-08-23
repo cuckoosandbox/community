@@ -29,5 +29,5 @@ class HookMouse(Signature):
     def on_call(self, call, process):
         if call["arguments"]["hook_identifier"] in [7, 14]:
             if not call["arguments"]["thread_identifier"]:
-                self.mark()
+                self.mark_call()
                 return True

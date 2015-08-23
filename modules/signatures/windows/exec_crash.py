@@ -27,4 +27,5 @@ class Crash(Signature):
 
     def on_call(self, call, process):
         if "faultrep.dll" in call["arguments"]["module_name"].lower():
-            self.mark()
+            self.mark_call()
+            return True

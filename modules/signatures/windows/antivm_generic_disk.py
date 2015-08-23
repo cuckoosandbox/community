@@ -44,9 +44,9 @@ class DiskInformation(Signature):
         if call["api"] == "NtCreateFile":
             filepath = call["arguments"]["filepath"].lower()
             if "scsi0" in filepath or "physicaldrive0" in filepath:
-                self.mark()
+                self.mark_call()
 
         if call["api"] in ["DeviceIoControl", "NtDeviceIoControlFile"]:
             if self.marked and call["arguments"]["control_code"] in self.ioctls:
-                self.mark()
+                self.mark_call()
                 return True

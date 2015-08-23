@@ -26,7 +26,7 @@ class AntiVMServices(Signature):
     filter_apinames = "EnumServicesStatusA", "EnumServicesStatusW"
 
     def on_call(self, call, process):
-        self.mark()
+        self.mark_call()
         return True
 
     def on_complete(self):

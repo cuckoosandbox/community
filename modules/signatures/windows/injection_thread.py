@@ -45,12 +45,10 @@ class InjectionThread(Signature):
 
     def on_call(self, call, process):
         self.functions[process["pid"]].add(call["api"])
-        self.mark()
+        self.mark_call()
 
     def on_complete(self):
-        # Only mark this signature if one or more of the following matches.
-        self.marked = False
-
         for pid, functions in self.functions.items():
             if len(functions) >= len(self.filter_apinames)-2:
                 self.match(None, "injection", pid=pid)
+                return True

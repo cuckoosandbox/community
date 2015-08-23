@@ -28,4 +28,4 @@ class VBoxDetectKeys(Signature):
     def on_complete(self):
         regkey = self.check_key(pattern=self.indicator, regex=True)
         if regkey:
-            self.add_match(None, "registry", regkey=regkey)
+            self.match(None, "registry", regkey=regkey)
