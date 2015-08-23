@@ -21,43 +21,41 @@ class FTPStealer(Signature):
     severity = 3
     categories = ["infostealer"]
     authors = ["nex"]
-    minimum = "1.2"
+    minimum = "2.0"
 
-    def run(self):
-        file_indicators = [
-            ".*\\\\CuteFTP\\\\sm\.dat$",
-            ".*\\\\FlashFXP\\\\.*\\\\Sites\.dat$",
-            ".*\\\\FlashFXP\\\\.*\\\\Sites\.dat$",
-            ".*\\\\FileZilla\\\\sitemanager\.xml$",
-            ".*\\\\FileZilla\\\\recentservers\.xml$",
-            ".*\\\\VanDyke\\\\Config\\\\Sessions\\\\.*",
-            ".*\\\\FTP Explorer\\\\.*"
-            ".*\\\\SmartFTP\\\\.*",
-            ".*\\\\TurboFTP\\\\.*",
-            ".*\\\\FTPRush\\\\.*",
-            ".*\\\\LeapFTP\\\\.*",
-            ".*\\\\FTPGetter\\\\.*",
-            ".*\\\\ALFTP\\\\.*",
-            ".*\\\\Ipswitch\\\\WS_FTP.*",
-        ]
+    file_indicators = [
+        ".*\\\\CuteFTP\\\\sm\.dat$",
+        ".*\\\\FlashFXP\\\\.*\\\\Sites\.dat$",
+        ".*\\\\FlashFXP\\\\.*\\\\Sites\.dat$",
+        ".*\\\\FileZilla\\\\sitemanager\.xml$",
+        ".*\\\\FileZilla\\\\recentservers\.xml$",
+        ".*\\\\VanDyke\\\\Config\\\\Sessions\\\\.*",
+        ".*\\\\FTP Explorer\\\\.*"
+        ".*\\\\SmartFTP\\\\.*",
+        ".*\\\\TurboFTP\\\\.*",
+        ".*\\\\FTPRush\\\\.*",
+        ".*\\\\LeapFTP\\\\.*",
+        ".*\\\\FTPGetter\\\\.*",
+        ".*\\\\ALFTP\\\\.*",
+        ".*\\\\Ipswitch\\\\WS_FTP.*",
+    ]
 
-        registry_indicators = [
-            ".*Software\\Far*\\Hosts$",
-            ".*Software\\Far*\\FTPHost$",
-            ".*Software\\Ghisler\\Windows Commander$",
-            ".*Software\\Ghisler\\Total Commander$",
-            ".*Software\\BPFTP\\$",
-            ".*Software\\BulletProof Software\BulletProof FTP Client\\$"
-        ]
+    registry_indicators = [
+        ".*Software\\Far*\\Hosts$",
+        ".*Software\\Far*\\FTPHost$",
+        ".*Software\\Ghisler\\Windows Commander$",
+        ".*Software\\Ghisler\\Total Commander$",
+        ".*Software\\BPFTP\\$",
+        ".*Software\\BulletProof Software\BulletProof FTP Client\\$",
+    ]
 
-        for indicator in file_indicators:
-            subject = self.check_file(pattern=indicator, regex=True)
-            if subject:
-                self.add_match(None, 'file', subject)
-                
-        for indicator in registry_indicators:
-            subject = self.check_key(pattern=indicator, regex=True)
-            if subject:
-                self.add_match(None, 'registry', subject)
+    def on_complete(self):
+        for indicator in self.file_indicators:
+            filepath = self.check_file(pattern=indicator, regex=True)
+            if filepath:
+                self.match(None, "file", filepath=filepath)
 
-        return self.has_matches()
+        for indicator in self.registry_indicators:
+            registry = self.check_key(pattern=indicator, regex=True)
+            if registry:
+                self.match(None, "registry", registry=registry)

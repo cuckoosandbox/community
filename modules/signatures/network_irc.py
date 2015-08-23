@@ -21,11 +21,8 @@ class NetworkIRC(Signature):
     severity = 3
     categories = ["irc"]
     authors = ["nex"]
-    minimum = "1.2"
+    minimum = "2.0"
 
-    def run(self):
-        if "irc" in self.results["network"]:
-            if len(self.results["network"]["irc"]) > 0:
-                self.add_match(None, 'irc', self.results["network"]["irc"])
-
-        return self.has_matches()
+    def on_complete(self):
+        if self.get_net_irc():
+            self.match(None, "irc", requests=len(self.get_net_irc()))

@@ -21,18 +21,16 @@ class InstallsWinpcap(Signature):
     severity = 3
     categories = ["sniffer"]
     authors = ["Thomas Birn", "nex"]
-    minimum = "1.2"
+    minimum = "2.0"
 
-    def run(self):
-        indicators = [
-            ".*\\\\packet\.dll$",
-            ".*\\\\npf\.sys$",
-            ".*\\\\wpcap\.dll$"
-        ]
+    indicators = [
+        ".*\\\\packet\.dll$",
+        ".*\\\\npf\.sys$",
+        ".*\\\\wpcap\.dll$"
+    ]
 
-        for indicator in indicators:
-            subject = self.check_file(pattern=indicator, regex=True)
-            if subject:
-                self.add_match(None, 'file', subject)
-
-        return self.has_matches()
+    def on_complete(self):
+        for indicator in self.indicators:
+            filepath = self.check_file(pattern=indicator, regex=True)
+            if filepath:
+                self.match(None, "file", filepath=filepath)

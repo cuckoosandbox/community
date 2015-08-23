@@ -22,10 +22,9 @@ class CarberpMutexes(Signature):
     categories = ["banker", "trojan", "rootkit"]
     families = ["carberp"]
     authors = ["KillerInstinct"]
-    minimum = "0.5"
+    minimum = "2.0"
 
-    def run(self):
-        if self.check_mutex(pattern="^(Global\\\\)?(UAC|INS|BD)NTFS\d+$", regex=True):
-            return True
-
-        return False
+    def on_complete(self):
+        regkey = self.check_mutex(pattern="^(Global\\\\)?(UAC|INS|BD)NTFS\d+$", regex=True)
+        if regkey:
+            self.match(None, "regkey", regkey=regkey)

@@ -22,37 +22,36 @@ class SpynetRat(Signature):
     categories = ["rat"]
     families = ["spynet"]
     authors = ["threatlead", "nex"]
+    minimum = "2.0"
+
     references = [
         "https://malwr.com/analysis/ZDQ1NjBhNWIzNTdkNDRhNjhkZTFmZTBkYTU2YjMwNzg/",
         "https://malwr.com/analysis/MjkxYmE2YzczNzcwNGJiZjljNDcwMzA2ZDkyNDU2Y2M/",
         "https://malwr.com/analysis/N2E3NWRiNDMyYjIwNGE0NTk3Y2E5NWMzN2UwZTVjMzI/",
-        "https://malwr.com/analysis/N2Q2NWY0Y2MzOTM0NDEzNmE1MTdhOThiNTQxMzhiNzk/"   
+        "https://malwr.com/analysis/N2Q2NWY0Y2MzOTM0NDEzNmE1MTdhOThiNTQxMzhiNzk/",
     ]
-    minimum = "1.2"
 
-    def run(self):
-        indicators = [
-            ".*CYBERGATEUPDATE",
-            ".*\(\(SpyNet\)\).*",
-            ".*Spy-Net.*",
-            ".*X_PASSWORDLIST_X.*",
-            ".*X_BLOCKMOUSE_X.*",
-            #".*PERSIST", # Causes false positive detection on XtremeRAT samples.
-            ".*_SAIR",
-        ]
+    indicators = [
+        ".*CYBERGATEUPDATE",
+        ".*\(\(SpyNet\)\).*",
+        ".*Spy-Net.*",
+        ".*X_PASSWORDLIST_X.*",
+        ".*X_BLOCKMOUSE_X.*",
+        # ".*PERSIST",  # Causes false positive detection on XtremeRAT samples.
+        ".*_SAIR",
+    ]
 
-        for indicator in indicators:
-            subject = self.check_mutex(pattern=indicator, regex=True)
-            if subject:
-                self.add_match(None, 'mutex', subject)
+    indicators2 = [
+        ".*\\SpyNet\\.*",
+    ]
 
-        keys = [
-            ".*\\SpyNet\\.*",
-        ]
+    def on_complete(self):
+        for indicator in self.indicators:
+            mutex = self.check_mutex(pattern=indicator, regex=True)
+            if mutex:
+                self.add_match(None, "mutex", mutex=mutex)
 
-        for key in keys:
-            subject = self.check_key(pattern=key, regex=True)
-            if subject:
-                self.add_match(None, 'registry', subject)
-        
-        return self.has_matches()
+        for indicator in self.indicators2:
+            regkey = self.check_key(pattern=indicator, regex=True)
+            if regkey:
+                self.add_match(None, "registry", regkey)

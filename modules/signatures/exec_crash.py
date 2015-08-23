@@ -21,20 +21,10 @@ class Crash(Signature):
     severity = 1
     categories = ["execution", "crash"]
     authors = ["nex"]
-    minimum = "1.2"
-    evented = True
+    minimum = "2.0"
+
+    filter_apinames = "LdrLoadDll",
 
     def on_call(self, call, process):
-        res = self.check_argument_call(
-            call,
-            pattern=".*faultrep\.dll$",
-            name="FileName",
-            api="LdrLoadDll",
-            regex=True
-        )
-
-        if res:
-            self.add_match(process, 'api', call)
-
-    def on_complete(self):
-        return self.has_matches()
+        if "faultrep.dll" in call["arguments"]["module_name"].lower():
+            self.mark()

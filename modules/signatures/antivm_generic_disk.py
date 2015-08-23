@@ -21,42 +21,32 @@ class DiskInformation(Signature):
     severity = 3
     categories = ["anti-vm"]
     authors = ["nex"]
-    minimum = "1.2"
-    evented = True
+    minimum = "2.0"
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.lastprocess = None
-        self.signs = []
+    filter_apinames = [
+        "NtCreateFile",
+        "DeviceIoControl",
+        "NtDeviceIoControlFile",
+    ]
+
+    indicators = [
+        "scsi0",
+        "physicaldrive0",
+    ]
+
+    ioctls = {
+        2954240: "IOCTL_STORAGE_QUERY_PROPERTY",
+        458752: "IOCTL_DISK_GET_DRIVE_GEOMETRY",
+        315400: "IOCTL_SCSI_MINIPORT",
+    }
 
     def on_call(self, call, process):
-        indicators = [
-            "scsi0",
-            "physicaldrive0"
-        ]
+        if call["api"] == "NtCreateFile":
+            filepath = call["arguments"]["filepath"].lower()
+            if "scsi0" in filepath or "physicaldrive0" in filepath:
+                self.mark()
 
-        ioctls = [
-            "2954240", # IOCTL_STORAGE_QUERY_PROPERTY
-            "458752", # IOCTL_DISK_GET_DRIVE_GEOMETRY
-            "315400" #IOCTL_SCSI_MINIPORT
-        ]
-
-        if process is not self.lastprocess:
-            self.handle = None
-            self.lastprocess = process
-            self.signs = []
-
-        if not self.handle:
-            if call["api"] == "NtCreateFile":
-                file_name = self.get_argument(call, "FileName")
-                for indicator in indicators:
-                    if indicator in file_name.lower():
-                        self.handle = self.get_argument(call, "FileHandle")
-                        self.signs.append(call)
-        else:
-            if call["api"] == "DeviceIoControl":
-                if self.get_argument(call, "DeviceHandle") == self.handle:
-                    if str(self.get_argument(call, "IoControlCode")) in ioctls:
-                        self.signs.append(call)
-                        self.add_match(process, 'api', self.signs)
-                        return True
+        if call["api"] in ["DeviceIoControl", "NtDeviceIoControlFile"]:
+            if self.marked and call["arguments"]["control_code"] in self.ioctls:
+                self.mark()
+                return True

@@ -22,13 +22,12 @@ class Prinimalka(Signature):
     categories = ["banker"]
     families = ["prinimalka"]
     authors = ["nex"]
-    minimum = "1.2"
-    evented = True
+    minimum = "2.0"
+
+    filter_apinames = "RegSetValueExA", "RegSetValueExW"
 
     def on_call(self, call, process):
-        if call["api"].startswith("RegSetValueEx"):
-            if self.get_argument(call, "ValueName").endswith("_opt_server1"):
-                server = self.get_argument(call, "Buffer").rstrip("\\x00")
-                self.description += " (C&C: {0})".format(server)
-                self.add_match(process, 'api', call)
-                return True
+        regkey = call["arguments"]["regkey"].lower()
+        if regkey.endswith("_opt_server1"):
+            self.mark(c2=call["arguments"]["value"])
+            return True

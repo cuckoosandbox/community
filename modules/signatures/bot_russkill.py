@@ -22,11 +22,9 @@ class Ruskill(Signature):
     alert = True
     categories = ["bot", "ddos"]
     authors = ["JoseMi Holguin", "nex"]
-    minimum = "1.2"
+    minimum = "2.0"
 
-    def run(self):
-        subject = self.check_mutex(pattern="FvLQ49IlzIyLjj6m")
-        if subject:
-            self.add_match(None, 'mutex', subject)
-
-        return self.has_matches()
+    def on_complete(self):
+        mutex = self.check_mutex(pattern="FvLQ49IlzIyLjj6m")
+        if mutex:
+            self.add_match(None, "mutex", mutex=mutex)

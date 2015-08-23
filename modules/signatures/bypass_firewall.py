@@ -23,12 +23,11 @@ class BypassFirewall(Signature):
     severity = 3
     categories = ["bypass"]
     authors = ["Anderson Tamborim", "nex"]
-    minimum = "1.2"
+    minimum = "2.0"
 
-    def run(self):
-        subject = self.check_key(pattern=".*\\\\SYSTEM\\\\CurrentControlSet\\\\Services\\\\SharedAccess\\\\Parameters\\\\FirewallPolicy\\\\.*",
-                                 regex=True)
-        if subject:
-            self.add_match(None, 'registry', subject)
+    indicator = ".*\\\\SYSTEM\\\\CurrentControlSet\\\\Services\\\\SharedAccess\\\\Parameters\\\\FirewallPolicy\\\\.*"
 
-        return self.has_matches()
+    def on_complete(self):
+        regkey = self.check_key(pattern=self.indicator, regex=True)
+        if regkey:
+            self.match(None, "registry", regkey=regkey)

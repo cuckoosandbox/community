@@ -21,28 +21,26 @@ class CheckIP(Signature):
     severity = 2
     categories = ["recon"]
     authors = ["nex"]
-    minimum = "1.2"
+    minimum = "2.0"
 
-    def run(self):
-        indicators = [
-            "checkip.dyndns.com",
-            "checkip.dyndns.org",
-            "whatismyip.org",
-            "whatsmyipaddress.com",
-            "getmyip.org",
-            "getmyip.co.uk",
-            "icanhazip.com",
-            "whatismyipaddress.com",
-            "myipaddress.com",
-            "ip-addr.es",
-            "api.ipify.org",
-            "ipinfo.info",
-            "myexternalip.com",
-        ]
+    indicators = [
+        "checkip.dyndns.com",
+        "checkip.dyndns.org",
+        "whatismyip.org",
+        "whatsmyipaddress.com",
+        "getmyip.org",
+        "getmyip.co.uk",
+        "icanhazip.com",
+        "whatismyipaddress.com",
+        "myipaddress.com",
+        "ip-addr.es",
+        "api.ipify.org",
+        "ipinfo.info",
+        "myexternalip.com",
+    ]
 
-        for indicator in indicators:
-            subject = self.check_domain(pattern=indicator)
-            if subject:
-                self.add_match(None, 'domain', subject)
-
-        return self.has_matches()
+    def on_complete(self):
+        for indicator in self.indicators:
+            domain = self.check_domain(pattern=indicator)
+            if domain:
+                self.add_match(None, "domain", domain=domain)

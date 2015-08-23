@@ -19,34 +19,35 @@ class Flame(Signature):
     name = "targeted_flame"
     description = "Shows some indicators associated with the Flame malware"
     severity = 3
-    references = ["http://www.crysys.hu/skywiper/skywiper.pdf",
-                  "http://www.securelist.com/en/blog/208193522/The_Flame_Questions_and_Answers",
-                  "http://www.certcc.ir/index.php?name=news&file=article&sid=1894"]
     categories = ["targeted"]
     families = ["flame", "skywiper"]
     authors = ["nex"]
-    minimum = "1.2"
+    minimum = "2.0"
 
-    def run(self):
-        indicators = [
-            "__fajb.*",
-            "DVAAccessGuard.*",
-            ".*mssecuritymgr.*"
-        ]
+    references = [
+        "http://www.crysys.hu/skywiper/skywiper.pdf",
+        "http://www.securelist.com/en/blog/208193522/The_Flame_Questions_and_Answers",
+        "http://www.certcc.ir/index.php?name=news&file=article&sid=1894",
+    ]
 
-        for indicator in indicators:
-            subject = self.check_mutex(pattern=indicator, regex=True)
-            if subject:
-                self.add_match(None, 'mutex', subject)
+    indicators = [
+        "__fajb.*",
+        "DVAAccessGuard.*",
+        ".*mssecuritymgr.*"
+    ]
 
-        indicators = [
-            ".*\\\\Microsoft Shared\\\\MSSecurityMgr\\\\.*",
-            ".*\\\\Ef_trace\.log$"
-        ]
+    indicators2 = [
+        ".*\\\\Microsoft Shared\\\\MSSecurityMgr\\\\.*",
+        ".*\\\\Ef_trace\.log$"
+    ]
 
-        for indicator in indicators:
-            subject = self.check_file(pattern=indicator, regex=True)
-            if subject:
-                self.add_match(None, 'file', subject)
+    def on_complete(self):
+        for indicator in self.indicators:
+            mutex = self.check_mutex(pattern=indicator, regex=True)
+            if mutex:
+                self.match(None, "mutex", mutex=mutex)
 
-        return self.has_matches()
+        for indicator in self.indicators2:
+            filepath = self.check_file(pattern=indicator, regex=True)
+            if filepath:
+                self.match(None, "file", filepath=filepath)

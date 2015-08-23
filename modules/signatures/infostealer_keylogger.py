@@ -22,15 +22,12 @@ class Keylogger(Signature):
     severity = 3
     categories = ["generic"]
     authors = ["Thomas Birn", "nex"]
-    minimum = "1.2"
-    evented = True
+    minimum = "2.0"
 
-    filter_apinames = set(["SetWindowsHookExA", "SetWindowsHookExW"])
+    filter_apinames = "SetWindowsHookExA", "SetWindowsHookExW"
 
     def on_call(self, call, process):
-        if int(self.get_argument(call, "HookIdentifier")) in [2, 13]:
-            if int(self.get_argument(call, "ThreadId")) == 0:
-                self.add_match(process, 'api', call)
-    
-    def on_complete(self):
-        return self.has_matches()
+        if call["arguments"]["hook_identifier"] in [2, 13]:
+            if not call["arguments"]["thread_identifier"]:
+                self.mark()
+                return True

@@ -22,17 +22,18 @@ class FynloskiMutexes(Signature):
     categories = ["rat"]
     families = ["fynloski"]
     authors = ["threatlead"]
-    references = ["https://malwr.com/analysis/ODVlOWEyNDU3NzBhNDE3OWJkZjE0ZjIxNTdiMzU1YmM/"]
-    minimum = "1.2"
+    minimum = "2.0"
 
-    def run(self):
-        indicators = [
-            "DC_MUTEX-.*"
-        ]
+    references = [
+        "https://malwr.com/analysis/ODVlOWEyNDU3NzBhNDE3OWJkZjE0ZjIxNTdiMzU1YmM/",
+    ]
 
-        for indicator in indicators:
-            subject = self.check_mutex(pattern=indicator, regex=True)
-            if subject:
-                self.add_match(None, 'mutex', subject)
+    indicators = [
+        "DC_MUTEX-.*",
+    ]
 
-        return self.has_matches()
+    def on_complete(self):
+        for indicator in self.indicators:
+            mutex = self.check_mutex(pattern=indicator, regex=True)
+            if mutex:
+                self.add_match(None, "mutex", mutex=mutex)

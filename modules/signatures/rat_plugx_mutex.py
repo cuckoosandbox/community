@@ -22,17 +22,18 @@ class PlugxMutexes(Signature):
     categories = ["rat"]
     families = ["plugx"]
     authors = ["threatlead", "nex"]
-    references = ["https://malwr.com/analysis/YTZjYmUwMzNlNzkwNGU5YmIxNDQwYTcyYjFkYWI0NWE/"]
-    minimum = "1.2"
+    minimum = "2.0"
 
-    def run(self):
-        indicators = [
-            "DoInstPrepare",
-        ]
+    references = [
+        "https://malwr.com/analysis/YTZjYmUwMzNlNzkwNGU5YmIxNDQwYTcyYjFkYWI0NWE/",
+    ]
 
-        for indicator in indicators:
+    indicators = [
+        "DoInstPrepare",
+    ]
+
+    def on_complete(self):
+        for indicator in self.indicators:
             subject = self.check_mutex(pattern=indicator)
             if subject:
-                self.add_match(None, 'mutex', subject)
-
-        return self.has_matches()
+                self.match(None, "mutex", subject)

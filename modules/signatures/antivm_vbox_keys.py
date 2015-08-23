@@ -21,13 +21,11 @@ class VBoxDetectKeys(Signature):
     severity = 3
     categories = ["anti-vm"]
     authors = ["nex"]
-    minimum = "1.2"
+    minimum = "2.0"
 
-    def run(self):
-        key = self.check_key(pattern=".*\\\\SOFTWARE\\\\Oracle\\\\VirtualBox\\ Guest\\ Additions$",
-                             regex=True)
-        if key:
-            self.add_match(None, 'registry', key)
-            return True
-        else:
-            return False
+    indicator = ".*\\\\SOFTWARE\\\\Oracle\\\\VirtualBox\\ Guest\\ Additions$"
+
+    def on_complete(self):
+        regkey = self.check_key(pattern=self.indicator, regex=True)
+        if regkey:
+            self.add_match(None, "registry", regkey=regkey)

@@ -15,10 +15,16 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-REG_SUBKEY = "{DFFACDC5-679F-4156-8947-C5C76BC0B67F}\InprocServer32"
-MOVE_FILE = ["Microsoft\\\shdocvw.tlb", "Microsoft\\\oleaut32.dll", 
-             "Microsoft\\\oleaut32.tlb", "Microsoft\\\credprov.tlb",
-             "Microsoft\\\libadcodec.dll", "Microsoft\\\libadcodec.tlb"]
+registry_indicator = "{DFFACDC5-679F-4156-8947-C5C76BC0B67F}\InprocServer32"
+
+file_moves = [
+    "Microsoft\\\shdocvw.tlb",
+    "Microsoft\\\oleaut32.dll",
+    "Microsoft\\\oleaut32.tlb",
+    "Microsoft\\\credprov.tlb",
+    "Microsoft\\\libadcodec.dll",
+    "Microsoft\\\libadcodec.tlb",
+]
 
 class ComRAT(Signature):
     name = "rat_comRAT"
@@ -28,63 +34,53 @@ class ComRAT(Signature):
     categories = ["APT", "RAT"]
     families = ["Turla", "Uroburos", "Snake"]
     authors = ["Robby Zeitfuchs", "@robbyFux"]
-    minimum = "1.0"
-    references = ["https://blog.gdatasoftware.com/blog/article/the-uroburos-case-new-sophisticated-rat-identified.html",
-                  "https://malwr.com/analysis/NjJiODNlNjE4NjAwNDc3MGE4NmM1YzBmMzhlZjNiYTY/",
-                  "https://malwr.com/analysis/ZTE5MTMzODk1OGVkNDhiODg1ZDE3ZWM5MThjMmRiNjY/"]   
-    
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.ioc = {"initProcessName": None,
-                    "countMoveFiles" : 0,
-                    "matchRegKey" : False,
-                    "writeExeFile" : False,
-                    "createProcess" : False}
-        
-    evented = True
-    filter_categories = set(["process","registry", "filesystem"])
-    filter_apinames = set(["NtOpenFile", "NtCreateFile", "DeleteFileW", "MoveFileWithProgressW", 
-                           "RegCreateKeyExW", "NtWriteFile", "CreateProcessInternalW"])
-    filter_processnames = set()
-    
-    def on_call(self, call, process):  
-        # Determine initial process name
-        if not self.ioc["initProcessName"]:
-            self.ioc["initProcessName"] = process["process_name"]
-              
-        if call["api"].startswith("RegCreateKeyEx"):
-            # check RegKey InprocServer32
-            if self.get_argument(call,"SubKey").endswith(REG_SUBKEY):
-                self.data.append({'process':process["process_name"], 'type': call["category"], 'value': REG_SUBKEY})
-                self.ioc["matchRegKey"] = True
-        
-        elif call["api"].startswith("MoveFileWithProgress"):
-            if self.get_argument(call,"NewFileName").endswith(".tmp"):
-                # move files
-                for file in MOVE_FILE:
-                    if self.get_argument(call,"ExistingFileName").endswith(file):
-                        self.data.append({'process':process["process_name"], 'type': call["category"], 
-                                          'value': self.get_argument(call,"ExistingFileName")})
-                        self.ioc["countMoveFiles"] += 1
-                        break 
-        elif call["api"].startswith("CreateProcessInternal"):
-            # start rundll32.exe Install?
-            cmd = self.get_argument(call,"CommandLine")
-            if "rundll32.exe" in cmd and "Install" in cmd:
-                self.data.append({'process':process["process_name"], 'type': call["category"], 'value': cmd})
-                self.ioc["createProcess"] = True
-  
-        elif call["api"].startswith("NtWriteFile"):
-            if process["process_name"] == self.ioc["initProcessName"] and self.get_argument(call,"Buffer")[0:2] == "MZ":
-                self.ioc["writeExeFile"] = True
+    minimum = "2.0"
 
-        return None
-    
+    references = [
+        "https://blog.gdatasoftware.com/blog/article/the-uroburos-case-new-sophisticated-rat-identified.html",
+        "https://malwr.com/analysis/NjJiODNlNjE4NjAwNDc3MGE4NmM1YzBmMzhlZjNiYTY/",
+        "https://malwr.com/analysis/ZTE5MTMzODk1OGVkNDhiODg1ZDE3ZWM5MThjMmRiNjY/",
+    ]
+
+    filter_apinames = [
+        "MoveFileWithProgressW",
+        "NtWriteFile",
+        "CreateProcessInternalW",
+    ]
+
+    def init(self):
+        self.move_count = 0
+        self.created_process = False
+        self.wrote_pe_file = False
+
+    def on_call(self, call, process):
+        if call["api"] == "MoveFileWithProgressW":
+            newfilepath = call["arguments"]["newfilepath"]
+            if newfilepath.endswith(".tmp"):
+                for filepath in file_moves:
+                    oldfilepath = call["arguments"]["oldfilepath"]
+                    if self._check_value(pattern=filepath,
+                                         subject=oldfilepath,
+                                         regex=True):
+                        self.move_count += 1
+                        self.mark()
+
+        if call["api"] == "CreateProcessInternalW":
+            # start rundll32.exe Install?
+            if "rundll32.exe" in call["arguments"]["command_line"] and \
+                    "Install" in call["arguments"]["command_line"]:
+                self.created_process = True
+                self.mark()
+
+        if call["api"] == "NtWriteFile" and \
+                call["arguments"]["buffer"][:2] == "MZ":
+            self.wrote_pe_file = True
+            self.mark()
+
     def on_complete(self):
-        # check IOC
-        if not self.ioc["matchRegKey"] or not self.ioc["writeExeFile"] or not self.ioc["createProcess"]:
-            return False
-        if len(MOVE_FILE) != self.ioc["countMoveFiles"]:
-            return False
-        
-        return True
+        if not self.check_key(pattern=registry_indicator, regex=True):
+            return
+
+        if self.created_process and self.wrote_pe_file and \
+                self.move_count == len(file_moves):
+            return True

@@ -21,12 +21,9 @@ class KnownVirustotal(Signature):
     severity = 2
     categories = ["antivirus"]
     authors = ["Michael Boman", "nex"]
-    minimum = "0.5"
+    minimum = "2.0"
 
-    def run(self):
-        if "virustotal" in self.results:
-            if "positives" in self.results["virustotal"]:
-                if self.results["virustotal"]["positives"] > 0:
-                    return True
-
-        return False
+    def on_complete(self):
+        results = self.get_virustotal()
+        if results.get("positives"):
+            self.match(None, "detection", positives=results["positives"])

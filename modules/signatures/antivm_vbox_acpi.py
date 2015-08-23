@@ -21,45 +21,11 @@ class VBoxDetectACPI(Signature):
     severity = 3
     categories = ["anti-vm"]
     authors = ["nex"]
-    minimum = "1.2"
-    evented = True
+    minimum = "2.0"
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.lastprocess = None
-
-    def on_call(self, call, process):
-        if process is not self.lastprocess:
-            self.opened = False
-            self.handle = None
-            self.lastprocess = process
-            self.signs = []
-
-        # First I check if the malware opens the relevant registry key.
-        if call["api"].startswith("RegOpenKeyEx"):
-            # Check if the registry is HKEY_LOCAL_MACHINE.
-            if (self.get_argument(call, "Registry") == "0x80000002"
-            # Check if the subkey opened is the correct one.
-            and self.get_argument(call, "SubKey")[:14].upper() == "HARDWARE\\ACPI\\"
-            # Since it could appear under different paths, check for all of them.
-            and self.get_argument(call, "SubKey")[14:18] in ["DSDT", "FADT", "RSDT"]):
-                if self.get_argument(call, "SubKey")[18:] == "\\VBOX__":
-                    self.add_match(process, 'api', call)
-                else:
-                    self.opened = True
-                    self.handle = self.get_argument(call,"Handle")
-                    self.signs.append(call)
-        # Now I check if the malware verified the value of the key.
-        elif call["api"].startswith("RegEnumKeyEx"):
-            # Verify if the key was actually opened.
-            if not self.opened:
-                return
-
-            # Verify the arguments.
-            if (self.get_argument(call, "Handle") == self.handle
-            and self.get_argument(call, "Name") == "VBOX__"):
-                self.signs.append(call)
-                self.add_match(process, 'api', self.signs)
+    filter_categories = "registry",
 
     def on_complete(self):
-        return self.has_matches()
+        for regkey in self.check_key("HARDWARE\\\\ACPI\\\\", regex=True, all=True):
+            if "vbox_" in regkey.lower():
+                self.match(None, "registry", regkey=regkey)

@@ -21,11 +21,13 @@ class WineDetect(Signature):
     severity = 3
     categories = ["anti-emulation"]
     authors = ["nex"]
-    minimum = "1.2"
+    minimum = "2.0"
 
-    def run(self):
-        subject = self.check_key(pattern="HKEY_CURRENT_USER\\Software\\Wine")
-        if subject:
-            self.add_match(None, 'registry', subject)
-        
-        return self.has_matches()
+    indicators = [
+        "HKEY_CURRENT_USER\\Software\\Wine",
+    ]
+
+    def on_complete(self):
+        for indicator in self.indicators:
+            for regkey in self.check_key(pattern=indicator, all=True):
+                self.match(None, "registry", regkey=regkey)

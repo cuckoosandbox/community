@@ -21,35 +21,33 @@ class VBoxDetectFiles(Signature):
     severity = 3
     categories = ["anti-vm"]
     authors = ["nex"]
-    minimum = "1.2"
+    minimum = "2.0"
 
-    def run(self):
-        indicators = [
-            ".*VBoxDisp\.dll$",
-            ".*VBoxHook\.dll$",
-            ".*VBoxMRXNP\.dll$",
-            ".*VBoxOGL\.dll$",
-            ".*VBoxOGLarrayspu\.dll$",
-            ".*VBoxOGLcrutil\.dll$",
-            ".*VBoxOGLerrorspu\.dll$",
-            ".*VBoxOGLfeedbackspu\.dll$",
-            ".*VBoxOGLpackspu\.dll$",
-            ".*VBoxOGLpassthroughspu\.dll$"
-            ".*VBoxDisp\.dll$",
-            ".*VBoxSF\.sys$",
-            ".*VBoxControl\.exe$",
-            ".*VBoxService\.exe$",
-            ".*VBoxTray\.exe$",
-            ".*VBoxDrvInst\.exe$",
-            ".*VBoxWHQLFake\.exe$",
-            ".*VBoxGuest\.[a-zA-Z]{3}$",
-            ".*VBoxMouse\.[a-zA-Z]{3}$",
-            ".*VBoxVideo\.[a-zA-Z]{3}$"
-        ]
+    indicators = [
+        ".*VBoxDisp\.dll$",
+        ".*VBoxHook\.dll$",
+        ".*VBoxMRXNP\.dll$",
+        ".*VBoxOGL\.dll$",
+        ".*VBoxOGLarrayspu\.dll$",
+        ".*VBoxOGLcrutil\.dll$",
+        ".*VBoxOGLerrorspu\.dll$",
+        ".*VBoxOGLfeedbackspu\.dll$",
+        ".*VBoxOGLpackspu\.dll$",
+        ".*VBoxOGLpassthroughspu\.dll$"
+        ".*VBoxDisp\.dll$",
+        ".*VBoxSF\.sys$",
+        ".*VBoxControl\.exe$",
+        ".*VBoxService\.exe$",
+        ".*VBoxTray\.exe$",
+        ".*VBoxDrvInst\.exe$",
+        ".*VBoxWHQLFake\.exe$",
+        ".*VBoxGuest\.[a-zA-Z]{3}$",
+        ".*VBoxMouse\.[a-zA-Z]{3}$",
+        ".*VBoxVideo\.[a-zA-Z]{3}$",
+    ]
 
-        for indicator in indicators:
-            subject = self.check_file(pattern=indicator, regex=True)
-            if subject:
-                self.add_match(None, 'file', subject)
-
-        return self.has_matches()
+    def on_complete(self):
+        for indicator in self.indicators:
+            filepath = self.check_file(pattern=indicator, regex=True)
+            if filepath:
+                self.add_match(None, "file", filepath=filepath)

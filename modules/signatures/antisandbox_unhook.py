@@ -21,15 +21,10 @@ class Unhook(Signature):
     severity = 3
     categories = ["anti-sandbox"]
     authors = ["nex"]
-    minimum = "1.2"
-    evented = True
+    minimum = "2.0"
+
+    filter_apinames = "__anomaly__",
 
     def on_call(self, call, process):
-        if self.check_argument_call(call,
-                                    api="__anomaly__",
-                                    name="Subcategory",
-                                    pattern="unhook"):
-            self.add_match(process, 'api', call)
-    
-    def on_complete(self):
-        return self.has_matches()
+        self.mark()
+        return True

@@ -21,11 +21,8 @@ class NetworkICMP(Signature):
     severity = 4
     categories = ["icmp"]
     authors = ["David Maciejak"]
-    minimum = "1.2"
+    minimum = "2.0"
 
-    def run(self):
-        if "icmp" in self.results["network"]:
-            if len(self.results["network"]["icmp"]) > 0:
-                self.add_match(None, 'icmp', self.results["network"]["icmp"])
-
-        return self.has_matches()
+    def on_complete(self):
+        if self.get_net_icmp():
+            self.match(None, "icmp", requests=len(self.get_next_icmp()))

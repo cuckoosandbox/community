@@ -21,22 +21,20 @@ class VBoxDetectDevices(Signature):
     severity = 3
     categories = ["anti-vm"]
     authors = ["nex"]
-    minimum = "1.2"
+    minimum = "2.0"
 
-    def run(self):
-        indicators = [
-            "\\Device\\VBoxGuest",
-            "\\Device\\VBoxMouse",
-            "\\Device\\VBoxVideo",
-            "VBoxMiniRdrDN",
-            "pipe\\VBoxMiniRdDN",
-            "VBoxTrayIPC",
-            "pipe\\VBoxTrayIPC"
-        ]
+    indicators = [
+        "\\Device\\VBoxGuest",
+        "\\Device\\VBoxMouse",
+        "\\Device\\VBoxVideo",
+        "VBoxMiniRdrDN",
+        "pipe\\VBoxMiniRdDN",
+        "VBoxTrayIPC",
+        "pipe\\VBoxTrayIPC"
+    ]
 
-        for indicator in indicators:
-            subject = self.check_file(pattern=indicator)
-            if subject:
-                self.add_match(None, 'file', subject)
-
-        return self.has_matches()
+    def on_complete(self):
+        for indicator in self.indicators:
+            filepath = self.check_file(pattern=indicator)
+            if filepath:
+                self.match(None, "file", filepath=filepath)

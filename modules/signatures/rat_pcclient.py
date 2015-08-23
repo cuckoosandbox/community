@@ -23,29 +23,27 @@ class PcClientMutexes(Signature):
     families = ["pcclient"]
     authors = ["threatlead", "nex"]
     references = ["https://malwr.com/analysis/MDIxN2NhMjg4MTg2NDY4MWIyNTE0Zjk5MTY1OGU4YzE/"]
-    minimum = "1.2"
-    
-    def run(self):
-        indicators = [
-            "BKLANG.*",
-            "VSLANG.*",
-        ]
-        
-        for indicator in indicators:
-            subject = self.check_mutex(pattern=indicator, regex=True)
-            if subject:
-                self.add_match(None, 'mutex', subject)
+    minimum = "2.0"
 
-        indicators = [
-            ".*\\\\syslog.dat",
-            ".*\\\\.*_lang.ini",
-            ".*\\\\[0-9]+_lang.dll",
-            ".*\\\\[0-9]+_res.tmp",
-        ]
+    indicators = [
+        "BKLANG.*",
+        "VSLANG.*",
+    ]
 
-        for indicator in indicators:
-            subject = self.check_file(pattern=indicator, regex=True)
-            if subject:
-                self.add_match(None, 'file', subject)
+    indicators2 = [
+        ".*\\\\syslog.dat",
+        ".*\\\\.*_lang.ini",
+        ".*\\\\[0-9]+_lang.dll",
+        ".*\\\\[0-9]+_res.tmp",
+    ]
 
-        return self.has_matches()
+    def on_complete(self):
+        for indicator in self.indicators:
+            mutex = self.check_mutex(pattern=indicator, regex=True)
+            if mutex:
+                self.add_match(None, "mutex", mutex=mutex)
+
+        for indicator in self.indicators2:
+            filepath = self.check_file(pattern=indicator, regex=True)
+            if filepath:
+                self.add_match(None, "file", filepath=filepath)

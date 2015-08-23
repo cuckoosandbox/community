@@ -21,19 +21,17 @@ class RansomwareFiles(Signature):
     severity = 3
     categories = ["ransomware"]
     authors = ["KillerInstinct"]
-    minimum = "0.5"
+    minimum = "2.0"
 
-    def run(self):
-        file_list = [
-            "\\\\help_decrypt.html$",
-            "\\\\decrypt_instruction.html$",
-            "\\\\decrypt_instructions.txt$",
-            "\\\\vault.key$",
-            "\\\\vault.txt$",
-        ]
+    indicators = [
+        "\\\\help_decrypt.html$",
+        "\\\\decrypt_instruction.html$",
+        "\\\\decrypt_instructions.txt$",
+        "\\\\vault.key$",
+        "\\\\vault.txt$",
+    ]
 
-        for indicator in file_list:
-            if self.check_file(pattern=indicator, regex=True):
-                return True
-
-        return False
+    def on_complete(self):
+        for indicator in self.indicators:
+            for filepath in self.check_file(pattern=indicator, regex=True, all=True):
+                self.match(None, "file", filepath=filepath)

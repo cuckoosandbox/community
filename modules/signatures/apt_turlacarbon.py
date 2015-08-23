@@ -15,10 +15,6 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-REG_SUBKEY = "ActiveComputerName"
-CONFIG_BUFFER_STRINGS = ["[NAME]", "[TIME]", "iproc", "user_winmin", "user_winmax", "object_id"]
-EXPLORER_EXE = "explorer.exe"
-
 class TurlaCarbon(Signature):
     name = "apt_turlacarbon"
     description = "Appears to be the targeted Turla Carbon malware"
@@ -27,63 +23,41 @@ class TurlaCarbon(Signature):
     categories = ["apt"]
     families = ["turla", "uroburos", "snake"]
     authors = ["Robby Zeitfuchs", "@robbyFux"]
-    minimum = "1.0"
-    references = ["https://blog.gdatasoftware.com/blog/article/analysis-of-project-cobra.html",
-                  "https://malwr.com/analysis/MTI2M2RjYTAyZmNmNDE4ZTk5MDBkZjA4MDA5ZTFjMDc/"]   
-    
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.ioc = {"explorerExeFileHandle": None,
-                    "confFileName": None,
-                    "openConfig": False,
-                    "matchRegKey" : False,
-                    "matchConfig" : False}
-        
-    evented = True
-    filter_categories = set(["registry", "filesystem"])
-    filter_apinames = set(["NtCreateFile", "NtWriteFile", "NtOpenFile", "NtOpenKey"])
-    filter_processnames = set()
-    
-    def on_call(self, call, process):  
-        if call["api"].startswith("NtOpenKey"):
-            # check RegKey ActiveComputerName
-            if self.get_argument(call,"ObjectAttributes").endswith(REG_SUBKEY):
-                self.data.append({'process':process["process_name"], 'type': call["category"], 'value': REG_SUBKEY})
-                self.ioc["matchRegKey"] = True
+    minimum = "2.0"
 
-        elif call["api"].startswith("NtCreateFile"):
-            # get file handle
-            if self.get_argument(call,"FileName").endswith(EXPLORER_EXE):
-                self.ioc["explorerExeFileHandle"] = self.get_argument(call,"FileHandle")
-            elif self.get_argument(call,"FileHandle") == self.ioc["explorerExeFileHandle"] and not \
-                self.ioc["confFileName"]:
-                self.ioc["confFileName"] = self.get_argument(call,"FileName")
+    references = [
+        "https://blog.gdatasoftware.com/blog/article/analysis-of-project-cobra.html",
+        "https://malwr.com/analysis/MTI2M2RjYTAyZmNmNDE4ZTk5MDBkZjA4MDA5ZTFjMDc/",
+    ]
 
-        elif call["api"].startswith("NtOpenFile") and self.ioc["explorerExeFileHandle"]:
-            # check open config file
-            if self.get_argument(call,"FileHandle") == self.ioc["explorerExeFileHandle"] and \
-                self.ioc["confFileName"] == self.get_argument(call,"FileName"):
-                self.ioc["openConfig"] = True
-        
-        elif call["api"].startswith("NtWriteFile") and self.ioc["explorerExeFileHandle"]:
-            # check config-file buffer
-            if self.get_argument(call,"FileHandle") == self.ioc["explorerExeFileHandle"]:
-                buffer = self.get_argument(call,"Buffer")
-                self.ioc["matchConfig"] = True
-                
-                for str in CONFIG_BUFFER_STRINGS:
-                    if not str in buffer:
-                        self.ioc["matchConfig"] = False
-                        break
-                    
-                if self.ioc["matchConfig"]:
-                    self.data.append({'process':process["process_name"], 'confFile': self.ioc["confFileName"], 'value': buffer})
-        
-        return None
-    
+    filter_apinames = "NtWriteFile",
+
+    regkey_indicator = ".*\\\\ActiveComputerName$"
+    buffer_indicators = [
+        "[NAME]",
+        "[TIME]",
+        "iproc",
+        "user_winmin",
+        "user_winmax",
+        "object_id",
+    ]
+
+    def init(self):
+        self.wrote = False
+
+    def on_call(self, call, process):
+        # Check whether each buffer indicator is in this buffer write.
+        for indicator in self.buffer_indicators:
+            if indicator not in call["arguments"]["buffer"]:
+                break
+        else:
+            self.wrote = True
+            self.mark()
+            return True
+
     def on_complete(self):
-        # check IOC
-        if not self.ioc["matchRegKey"] or not self.ioc["matchConfig"] or not self.ioc["openConfig"]:
-            return False
-        
-        return True
+        if not self.check_key(self.regkey_indicator, regex=True):
+            return
+
+        if self.wrote:
+            return True

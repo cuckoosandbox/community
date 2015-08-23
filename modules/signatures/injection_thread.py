@@ -1,4 +1,4 @@
-# Copyright (C) 2014 glysbays, Accuvant
+# Copyright (C) 2012 JoseMi "h0rm1" Holguin (@j0sm1)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,27 +15,26 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class InjectionRunPE(Signature):
-    """Works much like InjectionThread from injection_thread.py - so please
-    read its comment there to find out about the internal workings of this
-    signature."""
+class InjectionThread(Signature):
+    """Instead of overly complicated, and easily bypassable, handle tracking
+    we're just looking at the functions that have been used in each process.
+    If a subset containing the majority of the functions required for creating
+    a remote thread have been used then we trigger this signature."""
 
-    name = "injection_runpe"
-    description = "Executed a process and injected code into it, probably while unpacking"
+    name = "injection_thread"
+    description = "Code injection with CreateRemoteThread or NtQueueApcThread in a remote process"
     severity = 3
     categories = ["injection"]
-    authors = ["glysbaysb", "Accuvant"]
+    authors = ["JoseMi Holguin", "nex", "Accuvant"]
     minimum = "2.0"
 
     filter_apinames = [
-        "CreateProcessInternalW",
-        "NtUnmapViewOfSection",
-        "NtAllocateVirtualMemory",
-        "NtGetContextThread",
-        "NtWriteVirtualmemory",
+        "NtOpenProcess",
         "NtMapViewOfSection",
-        "NtSetContextThread",
-        "NtResumeThread",
+        "NtAllocateVirtualMemory",
+        "NtWriteVirtualMemory",
+        "CreateRemoteThread",
+        "NtQueueApcThread",
     ]
 
     def init(self):

@@ -29,32 +29,35 @@ class Polymorphic(Signature):
     severity = 3
     categories = ["packer"]
     authors = ["lordr"]
-    minimum = "1.2"
+    minimum = "2.0"
 
-    def run(self):
-        if self.results["target"]["category"] == "file":
-            target_ssdeep = self.results["target"]["file"]["ssdeep"]
-            target_sha1 = self.results["target"]["file"]["sha1"]
-            target_size = self.results["target"]["file"]["size"]
+    def on_complete(self):
+        if not HAVE_SSDEEP:
+            return
 
-            if target_ssdeep == "" or target_ssdeep == None:
-                return False
+        if self.get_results("target", {}).get("category") != "file":
+            return
 
-            for drop in self.results["dropped"]:
-                if drop["sha1"] == target_sha1:
-                    continue
+        target_ssdeep = self.results["target"]["file"]["ssdeep"]
+        target_sha1 = self.results["target"]["file"]["sha1"]
+        target_size = self.results["target"]["file"]["size"]
 
-                if fabs(target_size - drop["size"]) >= 1024:
-                    continue
+        if not target_ssdeep:
+            return
 
-                drop_ssdeep = drop["ssdeep"]
-                if drop_ssdeep == "" or drop_ssdeep == None:
-                    continue
+        for drop in self.get_results("dropped", []):
+            if drop["sha1"] == target_sha1:
+                continue
 
-                try:
-                    if pydeep.compare(target_ssdeep, drop_ssdeep) > 20:
-                        self.add_match(None, 'dropped file', drop)
-                except:
-                    continue
+            if fabs(target_size - drop["size"]) >= 1024:
+                continue
 
-        return self.has_matches()
+            drop_ssdeep = drop["ssdeep"]
+            if not drop_ssdeep:
+                continue
+
+            try:
+                if pydeep.compare(target_ssdeep, drop_ssdeep) > 20:
+                    self.match(None, "dropped file", drop)
+            except:
+                continue

@@ -19,33 +19,36 @@ class Cridex(Signature):
     name = "banker_cridex"
     description = "Cridex banking trojan"
     severity = 3
-    alert = True
     categories = ["Banking", "Trojan"]
     families = ["Cridex"]
     authors = ["Robby Zeitfuchs", "@robbyFux"]
-    minimum = "1.2"
-    references = ["http://stopmalvertising.com/rootkits/analysis-of-cridex.html",
-                  "http://sempersecurus.blogspot.de/2012/08/cridex-analysis-using-volatility.html",
-                  "http://labs.m86security.com/2012/03/the-cridex-trojan-targets-137-financial-organizations-in-one-go/",
-                  "https://malwr.com/analysis/NDU2ZWJjZTIwYmRiNGVmNWI3MDUyMGExMGQ0MmVhYTY/",
-                  "https://malwr.com/analysis/MTA5YmU4NmIwMjg5NDAxYjlhYzZiZGIwYjZkOTFkOWY/"]
+    minimum = "2.0"
 
-    def run(self):
-        indicators = [".*Local.QM.*",
-                      ".*Local.XM.*"]
-        signs = {}
-                      
+    references = [
+        "http://stopmalvertising.com/rootkits/analysis-of-cridex.html",
+        "http://sempersecurus.blogspot.de/2012/08/cridex-analysis-using-volatility.html",
+        "http://labs.m86security.com/2012/03/the-cridex-trojan-targets-137-financial-organizations-in-one-go/",
+        "https://malwr.com/analysis/NDU2ZWJjZTIwYmRiNGVmNWI3MDUyMGExMGQ0MmVhYTY/",
+        "https://malwr.com/analysis/MTA5YmU4NmIwMjg5NDAxYjlhYzZiZGIwYjZkOTFkOWY/",
+    ]
+
+    indicators = [
+        ".*Local.QM.*",
+        ".*Local.XM.*",
+    ]
+
+    def on_complete(self):
+
         match_file = self.check_file(pattern=".*\\\\KB[0-9]{8}\.exe", regex=True)
         match_batch_file = self.check_file(pattern=".*\\\\Temp\\\\\S{4,5}\.tmp\.bat", regex=True)
 
-        if match_file and match_batch_file:
-            signs['file'] = match_file
-            signs['batchfile'] = match_batch_file
-            for indicator in indicators:
-                match_mutex = self.check_mutex(pattern=indicator, regex=True)
-                if match_mutex:
-                    signs['mutex'] = match_mutex
-                    self.add_match(None, 'cridex_ioc', signs)
-                    return True
+        if not match_file or not match_batch_file:
+            return
 
-        return False
+        for indicator in self.indicators:
+            match_mutex = self.check_mutex(pattern=indicator, regex=True)
+            if match_mutex:
+                self.match(None, "cridex_ioc",
+                           filepath=match_file,
+                           batchfile=match_batch_file,
+                           mutex=match_mutex)

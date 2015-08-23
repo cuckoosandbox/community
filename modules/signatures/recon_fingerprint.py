@@ -21,30 +21,15 @@ class Fingerprint(Signature):
     severity = 3
     categories = ["recon"]
     authors = ["nex"]
-    minimum = "1.2"
-    evented = True
+    minimum = "2.0"
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.threshold = 3
-        self.matches = 0
-
-    def on_call(self, call, process):
-        indicators = [
-            "MachineGuid",
-            "DigitalProductId",
-            "SystemBiosDate"
-        ]
-
-        if call["category"] != "registry":
-            return
-
-        for argument in call["arguments"]:
-            for indicator in indicators:
-                if argument["value"] == indicator:
-                    self.add_match(process, 'api', call)
-                    self.matches += 1
-
+    indicators = [
+        ".*\\\\MachineGuid$",
+        ".*\\\\DigitalProductId$",
+        ".*\\\\SystemBiosDate$",
+    ]
 
     def on_complete(self):
-        return self.matches >= self.threshold
+        for indicator in self.indicators:
+            for regkey in self.check_key(pattern=indicator, regex=True, all=True):
+                self.match(None, "registry", regkey=regkey)

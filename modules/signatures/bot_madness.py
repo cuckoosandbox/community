@@ -13,7 +13,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
 from lib.cuckoo.common.abstracts import Signature
 
 class Madness(Signature):
@@ -23,14 +22,16 @@ class Madness(Signature):
     categories = ["bot", "ddos"]
     families = ["madness"]
     authors = ["thedude13", "nex"]
-    minimum = "1.2"
+    minimum = "2.0"
 
-    def run(self):
-        madness_re = re.compile("\?uid\x3d[0-9]{8}&ver\x3d[0-9].[0-9]{2}&mk\x3d[0-9a-f]{6}&os\x3d[A-Za-z0-9]+&rs\x3d[a-z]+&c\x3d[0-1]&rq\x3d[0-1]")
-        
-        if "network" in self.results:
-            for http in self.results["network"]["http"]:
-                if http["method"] == "GET" and madness_re.search(http["uri"]):
-                    self.add_match(None, 'http', http)
+    indicator = "\?uid\x3d[0-9]{8}&ver\x3d[0-9].[0-9]{2}&mk\x3d[0-9a-f]{6}&os\x3d[A-Za-z0-9]+&rs\x3d[a-z]+&c\x3d[0-1]&rq\x3d[0-1]"
 
-        return self.has_matches()
+    def on_complete(self):
+        for http in self.get_net_http():
+            if http["method"] != "GET":
+                continue
+
+            if self._check_value(pattern=self.indicator,
+                                 subject=http["uri"],
+                                 regex=True):
+                self.match(None, "http", http)

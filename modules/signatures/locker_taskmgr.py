@@ -21,21 +21,11 @@ class DisableTaskMgr(Signature):
     severity = 3
     categories = ["locker"]
     authors = ["Thomas Birn", "nex"]
-    minimum = "1.2"
-    evented = True
+    minimum = "2.0"
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.saw_disable = False
-
-    def on_call(self, call, process):
-        if self.check_argument_call(call, pattern="DisableTaskMgr",
-                                    category="registry"):
-            self.saw_disable = True
-            self.add_match(process, 'api', call)
+    indicator = ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion" \
+        "\\\\Policies\\\\System\\\\DisableTaskMgr$"
 
     def on_complete(self):
-        if self.check_key(pattern=".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System$",
-                          regex=True):
-            if self.saw_disable:
-                return True
+        for regkey in self.check_key(pattern=self.indicator, regex=True, all=True):
+            self.match(None, "registry", regkey=regkey)

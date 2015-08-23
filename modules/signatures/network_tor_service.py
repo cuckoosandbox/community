@@ -21,17 +21,15 @@ class TorHiddenService(Signature):
     severity = 3
     categories = ["network", "anonimity", "tor"]
     authors = ["nex"]
-    minimum = "1.2"
+    minimum = "2.0"
 
-    def run(self):
-        indicators = [
-            ".*\\\\tor\\\\hidden_service\\\\private_key$",
-            ".*\\\\tor\\\\hidden_service\\\\hostname$"
-        ]
+    indicators = [
+        ".*\\\\tor\\\\hidden_service\\\\private_key$",
+        ".*\\\\tor\\\\hidden_service\\\\hostname$",
+    ]
 
-        for indicator in indicators:
-            subject = self.check_file(pattern=indicator, regex=True)
-            if subject:
-                self.add_match(None, 'file', subject)
-
-        return self.has_matches()
+    def on_complete(self):
+        for indicator in self.indicators:
+            filepath = self.check_file(pattern=indicator, regex=True)
+            if filepath:
+                self.match(None, "file", filepath)

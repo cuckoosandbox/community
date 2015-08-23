@@ -21,18 +21,19 @@ class VBoxDetectWindow(Signature):
     severity = 3
     categories = ["anti-vm"]
     authors = ["nex"]
-    minimum = "1.2"
-    evented = True
+    minimum = "2.0"
+
+    # Lowercase all indicators.
+    indicators = [indicator.lower() for indicator in [
+        "VBoxTrayToolWndClass",
+        "VBoxTrayToolWnd",
+    ]]
 
     def on_call(self, call, process):
-        indicators = [
-            "VBoxTrayToolWndClass",
-            "VBoxTrayToolWnd"
-        ]
+        for indicator in self.indicators:
+            window_name = call["arguments"].get("window_name", "").lower()
+            class_name = call["arguments"].get("class_name", "").lower()
 
-        for indicator in indicators:
-            if self.check_argument_call(call, pattern=indicator, category="windows"):
-                self.add_match(process, 'api', call)
-
-    def on_complete(self):
-        return self.has_matches()
+            if indicator == window_name or indicator == class_name:
+                self.mark()
+                return True

@@ -21,14 +21,9 @@ class VMPPacked(Signature):
     severity = 2
     categories = ["packer"]
     authors = ["Jeremy Hedges"]
-    minimum = "0.5"
+    minimum = "2.0"
 
-    def run(self):
-        if "static" in self.results:
-            if "pe_sections" in self.results["static"]:
-                for section in self.results["static"]["pe_sections"]:
-                    if section["name"].lower().startswith(".vmp"):
-                        self.data.append({"section" : section})
-                        return True
-
-        return False
+    def on_complete(self):
+        for section in self.get_results("static", {}).get("pe_sections", []):
+            if section["name"].lower().startswith(".vmp"):
+                self.match(None, "section", name=section["name"])

@@ -21,33 +21,30 @@ class Tor(Signature):
     severity = 3
     categories = ["network", "anonimity", "tor"]
     authors = ["nex"]
-    minimum = "1.2"
-    evented = True
+    minimum = "2.0"
+
+    filter_apinames = "CreateServiceA", "CreateServiceW"
+
+    indicators = [
+        ".*\\\\tor\\\\cached-certs$",
+        ".*\\\\tor\\\\cached-consensus$",
+        ".*\\\\tor\\\\cached-descriptors$",
+        ".*\\\\tor\\\\geoip$",
+        ".*\\\\tor\\\\lock$",
+        ".*\\\\tor\\\\state$",
+        ".*\\\\tor\\\\torrc$",
+    ]
 
     def on_call(self, call, process):
-        if self.check_argument_call(call,
-                                    pattern="Tor Win32 Service",
-                                    api="CreateServiceA",
-                                    category="services"):
-            self.add_match(process, 'api', call)
+        service_name = call["arguments"]["service_name"]
+        display_name = call["arguments"]["display_name"]
+
+        if service_name == "Tor Win32 Service" or \
+                display_name == "Tor Win32 Service":
+            self.mark()
 
     def on_complete(self):
-        return self.has_matches()
-
-    def run(self):
-        indicators = [
-            ".*\\\\tor\\\\cached-certs$",
-            ".*\\\\tor\\\\cached-consensus$",
-            ".*\\\\tor\\\\cached-descriptors$",
-            ".*\\\\tor\\\\geoip$",
-            ".*\\\\tor\\\\lock$",
-            ".*\\\\tor\\\\state$",
-            ".*\\\\tor\\\\torrc$"
-        ]
-
-        for indicator in indicators:
-            subject = self.check_file(pattern=indicator, regex=True)
-            if subject:
-                self.add_match(None, 'file', subject)
-
-        return self.has_matches()
+        for indicator in self.indicators:
+            filepath = self.check_file(pattern=indicator, regex=True)
+            if filepath:
+                self.match(None, "file", filepath=filepath)

@@ -21,13 +21,13 @@ class DirtJumper(Signature):
     severity = 3
     categories = ["bot", "ddos"]
     families = ["dirtjumper"]
-    authors = ["nex","jjones"]
-    minimum = "1.2"
+    authors = ["nex", "jjones"]
+    minimum = "2.0"
 
-    def run(self):
-        if "network" in self.results:
-            for http in self.results["network"]["http"]:
-                if http["method"] == "POST" and http["body"].startswith("k=") and http.get("user-agent", "") == "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US)":
-                    self.add_match(None, 'http', http)
+    user_agent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US)"
 
-        return self.has_matches()
+    def on_complete(self):
+        for http in self.get_net_http():
+            if http["method"] == "POST" and http["body"].startswith("k=") and \
+                    http.get("user-agent", "") == self.user_agent:
+                self.match(None, "http", http)

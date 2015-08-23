@@ -21,19 +21,20 @@ class ZeusURL(Signature):
     severity = 3
     categories = ["banker"]
     authors = ["Robby Zeitfuchs"]
-    minimum = "1.2"
-    references = ["https://zeustracker.abuse.ch/blocklist.php?download=compromised"]
+    minimum = "2.0"
 
-    def run(self):
-        indicators = [
-            ".*\/config\.bin",                                  
-            ".*\/gate\.php",                               
-            ".*\/cfg\.bin",                                   
-        ]
+    references = [
+        "https://zeustracker.abuse.ch/blocklist.php?download=compromised",
+    ]
 
-        for indicator in indicators:
-            match = self.check_url(pattern=indicator, regex=True)
-            if match:
-                self.add_match(None, 'url', match)
-        
-        return self.has_matches()
+    indicators = [
+        ".*\/config\.bin",
+        ".*\/gate\.php",
+        ".*\/cfg\.bin",
+    ]
+
+    def on_complete(self):
+        for indicator in self.indicators:
+            url = self.check_url(pattern=indicator, regex=True)
+            if url:
+                self.add_match(None, "url", url=url)

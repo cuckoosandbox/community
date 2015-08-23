@@ -22,21 +22,20 @@ class XtremeMutexes(Signature):
     categories = ["rat"]
     families = ["xtremerat"]
     authors = ["threatlead", "nex"]
+    minimum = "2.0"
+
     references = [
         "https://malwr.com/analysis/ZWM4YjI2MzI1MmQ2NDBkMjkwNzI3NzhjNWM5Y2FhY2U/",
-        "https://malwr.com/analysis/MWY5YTAwZWI1NDc3NDJmMTgyNDA4ODc0NTk0MWIzNjM/"
+        "https://malwr.com/analysis/MWY5YTAwZWI1NDc3NDJmMTgyNDA4ODc0NTk0MWIzNjM/",
     ]
-    minimum = "1.2"
 
-    def run(self):
-        indicators = [
-            "XTREMEUPDATE",
-            "\(\(Mutex\)\).*"
-        ]
+    indicators = [
+        "XTREMEUPDATE",
+        "\(\(Mutex\)\).*"
+    ]
 
-        for indicator in indicators:
-            subject = self.check_mutex(pattern=indicator, regex=True)
-            if subject:
-                self.add_match(None, 'mutex', subject)
-
-        return self.has_matches()
+    def on_complete(self):
+        for indicator in self.indicators:
+            mutex = self.check_mutex(pattern=indicator, regex=True)
+            if mutex:
+                self.add_match(None, "mutex", mutex=mutex)

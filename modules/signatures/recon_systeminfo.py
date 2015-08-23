@@ -21,18 +21,10 @@ class SystemInfo(Signature):
     severity = 3
     categories = ["recon"]
     authors = ["nex"]
-    minimum = "1.2"
-    evented = True
+    minimum = "2.0"
 
     def on_call(self, call, process):
-        subject = self.check_argument_call(
-            call, pattern="^cmd\.exe.*(systeminfo|ipconfig|netstat)",
-            name="CommandLine",
-            category="process",
-            regex=True
-        )
-        if subject:
-            self.add_match(process, 'api', call)
-
-    def on_complete(self):
-        return self.has_matches()
+        if self._check_value(pattern="^cmd\.exe.*(systeminfo|ipconfig|netstat)",
+                             subject=call["arguments"]["command_line"],
+                             regex=True):
+            self.mark()

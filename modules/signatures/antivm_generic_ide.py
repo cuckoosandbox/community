@@ -21,12 +21,9 @@ class AntiVMIDE(Signature):
     severity = 3
     categories = ["anti-vm"]
     authors = ["nex"]
-    minimum = "1.2"
+    minimum = "2.0"
 
-    def run(self):
-        subject = self.check_key(pattern=".*\\\\SYSTEM\\\\CurrentControlSet\\\\Enum\\\\IDE$",
-                                 regex=True)
-        if subject:
-            self.add_match(None, 'registry', subject)
-
-        return self.has_matches()
+    def on_complete(self):
+        regkey = self.check_key(pattern=".*\\\\SYSTEM\\\\CurrentControlSet\\\\Enum\\\\IDE$", regex=True)
+        if regkey:
+            self.match(None, "registry", regkey=regkey)
