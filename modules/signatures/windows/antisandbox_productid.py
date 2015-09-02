@@ -22,7 +22,6 @@ class GetProductID(Signature):
     categories = ["anti-sandbox"]
     authors = ["nex"]
     minimum = "2.0"
-    evented = True
 
     filter_categories = "registry",
 

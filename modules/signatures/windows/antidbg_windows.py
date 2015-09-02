@@ -22,7 +22,6 @@ class AntiDBGWindows(Signature):
     categories = ["anti-debug"]
     authors = ["nex"]
     minimum = "2.0"
-    evented = True
 
     filter_categories = "ui",
 
