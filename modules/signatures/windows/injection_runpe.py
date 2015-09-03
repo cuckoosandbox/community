@@ -38,6 +38,8 @@ class InjectionRunPE(Signature):
         "NtResumeThread",
     ]
 
+    _current_process_handles = "0xffffffff", "0xffffffffffffffff"
+
     def init(self):
         self.functions = {}
 
@@ -45,10 +47,15 @@ class InjectionRunPE(Signature):
         self.functions[process["pid"]] = set()
 
     def on_call(self, call, process):
+        # We don't care about the current process.
+        process_handle = call["arguments"].get("process_handle")
+        if process_handle in self._current_process_handles:
+            return
+
         self.functions[process["pid"]].add(call["api"])
         self.mark_call()
 
     def on_complete(self):
         for pid, functions in self.functions.items():
-            if len(functions) >= len(self.filter_apinames)-2:
+            if len(functions) >= 4:
                 return True
