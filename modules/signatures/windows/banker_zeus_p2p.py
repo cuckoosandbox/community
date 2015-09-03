@@ -13,7 +13,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
 from lib.cuckoo.common.abstracts import Signature
 
 class ZeusP2P(Signature):
@@ -51,7 +50,7 @@ class ZeusP2P(Signature):
         # Check for UDP Traffic on remote port greater than 1024.
         # TODO: this might be faulty without checking whether the destination
         # IP is really valid.
-        for udp in self.get_results("network", {})["udp"]:
+        for udp in self.get_results("network", {}).get("udp", []):
             if udp["dport"] > 1024:
                 self.mark_ioc("udp", udp)
 
