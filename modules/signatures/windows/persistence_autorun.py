@@ -56,7 +56,7 @@ class Autorun(Signature):
 
     def on_complete(self):
         for indicator in self.indicators:
-            regkey = self.check_key(pattern=indicator, regex=True)
+            regkey = self.check_key(pattern=indicator, regex=True, actions=["regkey_written"])
             if regkey:
                 self.mark_ioc("regkey", regkey)
 
