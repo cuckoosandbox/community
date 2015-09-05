@@ -23,6 +23,8 @@ class VBoxDetectFiles(Signature):
     authors = ["nex"]
     minimum = "2.0"
 
+    filter_apinames = "LdrLoadDll",
+
     indicators = [
         ".*VBoxDisp\.dll$",
         ".*VBoxHook\.dll$",
@@ -45,6 +47,11 @@ class VBoxDetectFiles(Signature):
         ".*VBoxMouse\.[a-zA-Z]{3}$",
         ".*VBoxVideo\.[a-zA-Z]{3}$",
     ]
+
+    def on_call(self, call, process):
+        if "vboxhook" in call["arguments"]["module_name"].lower():
+            self.mark_call()
+            return True
 
     def on_complete(self):
         for indicator in self.indicators:

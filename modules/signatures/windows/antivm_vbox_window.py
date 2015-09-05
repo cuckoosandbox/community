@@ -23,6 +23,8 @@ class VBoxDetectWindow(Signature):
     authors = ["nex"]
     minimum = "2.0"
 
+    filter_categories = "ui",
+
     # Lowercase all indicators.
     indicators = [indicator.lower() for indicator in [
         "VBoxTrayToolWndClass",

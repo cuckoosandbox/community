@@ -23,9 +23,21 @@ class WineDetect(Signature):
     authors = ["nex"]
     minimum = "2.0"
 
+    filter_apinames = "LdrGetProcedureAddress",
+
     indicators = [
         "HKEY_CURRENT_USER\\Software\\Wine",
     ]
+
+    func_indicators = [
+        "wine_get_version",
+        "wine_nt_to_unix_file_name",
+    ]
+
+    def on_call(self, call, process):
+        if call["arguments"]["function_name"] in self.func_indicators:
+            self.mark_call()
+            return True
 
     def on_complete(self):
         for indicator in self.indicators:

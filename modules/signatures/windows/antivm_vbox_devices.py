@@ -23,20 +23,19 @@ class VBoxDetectDevices(Signature):
     authors = ["nex"]
     minimum = "2.0"
 
+    # TODO Might as well just do a generic ".*VBox.*" regex?
     indicators = [
-        "\\Device\\VBoxGuest",
-        "\\Device\\VBoxMouse",
-        "\\Device\\VBoxVideo",
-        "VBoxMiniRdrDN",
-        "pipe\\VBoxMiniRdDN",
-        "VBoxTrayIPC",
-        "pipe\\VBoxTrayIPC"
+        ".*VBoxGuest$",
+        ".*VBoxMouse$",
+        ".*VBoxVideo$",
+        ".*VBoxMiniRdrDN$",
+        ".*VBoxMiniRdDN$",
+        ".*VBoxTrayIPC$",
     ]
 
     def on_complete(self):
         for indicator in self.indicators:
-            filepath = self.check_file(pattern=indicator)
-            if filepath:
+            for filepath in self.check_file(pattern=indicator, regex=True, all=True):
                 self.mark_ioc("file", filepath)
 
         return self.has_marks()
