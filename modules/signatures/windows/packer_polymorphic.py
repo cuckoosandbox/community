@@ -38,9 +38,9 @@ class Polymorphic(Signature):
         if self.get_results("target", {}).get("category") != "file":
             return
 
-        target_ssdeep = self.results["target"]["file"]["ssdeep"]
-        target_sha1 = self.results["target"]["file"]["sha1"]
-        target_size = self.results["target"]["file"]["size"]
+        target_ssdeep = self.get_results("target", {})["file"]["ssdeep"]
+        target_sha1 = self.get_results("target", {})["file"]["sha1"]
+        target_size = self.get_results("target", {})["file"]["size"]
 
         if not target_ssdeep:
             return
