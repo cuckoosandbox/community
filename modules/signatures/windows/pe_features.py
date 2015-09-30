@@ -14,6 +14,7 @@ class PEFeatures(Signature):
 
     section_names = [
         ".text", ".rdata", ".data", ".pdata", ".DATA", ".reloc", ".idata",
+        ".rsrc", ".shared", ".bss", ".edata", ".tls", ".CRT", ".eh_fram",
     ]
 
     def on_complete(self):

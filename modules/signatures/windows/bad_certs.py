@@ -7,6 +7,7 @@ from lib.cuckoo.common.abstracts import Signature
 class BadCerts(Signature):
     name = "bad_certificate"
     description = "Contains known-bad certificates"
+    severity = 2
 
     sha1_sigs = {
         # Buhtrap
@@ -59,6 +60,9 @@ class BadCerts(Signature):
 
         # Techsnab
         "2feef9b548981d861c6a347243cc70c0b1102604": "https://www.virustotal.com/en/file/218db0851bd8aa548b30bdf2d75e1fce44c99ee1ea910b904e938a9e39c20526/analysis/",
+
+        # BrowseFox / NetFilter
+        "d8f6f0216a552e83080dfefd98ddd652e09e704c": "https://www.virustotal.com/en/file/ad5101cb617b7fda7a952271eb7655fc38360b04782967ce44703ac5ebf51e52/analysis/",
     }
 
     cn_sigs = {
