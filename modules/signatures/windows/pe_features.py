@@ -6,7 +6,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class PEFeatures(Signature):
     name = "pe_features"
-    description = "The executable has anomalies (could be a false positive)"
+    description = "The executable has PE anomalies (could be a false positive)"
     severity = 1
     categories = ["packer"]
     authors = ["Cuckoo Technologies"]
@@ -15,6 +15,7 @@ class PEFeatures(Signature):
     section_names = [
         ".text", ".rdata", ".data", ".pdata", ".DATA", ".reloc", ".idata",
         ".rsrc", ".shared", ".bss", ".edata", ".tls", ".CRT", ".eh_fram",
+        ".xdata",
     ]
 
     def on_complete(self):
