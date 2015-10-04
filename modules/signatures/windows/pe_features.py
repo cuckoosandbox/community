@@ -2,6 +2,8 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
+import re
+
 from lib.cuckoo.common.abstracts import Signature
 
 class PEFeatures(Signature):
@@ -18,9 +20,19 @@ class PEFeatures(Signature):
         ".xdata",
     ]
 
+    section_names_re = [
+        "\\/[\\d]+$",
+    ]
+
     def on_complete(self):
         for section in self.get_results("static", {}).get("pe_sections", []):
-            if section["name"] not in self.section_names:
+            if section["name"] in self.section_names:
+                continue
+
+            for section_name_re in self.section_names_re:
+                if re.match(section_name_re, section["name"]):
+                    break
+            else:
                 self.mark(section=section["name"])
 
         return self.has_marks()
