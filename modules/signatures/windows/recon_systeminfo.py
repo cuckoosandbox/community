@@ -13,6 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import re
+
 from lib.cuckoo.common.abstracts import Signature
 
 class SystemInfo(Signature):
@@ -23,11 +25,9 @@ class SystemInfo(Signature):
     authors = ["nex"]
     minimum = "2.0"
 
-    filter_apinames = "CreateProcessInternalW",
+    def on_complete(self):
+        for cmdline in self.get_command_lines():
+            if re.match("cmd(\\.exe)?.*(systeminfo|ipconfig|netstat)", cmdline, re.I):
+                self.mark_ioc("cmdline", cmdline)
 
-    def on_call(self, call, process):
-        if self._check_value(pattern="^cmd\.exe.*(systeminfo|ipconfig|netstat)",
-                             subject=call["arguments"]["command_line"],
-                             regex=True):
-            self.mark_call()
-            return True
+        return self.has_marks()
