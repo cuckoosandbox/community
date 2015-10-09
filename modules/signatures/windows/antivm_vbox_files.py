@@ -23,40 +23,39 @@ class VBoxDetectFiles(Signature):
     authors = ["nex"]
     minimum = "2.0"
 
-    filter_apinames = "LdrLoadDll",
-
     indicators = [
-        ".*VBoxDisp\.dll$",
-        ".*VBoxHook\.dll$",
-        ".*VBoxMRXNP\.dll$",
-        ".*VBoxOGL\.dll$",
-        ".*VBoxOGLarrayspu\.dll$",
-        ".*VBoxOGLcrutil\.dll$",
-        ".*VBoxOGLerrorspu\.dll$",
-        ".*VBoxOGLfeedbackspu\.dll$",
-        ".*VBoxOGLpackspu\.dll$",
-        ".*VBoxOGLpassthroughspu\.dll$"
-        ".*VBoxDisp\.dll$",
-        ".*VBoxSF\.sys$",
-        ".*VBoxControl\.exe$",
-        ".*VBoxService\.exe$",
-        ".*VBoxTray\.exe$",
-        ".*VBoxDrvInst\.exe$",
-        ".*VBoxWHQLFake\.exe$",
-        ".*VBoxGuest\.[a-zA-Z]{3}$",
-        ".*VBoxMouse\.[a-zA-Z]{3}$",
-        ".*VBoxVideo\.[a-zA-Z]{3}$",
+        ".*VBoxDisp\\.dll$",
+        ".*VBoxHook\\.dll$",
+        ".*VBoxMRXNP\\.dll$",
+        ".*VBoxOGL\\.dll$",
+        ".*VBoxOGLarrayspu\\.dll$",
+        ".*VBoxOGLcrutil\\.dll$",
+        ".*VBoxOGLerrorspu\\.dll$",
+        ".*VBoxOGLfeedbackspu\\.dll$",
+        ".*VBoxOGLpackspu\\.dll$",
+        ".*VBoxOGLpassthroughspu\\.dll$"
+        ".*VBoxDisp\\.dll$",
+        ".*VBoxSF\\.sys$",
+        ".*VBoxControl\\.exe$",
+        ".*VBoxService\\.exe$",
+        ".*VBoxTray\\.exe$",
+        ".*VBoxDrvInst\\.exe$",
+        ".*VBoxWHQLFake\\.exe$",
+        ".*VBoxGuest\\.[a-zA-Z]{3}$",
+        ".*VBoxMouse\\.[a-zA-Z]{3}$",
+        ".*VBoxVideo\\.[a-zA-Z]{3}$",
     ]
-
-    def on_call(self, call, process):
-        if "vboxhook" in call["arguments"]["module_name"].lower():
-            self.mark_call()
-            return True
 
     def on_complete(self):
         for indicator in self.indicators:
             filepath = self.check_file(pattern=indicator, regex=True)
             if filepath:
                 self.mark_ioc("file", filepath)
+                continue
+
+            dll = self.check_dll_loaded(pattern=indicator, regex=True)
+            if dll:
+                self.mark_ioc("dll", dll)
+                continue
 
         return self.has_marks()

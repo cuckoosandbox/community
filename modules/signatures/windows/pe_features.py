@@ -21,7 +21,7 @@ class PEFeatures(Signature):
     ]
 
     section_names_re = [
-        "\\/[\\d]+$",
+        "/[\\d]+$",
     ]
 
     def on_complete(self):

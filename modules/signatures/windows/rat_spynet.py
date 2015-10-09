@@ -31,7 +31,7 @@ class SpynetRat(Signature):
         "https://malwr.com/analysis/N2Q2NWY0Y2MzOTM0NDEzNmE1MTdhOThiNTQxMzhiNzk/",
     ]
 
-    indicators = [
+    mutexes_re = [
         ".*CYBERGATEUPDATE",
         ".*\(\(SpyNet\)\).*",
         ".*Spy-Net.*",
@@ -53,11 +53,11 @@ class SpynetRat(Signature):
         ".*MUT1EX.*",
     ]
 
-    indicators2 = [
+    regkeys_re = [
         ".*\\SpyNet\\.*",
     ]
 
-    indicators3 = [
+    files_re = [
         ".*XX--XX--XX.txt",
         ".*\\\\Spy-Net\\\\server.exe",
         ".*\\\\Spy-Net\\\\Spy-Net.dll",
@@ -66,17 +66,17 @@ class SpynetRat(Signature):
     ]
 
     def on_complete(self):
-        for indicator in self.indicators:
+        for indicator in self.mutexes_re:
             mutex = self.check_mutex(pattern=indicator, regex=True)
             if mutex:
                 self.mark_ioc("mutex", mutex)
 
-        for indicator in self.indicators2:
+        for indicator in self.regkeys_re:
             regkey = self.check_key(pattern=indicator, regex=True)
             if regkey:
                 self.mark_ioc("registry", regkey)
 
-        for indicator in self.indicators3:
+        for indicator in self.files_re:
             regkey = self.check_file(pattern=indicator, regex=True)
             if regkey:
                 self.mark_ioc("file", regkey)

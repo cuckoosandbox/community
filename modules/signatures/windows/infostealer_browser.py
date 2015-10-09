@@ -24,12 +24,12 @@ class BrowserStealer(Signature):
     minimum = "2.0"
 
     indicators = [
-        ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\signons\.sqlite$",
-        ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\secmod\.db$",
-        ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\cert8\.db$",
-        ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\key3\.db$",
-        ".*\\\\History\\\\History\.IE5\\\\index\.dat$",
-        ".*\\\\Temporary\\\\ Internet\\ Files\\\\Content\.IE5\\\\index\.dat$",
+        ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\signons\\.sqlite$",
+        ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\secmod\\.db$",
+        ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\cert8\\.db$",
+        ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\key3\\.db$",
+        ".*\\\\History\\\\History\\.IE5\\\\index\\.dat$",
+        ".*\\\\Temporary\\\\ Internet\\ Files\\\\Content\.IE5\\\\index\\.dat$",
         ".*\\\\Application\\ Data\\\\Google\\\\Chrome\\\\.*",
         ".*\\\\Application\\ Data\\\\Opera\\\\.*",
         ".*\\\\Application\\ Data\\\\Chromium\\\\.*",

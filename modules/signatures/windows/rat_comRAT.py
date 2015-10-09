@@ -18,12 +18,12 @@ from lib.cuckoo.common.abstracts import Signature
 registry_indicator = "{DFFACDC5-679F-4156-8947-C5C76BC0B67F}\InprocServer32"
 
 file_moves = [
-    "Microsoft\\\shdocvw.tlb",
-    "Microsoft\\\oleaut32.dll",
-    "Microsoft\\\oleaut32.tlb",
-    "Microsoft\\\credprov.tlb",
-    "Microsoft\\\libadcodec.dll",
-    "Microsoft\\\libadcodec.tlb",
+    "Microsoft\\\\shdocvw.tlb",
+    "Microsoft\\\\oleaut32.dll",
+    "Microsoft\\\\oleaut32.tlb",
+    "Microsoft\\\\credprov.tlb",
+    "Microsoft\\\\libadcodec.dll",
+    "Microsoft\\\\libadcodec.tlb",
 ]
 
 class ComRAT(Signature):

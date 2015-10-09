@@ -25,14 +25,14 @@ class PcClientMutexes(Signature):
     references = ["https://malwr.com/analysis/MDIxN2NhMjg4MTg2NDY4MWIyNTE0Zjk5MTY1OGU4YzE/"]
     minimum = "2.0"
 
-    indicators = [
+    mutexes_re = [
         "BKLANG.*",
         "VSLANG.*",
         ".*ps00045695",
         ".*dz00041bc7",
     ]
 
-    indicators2 = [
+    files_re = [
         ".*\\\\syslog.dat",
         ".*\\\\.*_lang.ini",
         ".*\\\\[0-9]+_lang.dll",
@@ -44,12 +44,12 @@ class PcClientMutexes(Signature):
     ]
 
     def on_complete(self):
-        for indicator in self.indicators:
+        for indicator in self.mutexes_re:
             mutex = self.check_mutex(pattern=indicator, regex=True)
             if mutex:
                 self.mark_ioc("mutex", mutex)
 
-        for indicator in self.indicators2:
+        for indicator in self.files_re:
             filepath = self.check_file(pattern=indicator, regex=True)
             if filepath:
                 self.mark_ioc("file", filepath)

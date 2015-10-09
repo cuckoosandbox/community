@@ -24,11 +24,11 @@ class RansomwareFiles(Signature):
     minimum = "2.0"
 
     indicators = [
-        "\\\\help_decrypt.html$",
-        "\\\\decrypt_instruction.html$",
-        "\\\\decrypt_instructions.txt$",
-        "\\\\vault.key$",
-        "\\\\vault.txt$",
+        ".*\\\\help_decrypt.html$",
+        ".*\\\\decrypt_instruction.html$",
+        ".*\\\\decrypt_instructions.txt$",
+        ".*\\\\vault.key$",
+        ".*\\\\vault.txt$",
     ]
 
     def on_complete(self):

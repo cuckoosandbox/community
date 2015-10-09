@@ -23,7 +23,7 @@ class CheckIP(Signature):
     authors = ["nex", "RedSocks"]
     minimum = "2.0"
 
-    indicators = [
+    domains = [
         "checkip.dyndns.com",
         "checkip.dyndns.org",
         "whatismyip.org",
@@ -60,7 +60,7 @@ class CheckIP(Signature):
     ]
 
     def on_complete(self):
-        for indicator in self.indicators:
+        for indicator in self.domains:
             domain = self.check_domain(pattern=indicator)
             if domain:
                 self.mark_ioc("domain", domain)

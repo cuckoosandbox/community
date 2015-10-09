@@ -30,24 +30,24 @@ class Flame(Signature):
         "http://www.certcc.ir/index.php?name=news&file=article&sid=1894",
     ]
 
-    indicators = [
-        "__fajb.*",
-        "DVAAccessGuard.*",
-        ".*mssecuritymgr.*"
+    mutexes_re = [
+        ".*__fajb",
+        ".*DVAAccessGuard",
+        ".*mssecuritymgr"
     ]
 
-    indicators2 = [
-        ".*\\\\Microsoft Shared\\\\MSSecurityMgr\\\\.*",
-        ".*\\\\Ef_trace\.log$"
+    regkeys_re = [
+        ".*\\\\Microsoft\\ Shared\\\\MSSecurityMgr\\\\.*",
+        ".*\\\\Ef_trace\\.log$"
     ]
 
     def on_complete(self):
-        for indicator in self.indicators:
+        for indicator in self.mutexes_re:
             mutex = self.check_mutex(pattern=indicator, regex=True)
             if mutex:
                 self.mark_ioc("mutex", mutex=mutex)
 
-        for indicator in self.indicators2:
+        for indicator in self.regkeys_re:
             filepath = self.check_file(pattern=indicator, regex=True)
             if filepath:
                 self.mark_ioc("file", filepath=filepath)

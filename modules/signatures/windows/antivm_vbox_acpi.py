@@ -24,8 +24,7 @@ class VBoxDetectACPI(Signature):
     minimum = "2.0"
 
     def on_complete(self):
-        for regkey in self.check_key("HARDWARE\\\\ACPI\\\\", regex=True, all=True):
-            if "vbox_" in regkey.lower():
-                self.mark_ioc("registry", regkey)
+        for regkey in self.check_key("HARDWARE\\\\ACPI\\\\.*vbox_", regex=True, all=True):
+            self.mark_ioc("registry", regkey)
 
         return self.has_marks()

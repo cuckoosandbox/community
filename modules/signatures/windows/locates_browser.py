@@ -11,27 +11,27 @@ class LocatesBrowser(Signature):
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
 
-    filepaths_re = [
+    files_re = [
         "C:\\\\Program\\ Files(\\ \\(x86\\))?\\\\Google\\\\Chrome\\\\Application",
         "C:\\\\Program\\ Files(\\ \\(x86\\))?\\\\Mozilla\\ Firefox",
     ]
 
     regkeys_re = [
         ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall\\\\Google Chrome",
-        ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App Paths\\\\chrome.exe",
+        ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App\\ Paths\\\\chrome.exe",
         ".*\\\\Mozilla\\\\Mozilla\\ Firefox",
         ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App\\ Paths\\\\firefox.exe",
     ]
 
     def on_complete(self):
-        for indicator in self.filepaths_re:
+        for indicator in self.files_re:
             filepath = self.check_file(pattern=indicator, regex=True)
             if filepath:
                 self.mark_ioc("file", filepath)
 
         for indicator in self.regkeys_re:
-            filepath = self.check_key(pattern=indicator, regex=True)
-            if filepath:
-                self.mark_ioc("regkey", filepath)
+            regkey = self.check_key(pattern=indicator, regex=True)
+            if regkey:
+                self.mark_ioc("regkey", regkey)
 
         return self.has_marks()

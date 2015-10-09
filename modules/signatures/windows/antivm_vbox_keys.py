@@ -23,7 +23,7 @@ class VBoxDetectKeys(Signature):
     authors = ["nex"]
     minimum = "2.0"
 
-    indicator = ".*\\\\SOFTWARE\\\\Oracle\\\\VirtualBox\\ Guest\\ Additions$"
+    indicator = ".*\\\\SOFTWARE\\\\Oracle\\\\VirtualBox\\ Guest\\ Additions"
 
     def on_complete(self):
         regkey = self.check_key(pattern=self.indicator, regex=True)

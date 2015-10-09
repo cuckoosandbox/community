@@ -23,7 +23,7 @@ class FTPStealer(Signature):
     authors = ["nex", "RedSocks"]
     minimum = "2.0"
 
-    file_indicators = [
+    files_re = [
         ".*\\\\CuteFTP\\\\sm\\.dat$",
         ".*\\\\FlashFXP\\\\.*\\\\Sites\\.dat$",
         ".*\\\\FileZilla\\\\sitemanager\\.xml$",
@@ -40,7 +40,7 @@ class FTPStealer(Signature):
         ".*\\\\Ipswitch\\\\WS_FTP.*",
     ]
 
-    registry_indicators = [
+    regkeys_re = [
         ".*Software\\\\Far*\\\\Hosts$",
         ".*Software\\\\Far*\\\\FTPHost$",
         ".*Software\\\\FlashFXP\\\\",
@@ -53,12 +53,12 @@ class FTPStealer(Signature):
     ]
 
     def on_complete(self):
-        for indicator in self.file_indicators:
+        for indicator in self.files_re:
             filepath = self.check_file(pattern=indicator, regex=True)
             if filepath:
                 self.mark_ioc("file", filepath)
 
-        for indicator in self.registry_indicators:
+        for indicator in self.regkeys_re:
             registry = self.check_key(pattern=indicator, regex=True)
             if registry:
                 self.mark_ioc("registry", registry)

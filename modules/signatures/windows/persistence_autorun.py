@@ -27,7 +27,7 @@ class Autorun(Signature):
     authors = ["Michael Boman", "nex", "securitykitten"]
     minimum = "2.0"
 
-    indicators = [
+    regkeys_re = [
         ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run$",
         ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnce$",
         ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunServices$",
@@ -43,25 +43,25 @@ class Autorun(Signature):
         ".*\\\\Software\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Image\\ File\\ Execution\\ Options.*",
         ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Winlogon\\\\Shell$",
         ".*\\\\System\\\\CurrentControlSet\\\\Services.*",
-        ".*\\\\SOFTWARE\\\\Classes\\\\Exefile\\\\Shell\\\\Open\\\\Command\\\\\(Default\).*",
+        ".*\\\\SOFTWARE\\\\Classes\\\\Exefile\\\\Shell\\\\Open\\\\Command\\\\\\(Default\\).*",
         ".*\\\\Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Windows\\\\load$",
         ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\ShellServiceObjectDelayLoad$",
     ]
 
-    indicators2 = [
+    files_re = [
         ".*\\\\win\.ini$",
-        ".*\\\\system\.ini$",
-        ".*\\\\Start Menu\\\\Programs\\\\Startup$",
+        ".*\\\\system\\.ini$",
+        ".*\\\\Start\\ Menu\\\\Programs\\\\Startup",
     ]
 
     def on_complete(self):
-        for indicator in self.indicators:
+        for indicator in self.regkeys_re:
             regkey = self.check_key(pattern=indicator, regex=True, actions=["regkey_written"])
             if regkey:
                 self.mark_ioc("regkey", regkey)
 
-        for indicator in self.indicators2:
-            filepath = self.check_file(pattern=indicator, regex=True)
+        for indicator in self.files_re:
+            filepath = self.check_file(pattern=indicator, regex=True, actions=["file_written"])
             if filepath:
                 self.mark_ioc("file", filepath)
 

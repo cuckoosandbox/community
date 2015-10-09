@@ -24,7 +24,7 @@ class CreatesAutorunInf(Signature):
     minimum = "2.0"
 
     def on_complete(self):
-        filepath = self.check_file(pattern=".*\\\\autorun\.inf$", regex=True)
+        filepath = self.check_file(pattern=".*\\\\autorun\\.inf$", regex=True)
         if filepath:
             self.mark_ioc("file", filepath)
             return True

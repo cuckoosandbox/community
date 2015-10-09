@@ -23,10 +23,15 @@ class AntiVMBios(Signature):
     authors = ["nex"]
     minimum = "2.0"
 
-    filter_categories = "registry",
+    regkeys_re = [
+        ".*SystemBiosVersion",
+        ".*VideoBiosVersion",
+    ]
 
-    def on_call(self, call, process):
-        regkey = call["arguments"].get("regkey", "").lower()
-        if regkey.endswith(("systembiosversion", "videobiosversion")):
-            self.mark_call()
-            return True
+    def on_complete(self):
+        for indicator in self.regkeys_re:
+            regkey = self.check_key(pattern=indicator, regex=True)
+            if regkey:
+                self.mark_ioc("regkey", regkey)
+
+        return self.has_marks()

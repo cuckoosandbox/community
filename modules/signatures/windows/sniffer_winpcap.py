@@ -24,9 +24,9 @@ class InstallsWinpcap(Signature):
     minimum = "2.0"
 
     indicators = [
-        ".*\\\\packet\.dll$",
-        ".*\\\\npf\.sys$",
-        ".*\\\\wpcap\.dll$"
+        ".*\\\\packet\\.dll$",
+        ".*\\\\npf\\.sys$",
+        ".*\\\\wpcap\\.dll$"
     ]
 
     def on_complete(self):
