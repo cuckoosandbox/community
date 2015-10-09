@@ -17,6 +17,8 @@
 
 # Additional keys added from SysInternals Administrators Guide
 
+import re
+
 from lib.cuckoo.common.abstracts import Signature
 
 class Autorun(Signature):
@@ -24,7 +26,7 @@ class Autorun(Signature):
     description = "Installs itself for autorun at Windows startup"
     severity = 3
     categories = ["persistence"]
-    authors = ["Michael Boman", "nex", "securitykitten"]
+    authors = ["Michael Boman", "nex", "securitykitten", "Cuckoo Technologies"]
     minimum = "2.0"
 
     regkeys_re = [
@@ -54,6 +56,10 @@ class Autorun(Signature):
         ".*\\\\Start\\ Menu\\\\Programs\\\\Startup",
     ]
 
+    command_lines_re = [
+        ".*schtasks.*/create.*/sc",
+    ]
+
     def on_complete(self):
         for indicator in self.regkeys_re:
             regkey = self.check_key(pattern=indicator, regex=True, actions=["regkey_written"])
@@ -64,5 +70,10 @@ class Autorun(Signature):
             filepath = self.check_file(pattern=indicator, regex=True, actions=["file_written"])
             if filepath:
                 self.mark_ioc("file", filepath)
+
+        for indicator in self.command_lines_re:
+            for cmdline in self.get_command_lines():
+                if re.match(indicator, cmdline, re.I):
+                    self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
