@@ -18,7 +18,7 @@ from lib.cuckoo.common.abstracts import Signature
 class DisableRegedit(Signature):
     name = "locker_regedit"
     description = "Disables Windows' Registry Editor"
-    severity = 3
+    severity = 2
     categories = ["locker"]
     authors = ["Thomas Birn", "nex"]
     minimum = "2.0"
@@ -27,7 +27,7 @@ class DisableRegedit(Signature):
         "\\\\Policies\\\\System\\DisableRegistryTools$"
 
     def on_complete(self):
-        for regkey in self.check_key(pattern=self.indicator, regex=True, all=True):
+        for regkey in self.check_key(pattern=self.indicator, regex=True, actions=["regkey_written"], all=True):
             self.mark_ioc("registry", regkey)
 
         return self.has_marks()
