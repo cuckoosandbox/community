@@ -20,7 +20,7 @@ class CheckIP(Signature):
     description = "Looks up the external IP address"
     severity = 2
     categories = ["recon"]
-    authors = ["nex"]
+    authors = ["nex", "RedSocks"]
     minimum = "2.0"
 
     indicators = [
@@ -37,6 +37,26 @@ class CheckIP(Signature):
         "api.ipify.org",
         "ipinfo.info",
         "myexternalip.com",
+        "ip-address.domaintools.com",
+        "ipchicken.com",
+        "www.whatismyip.ca",
+        "showmyip.com",
+        "www.formyip.com",
+        "ip2location.com",
+        "meineipadresse.de",
+        "ip-lookup.net",
+        "checkip.org",
+        "geoiptool.com",
+        "cmyip.com",
+        "knowmyip.com",
+        "whatismyip.everdot.org",
+        "whatismyip.akamai.com",
+        "whatismyip.com",
+        "bot.whatismyipaddress.com",
+        "showmyipaddress.com",
+        "www.showmyipaddress.com",
+        "www.getmyip.org",
+        "www.checkip.org",
     ]
 
     def on_complete(self):

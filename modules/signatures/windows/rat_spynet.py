@@ -17,11 +17,11 @@ from lib.cuckoo.common.abstracts import Signature
 
 class SpynetRat(Signature):
     name = "rat_spynet"
-    description = "Creates known SpyNet mutexes and/or registry changes."
+    description = "Creates known SpyNet files, registry changes and/or mutexes."
     severity = 3
     categories = ["rat"]
     families = ["spynet"]
-    authors = ["threatlead", "nex"]
+    authors = ["threatlead", "nex", "RedSocks"]
     minimum = "2.0"
 
     references = [
@@ -35,14 +35,34 @@ class SpynetRat(Signature):
         ".*CYBERGATEUPDATE",
         ".*\(\(SpyNet\)\).*",
         ".*Spy-Net.*",
+        ".*Spy.*Net.*Instalar",
+        ".*Spy.*Net.*Persist",
+        ".*Spy.*Net.*Sair",
         ".*X_PASSWORDLIST_X.*",
         ".*X_BLOCKMOUSE_X.*",
         # ".*PERSIST",  # Causes false positive detection on XtremeRAT samples.
         ".*_SAIR",
+        ".*SPY_NET_RATMUTEX",
+        ".*xXx.*key.*xXx",
+        ".*Administrator15",
+        ".*Caracas",
+        ".*Caracas_PERSIST",
+        ".*Pluguin",
+        ".*Pluguin_PERSIST",
+        ".*Pluguin_SAIR",
+        ".*MUT1EX.*",
     ]
 
     indicators2 = [
         ".*\\SpyNet\\.*",
+    ]
+
+    indicators3 = [
+        ".*XX--XX--XX.txt",
+        ".*\\\\Spy-Net\\\\server.exe",
+        ".*\\\\Spy-Net\\\\Spy-Net.dll",
+        ".*\\\\Spy-Net\\\\keylog.dat",
+        ".*\\\\Spy-Net",
     ]
 
     def on_complete(self):
@@ -55,5 +75,10 @@ class SpynetRat(Signature):
             regkey = self.check_key(pattern=indicator, regex=True)
             if regkey:
                 self.mark_ioc("registry", regkey)
+
+        for indicator in self.indicators3:
+            regkey = self.check_file(pattern=indicator, regex=True)
+            if regkey:
+                self.mark_ioc("file", regkey)
 
         return self.has_marks()

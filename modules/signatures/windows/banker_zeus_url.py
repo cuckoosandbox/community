@@ -20,7 +20,7 @@ class ZeusURL(Signature):
     description = "Contacts C&C server HTTP check-in (Banking Trojan)"
     severity = 3
     categories = ["banker"]
-    authors = ["Robby Zeitfuchs"]
+    authors = ["Robby Zeitfuchs", "RedSocks"]
     minimum = "2.0"
 
     references = [
@@ -31,6 +31,9 @@ class ZeusURL(Signature):
         ".*\/config\.bin",
         ".*\/gate\.php",
         ".*\/cfg\.bin",
+        ".*\/cp\.php",
+        ".*\.php.*letter.*login",
+        ".*\.php.*m.*login",
     ]
 
     def on_complete(self):

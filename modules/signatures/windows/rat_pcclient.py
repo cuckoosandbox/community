@@ -21,13 +21,15 @@ class PcClientMutexes(Signature):
     severity = 3
     categories = ["rat"]
     families = ["pcclient"]
-    authors = ["threatlead", "nex"]
+    authors = ["threatlead", "nex", "RedSocks"]
     references = ["https://malwr.com/analysis/MDIxN2NhMjg4MTg2NDY4MWIyNTE0Zjk5MTY1OGU4YzE/"]
     minimum = "2.0"
 
     indicators = [
         "BKLANG.*",
         "VSLANG.*",
+        ".*ps00045695",
+        ".*dz00041bc7",
     ]
 
     indicators2 = [
@@ -35,6 +37,10 @@ class PcClientMutexes(Signature):
         ".*\\\\.*_lang.ini",
         ".*\\\\[0-9]+_lang.dll",
         ".*\\\\[0-9]+_res.tmp",
+        ".*00045695.ini",
+        ".*ssewtu.dll",
+        ".*hjcpsn.*",
+        ".*system32.*Rkmptmy.*",
     ]
 
     def on_complete(self):

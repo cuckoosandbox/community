@@ -21,7 +21,7 @@ class Cridex(Signature):
     severity = 3
     categories = ["Banking", "Trojan"]
     families = ["Cridex"]
-    authors = ["Robby Zeitfuchs", "@robbyFux"]
+    authors = ["Robby Zeitfuchs", "@robbyFux", "RedSocks"]
     minimum = "2.0"
 
     references = [
@@ -35,6 +35,18 @@ class Cridex(Signature):
     indicators = [
         ".*Local.QM.*",
         ".*Local.XM.*",
+        "634I",
+        "634M",
+        "4BD88DEBRM",
+        "6E8I",
+        "6E8M",
+        "404I",
+        "404M",
+        "714I",
+        "714M",
+        ".*XMI00000.*",
+        ".*XMM00000.*",
+        "87b3c64lkj48gd",
     ]
 
     def on_complete(self):

@@ -21,7 +21,7 @@ class SpyEyeMutexes(Signature):
     severity = 3
     categories = ["banker"]
     families = ["spyeye"]
-    authors = ["nex"]
+    authors = ["nex", "RedSocks"]
     minimum = "2.0"
 
     indicators = [
@@ -30,6 +30,12 @@ class SpyEyeMutexes(Signature):
         "__CLEANSWEEP__",
         "__CLEANSWEEP_UNINSTALL__",
         "__CLEANSWEEP_RELOADCFG__",
+        "syjfyhb",
+        "Global.*wiuuyei",
+        "Global.*ovxpcyv",
+        "Global.*rzouciao",
+        "Global.*siijtlt",
+        "Global.*hhvaua",
     ]
 
     def on_complete(self):

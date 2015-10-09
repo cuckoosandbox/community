@@ -20,33 +20,36 @@ class FTPStealer(Signature):
     description = "Harvests credentials from local FTP client softwares"
     severity = 3
     categories = ["infostealer"]
-    authors = ["nex"]
+    authors = ["nex", "RedSocks"]
     minimum = "2.0"
 
     file_indicators = [
-        ".*\\\\CuteFTP\\\\sm\.dat$",
-        ".*\\\\FlashFXP\\\\.*\\\\Sites\.dat$",
-        ".*\\\\FlashFXP\\\\.*\\\\Sites\.dat$",
-        ".*\\\\FileZilla\\\\sitemanager\.xml$",
-        ".*\\\\FileZilla\\\\recentservers\.xml$",
-        ".*\\\\VanDyke\\\\Config\\\\Sessions\\\\.*",
-        ".*\\\\FTP Explorer\\\\.*"
-        ".*\\\\SmartFTP\\\\.*",
-        ".*\\\\TurboFTP\\\\.*",
-        ".*\\\\FTPRush\\\\.*",
-        ".*\\\\LeapFTP\\\\.*",
-        ".*\\\\FTPGetter\\\\.*",
-        ".*\\\\ALFTP\\\\.*",
+        ".*\\\\CuteFTP\\\\sm\\.dat$",
+        ".*\\\\FlashFXP\\\\.*\\\\Sites\\.dat$",
+        ".*\\\\FileZilla\\\\sitemanager\\.xml$",
+        ".*\\\\FileZilla\\\\recentservers\\.xml$",
+        ".*\\\\VanDyke\\\\Config\\\\Sessions.*",
+        ".*\\\\FTP Explorer\\\\",
+        ".*\\\\LeechFTP\\\\",
+        ".*\\\\SmartFTP\\\\",
+        ".*\\\\TurboFTP\\\\",
+        ".*\\\\FTPRush\\\\",
+        ".*\\\\LeapFTP\\\\",
+        ".*\\\\FTPGetter\\\\",
+        ".*\\\\ALFTP\\\\",
         ".*\\\\Ipswitch\\\\WS_FTP.*",
     ]
 
     registry_indicators = [
-        ".*Software\\Far*\\Hosts$",
-        ".*Software\\Far*\\FTPHost$",
-        ".*Software\\Ghisler\\Windows Commander$",
-        ".*Software\\Ghisler\\Total Commander$",
-        ".*Software\\BPFTP\\$",
-        ".*Software\\BulletProof Software\BulletProof FTP Client\\$",
+        ".*Software\\\\Far*\\\\Hosts$",
+        ".*Software\\\\Far*\\\\FTPHost$",
+        ".*Software\\\\FlashFXP\\\\",
+        ".*Software\\\\TurboFTP\\\\",
+        ".*Software\\\\Robo-FTP*\\\\FTPServers$",
+        ".*Software\\\\Ghisler\\\\Windows Commander$",
+        ".*Software\\\\Ghisler\\\\Total Commander$",
+        ".*Software\\\\BPFTP\\\\",
+        ".*Software\\\\BulletProof Software\\\\BulletProof FTP Client\\\\",
     ]
 
     def on_complete(self):
