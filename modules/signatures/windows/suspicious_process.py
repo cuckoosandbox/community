@@ -13,7 +13,7 @@ class CreatesSuspiciousProcess(Signature):
     minimum = "2.0"
 
     processes = [
-        "svchost", "powershell", "regsvr32",
+        "svchost", "powershell", "regsvr32", "bcdedit",
     ]
 
     def on_complete(self):
