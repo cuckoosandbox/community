@@ -14,6 +14,8 @@ class UsesWindowsUtilities(Signature):
     utilities = [
         "tasklist",
         "taskkill",
+        "netsh",
+        "netstat",
     ]
 
     def on_complete(self):
