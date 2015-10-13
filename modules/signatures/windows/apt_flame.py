@@ -45,11 +45,11 @@ class Flame(Signature):
         for indicator in self.mutexes_re:
             mutex = self.check_mutex(pattern=indicator, regex=True)
             if mutex:
-                self.mark_ioc("mutex", mutex=mutex)
+                self.mark_ioc("mutex", mutex)
 
         for indicator in self.regkeys_re:
             filepath = self.check_file(pattern=indicator, regex=True)
             if filepath:
-                self.mark_ioc("file", filepath=filepath)
+                self.mark_ioc("file", filepath)
 
         return self.has_marks()

@@ -32,6 +32,6 @@ class LocatesBrowser(Signature):
         for indicator in self.regkeys_re:
             regkey = self.check_key(pattern=indicator, regex=True)
             if regkey:
-                self.mark_ioc("regkey", regkey)
+                self.mark_ioc("registry", regkey)
 
         return self.has_marks()

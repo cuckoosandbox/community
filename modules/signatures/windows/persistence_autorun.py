@@ -58,7 +58,7 @@ class Autorun(Signature):
         for indicator in self.regkeys_re:
             regkey = self.check_key(pattern=indicator, regex=True, actions=["regkey_written"])
             if regkey:
-                self.mark_ioc("regkey", regkey)
+                self.mark_ioc("registry", regkey)
 
         for indicator in self.files_re:
             filepath = self.check_file(pattern=indicator, regex=True, actions=["file_written"])

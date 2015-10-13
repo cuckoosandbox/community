@@ -31,6 +31,6 @@ class AntiVMServices(Signature):
 
     def on_complete(self):
         for regkey in self.check_key("SYSTEM\\ControlSet001\\Services", all=True):
-            self.mark_ioc("services", regkey=regkey)
+            self.mark_ioc("registry", regkey)
 
         return self.has_marks()
