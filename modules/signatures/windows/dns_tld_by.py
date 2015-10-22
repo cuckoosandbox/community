@@ -14,13 +14,12 @@ class DNS_TLD_BY(Signature):
     minimum = "2.0"
 
     domains_re = [
-        ".*\\.by",
+        ".*\\.by$",
     ]
 
     def on_complete(self):
         for indicator in self.domains_re:
-            match = self.check_domain(pattern=indicator, regex=True)
-            if match:
-                self.mark_ioc("domain", match)
+            for domain in self.check_domain(pattern=indicator, regex=True, all=True):
+                self.mark_ioc("domain", domain)
 
         return self.has_marks()

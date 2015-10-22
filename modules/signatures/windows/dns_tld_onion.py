@@ -14,7 +14,7 @@ class DNS_TLD_ONION(Signature):
     minimum = "2.0"
 
     domains_re = [
-        ".*\\.onion"
+        ".*\\.onion$",
     ]
 
     def on_complete(self):
