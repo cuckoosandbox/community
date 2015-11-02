@@ -33,6 +33,6 @@ class PEFeatures(Signature):
                 if re.match(section_name_re, section["name"]):
                     break
             else:
-                self.mark(section=section["name"])
+                self.mark_ioc("section", section["name"])
 
         return self.has_marks()
