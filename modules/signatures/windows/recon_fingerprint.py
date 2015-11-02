@@ -27,6 +27,7 @@ class Fingerprint(Signature):
         ".*\\\\MachineGuid$",
         ".*\\\\DigitalProductId$",
         ".*\\\\SystemBiosDate$",
+        ".*Windows\\ NT\\\\CurrentVersion\\\\InstallDate$",
     ]
 
     def on_complete(self):
