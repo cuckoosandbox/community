@@ -21,6 +21,7 @@ class CreatesSuspiciousProcess(Signature):
         for cmdline in self.get_command_lines():
             for process in self.processes:
                 if process in cmdline.lower():
-                    self.mark(cmdline=cmdline, process=process)
+                    self.mark_ioc("cmdline", cmdline)
+                    break
 
         return self.has_marks()
