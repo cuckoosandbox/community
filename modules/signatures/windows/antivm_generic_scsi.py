@@ -23,11 +23,13 @@ class AntiVMSCSI(Signature):
     authors = ["nex"]
     minimum = "2.0"
 
-    indicator = \
-        "HARDWARE\\DEVICEMAP\\Scsi\\Scsi Port 0\\Scsi Bus 0\\" \
-        "Target Id 0\\Logical Unit Id 0\\Identifier"
+    regkeys_re = [
+        ".*\\\\HARDWARE\\\\DEVICEMAP\\\\Scsi\\\\Scsi Port \\d+\\\\Scsi Bus \\d+\\\\Target Id \\d+\\\\Logical Unit Id \\d+\\\\Identifier",
+    ]
 
     def on_complete(self):
-        if self.check_key(pattern=self.indicator):
-            self.mark_ioc("registry", self.indicator)
-            return True
+        for indicator in self.regkeys_re:
+            for regkey in self.check_key(pattern=indicator, regex=True, all=True):
+                self.mark_ioc("registry", regkey)
+
+        return self.has_marks()
