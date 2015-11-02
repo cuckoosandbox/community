@@ -21,4 +21,10 @@ class SandboxieDetect(Signature):
             for mutex in self.check_mutex(pattern=indicator, regex=True, all=True):
                 self.mark_ioc("mutex", mutex)
 
+        for filepath in self.check_file(pattern=".*sbiedll(\\.dll)?$", regex=True, all=True):
+            self.mark_ioc("file", filepath)
+
+        for dll in self.check_dll_loaded(pattern=".*sbiedll(\\.dll)?$", regex=True, all=True):
+            self.mark_ioc("dll", dll)
+
         return self.has_marks()

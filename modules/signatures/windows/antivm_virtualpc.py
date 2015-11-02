@@ -16,9 +16,21 @@ class VirtualPCDetect(Signature):
         ".*MicrosoftVirtualPC7UserServiceMakeSureWe'reTheOnlyOneMutex",
     ]
 
+    dlls_re = [
+        ".*vpc-s3\\.sys$",
+        ".*vpcubus\\.sys$",
+    ]
+
     def on_complete(self):
         for indicator in self.mutexes_re:
             for mutex in self.check_mutex(pattern=indicator, regex=True, all=True):
                 self.mark_ioc("mutex", mutex)
+
+        for indicator in self.dlls_re:
+            for filepath in self.check_file(pattern=indicator, regex=True, all=True):
+                self.mark_ioc("file", filepath)
+
+            for dll in self.check_dll_loaded(pattern=indicator, regex=True, all=True):
+                self.mark_ioc("dll", dll)
 
         return self.has_marks()

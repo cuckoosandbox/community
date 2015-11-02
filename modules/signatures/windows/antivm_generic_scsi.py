@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class AntiVMSCSI(Signature):
     name = "antivm_generic_scsi"
-    description = "Detects virtualization software with SCSI Disk Identifier trick"
+    description = "Detects virtualization software with SCSI Disk Identifier trick(s)"
     severity = 3
     categories = ["anti-vm"]
     authors = ["nex"]
@@ -25,6 +25,7 @@ class AntiVMSCSI(Signature):
 
     regkeys_re = [
         ".*\\\\HARDWARE\\\\DEVICEMAP\\\\Scsi\\\\Scsi Port \\d+\\\\Scsi Bus \\d+\\\\Target Id \\d+\\\\Logical Unit Id \\d+\\\\Identifier",
+        "HKEY_LOCAL_MACHINE\\\\SYSTEM\\\\ControlSet001\\\\Services\\\\Disk\\\\Enum\\\\0",
     ]
 
     def on_complete(self):
