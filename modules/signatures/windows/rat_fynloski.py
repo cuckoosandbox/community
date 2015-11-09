@@ -34,7 +34,7 @@ class Fynloski(Signature):
 
     files_re = [
         ".*msdcsc.*exe",
-        ".*MSDCSC.*",
+        #".*MSDCSC.*",
     ]
 
     def on_complete(self):
