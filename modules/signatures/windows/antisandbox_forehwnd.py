@@ -17,7 +17,7 @@ class AntiSandboxForegroundWindow(Signature):
     name = "antisandbox_foregroundwindows"
     description = "Checks whether any human activity is being performed " \
         "by constantly checking whether the foreground window changed"
-    severity = 3
+    severity = 2
     categories = ["anti-sandbox"]
     minimum = "2.0"
 

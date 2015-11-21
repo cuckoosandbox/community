@@ -23,9 +23,23 @@ class NetworkBIND(Signature):
     authors = ["nex", "Accuvant"]
     minimum = "2.0"
 
-    filter_apinames = "bind",
+    filter_apinames = "bind", "listen", "accept"
+
+    def init(self):
+        self.mask = 0
 
     def on_call(self, call, process):
         if call["api"] == "bind":
             self.mark_call()
-            return True
+            self.mask |= 1
+
+        if call["api"] == "listen":
+            self.mark_call()
+            self.mask |= 2
+
+        if call["api"] == "accept":
+            self.mark_call()
+            self.mask |= 4
+
+    def on_complete(self):
+        return self.mask == 7

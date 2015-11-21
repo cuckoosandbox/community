@@ -18,7 +18,7 @@ from lib.cuckoo.common.abstracts import Signature
 class Fingerprint(Signature):
     name = "recon_fingerprint"
     description = "Collects information to fingerprint the system (MachineGuid, DigitalProductId, SystemBiosDate)"
-    severity = 3
+    severity = 1
     categories = ["recon"]
     authors = ["nex"]
     minimum = "2.0"
