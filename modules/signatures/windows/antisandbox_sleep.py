@@ -32,7 +32,6 @@ class AntiSandboxSleep(Signature):
         sleep = call["arguments"]["milliseconds"]
         skip = call["arguments"]["skipped"]
         self.sleeps.append((process["process_name"], sleep, skip))
-        self.mark_call()
 
     def on_complete(self):
         proc_whitelist = [
