@@ -22,7 +22,7 @@ class InjectionRunPE(Signature):
 
     name = "injection_runpe"
     description = "Executed a process and injected code into it, probably while unpacking"
-    severity = 3
+    severity = 5
     categories = ["injection"]
     authors = ["glysbaysb", "Accuvant"]
     minimum = "2.0"

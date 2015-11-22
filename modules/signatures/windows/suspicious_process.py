@@ -14,7 +14,7 @@ class CreatesSuspiciousProcess(Signature):
 
     processes = [
         "svchost", "powershell", "regsvr32", "bcdedit", "mshta", "schtasks",
-        "wmic",
+        "wmic", "cmd.exe",
     ]
 
     def on_complete(self):
