@@ -20,7 +20,7 @@ class DumpedBuffer2(Signature):
     minimum = "2.0"
 
     def on_complete(self):
-        for entry in self.get_results("buffer"):
+        for entry in self.get_results("buffer", []):
             if entry["type"].startswith(("PE32", "MS-DOS")):
                 self.mark_ioc("buffer", "Buffer with sha1: %s" % entry["sha1"])
 
