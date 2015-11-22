@@ -18,7 +18,7 @@ from lib.cuckoo.common.abstracts import Signature
 class BrowserStealer(Signature):
     name = "infostealer_browser"
     description = "Steals private information from local Internet browsers"
-    severity = 3
+    severity = 2
     categories = ["infostealer"]
     authors = ["nex"]
     minimum = "2.0"
@@ -41,8 +41,7 @@ class BrowserStealer(Signature):
 
     def on_complete(self):
         for indicator in self.indicators:
-            filepath = self.check_file(pattern=indicator, regex=True)
-            if filepath:
+            for filepath in self.check_file(pattern=indicator, regex=True, all=True):
                 self.mark_ioc("file", filepath)
 
         return self.has_marks()

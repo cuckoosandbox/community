@@ -17,18 +17,19 @@ from lib.cuckoo.common.abstracts import Signature
 
 class RansomwareFiles(Signature):
     name = "ransomware_files"
-    description = "A process created a known ransomware decryption instruction / key file."
+    description = "Creates known ransomware decryption instruction / key file."
     severity = 3
     categories = ["ransomware"]
-    authors = ["KillerInstinct"]
+    authors = ["KillerInstinct", "Cuckoo Technologies"]
     minimum = "2.0"
 
     indicators = [
-        ".*\\\\help_decrypt.html$",
-        ".*\\\\decrypt_instruction.html$",
-        ".*\\\\decrypt_instructions.txt$",
-        ".*\\\\vault.key$",
-        ".*\\\\vault.txt$",
+        ".*\\\\help_decrypt\\.html$",
+        ".*\\\\decrypt_instruction\\.html$",
+        ".*\\\\decrypt_instructions\\.txt$",
+        ".*\\\\vault\\.key$",
+        ".*\\\\vault\\.txt$",
+        ".*\\\\HOWTO_RESTORE_FILES\\.(txt|html|bmp|jpg|jpeg|png|lnk)$",
     ]
 
     def on_complete(self):
