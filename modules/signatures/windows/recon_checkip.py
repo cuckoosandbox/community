@@ -57,6 +57,8 @@ class CheckIP(Signature):
         "www.showmyipaddress.com",
         "www.getmyip.org",
         "www.checkip.org",
+        "myip.nl",
+        "www.myip.nl",
     ]
 
     def on_complete(self):
