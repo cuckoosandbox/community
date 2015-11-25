@@ -34,6 +34,7 @@ class InjectionThread(Signature):
         "NtAllocateVirtualMemory",
         "NtWriteVirtualMemory",
         "CreateRemoteThread",
+        "CreateRemoteThreadEx",
         "NtQueueApcThread",
     ]
 
@@ -44,10 +45,16 @@ class InjectionThread(Signature):
         self.functions[process["pid"]] = set()
 
     def on_call(self, call, process):
+        # We're not interested in events to the local process. TODO Is there a
+        # better way to identify the current process?
+        process_handle = call["arguments"].get("process_handle")
+        if process_handle and process_handle.startswith("0xffffffff"):
+            return
+
         self.functions[process["pid"]].add(call["api"])
         self.mark_call()
 
     def on_complete(self):
         for pid, functions in self.functions.items():
-            if len(functions) >= len(self.filter_apinames)-2:
+            if len(functions) >= len(self.filter_apinames)-3:
                 return True
