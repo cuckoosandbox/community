@@ -63,6 +63,9 @@ class BadCerts(Signature):
 
         # BrowseFox / NetFilter
         "d8f6f0216a552e83080dfefd98ddd652e09e704c": "https://www.virustotal.com/en/file/ad5101cb617b7fda7a952271eb7655fc38360b04782967ce44703ac5ebf51e52/analysis/",
+
+        # eDellRoot
+        "98a04e4163357790c4a79e6d713ff0af51fe6927": "http://www.theregister.co.uk/2015/11/23/dude_youre_getting_pwned/",
     }
 
     cn_sigs = {
