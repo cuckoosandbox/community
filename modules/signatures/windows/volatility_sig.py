@@ -40,7 +40,7 @@ class VolLdrModules1(Signature):
             if not row["dll_in_init"] and not row["dll_in_load"] and \
                     not row["dll_in_mem"] and \
                     not row["process_name"].lower() in exceptions:
-                self.mark_vol("unlinked", row)
+                self.mark_vol("unlinked", dll=row)
 
         return self.has_marks()
 
@@ -58,7 +58,7 @@ class VolLdrModules2(Signature):
     def on_complete(self):
         for row in self.get_volatility("ldrmodules").get("data", []):
             if not row["process_name"]:
-                self.mark_vol("unlinked", row)
+                self.mark_vol("unlinked", dll=row)
 
         return self.has_marks()
 
@@ -76,7 +76,7 @@ class VolDevicetree1(Signature):
     def on_complete(self):
         for row in self.get_volatility("devicetree").get("data", []):
             if not row["driver_name"]:
-                self.mark_vol("unnamed_driver", row)
+                self.mark_vol("unnamed_driver", driver=row)
 
         return self.has_marks()
 
@@ -93,7 +93,7 @@ class VolSvcscan1(Signature):
         for row in self.get_volatility("svcscan").get("data", []):
             if row["service_name"] == "SharedAccess" and \
                     row["service_state"] == "SERVICE_STOPPED":
-                self.mark_vol("stopped_service", row)
+                self.mark_vol("stopped_service", service=row)
 
         return self.has_marks()
 
@@ -110,7 +110,7 @@ class VolSvcscan2(Signature):
         for row in self.get_volatility("svcscan").get("data", []):
             if row["service_name"] == "wscsvc" and \
                     row["service_state"] == "SERVICE_STOPPED":
-                self.mark_vol("stopped_service", row)
+                self.mark_vol("stopped_service", service=row)
 
         return self.has_marks()
 
@@ -127,7 +127,7 @@ class VolSvcscan3(Signature):
         for row in self.get_volatility("svcscan").get("data", []):
             if row["service_name"] == "ALG" and \
                     row["service_state"] == "SERVICE_STOPPED":
-                self.mark_vol("stopped_service", row)
+                self.mark_vol("stopped_service", service=row)
 
         return self.has_marks()
 
@@ -143,7 +143,7 @@ class VolModscan1(Signature):
     def on_complete(self):
         for row in self.get_volatility("modscan").get("data", []):
             if not row["kernel_module_name"]:
-                self.mark_vol("mysterious_kernel_module", row)
+                self.mark_vol("mysterious_kernel_module", kernel_module=row)
 
         return self.has_marks()
 
