@@ -29,7 +29,10 @@ class RansomwareFiles(Signature):
         ".*\\\\decrypt_instructions\\.txt$",
         ".*\\\\vault\\.key$",
         ".*\\\\vault\\.txt$",
-        ".*\\\\HOWTO_RESTORE_FILES\\.(txt|html|bmp|jpg|jpeg|png|lnk)$",
+        ".*\\\\howto_restore_files\\.(txt|html|bmp|jpg|jpeg|png|lnk)$",
+        ".*\\\\help_your_files\\.(png|html|txt)$",
+        ".*\\\\read\ me\ for\ decrypt\.txt$",
+        ".*\\\\your_files_are_encrypted\.html$",
     ]
 
     def on_complete(self):
