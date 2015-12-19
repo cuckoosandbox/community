@@ -25,9 +25,9 @@ class FTPStealer(Signature):
 
     files_re = [
         ".*\\\\CuteFTP\\\\sm\\.dat$",
-        ".*\\\\FlashFXP\\\\.*\\\\Sites\\.dat$",
-        ".*\\\\FileZilla\\\\sitemanager\\.xml$",
-        ".*\\\\FileZilla\\\\recentservers\\.xml$",
+        ".*\\\\CuteFTP\\ Lite\\\\sm\\.dat$",
+        ".*\\\\CuteFTP\\ Pro\\\\sm\\.dat$",
+        ".*\\\\FlashFXP\\\\.*\\\\(Sites|Quick|History)\\.dat$",
         ".*\\\\VanDyke\\\\Config\\\\Sessions.*",
         ".*\\\\FTP Explorer\\\\",
         ".*\\\\LeechFTP\\\\",
@@ -38,11 +38,16 @@ class FTPStealer(Signature):
         ".*\\\\FTPGetter\\\\",
         ".*\\\\ALFTP\\\\",
         ".*\\\\Ipswitch\\\\WS_FTP.*",
+        ".*\\\\wcx_ftp\\.ini$",
+        ".*\\\\32BitFtp\\.ini$",
+        ".*\\\\CoffeeCup\\ Software\\\\SharedSettings.*(sqlite|ccs)$",
+        ".*\\\\ExpanDrive\\\\drives\\.js$",
+        ".*\\\\FileZilla\\\\(sitemanager|recentservers|filezilla)\\.xml$",
     ]
 
     regkeys_re = [
-        ".*Software\\\\Far*\\\\Hosts$",
-        ".*Software\\\\Far*\\\\FTPHost$",
+        ".*Software\\\\Far.*\\\\Hosts$",
+        ".*Software\\\\Far.*\\\\FTPHost$",
         ".*Software\\\\FlashFXP\\\\",
         ".*Software\\\\TurboFTP\\\\",
         ".*Software\\\\Robo-FTP*\\\\FTPServers$",
@@ -50,6 +55,24 @@ class FTPStealer(Signature):
         ".*Software\\\\Ghisler\\\\Total Commander$",
         ".*Software\\\\BPFTP\\\\",
         ".*Software\\\\BulletProof Software\\\\BulletProof FTP Client\\\\",
+        ".*Software\\\\BPFTP\\\\Bullet\\ Proof\\ FTP",
+        ".*Software\\\\FTP\\ Explorer\\\\Profiles",
+        ".*\\\\CuteFTP\\ .\\ Professional\\\\QCToolbar",
+        ".*Software\\\\VanDyke\\\\SecureFX",
+        ".*Software\\\\South\\ River\\ Technologies\\\\WebDrive",
+        ".*Software\\\\LinasFTP",
+        ".*Software\\\\SoftX\\.org\\\\\FTPClient",
+        ".*Software\\\\Robo-FTP\\ 3\\.7",
+        ".*Software\\\\Sota\\\\FFFTP",
+        ".*Software\\\\LeechFTP",
+        ".*Software\\\\CoffeeCup\\ Software",
+        ".*Software\\\\FlashFXP",
+        ".*Software\\\\FTP\\ Explorer\\\\FTP\\ Explorer",
+        ".*Software\\\\FlashPeak\\\\BlazeFtp",
+        ".*Software\\\\LeapWare",
+        ".*Software\\\\SimonTatham\\\\PuTTY",
+        ".*Software\\\\Cryer\\\\WebSitePublisher",
+        ".*Software\\\\ExpanDrive",
     ]
 
     def on_complete(self):
