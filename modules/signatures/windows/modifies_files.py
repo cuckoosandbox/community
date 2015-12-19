@@ -15,9 +15,10 @@ from lib.cuckoo.common.abstracts import Signature
 
 class ModifiesFiles(Signature):
     name = "modifies_files"
-    description = "This sample modifies more than 5 files through " \
+    description = "This sample modifies more than %d files through " \
         "suspicious ways, likely a polymorphic virus or a ransomware"
     severity = 3
+    families = ["ransomware"]
     minimum = "2.0"
 
     filter_apinames = "MoveFileWithProgressW",
@@ -26,4 +27,16 @@ class ModifiesFiles(Signature):
         self.mark_call()
 
     def on_complete(self):
+        if self.has_marks(500):
+            self.description = self.description % 500
+            self.severity = 6
+        elif self.has_marks(100):
+            self.description = self.description % 100
+            self.severity = 5
+        elif self.has_marks(50):
+            self.description = self.description % 50
+            self.severity = 4
+        else:
+            self.description = self.description % 5
+
         return self.has_marks(5)
