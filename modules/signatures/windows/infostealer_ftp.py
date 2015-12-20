@@ -50,7 +50,7 @@ class FTPStealer(Signature):
         ".*Software\\\\Far.*\\\\FTPHost$",
         ".*Software\\\\FlashFXP\\\\",
         ".*Software\\\\TurboFTP\\\\",
-        ".*Software\\\\Robo-FTP*\\\\FTPServers$",
+        ".*Software\\\\Robo-FTP.*\\\\FTPServers$",
         ".*Software\\\\Ghisler\\\\Windows Commander$",
         ".*Software\\\\Ghisler\\\\Total Commander$",
         ".*Software\\\\BPFTP\\\\",
@@ -61,8 +61,7 @@ class FTPStealer(Signature):
         ".*Software\\\\VanDyke\\\\SecureFX",
         ".*Software\\\\South\\ River\\ Technologies\\\\WebDrive",
         ".*Software\\\\LinasFTP",
-        ".*Software\\\\SoftX\\.org\\\\\FTPClient",
-        ".*Software\\\\Robo-FTP\\ 3\\.7",
+        ".*Software\\\\SoftX\\.org\\\\FTPClient",
         ".*Software\\\\Sota\\\\FFFTP",
         ".*Software\\\\LeechFTP",
         ".*Software\\\\CoffeeCup\\ Software",
@@ -73,6 +72,9 @@ class FTPStealer(Signature):
         ".*Software\\\\SimonTatham\\\\PuTTY",
         ".*Software\\\\Cryer\\\\WebSitePublisher",
         ".*Software\\\\ExpanDrive",
+        ".*Software\\\\Martin\\ Prikryl",
+        ".*Software\\\\AceBIT",
+        ".*Software\\\\Nico\\ Mak\\ Computing\\\\WinZip",
     ]
 
     def on_complete(self):
