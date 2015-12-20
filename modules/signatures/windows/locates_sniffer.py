@@ -12,22 +12,22 @@ class LocatesSniffer(Signature):
     minimum = "2.0"
 
     regkeys_re = [
-        ".*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App\\ Paths\\\\Wireshark.exe",
-        ".*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall\\\\Wireshark",
+        ".*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App\\ Paths\\\\Wireshark.exe",
+        ".*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall\\\\Wireshark",
 
-        ".*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App\\ Paths\\\\Fiddler.exe",
-        ".*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall\\\\Fiddler",
+        ".*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App\\ Paths\\\\Fiddler.exe",
+        ".*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall\\\\Fiddler",
 
-        ".*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall\\\\Fiddler2",
-        ".*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App\\ Paths\\\\Fiddler2.exe",
+        ".*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall\\\\Fiddler2",
+        ".*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App\\ Paths\\\\Fiddler2.exe",
 
-        ".*SOFTWARE\\\\Classes\\\\SOFTWARE\\\\IEInspectorSoft\\\\HTTPAnalyzerAddon",
-        ".*SOFTWARE\\\\Classes\\\\IEHTTPAnalyzer\\.HTTPAnalyzerAddOn",
-        ".*SOFTWARE\\\\Classes\\\\HTTPAnalyzerStd\\.HTTPAnalyzerStandAlone",
+        ".*\\\\Software\\\\Classes\\\\SOFTWARE\\\\IEInspectorSoft\\\\HTTPAnalyzerAddon",
+        ".*\\\\Software\\\\Classes\\\\IEHTTPAnalyzer\\.HTTPAnalyzerAddOn",
+        ".*\\\\Software\\\\Classes\\\\HTTPAnalyzerStd\\.HTTPAnalyzerStandAlone",
 
-        ".*Software\\\\Classes\\\\Charles\\.AMF\\.Document",
-        ".*Software\\\\Classes\\\\Charles\\.Document",
-        ".*Software\\\\XK72\\ Ltd\\ folder",
+        ".*\\\\Software\\\\Classes\\\\Charles\\.AMF\\.Document",
+        ".*\\\\Software\\\\Classes\\\\Charles\\.Document",
+        ".*\\\\Software\\\\XK72\\ Ltd\\ folder",
     ]
 
     def on_complete(self):

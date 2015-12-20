@@ -20,7 +20,7 @@ class Rovnix(Signature):
     ]
 
     regkeys_re = [
-        ".*Software\\\\Microsoft\\\\Installer\\\\Products\\\\B[0-9]{9}",
+        ".*\\\\Software\\\\Microsoft\\\\Installer\\\\Products\\\\B[0-9]{9}",
     ]
 
     mutexes_re = [
