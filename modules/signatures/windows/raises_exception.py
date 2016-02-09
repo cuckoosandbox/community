@@ -1,4 +1,4 @@
-# Copyright (C) 2010-2015 Cuckoo Foundation.
+# Copyright (C) 2010-2016 Cuckoo Foundation.
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
@@ -6,12 +6,13 @@ from lib.cuckoo.common.abstracts import Signature
 
 class RaisesException(Signature):
     name = "raises_exception"
-    description = "One of the processes launched crashes"
+    description = "One or more processes crashed"
     severity = 1
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
 
-    def on_complete(self):
-        for stats in self.get_results("behavior", {}).get("apistats", {}).values():
-            if "__exception__" in stats:
-                return True
+    filter_apinames = "__exception__",
+
+    def on_call(self, call, process):
+        self.mark_call()
+        return True
