@@ -5,7 +5,7 @@
 from lib.cuckoo.common.abstracts import Signature
 
 class EvalJS(Signature):
-    name = "eval_js"
+    name = "js_eval"
     description = "Executes javascript"
     severity = 2
     categories = ["unpacking"]
