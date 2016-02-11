@@ -14,5 +14,10 @@ class RaisesException(Signature):
     filter_apinames = "__exception__",
 
     def on_call(self, call, process):
+        """Prettify the display of the call in the Signature."""
+        call["raw"] = "stacktrace",
+        call["arguments"]["stacktrace"] = \
+            "\n".join(call["arguments"]["stacktrace"])
+
         self.mark_call()
         return True
