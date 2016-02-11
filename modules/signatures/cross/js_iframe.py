@@ -18,6 +18,7 @@ class JsIframe(Signature):
 
     whitelist = [
         "https?://googleads\\.g\\.doubleclick\\.net/pagead/",
+        "https?://ad\\.doubleclick\\.net/ddm/",
     ]
 
     def on_call(self, call, process):
