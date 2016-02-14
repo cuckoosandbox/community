@@ -20,7 +20,7 @@ class StopsService(Signature):
 
     def on_complete(self):
         for regkey in self.check_key(pattern=self.indicator, regex=True, actions=["regkey_written"], all=True):
-            x = re.match(self.indicator, regkey)
+            x = re.match(self.indicator, regkey, re.I)
             self.mark_ioc("service", "%s (regkey %s)" % (x.group(1), regkey))
             self.severity += 1
 
