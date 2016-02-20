@@ -34,12 +34,12 @@ class HtmlFlash(Signature):
                 if key and value:
                     params[key.lower()] = value.lower()
 
-            if params not in results:
+            if params not in results and params.get("movie"):
                 results.append(params)
 
                 self.mark(
-                    movie=params.get("movie"),
-                    flashvars=params.get("flashvars"),
+                    movie=params["movie"],
+                    flashvars=params.get("flashvars", ""),
                 )
 
         return self.has_marks()
