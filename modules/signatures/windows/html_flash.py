@@ -43,3 +43,15 @@ class HtmlFlash(Signature):
                 )
 
         return self.has_marks()
+
+    def on_complete(self):
+        # Slightly hacky but will have to do for now.
+        for http in self.get_results("network", {}).get("http_ex", []):
+            if "x-flash-version:" in http["request"]:
+                self.mark(md5=http["md5"], sha1=http["sha1"])
+
+        for http in self.get_results("network", {}).get("https_ex", []):
+            if "x-flash-version:" in http["request"]:
+                self.mark(md5=http["md5"], sha1=http["sha1"])
+
+        return self.has_marks()
