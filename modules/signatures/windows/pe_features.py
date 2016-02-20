@@ -17,7 +17,7 @@ class PEFeatures(Signature):
     section_names = [
         ".text", ".rdata", ".data", ".pdata", ".DATA", ".reloc", ".idata",
         ".rsrc", ".shared", ".bss", ".edata", ".tls", ".CRT", ".eh_fram",
-        ".xdata",
+        ".xdata", "UPX0", "UPX1", "UPX2",
     ]
 
     section_names_re = [
