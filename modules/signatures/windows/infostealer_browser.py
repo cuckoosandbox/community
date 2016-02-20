@@ -28,8 +28,6 @@ class BrowserStealer(Signature):
         ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\secmod\\.db$",
         ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\cert8\\.db$",
         ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\key3\\.db$",
-        ".*\\\\History\\\\History\\.IE5\\\\index\\.dat$",
-        ".*\\\\Temporary\\\\ Internet\\ Files\\\\Content\.IE5\\\\index\\.dat$",
         ".*\\\\Application\\ Data\\\\Google\\\\Chrome\\\\.*",
         ".*\\\\Application\\ Data\\\\Opera\\\\.*",
         ".*\\\\Application\\ Data\\\\Chromium\\\\.*",
