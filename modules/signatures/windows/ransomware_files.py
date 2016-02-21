@@ -1,4 +1,5 @@
 # Copyright (C) 2015 KillerInstinct, Accuvant, Inc. (bspengler@accuvant.com)
+# Copyright (C) 2016 Cuckoo Foundation
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,8 +32,9 @@ class RansomwareFiles(Signature):
         ".*\\\\vault\\.txt$",
         ".*\\\\howto_restore_files\\.(txt|html|bmp|jpg|jpeg|png|lnk)$",
         ".*\\\\help_your_files\\.(png|html|txt)$",
-        ".*\\\\read\ me\ for\ decrypt\.txt$",
-        ".*\\\\your_files_are_encrypted\.html$",
+        ".*\\\\read\\ me\\ for\\ decrypt\\.txt$",
+        ".*\\\\your_files_are_encrypted\\.html$",
+        ".*\\\\recovery\\+[a-z0-9]+\\.txt$",
     ]
 
     def on_complete(self):
