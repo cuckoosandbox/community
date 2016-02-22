@@ -13,20 +13,29 @@ class RaisesException(Signature):
 
     filter_apinames = "__exception__",
 
+    exception_codes = {
+        "0xc0000139":
+            "Windows was unable to start this executable as it is importing "
+            "functions from DLLs that do not exist on this Operating System "
+            "(e.g., this binary only runs on Windows 7 and your Virtual "
+            "Machine is running Windows XP)",
+        "0xc0000135":
+            "Windows was unable to start this executable as it is importing "
+            "DLLs that do not exist on this Operating System (e.g., this "
+            "binary only runs on Windows 7 and your Virtual Machine is "
+            "running Windows XP)",
+    }
+
     def on_call(self, call, process):
         """Prettify the display of the call in the Signature."""
         call["raw"] = "stacktrace",
         call["arguments"]["stacktrace"] = \
             "\n".join(call["arguments"]["stacktrace"])
 
-        if call["arguments"]["exception"]["exception_code"] == "0xc0000139":
+        exception_code = call["arguments"]["exception"]["exception_code"]
+        if exception_code in self.exception_codes:
             self.severity = 5
-            self.description = (
-                "Windows was unable to start this executable as it is "
-                "importing functions from DLLs that do not exist on this "
-                "Operating System (e.g., this binary only runs on Windows 7 "
-                "and your Virtual Machine is running Windows XP)"
-            )
+            self.description = self.exception_codes[exception_code]
         else:
             # There's no point in keeping track of the API call for the
             # exception documented above.
