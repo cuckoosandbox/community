@@ -19,5 +19,17 @@ class RaisesException(Signature):
         call["arguments"]["stacktrace"] = \
             "\n".join(call["arguments"]["stacktrace"])
 
-        self.mark_call()
+        if call["arguments"]["exception"]["exception_code"] == "0xc0000139":
+            self.severity = 5
+            self.description = (
+                "Windows was unable to start this executable as it is "
+                "importing functions from DLLs that do not exist on this "
+                "Operating System (e.g., this binary only runs on Windows 7 "
+                "and your Virtual Machine is running Windows XP)"
+            )
+        else:
+            # There's no point in keeping track of the API call for the
+            # exception documented above.
+            self.mark_call()
+
         return True
