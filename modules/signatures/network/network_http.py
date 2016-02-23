@@ -24,5 +24,9 @@ class NetworkHTTP(Signature):
     minimum = "2.0"
 
     def on_complete(self):
-        if self.get_net_http():
-            return True
+        for http in getattr(self, "get_net_http_ex", lambda: [])():
+            self.mark_ioc("request", "%s %s://%s%s" % (
+                http["method"], http["protocol"], http["host"], http["uri"],
+            ))
+
+        return self.get_net_http() or self.has_marks()
