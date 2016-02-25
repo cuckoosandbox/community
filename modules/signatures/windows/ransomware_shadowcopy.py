@@ -14,13 +14,16 @@ class RansomwareShadowcopy(Signature):
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
 
-    indicator = (
-        "wmic.*shadowcopy.*delete.*(/nointeractive)?"
+    cmdline_re = (
+        "wmic.*shadowcopy.*delete.*(/nointeractive)?",
+        "vssadmin.*delete.*shadows",
     )
 
     def on_complete(self):
         for cmdline in self.get_command_lines():
-            if re.match(self.indicator, cmdline, re.I):
-                self.mark_ioc("cmdline", cmdline)
+            for regex in self.cmdline_re:
+                if re.match(regex, cmdline, re.I):
+                    self.mark_ioc("cmdline", cmdline)
+                    break
 
         return self.has_marks()
