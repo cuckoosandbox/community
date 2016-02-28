@@ -25,6 +25,7 @@ class Tor2Web(Signature):
 
     domains_re = [
         ".*\\.tor2web\\.[a-z]{2,20}$",
+        ".*\\.onion\\.[a-z]{2,20}$",
     ]
 
     def on_complete(self):
