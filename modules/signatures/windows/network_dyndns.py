@@ -68,8 +68,7 @@ class NetworkDynDNS(Signature):
 
     def on_complete(self):
         for indicator in self.domains_re:
-            match = self.check_domain(pattern=indicator, regex=True)
-            if match:
+            for match in self.check_domain(pattern=indicator, regex=True, all=True):
                 self.mark_ioc("domain", match)
 
         return self.has_marks()
