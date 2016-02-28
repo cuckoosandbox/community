@@ -64,7 +64,24 @@ class NetworkDynDNS(Signature):
         ".*\\.hopper\\.pw",
         ".*\\.couchpotatofries\\.",
         ".*\\.dyndns.*ip\\.com",
-    ]
+        ".*\\.dynamic-dns\\.net",
+        ".*\\.now-ip.org\\.net",
+        ".*\\.now-ip.net\\.net",
+        ".*\\.now-ip.net\\.xyz",
+        ".*\\.zapto\\.xyz",
+        ".*\\.mypi\\.co",
+        ".*\\.001www.com\\.com",
+        ".*\\.16-b\\.it",
+        ".*\\.32-b\\.it",
+        ".*\\.64-b\\.it",
+        ".*\\.crafting\\.xyz",
+        ".*\\.forums\\.info",
+        ".*\\.hicam\\.net",
+        ".*\\.myiphost\\.com",
+        ".*\\.mypi\\.co",
+        ".*\\.n4t\\.co",
+        ".*\\.tcp4\\.me",
+        ".*\\.x443\\.pw",
 
     def on_complete(self):
         for indicator in self.domains_re:
