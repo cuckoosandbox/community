@@ -23,10 +23,13 @@ class Tor2Web(Signature):
     authors = ["nex"]
     minimum = "2.0"
 
-    indicator = "^.*\.tor2web\.([a-z]{2,3})$"
+    domains_re = [
+        ".*\\.tor2web\\.[a-z]{2,20}$",
+    ]
 
     def on_complete(self):
-        for domain in self.check_domain(pattern=self.indicator, regex=True, all=True):
-            self.mark_ioc("domain", domain)
+        for regex in self.domains_re:
+            for domain in self.check_domain(pattern=regex, regex=True, all=True):
+                self.mark_ioc("domain", domain)
 
         return self.has_marks()
