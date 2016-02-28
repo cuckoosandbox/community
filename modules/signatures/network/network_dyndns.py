@@ -75,7 +75,7 @@ class NetworkDynDNS(Signature):
         ".*\\.32-b\\.it",
         ".*\\.64-b\\.it",
         ".*\\.crafting\\.xyz",
-        ".*\\.forums\\.info",
+        ".*\\.forumz\\.info",
         ".*\\.hicam\\.net",
         ".*\\.myiphost\\.com",
         ".*\\.mypi\\.co",
