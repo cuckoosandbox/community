@@ -1,4 +1,4 @@
-# Copyright (C) 2016 Justaguy Cybersprint B.V.
+# Copyright (C) 2016 Justaguy @ Cybersprint B.V.
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
