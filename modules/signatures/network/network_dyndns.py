@@ -82,6 +82,7 @@ class NetworkDynDNS(Signature):
         ".*\\.n4t\\.co",
         ".*\\.tcp4\\.me",
         ".*\\.x443\\.pw",
+    ]
 
     def on_complete(self):
         for indicator in self.domains_re:
