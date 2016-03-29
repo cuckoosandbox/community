@@ -32,6 +32,7 @@ class ZoneID(Signature):
             file_path = call["arguments"]["filepath"].lower()
             if file_path.endswith(':zone.identifier'):
                 self.zone_handle = call["arguments"]["file_handle"]
+                self.mark_call()
 
         if call["api"] == "NtWriteFile" and self.zone_handle:
             buf = call["arguments"]["buffer"].lower()
