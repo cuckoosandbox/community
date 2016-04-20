@@ -72,7 +72,7 @@ class KelihosBot(Signature):
     
     def on_complete(self):
         for http in self.get_net_http():
-            c2file = re.search(self.url_re, http["uri"])
-            if http["method"] == "GET" and http["user-agent"] in self.user_agent and c2file:
-               self.mark_ioc("request", http["uri"])
+            c2file = re.search(self.url_re, http.get("uri", ''))
+            if http.get("method", '') == "GET" and http.get("user-agent", '') in self.user_agent and c2file:
+               self.mark_ioc("request", http.get("uri", ''))
         return self.has_marks(2)
