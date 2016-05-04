@@ -26,9 +26,8 @@ class RansomwareFiles(Signature):
 
     indicators = [
         ".*\\\\help_decrypt\\.html$",
-        ".*\\\\decrypt_instruction\.html$",
+        ".*\\\\decrypt_instruction\.(html|txt)$",
         ".*\\\\help_your_files\.png$",
-        ".*\\\\decrypt_instructions\.txt$",
         ".*\\\\vault\.(key|txt)$",
         ".*\\\\!Decrypt-All-Files.*\.(txt|bmp)$",
         ".*\\\\help_restore_files\.txt$",
