@@ -29,5 +29,6 @@ class Prinimalka(Signature):
     def on_call(self, call, process):
         regkey = call["arguments"]["regkey"].lower()
         if regkey.endswith("_opt_server1"):
-            self.mark_call(c2=call["arguments"]["value"])
+            self.mark_call()
+            self.mark_ioc("cnc", call["arguments"]["value"])
             return True
