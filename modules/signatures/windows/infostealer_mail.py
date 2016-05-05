@@ -23,9 +23,31 @@ class MailStealer(Signature):
         ".*\\\\Software\\\\Microsoft\\\\Office\\\\Outlook\\\\OMI\\ Account\\ Manager",
         ".*\\\\Software\\\\RimArts\\\\B2\\\\Settings",
         ".*\\\\Software\\\\Poco\\ Systems\\ Inc",
+        ".*\\\\Software\\\\Mozilla\\\\Mozilla\\ Thunderbird",
+        # Well, strictly speaking..
+        ".*\\\\Software\\\\Google\\\\Google\\ Talk",
+    ]
+
+    files_re = [
+        ".*\\\\The\\ Bat!\\\\",
+        ".*\\\\ICQ\\\\",
+        ".*\\\\Miranda\\\\",
+        ".*\\\\SmartFTP\\\\",
+        ".*\\\\QIP\\\\",
+    ]
+
+    # To be replaced by a check_file(dirs=True) whenever we can do that in a
+    # backwards compatible way. Even better if we can provide an ioc=True to
+    # check_file() etc functions to return the IOC type for each result.
+    file_actions = [
+        "file_opened", "file_exists", "file_failed", "directory_enumerated",
     ]
 
     def on_complete(self):
+        for indicator in self.files_re:
+            for filepath in self.check_file(pattern=indicator, regex=True, all=True):
+                self.mark_ioc("file", filepath)
+
         for indicator in self.regkeys_re:
             registry = self.check_key(pattern=indicator, regex=True)
             if registry:

@@ -20,26 +20,37 @@ class BrowserStealer(Signature):
     description = "Steals private information from local Internet browsers"
     severity = 2
     categories = ["infostealer"]
-    authors = ["nex"]
+    authors = ["nex", "Cuckoo Technologies"]
     minimum = "2.0"
 
-    indicators = [
+    files_re = [
         ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\signons\\.sqlite$",
         ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\secmod\\.db$",
         ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\cert8\\.db$",
         ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\key3\\.db$",
-        ".*\\\\Application\\ Data\\\\Google\\\\Chrome\\\\.*",
-        ".*\\\\Application\\ Data\\\\Opera\\\\.*",
-        ".*\\\\Application\\ Data\\\\Chromium\\\\.*",
-        ".*\\\\Application\\ Data\\\\ChromePlus\\\\.*",
-        ".*\\\\Application\\ Data\\\\Nichrome\\\\.*",
-        ".*\\\\Application\\ Data\\\\Bromium\\\\.*",
-        ".*\\\\Application\\ Data\\\\RockMelt\\\\.*",
+        ".*\\\\(Application\\ Data|AppData).*?\\\\Google\\\\Chrome\\\\.*",
+        ".*\\\\(Application\\ Data|AppData).*?\\\\Opera\\\\.*",
+        ".*\\\\(Application\\ Data|AppData).*?\\\\Chromium\\\\.*",
+        ".*\\\\(Application\\ Data|AppData).*?\\\\ChromePlus\\\\.*",
+        ".*\\\\(Application\\ Data|AppData).*?\\\\Nichrome\\\\.*",
+        ".*\\\\(Application\\ Data|AppData).*?\\\\Bromium\\\\.*",
+        ".*\\\\(Application\\ Data|AppData).*?\\\\RockMelt\\\\.*",
+        ".*\\\\(Application\\ Data|AppData).*?\\\\Yandex\\\\YandexBrowser\\\\.*",
+    ]
+
+    regkeys_re = [
+        ".*\\\\Software\\\\Mozilla\\\\SeaMonkey",
+        ".*\\\\Software\\\\Opera\\ Software",
+        ".*\\\\Software\\\\Mozilla\\\\Mozilla\\ Firefox",
     ]
 
     def on_complete(self):
-        for indicator in self.indicators:
+        for indicator in self.files_re:
             for filepath in self.check_file(pattern=indicator, regex=True, all=True):
                 self.mark_ioc("file", filepath)
+
+        for indicator in self.regkeys_re:
+            for registry in self.check_key(pattern=indicator, regex=True, all=True):
+                self.mark_ioc("registry", registry)
 
         return self.has_marks()

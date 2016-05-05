@@ -20,7 +20,7 @@ class FTPStealer(Signature):
     description = "Harvests credentials from local FTP client softwares"
     severity = 3
     categories = ["infostealer"]
-    authors = ["nex", "RedSocks"]
+    authors = ["nex", "RedSocks", "Cuckoo Technologies"]
     minimum = "2.0"
 
     files_re = [
@@ -48,7 +48,7 @@ class FTPStealer(Signature):
     regkeys_re = [
         ".*\\\\Software\\\\Far.*\\\\Hosts$",
         ".*\\\\Software\\\\Far.*\\\\FTPHost$",
-        ".*\\\\Software\\\\FlashFXP\\\\",
+        ".*\\\\Software\\\\Far.*?\\\\FTP\\\\Hosts$",
         ".*\\\\Software\\\\TurboFTP\\\\",
         ".*\\\\Software\\\\Robo-FTP.*\\\\FTPServers$",
         ".*\\\\Software\\\\Ghisler\\\\Windows Commander$",
@@ -75,17 +75,16 @@ class FTPStealer(Signature):
         ".*\\\\Software\\\\Martin\\ Prikryl",
         ".*\\\\Software\\\\AceBIT",
         ".*\\\\Software\\\\Nico\\ Mak\\ Computing\\\\WinZip",
+        ".*\\\\Software\\\\FTPWare\\\\CoreFTP",
     ]
 
     def on_complete(self):
         for indicator in self.files_re:
-            filepath = self.check_file(pattern=indicator, regex=True)
-            if filepath:
+            for filepath in self.check_file(pattern=indicator, regex=True, all=True):
                 self.mark_ioc("file", filepath)
 
         for indicator in self.regkeys_re:
-            registry = self.check_key(pattern=indicator, regex=True)
-            if registry:
+            for registry in self.check_key(pattern=indicator, regex=True, all=True):
                 self.mark_ioc("registry", registry)
 
         return self.has_marks()
