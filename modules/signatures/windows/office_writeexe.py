@@ -32,7 +32,7 @@ class OfficeWriteEXE(Signature):
         pname = process["process_name"].lower()
         if pname in self.office_proc_list:
             buff = call["arguments"]["buffer"]
-            if buff and len(buff) > 2 and "MZ" in buff and "This program" in buff:
+            if buff and len(buff) > 2 and buff.startswith("MZ") and "This program" in buff:
                 self.mark_call()
 
     def on_complete(self):
