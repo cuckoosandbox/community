@@ -24,18 +24,20 @@ class ZoneID(Signature):
     authors = ["nex"]
     minimum = "2.0"
 
+    filter_apinames = "NtCreateFile", "NtWriteFile"
+
     def init(self):
         self.zone_handle = None
 
     def on_call(self, call, process):
         if call["api"] == "NtCreateFile":
             file_path = call["arguments"]["filepath"].lower()
-            if file_path.endswith(':zone.identifier'):
+            if file_path.endswith(":zone.identifier"):
                 self.zone_handle = call["arguments"]["file_handle"]
                 self.mark_call()
 
         if call["api"] == "NtWriteFile" and self.zone_handle:
             buf = call["arguments"]["buffer"].lower()
-            if "[zonetransfer]" in buf and "zoneid"in buf:
+            if "[zonetransfer]" in buf and "zoneid" in buf:
                 self.mark_call()
                 return True
