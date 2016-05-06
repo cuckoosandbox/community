@@ -4,8 +4,8 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class ShutdownSystem(Signature):
-    name = "shutdown_system"
+class AntiSandboxRestart(Signature):
+    name = "antisandbox_restart"
     description = "Attempts to shutdown or restart the system, generally used for bypassing sandboxing"
     severity = 3
     categories = ["anti-sandbox"]
