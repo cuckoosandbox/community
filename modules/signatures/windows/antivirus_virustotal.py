@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class KnownVirustotal(Signature):
     name = "antivirus_virustotal"
-    description = "File has been identified by at least %d AntiVirus engine/s on VirusTotal as malicious"
+    description = "File has been identified by at least one AntiVirus on VirusTotal as malicious"
     severity = 2
     categories = ["antivirus"]
     authors = ["Michael Boman", "nex", "Optiv"]
@@ -29,18 +29,16 @@ class KnownVirustotal(Signature):
             positives = results.get("positives")
             if positives > 40:
                 self.severity = 6
-                self.description = self.description % 40
+                self.description = "File has been identified by at least 40 AntiVirus engines on VirusTotal as malicious"
             elif positives > 30:
                 self.severity = 5
-                self.description = self.description % 30
+                self.description = "File has been identified by at least 30 AntiVirus engines on VirusTotal as malicious"
             elif positives > 20:
                 self.severity = 4
-                self.description = self.description % 20
+                self.description = "File has been identified by at least 20 AntiVirus engines on VirusTotal as malicious"
             elif positives > 10:
                 self.severity = 3
-                self.description = self.description % 10
-            elif positives < 10 or positives == 10:
-                self.description = self.description % 1
+                self.description = "File has been identified by at least 10 AntiVirus engines on VirusTotal as malicious"
 
             for engine, signature in results["scans"].items():
                 if signature["detected"]:
