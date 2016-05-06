@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class KnownVirustotal(Signature):
     name = "antivirus_virustotal"
-    description = "File has been identified by at least one AntiVirus on VirusTotal as malicious"
+    description = "File has been identified by at least one AntiVirus engine on VirusTotal as malicious"
     severity = 2
     categories = ["antivirus"]
     authors = ["Michael Boman", "nex", "Optiv"]
