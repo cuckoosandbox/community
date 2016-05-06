@@ -9,7 +9,7 @@ except ImportError:
 from lib.cuckoo.common.abstracts import Signature
 
 class AntiAnalysisDetectFile(Signature):
-    name = "antiav_detectfile"
+    name = "antianalysis_detectfile"
     description = "Attempts to identify installed analysis tools by a known file location"
     severity = 3
     categories = ["anti-analysis"]
