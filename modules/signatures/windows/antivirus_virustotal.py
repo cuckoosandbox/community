@@ -1,4 +1,4 @@
-# Copyright (C) 2012 Michael Boman (@mboman)
+# Copyright (C) 2012 Michael Boman (@mboman), Optiv, Inc. (brad.spengler@optiv.com)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,14 +17,33 @@ from lib.cuckoo.common.abstracts import Signature
 
 class KnownVirustotal(Signature):
     name = "antivirus_virustotal"
-    description = "File has been identified by at least one AntiVirus on VirusTotal as malicious"
+    description = "File has been identified by at least %d AntiVirus engine/s on VirusTotal as malicious"
     severity = 2
     categories = ["antivirus"]
-    authors = ["Michael Boman", "nex"]
+    authors = ["Michael Boman", "nex", "Optiv"]
     minimum = "2.0"
 
     def on_complete(self):
         results = self.get_virustotal()
         if results.get("positives"):
-            self.mark(positives=results["positives"])
-            return True
+            positives = results.get("positives")
+            if positives > 40:
+                self.severity = 6
+                self.description = self.description % 40
+            elif positives > 30:
+                self.severity = 5
+                self.description = self.description % 30
+            elif positives > 20:
+                self.severity = 4
+                self.description = self.description % 20
+            elif positives > 10:
+                self.severity = 3
+                self.description = self.description % 10
+            elif positives < 10 or positives == 10:
+                self.description = self.description % 1
+
+            for engine, signature in results["scans"].items():
+                if signature["detected"]:
+                    self.mark_ioc(engine, signature["result"])
+
+        return self.has_marks()
