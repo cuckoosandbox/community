@@ -25,7 +25,7 @@ class NetworkDocumentFile(Signature):
 
     proc_list =["wordview.exe","winword.exe","excel.exe","powerpnt.exe","outlook.exe","acrord32.exe","acrord64.exe"]
 
-    filter_apinames = set(["InternetCrackUrlW","InternetCrackUrlA","URLDownloadToFileW","HttpOpenRequestW","InternetReadFile","WSASend"])
+    filter_apinames = set(["InternetCrackUrlW","InternetCrackUrlA","URLDownloadToFileW","HttpOpenRequestW","InternetReadFile","WSASend","connect"])
     filter_analysistypes = set(["file"])
 
     def on_call(self, call, process):
