@@ -23,14 +23,14 @@ class ModifiesDesktopWallpaper(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
-    reg_indicators = [
+    regkeys_re = [
         ".*\\\\Control\\ Panel\\\\Desktop\\\\Wallpaper$",
         ".*\\\\Internet\\ Explorer\\\\Desktop\\\\General\\\\Wallpaper$",
     ]
 
     def on_complete(self):
-        for indicator in self.reg_indicators:
-            for regkey in self.check_key(pattern=indicator, regex=True, all=True):
+        for indicator in self.regkeys_re:
+            for regkey in self.check_key(pattern=indicator, regex=True, actions=["regkey_written"], all=True):
                 self.mark_ioc("registry", regkey)
 
         return self.has_marks()
