@@ -85,7 +85,6 @@ class BladabindiMutexes(Signature):
         ".*Trojan.*exe.*tmp",
         ".*Trojan.*exe.*config",
         ".*nsy1.tmp",
-        ".*ShellStyle.*dll",
     ]
 
     def on_complete(self):
