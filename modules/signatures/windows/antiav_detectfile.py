@@ -49,7 +49,7 @@ class AntiAVDetectFile(Signature):
         ".*\\\\G\\ DATA",
         ".*\\\\P\\ Tools",
         ".*\\\\P\\ Tools\\ Internet\\ Security",
-        ".*\\\\K7\\ omputing",
+        ".*\\\\K7\\ Computing",
         ".*\\\\Vba32",
         ".*\\\\Sunbelt\\ Software",
         ".*\\\\FRISK\\ Software",
