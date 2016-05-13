@@ -44,36 +44,36 @@ class InfoStealerC2Details(Signature):
 
         # Here we check for the interesting data appearing in buffers from network and crypto calls
         elif call["api"] == "CryptHashData":
-            buff = call["arguments"]["buffer"]
             if len(self.computerdetails) > 0:
+                buff = call["arguments"]["buffer"]
                 for compdetails in self.computerdetails:
                     if compdetails in buff:
                         self.mark_call()
 
         elif call["api"] == "HttpSendRequestW":
-            buff = call["arguments"]["post_data"]
             if len(self.computerdetails) > 0:
+                buff = call["arguments"]["post_data"]
                 for compdetails in self.computerdetails:
                     if compdetails in buff:
                         self.mark_call()
 
         elif call["api"] == "HttpOpenRequestW":
-            buff = call["arguments"]["path"]
             if len(self.computerdetails) > 0:
+                buff = call["arguments"]["path"]
                 for compdetails in self.computerdetails:
                     if compdetails in buff:
                         self.mark_call()
 
         elif call["api"] == "InternetCrackUrlW":
-            buff = call["arguments"]["url"]
             if len(self.computerdetails) > 0:
+                buff = call["arguments"]["url"]
                 for compdetails in self.computerdetails:
                     if compdetails in buff:
                         self.mark_call()
 
         elif call["api"] == "WSASend":
-            buff = call["arguments"]["buffer"]
             if len(self.computerdetails) > 0:
+                buff = call["arguments"]["buffer"]
                 for compdetails in self.computerdetails:
                     if compdetails in buff:
                         self.mark_call()
