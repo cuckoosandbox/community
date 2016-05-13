@@ -15,11 +15,11 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class InfoStealerC2Details(Signature):
-    name = "infostealer_c2_details"
+class NetworkC2Details(Signature):
+    name = "network_c2_details"
     description = "Queried details from the computer were then used in a network or crypto API call indicative of command and control communications/preperations"
     severity = 3
-    categories = ["infostealer","c2","network"]
+    categories = ["c2","network","infostealer"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
