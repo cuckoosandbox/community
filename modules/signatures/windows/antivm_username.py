@@ -23,7 +23,7 @@ class AntiVMUsernameQuery(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
-    filter_apinames = set(["GetUserNameA"])
+    filter_apinames = set(["GetUserNameA","GetUserNameW","GetUserNameExA","GetUserNameExW"])
 
     def on_call(self, call, process):
         self.mark_call()
