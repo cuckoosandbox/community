@@ -38,9 +38,9 @@ class NetworkC2Details(Signature):
                 self.computerdetails.append(compname)
 
         if call["api"] == "GetUserNameA":
-            compname = call["arguments"]["user_name"]
-            if compname:
-                self.computerdetails.append(compname)
+            username = call["arguments"]["user_name"]
+            if username:
+                self.computerdetails.append(username)
 
         # Here we check for the interesting data appearing in buffers from network and crypto calls
         elif call["api"] == "CryptHashData":
