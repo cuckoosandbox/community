@@ -19,7 +19,7 @@ class NetworkC2Details(Signature):
     name = "network_c2_details"
     description = "Queried details from the computer were then used in a network or crypto API call indicative of command and control communications/preperations"
     severity = 3
-    categories = ["c2","network","infostealer"]
+    categories = ["infostealer","c2","network"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
@@ -27,56 +27,51 @@ class NetworkC2Details(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.computerdetails = []
 
-    filter_apinames = set(["GetComputerNameA","GetUserNameA","CryptHashData","HttpSendRequestW","HttpOpenRequestW","InternetCrackUrlW","WSASend"])
+    filter_apinames = set(["GetComputerNameA","GetUserNameA","GetComputerNameW","GetUserNameW","CryptHashData","HttpSendRequestW","HttpOpenRequestW","InternetCrackUrlW","WSASend"])
     filter_analysistypes = set(["file"])
 
     def on_call(self, call, process):
         # Here we check for interesting bits of data which may be queried and used in cnc for computer identification
-        if call["api"] == "GetComputerNameA":
+        if call["api"] == "GetComputerNameA" or call["api"] == "GetComputerNameW":
             compname = call["arguments"]["computer_name"]
             if compname:
                 self.computerdetails.append(compname)
 
-        elif call["api"] == "GetUserNameA":
-            username = call["arguments"]["user_name"]
-            if username:
-                self.computerdetails.append(username)
+        if call["api"] == "GetUserNameA" or call["api"] == "GetUserNameW":
+            compname = call["arguments"]["user_name"]
+            if compname:
+                self.computerdetails.append(compname)
 
         # Here we check for the interesting data appearing in buffers from network and crypto calls
         elif call["api"] == "CryptHashData":
-            if len(self.computerdetails) > 0:
-                buff = call["arguments"]["buffer"]
-                for compdetails in self.computerdetails:
-                    if compdetails in buff:
-                        self.mark_call()
+            buff = call["arguments"]["buffer"]
+            for compdetails in self.computerdetails:
+                if compdetails in buff:
+                    self.mark_call()
 
         elif call["api"] == "HttpSendRequestW":
-            if len(self.computerdetails) > 0:
-                buff = call["arguments"]["post_data"]
-                for compdetails in self.computerdetails:
-                    if compdetails in buff:
-                        self.mark_call()
+            buff = call["arguments"]["post_data"]
+            for compdetails in self.computerdetails:
+                if compdetails in buff:
+                    self.mark_call()
 
         elif call["api"] == "HttpOpenRequestW":
-            if len(self.computerdetails) > 0:
-                buff = call["arguments"]["path"]
-                for compdetails in self.computerdetails:
-                    if compdetails in buff:
-                        self.mark_call()
+            buff = call["arguments"]["path"]
+            for compdetails in self.computerdetails:
+                if compdetails in buff:
+                    self.mark_call()
 
         elif call["api"] == "InternetCrackUrlW":
-            if len(self.computerdetails) > 0:
-                buff = call["arguments"]["url"]
-                for compdetails in self.computerdetails:
-                    if compdetails in buff:
-                        self.mark_call()
+            buff = call["arguments"]["url"]
+            for compdetails in self.computerdetails:
+                if compdetails in buff:
+                    self.mark_call()
 
         elif call["api"] == "WSASend":
-            if len(self.computerdetails) > 0:
-                buff = call["arguments"]["buffer"]
-                for compdetails in self.computerdetails:
-                    if compdetails in buff:
-                        self.mark_call()
+            buff = call["arguments"]["buffer"]
+            for compdetails in self.computerdetails:
+                if compdetails in buff:
+                    self.mark_call()
 
     def on_complete(self):
         return self.has_marks()
