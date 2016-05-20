@@ -32,42 +32,43 @@ class NetworkC2Details(Signature):
 
     def on_call(self, call, process):
         # Here we check for interesting bits of data which may be queried and used in cnc for computer identification
-        if call["api"] == "GetComputerNameA" or call["api"] == "GetComputerNameW":
+        api = call["api"]
+        if api == "GetComputerNameA" or api == "GetComputerNameW":
             compname = call["arguments"]["computer_name"]
             if compname:
                 self.computerdetails.append(compname)
 
-        if call["api"] == "GetUserNameA" or call["api"] == "GetUserNameW":
+        if api == "GetUserNameA" or api == "GetUserNameW":
             compname = call["arguments"]["user_name"]
             if compname:
                 self.computerdetails.append(compname)
 
         # Here we check for the interesting data appearing in buffers from network and crypto calls
-        elif call["api"] == "CryptHashData":
+        elif api == "CryptHashData":
             buff = call["arguments"]["buffer"]
             for compdetails in self.computerdetails:
                 if compdetails in buff:
                     self.mark_call()
 
-        elif call["api"] == "HttpSendRequestW":
+        elif api == "HttpSendRequestW":
             buff = call["arguments"]["post_data"]
             for compdetails in self.computerdetails:
                 if compdetails in buff:
                     self.mark_call()
 
-        elif call["api"] == "HttpOpenRequestW":
+        elif api == "HttpOpenRequestW":
             buff = call["arguments"]["path"]
             for compdetails in self.computerdetails:
                 if compdetails in buff:
                     self.mark_call()
 
-        elif call["api"] == "InternetCrackUrlW":
+        elif api == "InternetCrackUrlW":
             buff = call["arguments"]["url"]
             for compdetails in self.computerdetails:
                 if compdetails in buff:
                     self.mark_call()
 
-        elif call["api"] == "WSASend":
+        elif api == "WSASend":
             buff = call["arguments"]["buffer"]
             for compdetails in self.computerdetails:
                 if compdetails in buff:
