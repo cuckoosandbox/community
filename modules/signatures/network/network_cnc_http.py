@@ -84,22 +84,22 @@ class NetworkCnCHTTP(Signature):
                         suspectrequest.append(request)
 
         if post_noreferer > 0:
-            self.mark_ioc("post_no_referer", "HTTP traffic contains a POST request with no referer header")
+            self.mark_ioc("reason for suspicion", "HTTP traffic contains a POST request with no referer header")
 
         if post_nouseragent > 0:
-            self.mark_ioc("post_no_useragent", "HTTP traffic contains a POST request with no user-agent header")
+            self.mark_ioc("reason for suspicion", "HTTP traffic contains a POST request with no user-agent header")
 
         if get_nouseragent > 0:
-            self.mark_ioc("get_no_useragent", "HTTP traffic contains a GET request with no user-agent header")
+            self.mark_ioc("reason for suspicion", "HTTP traffic contains a GET request with no user-agent header")
 
         if version1 > 0:
-            self.mark_ioc("http_version_old", "HTTP traffic uses version 1.0")
+            self.mark_ioc("reason for suspicion", "HTTP traffic uses version 1.0")
 
         if iphost > 0:
-            self.mark_ioc("(ip_hostname", "HTTP connection was made to an IP address rather than domain name")
+            self.mark_ioc("(reason for suspicion", "HTTP connection was made to an IP address rather than domain name")
 
         if len(suspectrequest) > 0:
             for request in suspectrequest:
-                self.mark_ioc("suspicious_request", request)
+                self.mark_ioc("suspicious request", request)
 
         return self.has_marks()
