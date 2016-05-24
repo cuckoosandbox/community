@@ -40,6 +40,7 @@ class MailStealer(Signature):
         ".*\\\\Foxmail.*\\\\Accounts\.tdat$",
         ".*\\\\Thunderbird\\\\Profiles\\\\.*\.default$",
         ".*\\\\AppData\\\\Roaming\\\\Thunderbird\\\\profiles.ini$",
+         ".*\\\\The\\ Bat!\\\\",
     ]
 
     # To be replaced by a check_file(dirs=True) whenever we can do that in a
