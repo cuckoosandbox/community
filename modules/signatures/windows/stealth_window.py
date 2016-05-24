@@ -25,7 +25,17 @@ class Hidden_Window(Signature):
 
     filter_apinames = set(["ShellExecuteExW", "CreateProcessInternalW"])
 
-        if call["api"] == "ShellExecuteExW":
+    def on_call(self, call, process):
+        if call["api"] == "CreateProcessInternalW":
+            clbuf = call["arguments"]["command_line"].lower()
+            # Handle Powershell CommandLine Arguments
+            if "powershell" in clbuf and (re.search("-win[ ]+hidden", clbuf) or re.search("-windowstyle[ ]+hidden", clbuf)):
+                self.mark_call()
+            # CREATE_NO_WINDOW flag
+            elif call["flags"]["creation_flags"] == "CREATE_NO_WINDOW":
+                self.mark_call()
+
+        elif call["api"] == "ShellExecuteExW":
             if call["arguments"]["show_type"] == 0:
                 self.mark_call()
 
