@@ -22,6 +22,13 @@ class MailStealer(Signature):
         ".*\\\\Microsoft\\\\Internet\\ Account\\ Manager\\\\Accounts.*",
         ".*\\\\Software\\\\(Wow6432Node\\\\)?IncrediMail.*"
         ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\ Live\\ Mail.*",
+        ".*\\\\RIT\\\\The\\ Bat\\!",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\ Mail",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?RimArts\\\\B2\\\\Settings",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Poco\\ Systems\\ Inc",
+        ".*\\\\Software\\\\Mozilla\\\\Mozilla\\ Thunderbird",
+        # Well, strictly speaking..
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Google\\\\Google\\ Talk",
     ]
 
     files_re = [
