@@ -41,4 +41,6 @@ class PackerEntropy(Signature):
         if total_pe_data and float(total_compressed) / total_pe_data > .2:
             self.mark(entropy=float(total_compressed) / total_pe_data,
                       description="Overall entropy of this PE file is high")
+                      
+        return self.has_marks()
 
