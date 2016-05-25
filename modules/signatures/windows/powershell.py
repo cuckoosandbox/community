@@ -10,7 +10,7 @@ class SuspiciousPowershell(Signature):
     name = "suspicious_powershell"
     description = "Creates a suspicious Powershell process"
     severity = 3
-    categories = ["script", "dropper", "packer"]
+    categories = ["script", "dropper", "downloader", "packer"]
     authors = ["Kevin Ross", "Cuckoo Technologies"]
     minimum = "2.0"
 
