@@ -83,13 +83,19 @@ class Autorun(Signature):
                 self.mark_ioc("service name", servicename)
                 self.mark_ioc("service path", servicepath)
 
-        elif call["api"] == "RegSetValueExA":
+        elif call["api"] == "RegSetValueExA" or call["api"] == "RegSetValueExW" or call["api"] == "NtSetValueKey":
             regkey = call["arguments"]["regkey"]
             regvalue = call["arguments"]["value"]
-            for indicator in self.regkeys_re:
-                if re.match(indicator, regkey):
-                    self.mark_ioc("registry key", regkey)
-                    self.mark_ioc("registry value", regvalue)
+            in_whitelist = False
+            for whitelist in self.whitelists:
+                if re.match(whitelist, regkey, re.IGNORECASE):
+                    in_whitelist = True
+                    break
+            if not in_whitelist:
+                for indicator in self.regkeys_re:
+                    if re.match(indicator, regkey, re.IGNORECASE) and regvalue != "c:\\program files\\java\\jre7\\bin\jp2iexp.dll":
+                        self.mark_ioc("registry key", regkey)
+                        self.mark_ioc("registry value", regvalue)
 
     def on_complete(self):
         for indicator in self.files_re:
