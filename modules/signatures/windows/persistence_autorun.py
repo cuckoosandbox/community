@@ -17,7 +17,10 @@
 
 # Additional keys added from SysInternals Administrators Guide
 
-import re
+try:
+    import re2 as re
+except ImportError:
+    import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -64,18 +67,31 @@ class Autorun(Signature):
         ".*schtasks.*/create.*/sc",
     ]
 
-    filter_apinames = set(["CreateServiceA", "CreateServiceW"])
+    whitelists = [
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\{CAFEEFAC-0017-0000-FFFF-ABCDEFFEDCBA}\\\\InprocServer32\\\\.*",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\InprocServer32\\\\ThreadingModel$"
+    ]
+
+    filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey", "CreateServiceA", "CreateServiceW"])
 
     def on_call(self, call, process):
-        starttype = call["arguments"]["start_type"]
-        if starttype < 3:
-            self.mark_call()
+        if call["api"] == "CreateServiceA" or call["api"] == "CreateServiceW":
+            starttype = call["arguments"]["start_type"]
+            servicename = call["arguments"]["service_name"]
+            servicepath = call["arguments"]["filepath"]
+            if starttype < 3:
+                self.mark_ioc("service name", servicename)
+                self.mark_ioc("service path", servicepath)
+
+        elif call["api"] == "RegSetValueExA":
+            regkey = call["arguments"]["regkey"]
+            regvalue = call["arguments"]["value"]
+            for indicator in self.regkeys_re:
+                if re.match(indicator, regkey):
+                    self.mark_ioc("registry key", regkey)
+                    self.mark_ioc("registry value", regvalue)
 
     def on_complete(self):
-        for indicator in self.regkeys_re:
-            for regkey in self.check_key(pattern=indicator, regex=True, actions=["regkey_written"], all=True):
-                self.mark_ioc("registry", regkey)
-
         for indicator in self.files_re:
             for filepath in self.check_file(pattern=indicator, regex=True, actions=["file_written"], all=True):
                 self.mark_ioc("file", filepath)
