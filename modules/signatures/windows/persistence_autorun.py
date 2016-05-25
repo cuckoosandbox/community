@@ -83,7 +83,7 @@ class Autorun(Signature):
                 self.mark_ioc("service name", servicename)
                 self.mark_ioc("service path", servicepath)
 
-        elif call["api"] == "RegSetValueExA" or call["api"] == "RegSetValueExW" or call["api"] == "NtSetValueKey":
+        elif call["status"]:
             regkey = call["arguments"]["regkey"]
             regvalue = call["arguments"]["value"]
             in_whitelist = False
