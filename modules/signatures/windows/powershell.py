@@ -10,7 +10,7 @@ class SuspiciousPowershell(Signature):
     name = "suspicious_powershell"
     description = "Creates a suspicious Powershell process"
     severity = 3
-    categories = ["packer"]
+    categories = ["script", "dropper", "downloader", "packer"]
     authors = ["Kevin Ross", "Cuckoo Technologies"]
     minimum = "2.0"
 
@@ -29,6 +29,9 @@ class SuspiciousPowershell(Signature):
 
             if "-w hidden" in lower or "-windowstyle hidden" in lower:
                 self.mark(cmdline=cmdline, value="Attempts to execute command with a hidden window")
+
+            if "downloadfile(" in lower:
+                self.mark(cmdline=cmdline, value="Uses powershell to execute a file download from the command line")
 
             if "-enc" in lower or "-encodedcommand" in lower:
                 # This has to be improved.
