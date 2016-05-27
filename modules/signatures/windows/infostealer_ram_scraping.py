@@ -20,7 +20,7 @@ class InfostealerRamScraping(Signature):
     description = "Repeatedly reads process memory indicative of potential RAM scraping"
     severity = 2
     categories = ["infostealer", "pos"]
-    categories = ["Kevin Ross"]
+    authors = ["Kevin Ross"]
     minimum = "2.0"
 
     def on_complete(self):
