@@ -1,4 +1,4 @@
-# Copyright (C) 2014 Claudio "nex" Guarnieri (@botherder)
+# Copyright (C) 2014 Claudio "nex" Guarnieri (@botherder), Optiv, Inc. (brad.spengler@optiv.com)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,17 +15,37 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class Tor2Web(Signature):
+class TorGateway(Signature):
     name = "network_tor2web"
-    description = "Connects to Tor Hidden Services through Tor2Web"
+    description = "Connects to Tor Hidden Services through a Tor gateway"
     severity = 3
     categories = ["network"]
-    authors = ["nex"]
+    authors = ["nex", "Optiv"]
     minimum = "2.0"
 
     domains_re = [
         ".*\\.tor2web\\.[a-z]{2,20}$",
         ".*\\.onion\\.[a-z]{2,20}$",
+        ".*\.bortor\.com$",
+        ".*\.torpacho\.com$",
+        ".*\.torsanctions\.com$",
+        ".*\.torwild\.com$",
+        ".*\.pay2tor\.com$",
+        ".*\.tor2pay\.com$",
+        ".*\.tor4pay\.com$",
+        ".*\.pay4tor\.com$",
+        ".*\.torexplorer\.com$",
+        ".*\.tor\-gateways\.de$",
+        ".*\.torpaycash\.com$",
+        ".*\.torconnectpay\.com$",
+        ".*\.torwalletpay\.com$",
+        ".*\.walterwhitepay\.com$",
+        ".*\.rossulbrichtpay\.com$",
+        ".*\.42k2bu15\.com$",
+        ".*\.79fhdm16\.com$",
+        ".*\.myportopay\.com$",
+        ".*\.vivavtpaymaster\.com$",
+        ".*\.fraspartypay\.com$",
     ]
 
     def on_complete(self):
