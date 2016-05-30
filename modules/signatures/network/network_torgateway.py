@@ -16,7 +16,7 @@
 from lib.cuckoo.common.abstracts import Signature
 
 class TorGateway(Signature):
-    name = "network_tor2web"
+    name = "network_torgateway"
     description = "Connects to Tor Hidden Services through a Tor gateway"
     severity = 3
     categories = ["network"]
