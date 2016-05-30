@@ -24,8 +24,8 @@ class SunbeltDetectFiles(Signature):
     minimum = "2.0"
 
     file_indicators = [
-         ".*\\\\SandboxStarter\.exe$",
-         "C\:\\\\analysis\\\\.*",
+        ".*\\\\SandboxStarter\\.exe$",
+        "C\\:\\\\analysis\\\\.*",
     ]
 
     def on_complete(self):
