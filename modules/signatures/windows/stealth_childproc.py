@@ -12,11 +12,20 @@ class StealthChildProc(Signature):
     authors = ["Optiv"]
     minimum = "2.0"
 
-    filter_apinames = set(["NtCreateProcess","NtCreateProcessEx","RtlCreateUserProcess","CreateProcessInternalW"])
+    filter_apinames = [
+        "NtCreateProcess",
+        "NtCreateProcessEx",
+        "RtlCreateUserProcess",
+    ]
+
+    current_process = [
+        "0xffffffff",
+        "0xffffffffffffffff",
+    ]
 
     def on_call(self, call, process):
-        parenthandle = call["arguments"]["parent_handle"]
-        if parenthandle and parenthandle != "0xffffffff" and parenthandle != "0xffffffffffffffff":
+        process_handle = call["arguments"].get("parent_process_handle")
+        if process_handle and process_handle not in self.current_process:
             self.mark_call()
 
     def on_complete(self):
