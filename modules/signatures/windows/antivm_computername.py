@@ -23,7 +23,13 @@ class AntiVMComputernameQuery(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
-    filter_apinames = set(["GetComputerNameA","GetComputerNameW","GetComputerNameExA","GetComputerNameExW","gethostbyname"])
+    filter_apinames = [
+        "GetComputerNameA",
+        "GetComputerNameW",
+        "GetComputerNameExA",
+        "GetComputerNameExW",
+        "gethostbyname",
+    ]
 
     def on_call(self, call, process):
         self.mark_call()
