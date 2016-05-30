@@ -24,13 +24,12 @@ class AntiVMCPU(Signature):
     minimum = "2.0"
 
     regkeys_re = [
-        ".*\\HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\[^\\]+\\ProcessorNameString$",
+        ".*\\\\HARDWARE\\\\DESCRIPTION\\\\System\\\\CentralProcessor\\\\[^\\]+\\\\ProcessorNameString$",
     ]
 
     def on_complete(self):
         for indicator in self.regkeys_re:
-            regkey = self.check_key(pattern=indicator, regex=True)
-            if regkey:
+            for regkey in self.check_key(pattern=indicator, regex=True, all=True):
                 self.mark_ioc("registry", regkey)
 
         return self.has_marks()
