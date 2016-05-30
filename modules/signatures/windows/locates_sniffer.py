@@ -7,33 +7,35 @@ from lib.cuckoo.common.abstracts import Signature
 class LocatesSniffer(Signature):
     name = "locates_sniffer"
     description = "Tries to locate whether any sniffers are installed"
-    severity = 1
+    severity = 2
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
 
     regkeys_re = [
-        ".*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App\\ Paths\\\\Wireshark.exe",
-        ".*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall\\\\Wireshark",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\App\\ Paths\\\\Wireshark.exe",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall\\\\Wireshark",
 
-        ".*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App\\ Paths\\\\Fiddler.exe",
-        ".*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall\\\\Fiddler",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\App\\ Paths\\\\Fiddler.exe",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall\\\\Fiddler",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Fiddler2$",
 
-        ".*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall\\\\Fiddler2",
-        ".*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App\\ Paths\\\\Fiddler2.exe",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall\\\\Fiddler2",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\App\\ Paths\\\\Fiddler2.exe",
 
-        ".*\\\\Software\\\\Classes\\\\SOFTWARE\\\\IEInspectorSoft\\\\HTTPAnalyzerAddon",
-        ".*\\\\Software\\\\Classes\\\\IEHTTPAnalyzer\\.HTTPAnalyzerAddOn",
-        ".*\\\\Software\\\\Classes\\\\HTTPAnalyzerStd\\.HTTPAnalyzerStandAlone",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\SOFTWARE\\\\IEInspectorSoft\\\\HTTPAnalyzerAddon",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\IEHTTPAnalyzer\\.HTTPAnalyzerAddOn",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\HTTPAnalyzerStd\\.HTTPAnalyzerStandAlone",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\IEHTTPAnalyzerStd\\.HTTPAnalyzerStandAlone$",
 
-        ".*\\\\Software\\\\Classes\\\\Charles\\.AMF\\.Document",
-        ".*\\\\Software\\\\Classes\\\\Charles\\.Document",
-        ".*\\\\Software\\\\XK72\\ Ltd\\ folder",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\SOFTWARE\\\\IEInspectorSoft.*",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\Charles\\.AMF\\.Document",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\Charles\\.Document",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?XK72\\ Ltd\\ folder",
     ]
 
     def on_complete(self):
         for indicator in self.regkeys_re:
-            regkey = self.check_key(pattern=indicator, regex=True)
-            if regkey:
+            for regkey in self.check_key(pattern=indicator, regex=True, all=True):
                 self.mark_ioc("registry", regkey)
 
         return self.has_marks()
