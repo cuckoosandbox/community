@@ -28,7 +28,6 @@ class AntiVMComputernameQuery(Signature):
         "GetComputerNameW",
         "GetComputerNameExA",
         "GetComputerNameExW",
-        "gethostbyname",
     ]
 
     def on_call(self, call, process):
