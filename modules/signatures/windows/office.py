@@ -70,3 +70,18 @@ class OfficeHttpRequest(Signature):
         if len(call["arguments"]["args"]) == 3:
             self.mark_ioc("payload_url", call["arguments"]["args"][1])
             return True
+
+class OfficeRecentFiles(Signature):
+    name = "office_recent_files"
+    description = "Uses RecentFiles to determine whether it is running in a sandbox"
+    severity = 4
+    categories = ["vba"]
+    authors = ["Cuckoo Technologies"]
+    minimum = "2.0"
+
+    filter_apinames = "vbe6_Invoke",
+
+    def on_call(self, call, process):
+        if call["arguments"]["funcname"] == "RecentFiles":
+            self.mark_call()
+            return True

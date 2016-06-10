@@ -10,6 +10,9 @@ class HasWMI(Signature):
     name = "has_wmi"
     description = "Executes one or more WMI queries"
     severity = 2
+    categories = ["wmi"]
+    authors = ["Cuckoo Technologies"]
+    minimum = "2.0"
 
     blacklist = "(AntivirusProduct|FirewallProduct)"
 
@@ -21,3 +24,22 @@ class HasWMI(Signature):
                 self.severity = 3
 
         return self.has_marks()
+
+class Win32ProcessCreate(Signature):
+    name = "win32_process_create"
+    description = "Uses WMI to create a new process"
+    severity = 4
+    categories = ["wmi"]
+    authors = ["Cuckoo Technologies"]
+    minimum = "2.0"
+
+    filter_apinames = [
+        "IWbemServices_ExecMethod",
+        "IWbemServices_ExecMethodAsync",
+    ]
+
+    def on_call(self, call, process):
+        if call["arguments"]["class"] == "Win32_Process" and \
+                call["arguments"]["method"] == "Create":
+            self.mark_call()
+            return True
