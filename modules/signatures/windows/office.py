@@ -9,6 +9,7 @@ network_objects = [
     "msxml2.serverxmlhttp",
     "msxml2.xmlhttp",
     "msxml2.serverxmlhttp.6.0",
+    "winhttp.winhttprequest.5.1",
 ]
 
 class OfficeCreateObject(Signature):
