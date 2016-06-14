@@ -44,6 +44,9 @@ class VBoxDetectFiles(Signature):
         ".*VBoxGuest\\.[a-zA-Z]{3}$",
         ".*VBoxMouse\\.[a-zA-Z]{3}$",
         ".*VBoxVideo\\.[a-zA-Z]{3}$",
+        ".*\\\\VirtualBox\\ Guest\\ Additions\\\\uninst\.exe$",
+        ".*\\\\VirtualBox\\ Guest\\ Additions\\\\uninst\.exe\.dll$",
+        ".*\\\\vboxmrxnp\.dll$"
     ]
 
     def on_complete(self):
