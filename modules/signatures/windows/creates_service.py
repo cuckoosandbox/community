@@ -8,12 +8,29 @@ class CreatesService(Signature):
     name = "creates_service"
     description = "Creates a service"
     severity = 2
-    categories = ["service"]
-    authors = ["Cuckoo Technologies"]
+    categories = ["service", "persistance"]
+    authors = ["Cuckoo Technologies", "Kevin Ross"]
     minimum = "2.0"
 
-    filter_apinames = "CreateServiceA", "CreateServiceW"
+    filter_apinames = set(["CreateServiceA", "CreateServiceW","StartServiceA","StartServiceW"])
+
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.services = []
+        self.startedservices = []
 
     def on_call(self, call, process):
-        self.mark_call()
-        return True
+        if call["api"] == "CreateServiceA" or call["api"] == "CreateServiceW":
+            self.services.append(call["arguments"]["service_name"].lower())
+            self.mark_call()
+
+        elif call["api"] == "StartServiceA" or call["api"] == "StartServiceW":
+            self.startedservices.append(call["arguments"]["service_name"].lower())
+
+    def on_complete(self):
+        for service in self.services:
+            if service not in self.startedservices:
+                self.description = "Created a service where a service was also not started"
+                self.severity = 3
+
+        return self.has_marks()
