@@ -37,7 +37,7 @@ class PersistenceBootexecute(Signature):
             self.registry_writes[fullname] = call["arguments"]["value"]
 
     def on_complete(self):
-        match_key = self.check_key(pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\Session\\ Manager\\\\(BootExecute|SetupExecute|Execute|S0InitialCommand)$", regex=True, actions=["file_written"], all=True)
+        match_key = self.check_key(pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\Session\\ Manager\\\\(BootExecute|SetupExecute|Execute|S0InitialCommand)$", regex=True, actions=["regkey_written"], all=True)
         if match_key:
             self.found_bootexecute = True
             for match in match_key:
