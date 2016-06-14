@@ -1,64 +1,30 @@
-# Copyright (C) 2012 Claudio "nex" Guarnieri (@botherder)
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Copyright (C) 2010-2015 Cuckoo Foundation. Optiv, Inc. (brad.spengler@optiv.com)
+# This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
+# See the file 'docs/LICENSE' for copying permission.
 
 from lib.cuckoo.common.abstracts import Signature
 
-class VBoxDetectFiles(Signature):
-    name = "antivm_vbox_files"
-    description = "Detects VirtualBox through the presence of a file"
+class VMWareDetectFiles(Signature):
+    name = "antivm_vmware_files"
+    description = "Detects VMWare through the presence of various files"
     severity = 3
     categories = ["anti-vm"]
-    authors = ["nex"]
+    authors = ["Cuckoo Technologies", "Optiv"]
     minimum = "2.0"
 
-    indicators = [
-        ".*VBoxDisp\\.dll$",
-        ".*VBoxHook\\.dll$",
-        ".*VBoxMRXNP\\.dll$",
-        ".*VBoxOGL\\.dll$",
-        ".*VBoxOGLarrayspu\\.dll$",
-        ".*VBoxOGLcrutil\\.dll$",
-        ".*VBoxOGLerrorspu\\.dll$",
-        ".*VBoxOGLfeedbackspu\\.dll$",
-        ".*VBoxOGLpackspu\\.dll$",
-        ".*VBoxOGLpassthroughspu\\.dll$"
-        ".*VBoxDisp\\.dll$",
-        ".*VBoxSF\\.sys$",
-        ".*VBoxControl\\.exe$",
-        ".*VBoxService\\.exe$",
-        ".*VBoxTray\\.exe$",
-        ".*VBoxDrvInst\\.exe$",
-        ".*VBoxWHQLFake\\.exe$",
-        ".*VBoxGuest\\.[a-zA-Z]{3}$",
-        ".*VBoxMouse\\.[a-zA-Z]{3}$",
-        ".*VBoxVideo\\.[a-zA-Z]{3}$",
-        ".*\\\\VirtualBox\\ Guest\\ Additions\\\\uninst\.exe$",
-        ".*\\\\VirtualBox\\ Guest\\ Additions\\\\uninst\.exe\.dll$",
-        ".*\\\\vboxmrxnp\.dll$"
+    files_re = [
+        ".*vmmouse\\.sys",
+        ".*vmhgfs\\.sys",
+        ".*hgfs$",
+        ".*vmci$",
+        ".*\\\\VMware\\ Tools\\\\TPAutoConnSvc\.exe$",
+        ".*\\\\VMware\\ Tools\\\\TPAutoConnSvc\.exe\.dll$",
+        ".*\\\\Program\\ Files(\\ \(x86\))?\\\\VMware\\\\VMware\\ Tools.*",
     ]
 
     def on_complete(self):
-        for indicator in self.indicators:
-            filepath = self.check_file(pattern=indicator, regex=True)
-            if filepath:
+        for indicator in self.files_re:
+            for filepath in self.check_file(pattern=indicator, regex=True, all=True):
                 self.mark_ioc("file", filepath)
-                continue
-
-            dll = self.check_dll_loaded(pattern=indicator, regex=True)
-            if dll:
-                self.mark_ioc("dll", dll)
-                continue
 
         return self.has_marks()
