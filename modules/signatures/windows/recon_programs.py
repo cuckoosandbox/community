@@ -1,10 +1,6 @@
 # Copyright (C) 2014 Optiv, Inc. (brad.spengler@optiv.com), Updated 2016 for cuckoo 2.0
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
-try:
-    import re2 as re
-except ImportError:
-    import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -16,7 +12,7 @@ class InstalledApps(Signature):
     authors = ["Optiv"]
     minimum = "2.0"
 
-    filter_apinames = set(["RegQueryValueExA", "RegQueryValueExW"])
+    filter_apinames = "RegQueryValueExA", "RegQueryValueExW"
 
     def on_call(self, call, process):
         keyname = call["arguments"]["regkey"]
