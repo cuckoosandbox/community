@@ -8,7 +8,7 @@ class CreatesService(Signature):
     name = "creates_service"
     description = "Creates a service"
     severity = 2
-    categories = ["service", "persistance"]
+    categories = ["service", "persistence"]
     authors = ["Cuckoo Technologies", "Kevin Ross"]
     minimum = "2.0"
 
