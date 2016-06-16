@@ -12,11 +12,9 @@ class RemovesZoneIdADS(Signature):
     authors = ["Optiv"]
     minimum = "2.0"
 
-    filter_apinames = set(["DeleteFileA","DeleteFileW"])
-
-    def on_call(self, call, process):
-        if call["api"].startswith("DeleteFile") and call["arguments"]["filepath"].endswith(":Zone.Identifier"):
-            self.mark_call()
-
     def on_complete(self):
+        for deletedfile in self.get_files(actions=["file_deleted"]):
+            if deletedfile.endswith(":Zone.Identifier"):
+                self.mark_ioc("file", deletedfile)
+
         return self.has_marks()
