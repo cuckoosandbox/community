@@ -24,7 +24,7 @@ class HyperVDetectKeys(Signature):
     minimum = "2.0"
 
     regkeys_re = [
-        ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\ACPI\\\\Hyper_V_Gen_Counter_V1$",
+        ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\ACPI\\\\Hyper_V_Gen_Counter_V1",
     ]
 
     def on_complete(self):
