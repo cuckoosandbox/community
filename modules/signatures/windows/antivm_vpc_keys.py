@@ -24,8 +24,8 @@ class VPCDetectKeys(Signature):
     minimum = "2.0"
 
     regkeys_re = [
-        ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\PCI\\\\VEN_5333&DEV_8811&SUBSYS_00000000&REV_00$",
-        ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Services\\\\vpc-s3$",
+        ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\PCI\\\\VEN_5333&DEV_8811&SUBSYS_00000000&REV_00",
+        ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Services\\\\vpc-s3",
     ]
 
     def on_complete(self):
