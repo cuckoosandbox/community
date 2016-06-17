@@ -24,11 +24,11 @@ class VBoxDetectKeys(Signature):
     minimum = "2.0"
 
     regkeys_re = [
-        ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Oracle\\\\VirtualBox\\ Guest\\ Additions$",
-        ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall\\\\Oracle\\ VM\\ VirtualBox\\ Guest\\ Additions$",
-        ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\PCI\\\\VEN_80EE&DEV_BEEF&SUBSYS_00000000&REV_00$",
-        ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\PCI\\\\VEN_80EE&DEV_CAFE&SUBSYS_00000000&REV_00$",
-        ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\VirtualDeviceDrivers$",
+        ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Oracle\\\\VirtualBox\\ Guest\\ Additions",
+        ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall\\\\Oracle\\ VM\\ VirtualBox\\ Guest\\ Additions",
+        ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\PCI\\\\VEN_80EE&DEV_BEEF&SUBSYS_00000000&REV_00",
+        ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\PCI\\\\VEN_80EE&DEV_CAFE&SUBSYS_00000000&REV_00",
+        ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\VirtualDeviceDrivers",
         ".*\\\\HARDWARE\\\\ACPI\\\\(DSDT|FADT|RSDT)\\\\VBOX__.*",
     ]
     
