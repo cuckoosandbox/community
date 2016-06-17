@@ -24,7 +24,7 @@ class SandboxJoeAnubisDetectFiles(Signature):
     minimum = "2.0"
 
     file_indicators = [
-         "C\:\\\\sample\.exe$",
+         "C\:\\\\sample\.exe",
          "C\:\\\\InsideTm\\\\.*",
     ]
 
