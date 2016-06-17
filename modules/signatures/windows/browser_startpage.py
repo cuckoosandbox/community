@@ -24,7 +24,7 @@ class browser_startpage(Signature):
     minimum = "2.0"
 
     regkeys_re = [
-        ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\Main\\\\Start\\ Page$",
+        ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\Main\\\\Start\\ Page",
     ]
 
     def on_complete(self):
