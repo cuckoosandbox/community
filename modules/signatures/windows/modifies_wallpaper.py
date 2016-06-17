@@ -24,8 +24,8 @@ class ModifiesDesktopWallpaper(Signature):
     minimum = "2.0"
 
     regkeys_re = [
-        ".*\\\\Control\\ Panel\\\\Desktop\\\\Wallpaper$",
-        ".*\\\\Internet\\ Explorer\\\\Desktop\\\\General\\\\Wallpaper$",
+        ".*\\\\Control\\ Panel\\\\Desktop\\\\Wallpaper",
+        ".*\\\\Internet\\ Explorer\\\\Desktop\\\\General\\\\Wallpaper",
     ]
 
     def on_complete(self):
