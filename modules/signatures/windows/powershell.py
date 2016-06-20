@@ -21,7 +21,7 @@ class SuspiciousPowershell(Signature):
             if "powershell" not in lower:
                 continue
 
-            if "-ep bypass" in lower or "-executionpolicy bypass" in lower or "-ep unrestricted" in lower or "-executionpolicy unrestricted" in lower or "YnlwYXNz" in lower or "J5cGFzc" in lower or "ieXBhc3" in lower or ""dW5yZXN0cmljdGVk" in lower or "VucmVzdHJpY3RlZ" in lower or "1bnJlc3RyaWN0ZW" in lower:
+            if "-ep bypass" in lower or "-executionpolicy bypass" in lower or "-ep unrestricted" in lower or "-executionpolicy unrestricted" in lower or "YnlwYXNz" in lower or "J5cGFzc" in lower or "ieXBhc3" in lower or "dW5yZXN0cmljdGVk" in lower or "VucmVzdHJpY3RlZ" in lower or "1bnJlc3RyaWN0ZW" in lower:
                 self.mark(cmdline=cmdline, value="Attempts to bypass execution policy")
 
             if "-nop" in lower or "-noprofile" in lower:
