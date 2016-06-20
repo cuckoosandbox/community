@@ -33,11 +33,11 @@ class SuspiciousPowershell(Signature):
             if "downloadfile(" in lower or "ZG93bmxvYWRmaWxlK" in lower or "Rvd25sb2FkZmlsZS" in lower or "kb3dubG9hZGZpbGUo" in lower:
                 self.mark(cmdline=cmdline, value="Uses powershell to execute a file download from the command line")
 
-            if "-enc" in lower or "-encodedcommand" in lower or "-e ":
+            if "-enc" in lower or "-e " in lower:
                 # This has to be improved.
                 script, args = None, shlex.split(cmdline)
                 for idx, arg in enumerate(args):
-                    if "-enc" not in arg.lower() and "-encodedcommand" not in arg.lower():
+                    if "-enc" not in arg.lower() and "-e " not in arg.lower():
                         continue
 
                     try:
