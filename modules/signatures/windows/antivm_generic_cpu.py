@@ -24,7 +24,7 @@ class AntiVMCPU(Signature):
     minimum = "2.0"
 
     regkeys_re = [
-        ".*\\\\HARDWARE\\\\DESCRIPTION\\\\System\\\\CentralProcessor\\\\.*\\\\ProcessorNameString$",
+        ".*\\\\HARDWARE\\\\DESCRIPTION\\\\System\\\\CentralProcessor\\\\.*\\\\ProcessorNameString",
     ]
 
     def on_complete(self):
