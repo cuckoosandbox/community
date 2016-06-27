@@ -24,9 +24,9 @@ class ThreatTrackDetectFiles(Signature):
     minimum = "2.0"
 
     files_re = [
-        "^C:\\\\cwsandbox",
-        "^C:\\\\gfisandbox",
-        "^C:\\\\sandbox\\\\starter\.exe"
+        "C:\\\\cwsandbox",
+        "C:\\\\gfisandbox",
+        "C:\\\\sandbox\\\\starter\\.exe",
     ]
 
     def on_complete(self):
