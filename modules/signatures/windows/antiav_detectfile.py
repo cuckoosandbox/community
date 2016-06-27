@@ -68,8 +68,8 @@ class AntiAVDetectFile(Signature):
         ".*\\\\Malwarebytes",
         ".*\\\\Malwarebytes'\\ Anti-Malware",
         ".*\\\\Microsoft\\ Security\\ Client",
-        ".*\\\\System32\\\\drivers\\\\kl1\\.sys$",
-        ".*\\\\System32\\\\drivers\\\\(tm((actmon|comm)\\.|e(vtmgr\\.|ext\\.)|(nciesc|tdi)\\.)|TMEBC32\\.)sys$",
+        ".*\\\\System32\\\\drivers\\\\kl1\\.sys",
+        ".*\\\\System32\\\\drivers\\\\(tm((actmon|comm)\\.|e(vtmgr\\.|ext\\.)|(nciesc|tdi)\\.)|TMEBC32\\.)sys",
     ]
 
     def on_complete(self):
