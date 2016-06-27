@@ -24,9 +24,9 @@ class FortinetDetectFiles(Signature):
     minimum = "2.0"
 
     files_re = [
-        "^C:\\\\tracer\\\\mdare32_0\.sys",
-        "^C:\\\\tracer\\\\fortitracer\.exe",
-        "^C:\\\\manual\\\\sunbox\.exe",
+        "C:\\\\tracer\\\\mdare32_0\\.sys",
+        "C:\\\\tracer\\\\fortitracer\\.exe",
+        "C:\\\\manual\\\\sunbox\\.exe",
     ]
 
     def on_complete(self):
