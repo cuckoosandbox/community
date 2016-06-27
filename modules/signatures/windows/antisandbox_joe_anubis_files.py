@@ -24,8 +24,8 @@ class SandboxJoeAnubisDetectFiles(Signature):
     minimum = "2.0"
 
     file_indicators = [
-         "C\:\\\\sample\.exe",
-         "C\:\\\\InsideTm\\\\.*",
+        "C\\:\\\\sample\\.exe",
+        "C\\:\\\\InsideTm\\\\.*",
     ]
 
     def on_complete(self):
