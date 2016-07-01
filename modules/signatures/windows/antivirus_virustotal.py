@@ -27,16 +27,16 @@ class KnownVirustotal(Signature):
         results = self.get_virustotal()
         if results.get("positives"):
             positives = results.get("positives")
-            if positives > 40:
+            if positives >= 40:
                 self.severity = 6
                 self.description = "File has been identified by at least 40 AntiVirus engines on VirusTotal as malicious"
-            elif positives > 30:
+            elif positives >= 30:
                 self.severity = 5
                 self.description = "File has been identified by at least 30 AntiVirus engines on VirusTotal as malicious"
-            elif positives > 20:
+            elif positives >= 20:
                 self.severity = 4
                 self.description = "File has been identified by at least 20 AntiVirus engines on VirusTotal as malicious"
-            elif positives > 10:
+            elif positives >= 10:
                 self.severity = 3
                 self.description = "File has been identified by at least 10 AntiVirus engines on VirusTotal as malicious"
 
