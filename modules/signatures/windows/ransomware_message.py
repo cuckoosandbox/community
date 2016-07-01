@@ -69,6 +69,7 @@ class RansomwareMessage(Signature):
             "bootkit",
             "rootkit",
             "payment",
+            "victim",
             "AES128",
             "AES256",
             "AES 128",
