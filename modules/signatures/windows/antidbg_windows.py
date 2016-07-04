@@ -65,7 +65,7 @@ class AntiDBGWindows(Signature):
         "SmartSniff",
         "ConsoleWindowClass",
         "18467-41",
-    ]
+    ]]
 
     def on_call(self, call, process):
         for indicator in self.indicators:
