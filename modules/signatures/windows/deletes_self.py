@@ -29,7 +29,7 @@ class DeletesSelf(Signature):
         for process in self.get_results("behavior", {}).get("generic", []):
             for cmdline in process.get("summary", {}).get("command_line", []):
                 processes.append(cmdline)
-        
+
         if processes:
             for deletedfile in self.get_files(actions=["file_deleted"]):
                 if deletedfile in processes[0]:
