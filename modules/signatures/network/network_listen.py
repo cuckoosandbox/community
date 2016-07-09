@@ -15,31 +15,32 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class NetworkBIND(Signature):
-    name = "network_bind"
-    description = "Starts servers listening on {0}"
+class NetworkListen(Signature):
+    name = "network_listen"
+    description = "Starts listening on a network socket"
     severity = 2
-    categories = ["bind"]
-    authors = ["nex", "Accuvant"]
+    categories = ["network"]
+    authors = ["snemes", "nex", "Accuvant"]
     minimum = "2.0"
 
-    filter_apinames = "bind", "listen", "accept"
+    filter_apinames = {"bind", "listen"}
 
     def init(self):
-        self.mask = 0
+        self.binds = {}
 
     def on_call(self, call, process):
+        socket = call["arguments"].get("socket")
+        if not socket: return
         if call["api"] == "bind":
-            self.mark_call()
-            self.mask |= 1
-
-        if call["api"] == "listen":
-            self.mark_call()
-            self.mask |= 2
-
-        if call["api"] == "accept":
-            self.mark_call()
-            self.mask |= 4
+            self.binds[socket] = {
+                "pid": self.pid,
+                "cid": self.cid,
+                "call": self.call
+            }
+        elif call["api"] == "listen":
+            bind = self.binds.get(socket)
+            if not bind: return
+            self.mark(type="call", **bind)
 
     def on_complete(self):
-        return self.mask == 7
+        return self.has_marks()
