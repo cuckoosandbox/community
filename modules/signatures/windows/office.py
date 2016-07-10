@@ -86,3 +86,36 @@ class OfficeRecentFiles(Signature):
         if call["arguments"]["funcname"] == "RecentFiles":
             self.mark_call()
             return True
+
+class HasOfficeEps(Signature):
+    name = "has_office_eps"
+    description = "Located potentially malicious Encapsulated Post Script (EPS) file"
+    severity = 3
+    categories = ["office"]
+    authors = ["Cuckoo Technologies"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        office = self.get_results("static", {}).get("office", {})
+        if office.get("eps", []):
+            return True
+
+class OfficeEpsStrings(Signature):
+    name = "office_eps_strings"
+    description = "Suspicious keywords embedded in an Encapsulated Post Script (EPS) file"
+    severity = 3
+    categories = ["office"]
+    authors = ["Cuckoo Technologies"]
+    minimum = "2.0"
+
+    keywords = [
+        "longjmp", "NtCreateEvent", "NtProtectVirtualMemory",
+    ]
+
+    def on_complete(self):
+        office = self.get_results("static", {}).get("office", {})
+        for s in office.get("eps", []):
+            if s.strip() in self.keywords:
+                self.mark_ioc("eps_string", s)
+
+        return self.has_marks()
