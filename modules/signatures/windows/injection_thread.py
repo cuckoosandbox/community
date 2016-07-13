@@ -1,4 +1,4 @@
-# Copyright (C) 2012 JoseMi "h0rm1" Holguin (@j0sm1)
+# Copyright (C) 2012-2016 JoseMi "h0rm1" Holguin (@j0sm1), Optiv, Inc. (brad.spengler@optiv.com), KillerInstinct
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,45 +16,89 @@
 from lib.cuckoo.common.abstracts import Signature
 
 class InjectionThread(Signature):
-    """Instead of overly complicated, and easily bypassable, handle tracking
-    we're just looking at the functions that have been used in each process.
-    If a subset containing the majority of the functions required for creating
-    a remote thread have been used then we trigger this signature."""
-
     name = "injection_thread"
     description = "Code injection with CreateRemoteThread or NtQueueApcThread in a remote process"
     severity = 3
     categories = ["injection"]
-    authors = ["JoseMi Holguin", "nex", "Accuvant"]
+    authors = ["JoseMi Holguin", "nex", "Optiv", "KillerInstinct"]
     minimum = "2.0"
 
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.lastprocess = None
+
     filter_apinames = [
+        "OpenProcess",
         "NtOpenProcess",
         "NtMapViewOfSection",
         "NtAllocateVirtualMemory",
         "NtWriteVirtualMemory",
+        "VirtualAllocEx",
+        "WriteProcessMemory",
+        "NtWow64WriteVirtualMemory64",
         "CreateRemoteThread",
         "CreateRemoteThreadEx",
         "NtQueueApcThread",
     ]
 
-    def init(self):
-        self.functions = {}
-
-    def on_process(self, process):
-        self.functions[process["pid"]] = set()
-
     def on_call(self, call, process):
-        # We're not interested in events to the local process. TODO Is there a
-        # better way to identify the current process?
-        process_handle = call["arguments"].get("process_handle")
-        if process_handle and process_handle.startswith("0xffffffff"):
-            return
+        if process is not self.lastprocess:
+            self.sequence = 0
+            self.process_handles = set()
+            self.process_pids = set()
+            self.handle_map = dict()
+            self.lastprocess = process
 
-        self.functions[process["pid"]].add(call["api"])
-        self.mark_call()
-
-    def on_complete(self):
-        for pid, functions in self.functions.items():
-            if len(functions) >= len(self.filter_apinames)-3:
+        if call["api"] == "OpenProcess" and call["status"] == True:
+            if call["arguments"]["process_id"] != process["pid"]:
+                handle = call["return"]
+                pid = str(call["arguments"]["process_id"])
+                self.process_handles.add(handle)
+                self.process_pids.add(pid)
+                self.handle_map[handle] = pid
+        elif call["api"] == "NtOpenProcess" and call["status"] == True:
+            if call["arguments"]["process_identifier"] != process["pid"]:
+                handle = call["arguments"]["process_handle"]
+                pid = str(call["arguments"]["process_identifier"])
+                self.process_handles.add(handle)
+                self.process_pids.add(pid)
+                self.handle_map[handle] = pid
+        elif (call["api"] == "NtMapViewOfSection") and self.sequence == 0:
+            if call["arguments"]["process_handle"] in self.process_handles:
+                self.sequence = 2
+        elif (call["api"] == "VirtualAllocEx" or call["api"] == "NtAllocateVirtualMemory") and self.sequence == 0:
+            if call["arguments"]["process_handle"] in self.process_handles:
+                self.sequence = 1
+        elif (call["api"] == "NtWriteVirtualMemory" or call["api"] == "NtWow64WriteVirtualMemory64" or call["api"] == "WriteProcessMemory") and self.sequence == 1:
+            if call["arguments"]["process_handle"] in self.process_handles:
+                self.sequence = 2
+        elif (call["api"] == "NtWriteVirtualMemory" or call["api"] == "NtWow64WriteVirtualMemory64"  or call["api"] == "WriteProcessMemory") and self.sequence == 2:
+            handle = call["arguments"]["process_handle"]
+            if handle in self.process_handles:
+                addr = int(call["arguments"]["base_address"], 16)
+                buf = call["arguments"]["buffer"]
+                if addr >= 0x7c900000 and addr < 0x80000000 and buf.startswith("\\xe9"):
+                    self.description = "Code injection via WriteProcessMemory-modified NTDLL code in a remote process"
+                    #procname = self.get_name_from_pid(self.handle_map[handle])
+                    #desc = "{0}({1}) -> {2}({3})".format(process["process_name"], str(process["pid"]),
+                                                         #procname, self.handle_map[handle])
+                    #self.mark_ioc("Injection", desc)
+                    return True
+        elif (call["api"] == "CreateRemoteThread" or call["api"].startswith("NtCreateThread")) and self.sequence == 2:
+            handle = call["arguments"]["process_handle"]
+            if handle in self.process_handles:
+                #procname = self.get_name_from_pid(self.handle_map[handle])
+                #desc = "{0}({1}) -> {2}({3})".format(process["process_name"], str(process["pid"]),
+                                                     #procname, self.handle_map[handle])
+                #self.mark_ioc("Injection", desc)
                 return True
+        elif call["api"].startswith("NtQueueApcThread") and self.sequence == 2:
+            if str(call["arguments"]["process_id"]) in self.process_pids:
+                self.description = "Code injection with NtQueueApcThread in a remote process"
+                #desc = "{0}({1}) -> {2}({3})".format(self.lastprocess["process_name"], str(self.lastprocess["pid"]),
+                                                     #process["process_name"], str(process["process_id"]))
+                #self.mark_ioc("Injection", desc)
+                return True
+
+    #def on_complete(self):
+        #return self.has_marks()
