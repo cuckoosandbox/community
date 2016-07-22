@@ -28,3 +28,5 @@ class ADS(Signature):
             parts = filepath.replace("/", "\\").split("\\")
             if ":" in parts[-1]:
                 self.mark_ioc("file", filepath)
+                
+         return self.has_marks()
