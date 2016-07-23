@@ -29,4 +29,4 @@ class ADS(Signature):
             if ":" in parts[-1]:
                 self.mark_ioc("file", filepath)
                 
-         return self.has_marks()
+        return self.has_marks()
