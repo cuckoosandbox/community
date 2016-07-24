@@ -2,6 +2,8 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
+import ntpath
+
 from lib.cuckoo.common.abstracts import Signature
 
 network_objects = [
@@ -118,4 +120,61 @@ class OfficeEpsStrings(Signature):
             if s.strip() in self.keywords:
                 self.mark_ioc("eps_string", s)
 
+        return self.has_marks()
+
+class OfficeVulnerableGuid(Signature):
+    name = "office_vuln_guid"
+    description = "GUIDs known to be associated with a CVE were requested (may be False Positive)"
+    severity = 3
+    categories = ["office"]
+    authors = ["Cuckoo Technologies"]
+    minimum = "2.0"
+
+    bad_guids = {
+        "BDD1F04B-858B-11D1-B16A-00C0F0283628": "CVE-2012-0158",
+        "996BF5E0-8044-4650-ADEB-0B013914E99C": "CVE-2012-0158",
+        "C74190B6-8589-11d1-B16A-00C0F0283628": "CVE-2012-0158",
+        "9181DC5F-E07D-418A-ACA6-8EEA1ECB8E9E": "CVE-2012-0158",
+        "1EFB6596-857C-11D1-B16A-00C0F0283628": "CVE-2012-1856",
+        "66833FE6-8583-11D1-B16A-00C0F0283628": "CVE-2012-1856",
+        "1EFB6596-857C-11D1-B16A-00C0F0283628": "CVE-2013-3906",
+        "DD9DA666-8594-11D1-B16A-00C0F0283628": "CVE-2014-1761",
+        "00000535-0000-0010-8000-00AA006D2EA4": "CVE-2015-0097",
+        "0E59F1D5-1FBE-11D0-8FF2-00A0D10038BC": "CVE-2015-0097",
+        "05741520-C4EB-440A-AC3F-9643BBC9F847": "CVE-2015-1641",
+        "A08A033D-1A75-4AB6-A166-EAD02F547959": "CVE-2015-1641",
+        "F4754C9B-64F5-4B40-8AF4-679732AC0607": "CVE-2015-1641",
+        "4C599241-6926-101B-9992-00000B65C6F9": "CVE-2015-2424",
+        "44F9A03B-A3EC-4F3B-9364-08E0007F21DF": "CVE-2015-2424",
+    }
+
+    def on_complete(self):
+        summary = self.get_results("behavior", {}).get("summary", {})
+        for guid in summary.get("guid", []):
+            if guid.upper() in self.bad_guids:
+                self.mark_ioc("cve", self.bad_guids[guid.upper()])
+        return self.has_marks()
+
+class OfficeVulnModules(Signature):
+    name = "office_vuln_modules"
+    description = "Libraries known to be associated with a CVE were requested (may be False Positive)"
+    severity = 3
+    categories = ["office"]
+    authors = ["Cuckoo Technologies"]
+    minimum = "2.0"
+
+    bad_modules = {
+        "ogl.dll": "CVE-2013-3906",
+        "oart.dll": "CVE-2013-3906",
+        "packager.dll": "CVE-2014-4114/6352",
+        "olkloadr.dll": "CVE-2015-1641",
+        "epsimp32.flt": "CVE-2015-2545",
+    }
+
+    def on_complete(self):
+        summary = self.get_results("behavior", {}).get("summary", {})
+        for module in summary.get("dll_loaded", []):
+            module = ntpath.split(module)[1]
+            if module.lower() in self.bad_modules:
+                self.mark_ioc("cve", self.bad_modules[module.lower()])
         return self.has_marks()
