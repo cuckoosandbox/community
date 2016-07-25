@@ -5,7 +5,7 @@
 from lib.cuckoo.common.abstracts import Signature
 
 class ModifySecurityCenterWarnings(Signature):
-    name = "modifies_desktop_wallpaper"
+    name = "modifies_security_center_warnings"
     description = "modify_security_center_warnings"
     severity = 3
     categories = ["stealth"]
