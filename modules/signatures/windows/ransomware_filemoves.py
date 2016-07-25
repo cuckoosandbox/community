@@ -23,19 +23,23 @@ class RamsomwareFileMoves(Signature):
     filter_apinames = "MoveFileWithProgressW", "MoveFileWithProgressTransactedW"
 
     def on_call(self, call, process):
-        self.mark_call()
+        origfile = call["arguments"]["oldfilepath"]
+        newfile = call["arguments"]["newfilepath"]
+        if not origfile.endswith(".tmp") and not newfile.endswith(".tmp"):
+            self.mark_call()
 
     def on_complete(self):
-        if self.has_marks(500):
+        if self.has_marks(1000):
             self.description = self.description % 500
             self.severity = 6
+        if self.has_marks(600):
+            self.description = self.description % 500
+            self.severity = 5
         elif self.has_marks(100):
             self.description = self.description % 100
-            self.severity = 5
+            self.severity = 4
         elif self.has_marks(50):
             self.description = self.description % 50
-            self.severity = 4
-        else:
-            self.description = self.description % 5
+            self.severity = 3
 
-        return self.has_marks(5)
+        return self.has_marks(50)
