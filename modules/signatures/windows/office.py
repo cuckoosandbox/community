@@ -127,7 +127,7 @@ class OfficeVulnerableGuid(Signature):
     description = "GUIDs known to be associated with a CVE were requested (may be False Positive)"
     severity = 3
     categories = ["office"]
-    authors = ["Cuckoo Technologies"]
+    authors = ["Niels Warnars @ Cuckoo Technologies"]
     minimum = "2.0"
 
     bad_guids = {
@@ -160,7 +160,7 @@ class OfficeVulnModules(Signature):
     description = "Libraries known to be associated with a CVE were requested (may be False Positive)"
     severity = 3
     categories = ["office"]
-    authors = ["Cuckoo Technologies"]
+    authors = ["Niels Warnars @ Cuckoo Technologies"]
     minimum = "2.0"
 
     bad_modules = {
