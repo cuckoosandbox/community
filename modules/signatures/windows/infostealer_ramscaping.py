@@ -19,7 +19,7 @@ class InfoStealerRamScraping(Signature):
     name = "infostealer_ramscraping"
     description = "Appears to be performing RAM scraping to retrieve information from the memory of another process"
     severity = 3
-    categories = ["generic"]
+    categories = ["infostealer"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
