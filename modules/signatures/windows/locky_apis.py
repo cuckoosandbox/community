@@ -117,6 +117,6 @@ class Locky_APIs(Signature):
 
             if self.payment:
                 for url in self.payment:
-                    self.mark_ioc({"Payment", url})
+                    self.mark_ioc("Payment", url)
 
         return ret
