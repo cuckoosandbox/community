@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class ProcessNeeded(Signature):
     name = "process_needed"
-    description = "Repeatedly searches for a not-found process, may want to run a web browser"
+    description = "Repeatedly searches for a not-found process, you may want to run a web browser during analysis"
     severity = 2
     categories = ["generic"]
     authors = ["Optiv"]
