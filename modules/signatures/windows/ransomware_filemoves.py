@@ -13,30 +13,33 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class ModifiesFiles(Signature):
-    name = "modifies_files"
-    description = "This sample modifies more than %d files through " \
-        "suspicious ways, likely a polymorphic virus or a ransomware"
+class RamsomwareFileMoves(Signature):
+    name = "ransomware_file_moves"
+    description = "Performs more than %d file moves indicative of a ransomware file encryption process"
     severity = 3
     families = ["ransomware"]
     minimum = "2.0"
 
-    filter_apinames = "MoveFileWithProgressW",
+    filter_apinames = "MoveFileWithProgressW", "MoveFileWithProgressTransactedW"
 
     def on_call(self, call, process):
-        self.mark_call()
+        origfile = call["arguments"]["oldfilepath"]
+        newfile = call["arguments"]["newfilepath"]
+        if not origfile.endswith(".tmp") and not newfile.endswith(".tmp"):
+            self.mark_call()
 
     def on_complete(self):
-        if self.has_marks(500):
+        if self.has_marks(1000):
             self.description = self.description % 500
             self.severity = 6
+        if self.has_marks(600):
+            self.description = self.description % 500
+            self.severity = 5
         elif self.has_marks(100):
             self.description = self.description % 100
-            self.severity = 5
+            self.severity = 4
         elif self.has_marks(50):
             self.description = self.description % 50
-            self.severity = 4
-        else:
-            self.description = self.description % 5
+            self.severity = 3
 
-        return self.has_marks(5)
+        return self.has_marks(50)
