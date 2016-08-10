@@ -25,36 +25,46 @@ class RansomwareFiles(Signature):
     minimum = "2.0"
 
     indicators = [
-        ".*\\\\help_decrypt\\.html$",
-        ".*\\\\decrypt_instruction\.(html|txt)$",
-        ".*\\\\help_your_files\.png$",
-        ".*\\\\vault\.(key|txt)$",
-        ".*\\\\!Decrypt-All-Files.*\.(txt|bmp)$",
-        ".*\\\\help_restore_files\.txt$",
-        ".*\\\\help_to_save_files\.(txt|bmp)$",
-        ".*\\\\recovery_(file|key)\.txt$",
-        ".*\\\\restore_files_.*\.(txt|html)$",
-        ".*\\\\howto_restore_files.*\.(txt|html)$",
-        ".*\\\\+-xxx-HELP-xxx-+.*\.(png|txt|html)$",
-        ".*\\\\HELP_RECOVER_instructions\+.*\.(txt|html)$",
-        ".*\\\\YOUR_FILES_ARE_ENCRYPTED\.HTML$",
-        ".*\\\\_?how_recover.*\.(txt|html)$",
-        ".*\\\\cl_data.*\.bak$",
-        ".*\\\\READ\ ME\ FOR\ DECRYPT\.txt$",
-        ".*\\\\YOUR_FILES.url$",
-        ".*\\\\_How\ to\ decrypt\ LeChiffre\ files\.html$",
-        ".*\\\\cryptinfo\.txt$",
-        ".*\\\\README_DECRYPT_HYDRA_ID_.*(\.txt|\.jpg)$",
-        ".*\\\\_Locky_recover_instructions\.txt$",
-        ".*\\\\_DECRYPT_INFO_[a-z]{4,7}\.html$",
-        ".*\\\\de_crypt_readme\.(html|txt|bmp)$",
-        ".*\\\\HELP_YOUR_FILES\.(html|txt)$",
-        ".*\\\\READ_IT\.txt$",
+        (".*\\\\help_decrypt\.html$", ["CryptoWall"]),
+        (".*\\\\decrypt_instruction\.html$", ["CryptoWall"]),
+        (".*\\\\help_your_files\.png$", ["CryptoWall"]),
+        (".*\\\\decrypt_instructions\.txt$", ["CryptoLocker"]),
+        (".*\\\\vault\.(key|txt)$", ["CrypVault"]),
+        (".*\\\\!Decrypt-All-Files.*\.(txt|bmp)$", ["CTB-Locker"]),
+        (".*\\\\help_restore_files\.txt$", ["TeslaCrypt", "AlphaCrypt"]),
+        (".*\\\\help_to_save_files\.(txt|bmp)$", ["TeslaCrypt", "AlphaCrypt"]),
+        (".*\\\\recovery_(file|key)\.txt$", ["TeslaCrypt", "AlphaCrypt"]),
+        (".*\\\\restore_files_.*\.(txt|html)$", ["TeslaCrypt", "AlphaCrypt"]),
+        (".*\\\\howto_restore_files.*\.(txt|html)$", ["TeslaCrypt", "AlphaCrypt"]),
+        (".*\\\\+-xxx-HELP-xxx-+.*\.(png|txt|html)$", ["TeslaCrypt", "AlphaCrypt"]),
+        (".*\\\\HELP_RECOVER_instructions\+.*\.(txt|html)$", ["TeslaCrypt", "AlphaCrypt"]),
+        (".*\\\\YOUR_FILES_ARE_ENCRYPTED\.HTML$", ["Chimera"]),
+        (".*\\\\_?how_recover.*\.(txt|html)$", ["TeslaCrypt", "AlphaCrypt"]),
+        (".*\\\\cl_data.*\.bak$", ["WinPlock"]),
+        (".*\\\\READ\ ME\ FOR\ DECRYPT\.txt$", ["Fakben"]),
+        (".*\\\\YOUR_FILES.url$", ["Radamant"]),
+        (".*\\\\_How\ to\ decrypt\ LeChiffre\ files\.html$", ["LeChiffre"]),
+        (".*\\\\cryptinfo\.txt$", ["DMALocker"]),
+        (".*\\\\README_DECRYPT_HYDRA_ID_.*(\.txt|\.jpg)$", ["HydraCrypt"]),
+        (".*\\\\_Locky_recover_instructions\.txt$", ["Locky"]),
+        (".*\\\\_DECRYPT_INFO_[a-z]{4,6}\.html$", ["Maktub"]),
+        (".*\\\\de_crypt_readme\.(html|txt|bmp)$", ["CryptXXX"]),
+        (".*\\\\HELP_YOUR_FILES\.(html|txt)$", ["CryptFile2"]),
+        (".*\\\\READ_IT\.txt$", ["MMLocker"]),
+        (".*\\\\#\ DECRYPT\ MY\ FILES\ #\.(txt|html|vbs)$", ["Cerber"]),
+        (".*\\\\_HELP_instructions\.html$", ["Locky"]),
+        (".*\\\\!satana!.txt$", ["Satana"]),
+        (".*\\\\HOW_TO_UNLOCK_FILES_README_\([0-9a-f]+\)\.(txt|html|bmp)$", ["WildFire"]),
+        (".*\\\\HELP_DECRYPT_YOUR_FILES\.(html|txt)$", ["CryptFile2"]),
     ]
 
     def on_complete(self):
         for indicator in self.indicators:
-            for filepath in self.check_file(pattern=indicator, regex=True, all=True):
+            for filepath in self.check_file(pattern=indicator[0], actions=["file_written"], regex=True, all=True):
                 self.mark_ioc("file", filepath)
+                if indicator[1] != "":
+                    self.description = ("Creates a known {0} ransomware "
+                                        "decryption instruction / key file."
+                                        "".format("/".join(indicator[1])))                
 
         return self.has_marks()
