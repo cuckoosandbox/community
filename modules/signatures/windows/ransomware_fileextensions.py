@@ -51,6 +51,7 @@ class RansomwareExtensions(Signature):
         (".*\.[0-9A-F]{32}\.[0-9A-F]{5}$", ["CryptXXX"]),
         (".*\.id_[^\/]*\.scl$", ["CryptFile2"]),
         (".*\.razy$", ["Razy"]),
+        (".*\.Venus[a-z]$", ["VenusLocker"]),
     ]
 
     def on_complete(self):
