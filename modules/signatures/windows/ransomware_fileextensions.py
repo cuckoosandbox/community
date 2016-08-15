@@ -1,4 +1,4 @@
-# Copyright (C) 2016 Kevin Ross
+# Copyright (C) 2016 Kevin Ross, Uses code from KillerInstinct signature https://github.com/spender-sandbox/community-modified/blob/master/modules/signatures/ransomware_files.py
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
