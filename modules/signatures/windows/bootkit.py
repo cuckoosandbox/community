@@ -49,14 +49,14 @@ class Bootkit(Signature):
                 if handle not in self.handles:
                     self.handles[handle] = filename
                     self.mark_call()
-        elif call["api"] == "DeviceIoControl" or call["api"] == "NtDeviceIoControlFile":
-            ioctl = int(call["arguments"]["control_code"], 16)
+        elif (call["api"] == "DeviceIoControl" or call["api"] == "NtDeviceIoControlFile") and call["status"]:
+            ioctl = call["flags"]["control_code"]
             if call["api"] == "DeviceIoControl":
                 handle = int(call["arguments"]["device_handle"], 16)
             else:
                 handle = int(call["arguments"]["file_handle"], 16) 
             # IOCTL_SCSI_PASS_THROUGH_DIRECT
-            if handle in self.handles and ioctl == 0x4d014:
+            if handle in self.handles and ioctl == "IOCTL_SCSI_PASS_THROUGH_DIRECT":
                 self.mark_call()
                 self.bootkit = True
         elif call["api"] == "NtWriteFile":
@@ -67,4 +67,4 @@ class Bootkit(Signature):
 
     def on_complete(self):
         if self.bootkit:
-            return self.has_marks()
+            return self.has_marks()        
