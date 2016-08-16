@@ -52,11 +52,10 @@ class RansomwareFiles(Signature):
         (".*\\\\HELP_YOUR_FILES\.(html|txt)$", ["CryptFile2"]),
         (".*\\\\READ_IT\.txt$", ["MMLocker"]),
         (".*\\\\#\ DECRYPT\ MY\ FILES\ #\.(txt|html|vbs)$", ["Cerber"]),
-        (".*\\\\_HELP_instructions\.html$", ["Locky"]),
+        (".*\\\\_HELP_instructions\.(html|bmp)$", ["Locky"]),
         (".*\\\\!satana!.txt$", ["Satana"]),
         (".*\\\\HOW_TO_UNLOCK_FILES_README_\([0-9a-f]+\)\.(txt|html|bmp)$", ["WildFire"]),
         (".*\\\\HELP_DECRYPT_YOUR_FILES\.(html|txt)$", ["CryptFile2"]),
-        (".*\\\\_HELP_instructions\.(bmp|html)$", ["Locky"]),
     ]
 
     def on_complete(self):
