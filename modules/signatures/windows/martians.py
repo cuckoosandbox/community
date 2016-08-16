@@ -69,7 +69,7 @@ class ProcessMartian(Signature):
                     if pname not in self.martian_pnames:
                         self.martian_pnames.append(pname)
                     if cmdline != "":
-                        self.mark_ioc("martian process", cmdline)
+                        self.mark_ioc("process", cmdline)
 
         if len(self.martian_pnames) == 1:
             self.description = "One or more martian processes was created by the process "
