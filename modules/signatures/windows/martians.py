@@ -21,8 +21,6 @@ class ProcessMartian(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.whitelist_procs = [
             "iexplore.exe",
-            "firefox.exe",
-            "chrome.exe",
             "winword.exe",
             "outlook.exe",
             "powerpnt.exe",
