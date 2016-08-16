@@ -90,12 +90,13 @@ class RansomwareDroppedFiles(Signature):
         droppedcount = 0
 
         for dropped in self.get_results("dropped", []):
-            droppedtype = dropped["type"]
-            droppedname = dropped["name"]
-            filepath = dropped["filepath"]
-            if droppedtype == "data" and ".tmp" not in droppedname:
-                droppedcount += 1
-                self.mark_ioc("file", filepath)
+            if dropped["filepath"]:
+                droppedtype = dropped["type"]
+                droppedname = dropped["name"]
+                filepath = dropped["filepath"]
+                if droppedtype == "data" and ".tmp" not in droppedname:
+                    droppedcount += 1
+                    self.mark_ioc("file", filepath)
         if droppedcount > 50:
             if droppedcount > 1000:
                 self.severity = 6
