@@ -23,14 +23,19 @@ class WscriptDownloader(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
-    script_proc_list =["wscript.exe"]
+    filter_apinames = [
+        "InternetCrackUrlW",
+        "InternetCrackUrlA",
+        "URLDownloadToFileW",
+        "HttpOpenRequestW",
+        "InternetReadFile",
+        "WSASend",
+    ]
 
-    filter_apinames = set(["InternetCrackUrlW","InternetCrackUrlA","URLDownloadToFileW","HttpOpenRequestW","InternetReadFile","WSASend"])
-    filter_analysistypes = set(["file"])
+    filter_analysistypes = "file",
 
     def on_call(self, call, process):
-        pname = process["process_name"].lower()
-        if pname in self.script_proc_list:
+        if process["process_name"].lower() == "wscript.exe":
             self.mark_call()
 
     def on_complete(self):
