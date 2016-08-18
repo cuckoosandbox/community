@@ -26,6 +26,10 @@ class Dropper(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.executed = []
+        self.exe = False
+        if self.get_results("target", {}).get("category") == "file":
+            if "PE32 executable" in self.get_results("target", {})["file"]["type"]:
+                self.exe = True
 
     filter_apinames = set(["CreateProcessInternalW","ShellExecuteExW"])
 
@@ -41,5 +45,7 @@ class Dropper(Signature):
                     filepath = dropped["filepath"]
                     if executed == filepath:
                         self.mark_ioc("file", executed)
+                        if not self.exe:
+                            self.severity = 3
 
         return self.has_marks()
