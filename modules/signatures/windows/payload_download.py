@@ -62,7 +62,7 @@ class NetworkEXE(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.pname = []
-        self.high_risk_proc = ["wordview.exe","winword.exe","excel.exe","powerpnt.exe","outlook.exe","acrord32.exe","acrord64.exe","wscript.exe","java.exe"]
+        self.high_risk_proc = ["wordview.exe","winword.exe","excel.exe","powerpnt.exe","outlook.exe","acrord32.exe","acrord64.exe","wscript.exe","java.exe","javaw.exe"]
 
     filter_apinames = set(["recv", "InternetReadFile"])
     filter_analysistypes = set(["file"])
@@ -99,7 +99,7 @@ class SuspiciousWriteEXE(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.pname = []
-        self.susp_proc_list =["wordview.exe","winword.exe","excel.exe","powerpnt.exe","outlook.exe","wscript.exe","java.exe"]
+        self.susp_proc_list =["wordview.exe","winword.exe","excel.exe","powerpnt.exe","outlook.exe","wscript.exe","java.exe","javaw.exe"]
 
     filter_apinames = set(["NtWriteFile"])
     filter_analysistypes = set(["file"])
