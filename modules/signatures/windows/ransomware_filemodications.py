@@ -90,7 +90,7 @@ class RansomwareDroppedFiles(Signature):
         droppedcount = 0
 
         for dropped in self.get_results("dropped", []):
-            if dropped["filepath"]:
+            if "filepath" in dropped:
                 droppedtype = dropped["type"]
                 droppedname = dropped["name"]
                 filepath = dropped["filepath"]
