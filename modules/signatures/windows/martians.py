@@ -74,11 +74,11 @@ class ProcessMartian(Signature):
                         self.mark_ioc("process", cmdline)
 
         if len(self.martian_pnames) == 1:
-            self.description = "A martian process was created by the process "
+            self.description = "One or more martian processes was created by the process "
             for pname in self.martian_pnames:
                 self.description += pname
         elif len(self.martian_pnames) > 1:
-            self.description = "Multiple martian processes was created by the processes "
+            self.description = "One or more martian processes was created by the processes "
             list = ", ".join(self.martian_pnames )
             self.description += list
         return self.has_marks()
