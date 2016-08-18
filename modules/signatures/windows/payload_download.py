@@ -99,9 +99,8 @@ class SuspiciousWriteEXE(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.pname = []
         self.susp_proc_list =["wordview.exe","winword.exe","excel.exe","powerpnt.exe","outlook.exe","wscript.exe","java.exe","javaw.exe"]
-        self.exes = []
         self.executed = False
-        self.executedfail = False
+        self.exes = []
 
     filter_apinames = set(["NtWriteFile","CreateProcessInternalW","ShellExecuteExW"])
 
@@ -116,33 +115,25 @@ class SuspiciousWriteEXE(Signature):
                         self.pname.append(pname)
                     if filepath not in self.exes:
                         self.exes.append(filepath)                
-                    self.mark_call()
 
             if call["api"] == "CreateProcessInternalW" or call["api"] == "ShellExecuteExW":
                 filepath = call["arguments"]["filepath"]
                 if filepath in self.exes and pname in self.pname:
-                    self.executed = True
-                    self.mark_call()
-                    if call["status"] == 0:
-                        self.executedfail = True              
+                    self.executed = True               
 
     def on_complete(self):
         if len(self.pname) == 1:
             for pname in self.pname:
                 self.description = "The process %s wrote an executable file to disk" % pname
-                if self.executed and self.executedfail:
-                    self.description += " which it then attempted to execute but failed. This is indicative of a failed payload download being executed"
-                    self.severity == 6
-                elif self.executed:
-                    self.description += " which was then executed"
+                if self.executed:
+                    self.description += " which it then attempted to execute"
                     self.severity == 6
         elif len(self.pname) > 1:
             list = ", ".join(self.pname )
             self.description = "The processes %s wrote an executable file to disk" % list
-            if self.executed and self.executedfail:
-                self.description += " which it then attempted to execute but failed. This is indicative of a failed payload download being executed"
+            if self.executed:
+                self.description += " which it then attempted to execute"
                 self.severity == 6
-            elif self.executed:
-                self.description += " which was then executed"
-                self.severity == 6
+        for exe in self.exes:
+            self.mark_ioc("file", exe)
         return self.has_marks()
