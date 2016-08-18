@@ -65,7 +65,6 @@ class NetworkEXE(Signature):
         self.high_risk_proc = ["wordview.exe","winword.exe","excel.exe","powerpnt.exe","outlook.exe","acrord32.exe","acrord64.exe","wscript.exe","java.exe","javaw.exe"]
 
     filter_apinames = set(["recv", "InternetReadFile"])
-    filter_analysistypes = set(["file"])
 
     def on_call(self, call, process):
         buf = call["arguments"]["buffer"]
@@ -100,24 +99,50 @@ class SuspiciousWriteEXE(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.pname = []
         self.susp_proc_list =["wordview.exe","winword.exe","excel.exe","powerpnt.exe","outlook.exe","wscript.exe","java.exe","javaw.exe"]
+        self.exes = []
+        self.executed = False
+        self.executedfail = False
 
-    filter_apinames = set(["NtWriteFile"])
-    filter_analysistypes = set(["file"])
+    filter_apinames = set(["NtWriteFile","CreateProcessInternalW","ShellExecuteExW"])
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()
         if pname in self.susp_proc_list:
-            buff = call["arguments"]["buffer"]
-            if buff and len(buff) > 2 and buff.startswith("MZ") and "This program" in buff:
-                if pname not in self.pname:
-                    self.pname.append(pname)               
-                self.mark_call()
+            if call["api"] == "NtWriteFile":
+                buff = call["arguments"]["buffer"]
+                filepath = call["arguments"]["filepath"]
+                if filepath.endswith(".exe") or (buff and len(buff) > 2 and buff.startswith("MZ") and "This program" in buff):
+                    if pname not in self.pname:
+                        self.pname.append(pname)
+                    if filepath not in self.exes:
+                        self.exes.append(filepath)                
+                    self.mark_call()
+
+            if call["api"] == "CreateProcessInternalW" or call["api"] == "ShellExecuteExW":
+                filepath = call["arguments"]["filepath"]
+                if filepath in self.exes and pname in self.pname:
+                    self.executed = True
+                    self.mark_call()
+                    if call["status"] == 0:
+                        self.executedfail = True              
 
     def on_complete(self):
         if len(self.pname) == 1:
             for pname in self.pname:
                 self.description = "The process %s wrote an executable file to disk" % pname
+                if self.executed and self.executedfail:
+                    self.description += " which it then attempted to execute but failed. This is indicative of a failed payload download being executed"
+                    self.severity == 6
+                elif self.executed:
+                    self.description += " which was then executed"
+                    self.severity == 6
         elif len(self.pname) > 1:
             list = ", ".join(self.pname )
             self.description = "The processes %s wrote an executable file to disk" % list
+            if self.executed and self.executedfail:
+                self.description += " which it then attempted to execute but failed. This is indicative of a failed payload download being executed"
+                self.severity == 6
+            elif self.executed:
+                self.description += " which was then executed"
+                self.severity == 6
         return self.has_marks()
