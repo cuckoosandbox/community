@@ -57,6 +57,7 @@ class WMIAntiVM(Signature):
     "win32_logicaldisk",
     "win32_bios",
     "win32_computersystem",
+    "win32_physicalmemory"
     "deviceid"
     ]
 
