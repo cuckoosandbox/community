@@ -48,6 +48,8 @@ class RansomwareExtensions(Signature):
         (".*\.bart\.zip$", ["Bart"]),
         (".*\.zepto$", ["Zepto"]),
         (".*\.crypt$", ["CryptXXX"]),
+        (".*\.crypz$", ["CryptXXX"]),
+        (".*\.cryp1$", ["CryptXXX"]),
         (".*\.[0-9A-F]{32}\.[0-9A-F]{5}$", ["CryptXXX"]),
         (".*\.id_[^\/]*\.scl$", ["CryptFile2"]),
         (".*\.razy$", ["Razy"]),
