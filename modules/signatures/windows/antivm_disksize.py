@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class AntiVMDiskSize(Signature):
     name = "antivm_disk_size"
-    description = "Queries the disk size which could be used to detect virtual machine with a small fixed size or dynamic allocation"
+    description = "Queries the disk size which could be used to detect a virtual machine with a small fixed size or dynamic allocation"
     severity = 2
     categories = ["anti-vm"]
     authors = ["Kevin Ross"]
