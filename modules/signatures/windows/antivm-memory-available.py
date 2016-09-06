@@ -24,6 +24,7 @@ class MemoryAvailable(Signature):
     minimum = "2.0"
 
     filter_apinames = set(["GlobalMemoryStatusEx","GetPhysicallyInstalledSystemMemory"])
+    filter_analysistypes = set(["file"])    
 
     def on_call(self, call, process):
             self.mark_call()
