@@ -26,7 +26,7 @@ class NetworkDocumentFile(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.pname = []
-        self.proc_list =["wordview.exe","winword.exe","excel.exe","powerpnt.exe","outlook.exe","acrord32.exe","acrord64.exe","wscript.exe"]
+        self.proc_list =["wordview.exe","winword.exe","excel.exe","powerpnt.exe","outlook.exe","acrord32.exe","acrord64.exe","wscript.exe","mspub.exe"]
 
     filter_apinames = set(["InternetCrackUrlW","InternetCrackUrlA","URLDownloadToFileW","HttpOpenRequestW","WSASend"])
     filter_analysistypes = set(["file"])
