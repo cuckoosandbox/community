@@ -24,6 +24,7 @@ class NetworkAdapters(Signature):
     minimum = "2.0"
 
     filter_apinames = set(["GetAdaptersAddresses"])
+    filter_analysistypes = set(["file"])
 
     def on_call(self, call, process):
             self.mark_call()
