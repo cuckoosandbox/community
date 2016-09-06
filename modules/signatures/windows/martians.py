@@ -27,7 +27,8 @@ class ProcessMartian(Signature):
             "outlook.exe",
             "powerpnt.exe",
             "excel.exe",
-            "wordview.exe"
+            "wordview.exe",
+            "wspub.exe",
             "acrord32.exe",
             "acrord64.exe",
             "wscript.exe"
