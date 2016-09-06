@@ -24,9 +24,14 @@ class MemoryAvailable(Signature):
     minimum = "2.0"
 
     filter_apinames = set(["GlobalMemoryStatusEx","GetPhysicallyInstalledSystemMemory"])
-    filter_analysistypes = set(["file"])    
+
+    whitelistprocs = [
+        "acrord32.exe",
+        "acrord64.exe"
+    ]
 
     def on_call(self, call, process):
+        if process["process_name"].lower() not in self.whitelistprocs:
             self.mark_call()
 
     def on_complete(self):
