@@ -30,7 +30,7 @@ class ProcessInterest(Signature):
         self.lastprocessname = ""
         self.interested_processes = set()
 
-    filter_apinames = set(["Process32NextW", "Process32FirstW"])
+    filter_apinames = "Process32NextW", "Process32FirstW"
 
     def on_call(self, call, process):
         if call["api"] == "Process32NextW":

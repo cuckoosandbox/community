@@ -31,7 +31,7 @@ class Dropper(Signature):
             if "PE32 executable" in self.get_results("target", {})["file"]["type"]:
                 self.exe = True
 
-    filter_apinames = set(["CreateProcessInternalW","ShellExecuteExW"])
+    filter_apinames = "CreateProcessInternalW", "ShellExecuteExW"
 
     def on_call(self, call, process):
         filepath = call["arguments"]["filepath"]

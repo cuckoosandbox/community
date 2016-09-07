@@ -62,9 +62,11 @@ class RansomwareExtensions(Signature):
         for indicator in self.indicators:
             for filepath in self.check_file(pattern=indicator[0], regex=True, all=True):
                 self.mark_ioc("file", filepath)
-                if indicator[1] != "":
-                    self.description = ("Appends known {0} ransomware "
-                                        "file extensions to files that have been encrypted."
-                                        "".format("/".join(indicator[1])))                
+                if indicator[1]:
+                    self.description = (
+                        "Appends known %s ransomware file extensions to "
+                        "files that have been encrypted." %
+                        "/".join(indicator[1])
+                    )
 
         return self.has_marks()

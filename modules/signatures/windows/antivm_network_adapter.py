@@ -36,5 +36,4 @@ class NetworkAdapters(Signature):
         if process["process_name"].lower() not in self.whitelistprocs:
             self.mark_call()
 
-    def on_complete(self):
         return self.has_marks()

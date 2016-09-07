@@ -63,8 +63,9 @@ class RansomwareFiles(Signature):
             for filepath in self.check_file(pattern=indicator[0], actions=["file_written"], regex=True, all=True):
                 self.mark_ioc("file", filepath)
                 if indicator[1] != "":
-                    self.description = ("Creates a known {0} ransomware "
-                                        "decryption instruction / key file."
-                                        "".format("/".join(indicator[1])))                
+                    self.description = (
+                        "Creates a known %s ransomware decryption "
+                        "instruction / key file." % "/".join(indicator[1])
+                    )
 
         return self.has_marks()

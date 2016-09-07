@@ -43,7 +43,7 @@ class Win32ProcessCreate(Signature):
                 call["arguments"]["method"] == "Create":
             self.mark_call()
             return True
-            
+
 class WMIAntiVM(Signature):
     name = "wmi_antivm"
     description = "Executes one or more WMI queries which could be used to identify virtual machines"
@@ -53,12 +53,12 @@ class WMIAntiVM(Signature):
     minimum = "2.0"
 
     antivm = [
-    "win32_processor",
-    "win32_logicaldisk",
-    "win32_bios",
-    "win32_computersystem",
-    "win32_physicalmemory"
-    "deviceid"
+        "win32_processor",
+        "win32_logicaldisk",
+        "win32_bios",
+        "win32_computersystem",
+        "win32_physicalmemory",
+        "deviceid",
     ]
 
     def on_complete(self):

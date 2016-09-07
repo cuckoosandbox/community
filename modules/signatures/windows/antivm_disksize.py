@@ -24,7 +24,7 @@ class AntiVMDiskSize(Signature):
     minimum = "2.0"
     evented = True
 
-    filter_apinames = set(["GetDiskFreeSpaceExW","GetDiskFreeSpaceExW"])
+    filter_apinames = "GetDiskFreeSpaceExW", "GetDiskFreeSpaceExW"
 
     whitelistprocs = [
         "iexplore.exe",

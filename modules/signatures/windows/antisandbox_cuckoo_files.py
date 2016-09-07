@@ -24,11 +24,11 @@ class CuckooDetectFiles(Signature):
     minimum = "2.0"
 
     file_indicators = [
-         ".*\\\\agent\.py$",
-         ".*\\\\agent\.pyw$",
-        ".*\\\\analyzer\.py$",
-         ".*\\\\cuckoo\\\\dll$",
-         ".*\\\\pipe\\\\cuckoo$",
+        ".*\\\\agent\\.py$",
+        ".*\\\\agent\\.pyw$",
+        ".*\\\\analyzer\\.py$",
+        ".*\\\\cuckoo\\\\dll",
+        ".*\\\\pipe\\\\cuckoo",
     ]
 
     def on_complete(self):

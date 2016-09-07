@@ -26,10 +26,19 @@ class NetworkDocumentFile(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.pname = []
-        self.proc_list =["wordview.exe","winword.exe","excel.exe","powerpnt.exe","outlook.exe","acrord32.exe","acrord64.exe","wscript.exe","mspub.exe"]
 
-    filter_apinames = set(["InternetCrackUrlW","InternetCrackUrlA","URLDownloadToFileW","HttpOpenRequestW","WSASend"])
-    filter_analysistypes = set(["file"])
+    proc_list = [
+        "wordview.exe", "winword.exe", "excel.exe", "powerpnt.exe",
+        "outlook.exe", "acrord32.exe", "acrord64.exe", "wscript.exe",
+        "mspub.exe",
+    ]
+
+    filter_apinames = [
+        "InternetCrackUrlW", "InternetCrackUrlA", "URLDownloadToFileW",
+        "HttpOpenRequestW", "WSASend",
+    ]
+
+    filter_analysistypes = "file",
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()
@@ -45,11 +54,8 @@ class NetworkDocumentFile(Signature):
                 self.description += pname
         elif len(self.pname) > 1:
             self.description = "Network communications indicative of a potential document or script payload download was initiated by the processes "
-            list = ", ".join(self.pname )
-            self.description += list
+            self.description += ", ".join(self.pname)
         return self.has_marks()
-
-from lib.cuckoo.common.abstracts import Signature
 
 class NetworkEXE(Signature):
     name = "network_downloader_exe"
@@ -62,9 +68,14 @@ class NetworkEXE(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.pname = []
-        self.high_risk_proc = ["wordview.exe","winword.exe","excel.exe","powerpnt.exe","outlook.exe","acrord32.exe","acrord64.exe","wscript.exe","java.exe","javaw.exe"]
 
-    filter_apinames = set(["recv", "InternetReadFile"])
+    high_risk_proc = [
+        "wordview.exe", "winword.exe", "excel.exe", "powerpnt.exe",
+        "outlook.exe", "acrord32.exe", "acrord64.exe", "wscript.exe",
+        "java.exe", "javaw.exe",
+    ]
+
+    filter_apinames = "recv", "InternetReadFile"
 
     def on_call(self, call, process):
         buf = call["arguments"]["buffer"]
@@ -83,8 +94,7 @@ class NetworkEXE(Signature):
                 self.description += pname
         elif len(self.pname) > 1:
             self.description = "An executable file was downloaded by the processes "
-            list = ", ".join(self.pname )
-            self.description += list
+            self.description += ", ".join(self.pname)
         return self.has_marks()
 
 class SuspiciousWriteEXE(Signature):
@@ -98,11 +108,17 @@ class SuspiciousWriteEXE(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.pname = []
-        self.susp_proc_list =["wordview.exe","winword.exe","excel.exe","powerpnt.exe","outlook.exe","wscript.exe","java.exe","javaw.exe"]
         self.executed = False
         self.exes = []
 
-    filter_apinames = set(["NtWriteFile","CreateProcessInternalW","ShellExecuteExW"])
+    susp_proc_list = [
+        "wordview.exe", "winword.exe", "excel.exe", "powerpnt.exe",
+        "outlook.exe", "wscript.exe", "java.exe", "javaw.exe",
+    ]
+
+    filter_apinames = [
+        "NtWriteFile", "CreateProcessInternalW", "ShellExecuteExW",
+    ]
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()
@@ -114,12 +130,12 @@ class SuspiciousWriteEXE(Signature):
                     if pname not in self.pname:
                         self.pname.append(pname)
                     if filepath not in self.exes:
-                        self.exes.append(filepath)                
+                        self.exes.append(filepath)
 
             if call["api"] == "CreateProcessInternalW" or call["api"] == "ShellExecuteExW":
                 filepath = call["arguments"]["filepath"]
                 if filepath in self.exes and pname in self.pname:
-                    self.executed = True               
+                    self.executed = True
 
     def on_complete(self):
         if len(self.pname) == 1:
@@ -129,8 +145,7 @@ class SuspiciousWriteEXE(Signature):
                     self.description += " which it then attempted to execute"
                     self.severity == 6
         elif len(self.pname) > 1:
-            list = ", ".join(self.pname )
-            self.description = "The processes %s wrote an executable file to disk" % list
+            self.description = "The processes %s wrote an executable file to disk" % ", ".join(self.pname)
             if self.executed:
                 self.description += " which it then attempted to execute"
                 self.severity == 6

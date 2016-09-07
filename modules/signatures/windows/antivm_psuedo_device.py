@@ -22,13 +22,12 @@ class AntiVMSharedDevice(Signature):
     categories = ["anti-vm"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    evented = True
 
-    filter_apinames = set(["NtCreateFile"])
+    filter_apinames = "NtCreateFile",
 
     def on_call(self, call, process):
         filepath = call["arguments"]["filepath"].lower()
-        if filepath.endswith("\??\hgfs") or filepath.endswith("\??\vmci"): 
+        if filepath.endswith(("\\??\\hgfs", "\\??\\vmci")):
             self.mark_call()
 
     def on_complete(self):

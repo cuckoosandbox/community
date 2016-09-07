@@ -23,7 +23,9 @@ class MemoryAvailable(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
-    filter_apinames = set(["GlobalMemoryStatusEx","GetPhysicallyInstalledSystemMemory"])
+    filter_apinames = [
+        "GlobalMemoryStatusEx", "GetPhysicallyInstalledSystemMemory",
+    ]
 
     whitelistprocs = [
         "iexplore.exe",
@@ -44,5 +46,4 @@ class MemoryAvailable(Signature):
         if process["process_name"].lower() not in self.whitelistprocs:
             self.mark_call()
 
-    def on_complete(self):
         return self.has_marks()

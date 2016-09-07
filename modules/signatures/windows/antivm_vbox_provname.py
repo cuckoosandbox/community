@@ -24,11 +24,10 @@ class VBoxDetectProvname(Signature):
     minimum = "2.0"
     evented = True
 
-    filter_apinames = set(["WNetGetProviderNameW"])
+    filter_apinames = "WNetGetProviderNameW",
 
     def on_call(self, call, process):
-        if call["arguments"]["net_type"] == "0x00250000": 
+        if call["arguments"]["net_type"] == "0x00250000":
             self.mark_call()
 
-    def on_complete(self):
         return self.has_marks()
