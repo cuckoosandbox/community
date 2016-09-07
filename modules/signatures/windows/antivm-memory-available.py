@@ -31,7 +31,13 @@ class MemoryAvailable(Signature):
         "chrome.exe",
         "safari.exe",
         "acrord32.exe",
-        "acrord64.exe"
+        "acrord64.exe",
+        "wordview.exe",
+        "winword.exe",
+        "excel.exe",
+        "powerpnt.exe",
+        "outlook.exe",
+        "mspub.exe",
     ]
 
     def on_call(self, call, process):
