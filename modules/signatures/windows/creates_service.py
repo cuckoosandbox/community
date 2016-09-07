@@ -12,7 +12,10 @@ class CreatesService(Signature):
     authors = ["Cuckoo Technologies", "Kevin Ross"]
     minimum = "2.0"
 
-    filter_apinames = set(["CreateServiceA", "CreateServiceW","StartServiceA","StartServiceW"])
+    filter_apinames = [
+        "CreateServiceA", "CreateServiceW",
+        "StartServiceA", "StartServiceW",
+    ]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
