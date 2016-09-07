@@ -26,6 +26,10 @@ class MemoryAvailable(Signature):
     filter_apinames = set(["GlobalMemoryStatusEx","GetPhysicallyInstalledSystemMemory"])
 
     whitelistprocs = [
+        "iexplore.exe",
+        "firefox.exe",
+        "chrome.exe",
+        "safari.exe",
         "acrord32.exe",
         "acrord64.exe"
     ]
