@@ -30,7 +30,15 @@ class AntiVMDiskSize(Signature):
         "iexplore.exe",
         "firefox.exe",
         "chrome.exe",
-        "safari.exe"
+        "safari.exe",
+        "acrord32.exe",
+        "acrord64.exe",
+        "wordview.exe",
+        "winword.exe",
+        "excel.exe",
+        "powerpnt.exe",
+        "outlook.exe",
+        "mspub.exe",
     ]
 
     def on_call(self, call, process):
