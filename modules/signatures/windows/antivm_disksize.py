@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class AntiVMDiskSize(Signature):
     name = "antivm_disk_size"
-    description = "Queries the disk size which could be used to detect a virtual machine with a small fixed size or dynamic allocation"
+    description = "Queries the disk size which could be used to detect virtual machine with small fixed size or dynamic allocation"
     severity = 2
     categories = ["anti-vm"]
     authors = ["Kevin Ross"]
@@ -26,8 +26,16 @@ class AntiVMDiskSize(Signature):
 
     filter_apinames = set(["GetDiskFreeSpaceExW","GetDiskFreeSpaceExW"])
 
+    whitelistprocs = [
+        "iexplore.exe",
+        "firefox.exe",
+        "chrome.exe",
+        "safari.exe"
+    ]
+
     def on_call(self, call, process):
-        self.mark_call()
+        if process["process_name"].lower() not in self.whitelistprocs:
+            self.mark_call()
 
     def on_complete(self):
         return self.has_marks()
