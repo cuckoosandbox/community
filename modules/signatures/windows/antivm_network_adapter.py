@@ -24,9 +24,16 @@ class NetworkAdapters(Signature):
     minimum = "2.0"
 
     filter_apinames = set(["GetAdaptersAddresses"])
-    filter_analysistypes = set(["file"])
+
+    whitelistprocs = [
+        "iexplore.exe",
+        "firefox.exe",
+        "chrome.exe",
+        "safari.exe"
+    ]
 
     def on_call(self, call, process):
+        if process["process_name"].lower() not in self.whitelistprocs:
             self.mark_call()
 
     def on_complete(self):
