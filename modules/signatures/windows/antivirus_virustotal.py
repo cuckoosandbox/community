@@ -1,4 +1,4 @@
-# Copyright (C) 2012 Michael Boman (@mboman), Optiv, Inc. (brad.spengler@optiv.com)
+# Copyright (C) 2012 Michael Boman (@mboman), Optiv, Inc. (brad.spengler@optiv.com), Kevin Ross
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,25 +20,25 @@ class KnownVirustotal(Signature):
     description = "File has been identified by at least one AntiVirus engine on VirusTotal as malicious"
     severity = 2
     categories = ["antivirus"]
-    authors = ["Michael Boman", "nex", "Optiv"]
+    authors = ["Michael Boman", "nex", "Optiv", "Kevin Ross"]
     minimum = "2.0"
 
     def on_complete(self):
         results = self.get_virustotal()
         if results.get("positives"):
             positives = results.get("positives")
-            if positives >= 40:
-                self.severity = 6
-                self.description = "File has been identified by at least 40 AntiVirus engines on VirusTotal as malicious"
-            elif positives >= 30:
-                self.severity = 5
-                self.description = "File has been identified by at least 30 AntiVirus engines on VirusTotal as malicious"
-            elif positives >= 20:
-                self.severity = 4
-                self.description = "File has been identified by at least 20 AntiVirus engines on VirusTotal as malicious"
-            elif positives >= 10:
-                self.severity = 3
-                self.description = "File has been identified by at least 10 AntiVirus engines on VirusTotal as malicious"
+            if positives == 1:
+                self.description = "File has been identified by one AntiVirus engine on VirusTotal as malicious"
+            elif positives > 1:
+                self.description = "File has been identified by %s AntiVirus engines on VirusTotal as malicious" % positives
+                if positives >= 40:
+                    self.severity = 6
+                elif positives >= 30:
+                    self.severity = 5
+                elif positives >= 20:
+                    self.severity = 4
+                elif positives >= 10:
+                    self.severity = 3
 
             for engine, signature in results["scans"].items():
                 if signature["detected"]:
