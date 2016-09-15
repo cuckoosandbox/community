@@ -18,3 +18,47 @@ class ProcMemDumpURLs(Signature):
                 self.mark_ioc("url", url)
 
         return self.has_marks()
+        
+class ProcMemDumpTORURLs(Signature):
+    name = "memdump_tor_urls"
+    description = "Found TOR related URLs in process memory dump indicative of C2 or ransomware domains/messages"
+    severity = 3
+    categories = ["unpacking", "ransomware", "c2"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        indicators = [
+            ".torproject.org",
+            ".tor2web.",
+            ".onion.",
+            ".onion/",
+            ".bortor.com",
+            ".torpacho.com$",
+            ".torsanctions.com",
+            ".torwild.com",
+            ".pay2tor.com",
+            ".tor2pay.com",
+            ".tor4pay.com",
+            ".pay4tor.com",
+            ".torexplorer.com",
+            ".tor-gateways.de",
+            ".torpaycash.com",
+            ".torconnectpay.com",
+            ".torwalletpay.com",
+            ".walterwhitepay.com",
+            ".rossulbrichtpay.com",
+            ".42k2bu15.com",
+            ".79fhdm16.com",
+            ".myportopay.com",
+            ".vivavtpaymaster.com",
+            ".fraspartypay.com",
+        ]
+
+        for procmem in self.get_results("procmemory", []):
+            for url in procmem.get("urls", []):
+                for indicator in indicators:
+                    if indicator in url or url.endswith(".onion"):
+                        self.mark_ioc("url", url)
+
+        return self.has_marks()
