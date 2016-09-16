@@ -30,7 +30,7 @@ class ModifiesBootConfig(Signature):
             buf = call["arguments"]["command_line"].lower()
         else:
             buf = call["arguments"]["filepath"].lower()
-        if "bcdedit" in buf:
+        if "bcdedit" in buf and "set" in buf:
             self.mark_ioc("command", buf)
 
     def on_complete(self):
