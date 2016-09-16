@@ -13,25 +13,31 @@ class MailStealer(Signature):
     minimum = "2.0"
 
     regkeys_re = [
-        ".*\\\\Software\\\\(Wow6432Node\\\\)?Clients\\\\Mail.*",
-        ".*\\\\Microsoft\\\\Windows\\ Messaging\\ Subsystem\\\\MSMapiApps.*",
-        ".*\\\\Microsoft\\\\Windows\\ Messaging\\ Subsystem\\\\Profiles.*",
-        ".*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Windows\\ Messaging\\ Subsystem\\\\Profiles.*",
-        ".*\\\\Microsoft\\\\Office\\\\.*\\\\Outlook\\\\Profiles\\\\Outlook.*",
-        ".*\\\\Microsoft\\\\Office\\\\Outlook\\\\OMI\\ Account\\ Manager\\\\Accounts.*",
-        ".*\\\\Microsoft\\\\Internet\\ Account\\ Manager\\\\Accounts.*",
-        ".*\\\\Software\\\\(Wow6432Node\\\\)?IncrediMail.*"
-        ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\ Live\\ Mail.*",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?IncrediMail"
         ".*\\\\RIT\\\\The\\ Bat\\!",
-        ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\ Mail",
-        ".*\\\\Software\\\\(Wow6432Node\\\\)?RimArts\\\\B2\\\\Settings",
-        ".*\\\\Software\\\\(Wow6432Node\\\\)?Poco\\ Systems\\ Inc",
+        ".*\\\\Microsoft\\\\Internet\\ Account\\ Manager\\\\Accounts",
+        ".*\\\\Software\\\\Microsoft\\\\Windows\\ Mail",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\ Live\\ Mail",
+        ".*\\\\Microsoft\\\\Windows\\ Messaging\\ Subsystem\\\\MSMapiApps",
+        ".*\\\\Microsoft\\\\Windows\\ Messaging\\ Subsystem\\\\Profiles.*",
+        ".*\\\\Software\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Windows\\ Messaging\\ Subsystem",
+        ".*\\\\Software\\\\Microsoft\\\\Internet\\ Account\\ Manager",
+        ".*\\\\Software\\\\Microsoft\\\\Office\\\\Outlook\\\\OMI\\ Account\\ Manager",
+        ".*\\\\Software\\\\RimArts\\\\B2\\\\Settings",
+        ".*\\\\Software\\\\Poco\\ Systems\\ Inc",
         ".*\\\\Software\\\\Mozilla\\\\Mozilla\\ Thunderbird",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Clients\\\\Mail",
+        ".*\\\\Microsoft\\\\Office\\\\.*\\\\Outlook\\\\Profiles\\\\Outlook",
         # Well, strictly speaking..
-        ".*\\\\Software\\\\(Wow6432Node\\\\)?Google\\\\Google\\ Talk",
+        ".*\\\\Software\\\\Google\\\\Google\\ Talk",
     ]
 
     files_re = [
+        ".*\\\\The\\ Bat!\\\\",
+        ".*\\\\ICQ\\\\",
+        ".*\\\\Miranda\\\\",
+        ".*\\\\SmartFTP\\\\",
+        ".*\\\\QIP\\\\",
         ".*\.pst$",
         ".*\\\\Microsoft\\\\Windows\\ Live\\ Mail.*",
         ".*\\\\Microsoft\\\\Address\\ Book\\\\.*\.wab$",
@@ -40,7 +46,6 @@ class MailStealer(Signature):
         ".*\\\\Foxmail.*\\\\Accounts\.tdat$",
         ".*\\\\Thunderbird\\\\Profiles\\\\.*\.default$",
         ".*\\\\AppData\\\\Roaming\\\\Thunderbird\\\\profiles.ini$",
-         ".*\\\\The\\ Bat!\\\\",
     ]
 
     # To be replaced by a check_file(dirs=True) whenever we can do that in a
