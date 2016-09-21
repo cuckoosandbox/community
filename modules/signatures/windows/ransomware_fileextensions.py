@@ -57,7 +57,8 @@ class RansomwareExtensions(Signature):
         (".*\.Venus(f|p)$", ["VenusLocker"]),
         (".*\.fs0ciety$", ["Fsociety"]),
         (".*\.cry$", ["CryLocker"]),
-        (".*\.locked$", ["Philadelphia"]),
+        (".*\.locked$", ["multi-family"]),
+        (".*\.locklock$", ["LockLock"]),
     ]
 
     def on_complete(self):
