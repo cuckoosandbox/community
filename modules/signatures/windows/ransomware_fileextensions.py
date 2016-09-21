@@ -38,9 +38,7 @@ class RansomwareExtensions(Signature):
         (".*\.locky$", ["Locky"]),
         (".*\.wflx$", ["Locky"]),
         (".*\.locked$", ["Locked"]),
-        (".*\.cerber$", ["Cerber"]),
-        (".*\.cerber2$", ["Cerber"]),
-        (".*\.cerber3$", ["Cerber"]),
+        (".*\.cerber[1-3]$", ["Cerber"]),
         (".*\.encrypt$", [""]),
         (".*\.R5A$", ["7ev3n"]),
         (".*\.R4A$", ["7ev3n"]),
@@ -59,6 +57,10 @@ class RansomwareExtensions(Signature):
         (".*\.cry$", ["CryLocker"]),
         (".*\.locked$", ["multi-family"]),
         (".*\.locklock$", ["LockLock"]),
+        (".*\.fantom$", ["Fantom"]),
+        (".*_nullbyte$", ["Nullbyte"]),
+        (".*\.purge$", ["Globe"]),
+        (".*\.domino$", ["Domino"]),
     ]
 
     def on_complete(self):
