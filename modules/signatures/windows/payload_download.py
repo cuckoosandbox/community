@@ -123,7 +123,7 @@ class SuspiciousWriteEXE(Signature):
     def on_call(self, call, process):
         pname = process["process_name"].lower()
         if pname in self.susp_proc_list:
-            if call["api"] == "NtWriteFile":
+            if call["api"] == "NtWriteFile" and call["arguments"].get("filepath"):
                 buff = call["arguments"]["buffer"]
                 filepath = call["arguments"]["filepath"]
                 if filepath.endswith(".exe") or (buff and len(buff) > 2 and buff.startswith("MZ") and "This program" in buff):
