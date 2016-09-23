@@ -36,6 +36,7 @@ class BrowserStealer(Signature):
         ".*\\\\(Application\\ Data|AppData).*?\\\\Bromium\\\\.*",
         ".*\\\\(Application\\ Data|AppData).*?\\\\RockMelt\\\\.*",
         ".*\\\\(Application\\ Data|AppData).*?\\\\Yandex\\\\YandexBrowser\\\\.*",
+        ".*\\\\(Application\\ Data|AppData).*?\\\\Local\\\\Avira\\\\Scout\\\\User Data\\\\.*",
     ]
 
     regkeys_re = [
