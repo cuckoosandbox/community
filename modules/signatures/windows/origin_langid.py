@@ -50,7 +50,7 @@ class BuildLangID(Signature):
         "TURKISH",
         "UKRAINIAN",
         "YIDDISH",
-        "ZULU",
+        "ZULU"
     ]
 
     def on_complete(self):
