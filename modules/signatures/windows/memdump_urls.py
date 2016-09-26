@@ -78,7 +78,7 @@ class ProcMemDumpIPURLs(Signature):
     minimum = "2.0"
 
     def on_complete(self):
-        ip = re.compile("^http\:\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}")
+        ip = re.compile("^(http|https)\:\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}")
         for procmem in self.get_results("procmemory", []):
             for url in procmem.get("urls", []):
                 if re.match(ip, url):
