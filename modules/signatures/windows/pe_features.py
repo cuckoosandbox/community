@@ -39,7 +39,7 @@ class PEFeatures(Signature):
 
 class PEIDPacker(Signature):
     name = "peid_packer"
-    description = "The executable was packed using a known packer"
+    description = "The executable uses a known packer"
     severity = 1
     categories = ["packer"]
     authors = ["Kevin Ross"]
