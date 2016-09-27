@@ -47,7 +47,7 @@ class RansomwareExtensions(Signature):
         (".*\.herbst$", ["Herbst"]),
         (".*\.CrySiS$", ["Crysis"]),
         (".*\.bart\.zip$", ["Bart"]),
-        (".*\.zepto$", ["Zepto"]),
+        (".*\.zepto$", ["Locky"]),
         (".*\.crypt$", ["CryptXXX"]),
         (".*\.crypz$", ["CryptXXX"]),
         (".*\.cryp1$", ["CryptXXX"]),
@@ -63,6 +63,7 @@ class RansomwareExtensions(Signature):
         (".*_nullbyte$", ["Nullbyte"]),
         (".*\.purge$", ["Globe"]),
         (".*\.domino$", ["Domino"]),
+        (".*\.odin$", ["Locky"]),
     ]
 
     def on_complete(self):
