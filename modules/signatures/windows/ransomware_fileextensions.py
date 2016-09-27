@@ -64,6 +64,7 @@ class RansomwareExtensions(Signature):
         (".*\.purge$", ["Globe"]),
         (".*\.domino$", ["Domino"]),
         (".*\.odin$", ["Locky"]),
+        (".*\.encrypted$", ["multi-family"]),
     ]
 
     def on_complete(self):
