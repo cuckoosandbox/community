@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class NetworkDocumentFile(Signature):
     name = "network_document_file"
-    description = "A document file initiated network communications indicative of a potential exploit or payload download"
+    description = "A document or script file initiated network communications indicative of a potential exploit or payload download"
     severity = 3
     categories = ["exploit", "downloader"]
     authors = ["Kevin Ross", "Will Metcalf"]
@@ -30,7 +30,7 @@ class NetworkDocumentFile(Signature):
     proc_list = [
         "wordview.exe", "winword.exe", "excel.exe", "powerpnt.exe",
         "outlook.exe", "acrord32.exe", "acrord64.exe", "wscript.exe",
-        "mspub.exe",
+        "mspub.exe", "powershell.exe",
     ]
 
     filter_apinames = [
@@ -72,7 +72,7 @@ class NetworkEXE(Signature):
     high_risk_proc = [
         "wordview.exe", "winword.exe", "excel.exe", "powerpnt.exe",
         "outlook.exe", "acrord32.exe", "acrord64.exe", "wscript.exe",
-        "java.exe", "javaw.exe",
+        "java.exe", "javaw.exe", "powershell.exe",
     ]
 
     filter_apinames = "recv", "InternetReadFile"
@@ -113,7 +113,7 @@ class SuspiciousWriteEXE(Signature):
 
     susp_proc_list = [
         "wordview.exe", "winword.exe", "excel.exe", "powerpnt.exe",
-        "outlook.exe", "wscript.exe", "java.exe", "javaw.exe",
+        "outlook.exe", "wscript.exe", "java.exe", "javaw.exe", "powershell.exe",
     ]
 
     filter_apinames = [
