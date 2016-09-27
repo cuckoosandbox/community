@@ -60,7 +60,7 @@ class BuildLangID(Signature):
                         self.mark(
                             name=resource["name"],
                             language=resource["language"],
-                            file_type=resource["filetype"],
+                            filetype=resource["filetype"],
                             sublanguage=resource["sublanguage"],
                             offset=resource["offset"],
                             size=resource["size"],
