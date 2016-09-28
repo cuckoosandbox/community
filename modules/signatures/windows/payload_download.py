@@ -35,7 +35,7 @@ class NetworkDocumentFile(Signature):
 
     filter_apinames = [
         "InternetCrackUrlW", "InternetCrackUrlA", "URLDownloadToFileW",
-        "HttpOpenRequestW", "WSASend",
+        "URLDownloadToCacheFileW", "HttpOpenRequestW", "WSASend",
     ]
 
     filter_analysistypes = "file",
