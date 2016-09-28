@@ -33,73 +33,45 @@ class NetworkCnCHTTP(Signature):
     def on_complete(self):
 
         whitelist = [
-            "^http://.*\.microsoft\.com/.*",
-            "^http://.*\.windowsupdate\.com/.*",
-            "http://.*\.adobe\.com/.*",
+            "microsoft.com",
+            "windowsupdate\.com",
+            "adobe.com",
             ]
 
-        # HTTP request Features. Done like this due to for loop appending data each time instead of once so we wait to end of checks to add summary of anomalies
-        post_noreferer = 0
-        post_nouseragent = 0
-        get_nouseragent = 0
-        version1 = 0
-        iphost = 0
+        suspectrequests = []        
 
-        # Scoring
-        cnc_score = 0
-        suspectrequest = []
+        for http in getattr(self, "get_net_http_ex", lambda: [])():
+            is_whitelisted = False
+            for whitelisted in whitelist:
+                if whitelisted in http["host"]:
+                    is_whitelisted = True                              
 
-        if self.get_net_http():
-            for req in self.get_net_http():
-                is_whitelisted = False
-                for white in whitelist:
-                    if re.match(white, req["uri"], re.IGNORECASE):
-                        is_whitelisted = True                              
+            # Check HTTP features
+            reasons = []
+            ip = re.compile("^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}")
+            if not is_whitelisted and http["method"] == "POST" and "Referer:" not in http["request"]:
+                reasons.append("POST method with no referer header")
 
-                # Check HTTP features
-                request = req["uri"]
-                ip = re.compile("^http\:\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}")
-                if not is_whitelisted and req["method"] == "POST" and "Referer:" not in req["data"]:
-                    post_noreferer += 1
-                    cnc_score += 1
+            if not is_whitelisted and http["method"] == "POST" and "User-Agent:" not in http["request"]:
+                reasons.append("POST method with no useragent header")
 
-                if not is_whitelisted and req["method"] == "POST" and "User-Agent:" not in req["data"]:
-                    post_nouseragent += 1
-                    cnc_score += 1
+            if not is_whitelisted and http["method"] == "GET" and "User-Agent:" not in http["request"]:
+                reasons.append("GET method with no useragent header")
 
-                if not is_whitelisted and req["method"] == "GET" and "User-Agent:" not in req["data"]:
-                    get_nouseragent += 1
-                    cnc_score += 1
+            if not is_whitelisted and "HTTP/1.0" in http["request"]:
+                reasons.append("HTTP version 1.0 used")
 
-                if not is_whitelisted and req["version"] == "1.0":
-                    version1 += 1
-                    cnc_score += 1
-
-                if not is_whitelisted and ip.match(request):
-                    iphost += 1
-                    cnc_score += 1
-
-                if not is_whitelisted and cnc_score > 0:
-                    if suspectrequest.count(request) == 0:
-                        suspectrequest.append(request)
-
-        if post_noreferer > 0:
-            self.mark_ioc("reason for suspicion", "HTTP traffic contains a POST request with no referer header")
-
-        if post_nouseragent > 0:
-            self.mark_ioc("reason for suspicion", "HTTP traffic contains a POST request with no user-agent header")
-
-        if get_nouseragent > 0:
-            self.mark_ioc("reason for suspicion", "HTTP traffic contains a GET request with no user-agent header")
-
-        if version1 > 0:
-            self.mark_ioc("reason for suspicion", "HTTP traffic uses version 1.0")
-
-        if iphost > 0:
-            self.mark_ioc("(reason for suspicion", "HTTP connection was made to an IP address rather than domain name")
-
-        if len(suspectrequest) > 0:
-            for request in suspectrequest:
-                self.mark_ioc("suspicious request", request)
+            if not is_whitelisted and ip.match(http["host"]):
+                reasons.append("Connection to IP address")
+                
+            if len(reasons) > 0:
+                request = "%s %s://%s%s" % (http["method"], http["protocol"], http["host"], http["uri"])
+                if request not in suspectrequests:
+                    features = ', '.join(reasons)
+                    suspectrequests.append(request)
+                    self.mark(
+                        suspicious_features=features,
+                        suspicious_request=request,
+                    )
 
         return self.has_marks()
