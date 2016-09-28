@@ -13,6 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import sys
+
 from lib.cuckoo.common.abstracts import Signature
 
 class CreatesLargeKey(Signature):
@@ -32,7 +34,7 @@ class CreatesLargeKey(Signature):
     filter_apinames = set(["NtSetValueKey", "RegSetValueExA", "RegSetValueExW"])
 
     def on_call(self, call, process):
-        vallen = len(call["arguments"]["value"])
+        vallen = sys.getsizeof(call["arguments"]["value"])
         if vallen:
             length = int(vallen)
             if length > 16 * 1024:
