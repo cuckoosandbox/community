@@ -47,14 +47,15 @@ class InjectionNetworkTraffic(Signature):
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()
+        host = ""
         if pname in self.proc_list:
             if "ip_address" in call["arguments"]:
                 host = call["arguments"]["ip_address"]
             elif "hostname" in call["arguments"]:
                 host = call["arguments"]["hostname"]
 
-            if host:
-                if not host.startswith("127.") and not host.startswith("10.") and not host.startswith("172.16.") and not host.startswith("192.168."):
+            if host != "":
+                if not host.startswith(("127.", "10.", "172.16.", "192.168.")):
                     if pname not in self.pname:
                         self.pname.append(pname)
                     self.mark_call()
