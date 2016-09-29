@@ -18,7 +18,7 @@ class InjectionNetworkTraffic(Signature):
     name = "injection_network_trafic"
     description = "A system process is connecting to the network likely as a result of code injection"
     severity = 3
-    categories = ["injection", "cnc"]
+    categories = ["injection", "cnc", "stealth"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
@@ -27,31 +27,48 @@ class InjectionNetworkTraffic(Signature):
         self.pname = []
 
     proc_list = [
+        "conhost.exe",
         "csrss.exe",
+        "dwm.exe",
         "explorer.exe",
-        "lsass.exe", 
-        "services.exe", 
-        "smss.exe", 
-        "userinit.exe", 
-        "wininit.exe", 
-        "winlogon.exe", 
+        "lsass.exe",
+        "services.exe",
+        "smss.exe",
+        "userinit.exe",
+        "wininit.exe",
+        "winlogon.exe",
     ]
 
-    filter_apinames = "InternetCrackUrlW", "InternetCrackUrlA", "URLDownloadToFileW", "URLDownloadToCacheFileW", "HttpOpenRequestW", "WSASend", "send", "sendto", "connect",
+    filter_apinames = [
+        "InternetConnectA", "InternetConnectW", "InternetCrackUrlA", "InternetCrackUrlW", "InternetCrackUrlA", "InternetCrackUrlW",
+        "URLDownloadToFileA","URLDownloadToFileW", "URLDownloadToCacheFileA", "URLDownloadToCacheFileW", "HttpOpenRequestA", 
+        "HttpOpenRequestW", "WSASend", "send", "sendto", "connect",
+    ]
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()
         if pname in self.proc_list:
-            if pname not in self.pname:
-                self.pname.append(pname)
-            self.mark_call()
+            if "ip_address" in call["arguments"]:
+                host = call["arguments"]["ip_address"]
+            elif "hostname" in call["arguments"]:
+                host = call["arguments"]["hostname"]
 
+            if host:
+                if not host.startswith("127.") and not host.startswith("10.") and not host.startswith("172.16.") and not host.startswith("192.168."):
+                    if pname not in self.pname:
+                        self.pname.append(pname)
+                    self.mark_call()
+            else:
+                if pname not in self.pname:
+                    self.pname.append(pname)
+                self.mark_call()
+            
     def on_complete(self):
         if len(self.pname) == 1:
-            self.description = "Network communications from a system process indicative of possible code injection originated from the process "
+            self.description = "Network communications indicative of possible code injection originated from the process "
             for pname in self.pname:
                 self.description += pname
         elif len(self.pname) > 1:
-            self.description = "Network communications from a system process indicative of possible code injection originated from the processes "
+            self.description = "Network communications indicative of possible code injection originated from the processes "
             self.description += ", ".join(self.pname)
         return self.has_marks()
