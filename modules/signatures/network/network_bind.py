@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class NetworkBIND(Signature):
     name = "network_bind"
-    description = "Starts servers listening on {0}"
+    description = "Starts servers listening"
     severity = 2
     categories = ["bind"]
     authors = ["nex", "Accuvant"]
