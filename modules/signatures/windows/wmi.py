@@ -56,9 +56,13 @@ class WMIAntiVM(Signature):
         "win32_processor",
         "win32_logicaldisk",
         "win32_bios",
-        "win32_computersystem",
         "win32_physicalmemory",
+        "win32_physicalmedia",
+        "win32_diskdrive",
+        "win32_service",
+        "win32_process",
         "deviceid",
+        "computersystem",
     ]
 
     def on_complete(self):
