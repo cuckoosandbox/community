@@ -65,6 +65,8 @@ class RansomwareExtensions(Signature):
         (".*\.odin$", ["Locky"]),
         (".*\.locked$", ["multi-family"]),
         (".*\.encrypted$", ["multi-family"]),
+        (".*dxxd$", ["DXXD"]),
+        (".*\.~HL[A-Z0-9]{5}$", ["HadesLocker"]),
     ]
 
     def on_complete(self):
