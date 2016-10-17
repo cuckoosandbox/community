@@ -49,11 +49,11 @@ class Multiple_UA(Signature):
                 self.procs.append((process["process_name"], ua))
 
     def on_complete(self):
-        if len(self.useragents) < 2:
-            return False
-
-        for item in self.procs:
-                self.mark_ioc("Process", item[0])
-                self.mark_ioc("User-Agent", item[1])
+        if len(self.useragents) > 1:
+            for item in self.procs:
+                self.mark(
+                    process=item[0],
+                    useragent=item[1],
+                )
 
         return self.has_marks()
