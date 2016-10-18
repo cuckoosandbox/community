@@ -57,7 +57,12 @@ class RansomwareFiles(Signature):
         (".*\\\\HOW_TO_UNLOCK_FILES_README_\([0-9a-f]+\)\.(txt|html|bmp)$", ["WildFire"]),
         (".*\\\\HELP_DECRYPT_YOUR_FILES\.(html|txt)$", ["CryptFile2"]),
         (".*\\\\!!!\ Readme\ For\ Decrypt\ !!!\.txt$", ["MarsJoke"]),
-        (".*_HOWDO_text\.(html|bmp)$", ["Locky"]),        
+        (".*_HOWDO_text\.(html|bmp)$", ["Locky"]),
+        (".*\\\\!!_RECOVERY_instructions_!!\.(html|txt)$", ["Nuke"]),
+        (".*\\\\DECRYPT_YOUR_FILES\.HTML$", ["Fantom"]),
+        (".*\\\\README_RECOVER_FILES_.*\.(html|txt|png)$", ["HadesLocker"]),
+        (".*\\\\README\.hta$", ["Cerber"]),
+        (".*RESTORE-FILES!.*txt$", ["Comrade-Circle"]),
     ]
 
     def on_complete(self):
