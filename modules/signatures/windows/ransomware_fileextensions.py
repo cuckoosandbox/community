@@ -67,6 +67,10 @@ class RansomwareExtensions(Signature):
         (".*\.encrypted$", ["multi-family"]),
         (".*dxxd$", ["DXXD"]),
         (".*\.~HL[A-Z0-9]{5}$", ["HadesLocker"]),
+        (".*\.exotic$", ["Exotic"]),
+        (".*\.k0stya$", ["Kostya"]),
+        (".*\.1txt$", ["Enigma"]),
+        (".*\.nuclear55$", ["Nuke"]),
     ]
 
     def on_complete(self):
