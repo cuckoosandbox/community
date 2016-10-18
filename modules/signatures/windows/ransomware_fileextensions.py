@@ -23,15 +23,6 @@ class RansomwareExtensions(Signature):
     authors = ["Kevin Ross"]
 
     indicators = [
-        (".*\.aaa$", ["TelsaCrypt"]),
-        (".*\.aba$", ["TelsaCrypt"]),
-        (".*\.ccc$", ["TelsaCrypt"]),
-        (".*\.ecc$", ["TelsaCrypt"]),
-        (".*\.exx$", ["TelsaCrypt"]),
-        (".*\.ezz$", ["TelsaCrypt"]),
-        (".*\.vvv$", ["TelsaCrypt"]),
-        (".*\.rdm$", ["TelsaCrypt"]),
-        (".*\.rrk$", ["TelsaCrypt"]),
         (".*\.toxcrypt$", ["ToxCrypt"]),
         (".*\.hydracrypt_ID_[a-z0-9]{8}$", ["HydraCrypt"]),
         (".*\.hydracrypttmp_ID_[a-z0-9]{8}$", ["HydraCrypt"]),
@@ -58,6 +49,8 @@ class RansomwareExtensions(Signature):
         (".*\.fantom$", ["Fantom"]),
         (".*_nullbyte$", ["Nullbyte"]),
         (".*\.purge$", ["Globe"]),
+        (".*\.globe$", ["Globe"]),
+        (".*\.raid10$", ["Globe"]),
         (".*\.domino$", ["Domino"]),
         (".*\.locky$", ["Locky"]),
         (".*\.wflx$", ["Locky"]),
@@ -73,6 +66,7 @@ class RansomwareExtensions(Signature):
         (".*\.0x5bm$", ["Nuke"]),
         (".*\.nuclear55$", ["Nuke"]),
         (".*\.comrade$", ["Comrade-Circle"]),
+        (".*\.rip$", ["KillerLocker"]),
     ]
 
     def on_complete(self):
