@@ -72,6 +72,7 @@ class RansomwareExtensions(Signature):
         (".*\.1txt$", ["Enigma"]),
         (".*\.0x5bm$", ["Nuke"]),
         (".*\.nuclear55$", ["Nuke"]),
+        (".*\.comrade$", ["Comrade-Circle"]),
     ]
 
     def on_complete(self):
