@@ -70,6 +70,7 @@ class RansomwareExtensions(Signature):
         (".*\.exotic$", ["Exotic"]),
         (".*\.k0stya$", ["Kostya"]),
         (".*\.1txt$", ["Enigma"]),
+        (".*\.0x5bm$", ["Nuke"]),
         (".*\.nuclear55$", ["Nuke"]),
     ]
 
