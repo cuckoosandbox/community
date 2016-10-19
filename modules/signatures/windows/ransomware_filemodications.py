@@ -30,9 +30,9 @@ class RamsomwareFileMoves(Signature):
 
     def on_complete(self):
         if self.has_marks(1000):
-            self.description = self.description % 500
+            self.description = self.description % 1000
             self.severity = 6
-        if self.has_marks(600):
+        if self.has_marks(500):
             self.description = self.description % 500
             self.severity = 5
         elif self.has_marks(100):
