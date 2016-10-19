@@ -16,6 +16,7 @@ class UsesWindowsUtilities(Signature):
         "taskkill",
         "netsh",
         "netstat",
+        "bitsadmin",
     ]
 
     def on_complete(self):
