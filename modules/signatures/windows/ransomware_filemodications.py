@@ -17,7 +17,7 @@ class RamsomwareFileMoves(Signature):
     name = "ransomware_file_moves"
     description = "Performs more than %d file moves indicative of a ransomware file encryption process"
     severity = 3
-    families = ["ransomware"]
+    categories = ["ransomware"]
     minimum = "2.0"
 
     filter_apinames = "MoveFileWithProgressW", "MoveFileWithProgressTransactedW"
@@ -48,7 +48,7 @@ class RansomwareAppendsExtension(Signature):
     name = "ransomware_appends_extensions"
     description = "Appends a new file extension to more than %d files indicative of a ransomware file encryption process"
     severity = 3
-    families = ["ransomware"]
+    categories = ["ransomware"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
@@ -82,7 +82,7 @@ class RansomwareDroppedFiles(Signature):
     name = "ransomware_dropped_files"
     description = "Drops many unknown file mime types indicative of ransomware writing encrypted files back to disk"
     severity = 3
-    families = ["ransomware"]
+    categories = ["ransomware"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
