@@ -93,16 +93,32 @@ class RansomwareMessage(Signature):
             "enter code",
             "your key",
             "unique key"
-    ]
+        ]
+
+        self.whitelistprocs = [
+            "iexplore.exe",
+            "firefox.exe",
+            "chrome.exe",
+            "safari.exe",
+            "acrord32.exe",
+            "acrord64.exe",
+            "wordview.exe",
+            "winword.exe",
+            "excel.exe",
+            "powerpnt.exe",
+            "outlook.exe",
+            "mspub.exe"
+        ]
 
     filter_apinames = set(["NtWriteFile"])
 
     def on_call(self, call, process):
-        buff = call["arguments"]["buffer"].lower()
-        if len(buff) >= 128:
-            patterns = "|".join(self.indicators)
-            if len(re.findall(patterns, buff)) > 1:
-                self.mark_call()
+        if process["process_name"].lower() not in self.whitelistprocs:
+            buff = call["arguments"]["buffer"].lower()
+            if len(buff) >= 128:
+                patterns = "|".join(self.indicators)
+                if len(re.findall(patterns, buff)) > 1:
+                    self.mark_call()
 
     def on_complete(self):
         return self.has_marks()
