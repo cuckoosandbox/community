@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class ProcMemDumpYara(Signature):
     name = "memdump_yara"
-    description = "Yara rule detection in process memory"
+    description = "Yara rule detected in process memory"
     severity = 2
     categories = ["generic"]
     authors = ["Kevin Ross", "KillerInstinct"]
