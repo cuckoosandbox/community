@@ -63,6 +63,7 @@ class RansomwareFiles(Signature):
         (".*\\\\README_RECOVER_FILES_.*\.(html|txt|png)$", ["HadesLocker"]),
         (".*\\\\README\.hta$", ["Cerber"]),
         (".*\\\\RESTORE-FILES!.*txt$", ["Comrade-Circle"]),
+        (".*_WHAT_is\.(html|bmp)$", ["Locky"]),
     ]
 
     def on_complete(self):
