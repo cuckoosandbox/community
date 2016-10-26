@@ -46,7 +46,7 @@ class SuspiciousPowershell(Signature):
                 else:
                     features += ", Downloads a file"
 
-            if "start-process" in lower:
+            if "start-process" in lower or "shellexecute" in lower:
                 if features == "":
                     features = "Creates a new process"
                 else:
