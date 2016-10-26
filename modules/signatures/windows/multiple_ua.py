@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class Multiple_UA(Signature):
     name = "multiple_useragents"
-    description = "Network activity contains more than one unique useragent."
+    description = "Network activity contains more than one unique useragent"
     severity = 3
     categories = ["network"]
     authors = ["KillerInstinct"]
