@@ -102,7 +102,7 @@ class SuspiciousWriteEXE(Signature):
     description = "Wrote an executable file to disk"
     severity = 3
     categories = ["exploit", "downloader", "virus"]
-    authors = ["Will Metcalf"]
+    authors = ["Will Metcalf", "Kevin Ross"]
     minimum = "2.0"
 
     def __init__(self, *args, **kwargs):
@@ -117,22 +117,35 @@ class SuspiciousWriteEXE(Signature):
     ]
 
     filter_apinames = [
-        "NtWriteFile", "CreateProcessInternalW", "ShellExecuteExW",
+        "NtCreateFile", "NtWriteFile", "CreateProcessInternalW", "ShellExecuteExW",
+    ]
+
+    whitelist = [
+        "\Windows\System32\wscript.exe",
     ]
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()
         if pname in self.susp_proc_list:
             if call["api"] == "NtWriteFile" and call["arguments"].get("filepath"):
-                buff = call["arguments"]["buffer"]
                 filepath = call["arguments"]["filepath"]
                 if filepath.endswith(".exe") or (buff and len(buff) > 2 and buff.startswith("MZ") and "This program" in buff):
-                    if pname not in self.pname:
-                        self.pname.append(pname)
-                    if filepath not in self.exes:
-                        self.exes.append(filepath)
-
-            if call["api"] == "CreateProcessInternalW" or call["api"] == "ShellExecuteExW":
+                    for white in self.whitelist:
+                        if white not in filepath:
+                            if pname not in self.pname:
+                                self.pname.append(pname)
+                            if filepath not in self.exes:
+                               self.exes.append(filepath)
+            elif call["api"] == "NtCreateFile" and call["arguments"].get("filepath"):
+                filepath = call["arguments"]["filepath"]
+                if filepath.endswith(".exe"):
+                    for white in self.whitelist:
+                        if white not in filepath:
+                            if pname not in self.pname:
+                                self.pname.append(pname)
+                            if filepath not in self.exes:
+                                self.exes.append(filepath)
+            elif call["api"] == "CreateProcessInternalW" or call["api"] == "ShellExecuteExW":
                 filepath = call["arguments"]["filepath"]
                 if filepath in self.exes and pname in self.pname:
                     self.executed = True
