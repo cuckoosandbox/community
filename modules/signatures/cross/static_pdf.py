@@ -25,5 +25,5 @@ class PDFJavaScript(Signature):
 
     def on_complete(self):
         for pdf in self.get_results("static", {}).get("pdf", []):
-            if "javascript" in pdf:
+            if "javascript" in pdf and len(pdf["javascript"]) > 0:
                 return True
