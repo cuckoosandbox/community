@@ -72,8 +72,7 @@ class SuspiciousPowershell(Signature):
 
             if len(features) > 0:
                 if "base64 encoded command value" in features:
-                   self.mark(cmdline=cmdline, description=features,
-                          script=script)
+                    self.mark(cmdline=cmdline, description=features, script=script)
                 else:                 
                     self.mark(cmdline=cmdline, description=features)
 
