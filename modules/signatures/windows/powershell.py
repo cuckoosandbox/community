@@ -1,4 +1,4 @@
-# Copyright (C) 2010-2015 Cuckoo Foundation.
+# Copyright (C) 2010-2016 Cuckoo Foundation, Kevin Ross
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
@@ -17,21 +17,40 @@ class SuspiciousPowershell(Signature):
     def on_complete(self):
         for cmdline in self.get_command_lines():
             lower = cmdline.lower()
+            features = ""
 
             if "powershell" not in lower:
                 continue
 
             if "-ep bypass" in lower or "-executionpolicy bypass" in lower:
-                self.mark(cmdline=cmdline, value="Attempts to bypass execution policy")
+                if features == "":
+                    features = "Attempts to bypass execution policy"
+                else:
+                    features += ", Attempts to bypass execution policy"       
 
             if "-nop" in lower or "-noprofile" in lower:
-                self.mark(cmdline=cmdline, value="Does not load current user profile")
+                if features == "":
+                    features = "Does not load current user profile"
+                else:
+                    features += ", Does not load current user profile"
 
             if "-w hidden" in lower or "-windowstyle hidden" in lower:
-                self.mark(cmdline=cmdline, value="Attempts to execute command with a hidden window")
+                if features == "":
+                    features = "Attempts to execute command with a hidden window"
+                else:
+                    features += ", Attempts to execute command with a hidden window"
 
             if "downloadfile(" in lower:
-                self.mark(cmdline=cmdline, value="Uses powershell to execute a file download from the command line")
+                if features == "":
+                    features = "Downloads a file"
+                else:
+                    features += ", Downloads a file"
+
+            if "start-process" in lower:
+                if features == "":
+                    features = "Creates a new process"
+                else:
+                    features += ", Creates a new process"
 
             if "-enc" in lower or "-encodedcommand" in lower:
                 # This has to be improved.
@@ -46,7 +65,16 @@ class SuspiciousPowershell(Signature):
                     except:
                         pass
 
-                self.mark(cmdline=cmdline, value="Uses a base64 encoded command value",
+                if features == "":
+                    features = "Uses a base64 encoded command value"
+                else:
+                    features += ", Uses a base64 encoded command value"
+
+            if len(features) > 0:
+                if "base64 encoded command value" in features:
+                   self.mark(cmdline=cmdline, description=features,
                           script=script)
+                else:                 
+                    self.mark(cmdline=cmdline, description=features)
 
         return self.has_marks()
