@@ -27,7 +27,6 @@ class Dyreza(Signature):
         ".*tubeini.*exe",
         ".*mfcsubs.dll",
         ".*Temp.*mscodecs.exe",
-        ".*system32.*Duser.*dll",
     ]
 
     def on_complete(self):
