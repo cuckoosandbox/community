@@ -72,6 +72,7 @@ class RansomwareExtensions(Signature):
         (".*\.adk$", ["AngryDuck"]),
         (".*\.lock93$", ["Lock93"]),
         (".*\.Alcatraz$", ["Alcatraz-Locker"]),
+        (".*\.dCrypt$", ["DummyLocker"]),
     ]
 
     def on_complete(self):
