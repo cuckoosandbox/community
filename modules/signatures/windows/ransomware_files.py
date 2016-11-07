@@ -65,6 +65,7 @@ class RansomwareFiles(Signature):
         (".*\\\\RESTORE-FILES!.*txt$", ["Comrade-Circle"]),
         (".*_WHAT_is\.(html|bmp)$", ["Locky"]),
         (".*\\\\decrypt\ explanations\.html$", ["n1n1n1"]),
+        (".*\\\\ransomed\.html$", ["Alcatraz-Locker"]),
     ]
 
     def on_complete(self):
