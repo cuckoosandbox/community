@@ -73,6 +73,8 @@ class RansomwareExtensions(Signature):
         (".*\.lock93$", ["Lock93"]),
         (".*\.Alcatraz$", ["Alcatraz-Locker"]),
         (".*\.dCrypt$", ["DummyLocker"]),
+        (".*\.enc$", ["encryptJJS"]),
+        (".*\.rnsmwr$", ["Gremit"]),
     ]
 
     def on_complete(self):
