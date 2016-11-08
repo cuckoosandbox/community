@@ -41,6 +41,7 @@ class RansomwareExtensions(Signature):
         (".*\.cryp1$", ["CryptXXX"]),
         (".*\.[0-9A-F]{32}\.[0-9A-F]{5}$", ["CryptXXX"]),
         (".*\.id_[^\/]*\.scl$", ["CryptFile2"]),
+        (".*\.id_[^\/]*\.rscl$", ["CryptFile2"]),
         (".*\.razy$", ["Razy"]),
         (".*\.Venus(f|p)$", ["VenusLocker"]),
         (".*\.fs0ciety$", ["Fsociety"]),
