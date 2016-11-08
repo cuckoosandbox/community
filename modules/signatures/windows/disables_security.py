@@ -33,7 +33,7 @@ class DisablesSecurity(Signature):
             for regkey in self.check_key(pattern=indicator[0], regex=True, actions=["regkey_written"], all=True):
                 self.mark(
                     description=indicator[1],
-                    registry=indicator[0],                     
+                    registry=regkey,                     
                 )
                 self.severity += 1
 
