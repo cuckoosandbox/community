@@ -79,6 +79,7 @@ class RansomwareExtensions(Signature):
         (".*\.da_vinci_code$", ["Troldesh"]),
         (".*\.magic_software_syndicate$", ["Troldesh"]),
         (".*_luck$", ["CryptoLuck"]),
+        (".*\.CHIP$", ["CHIP"]),
     ]
 
     def on_complete(self):
