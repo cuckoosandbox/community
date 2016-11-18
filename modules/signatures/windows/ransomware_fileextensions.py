@@ -23,15 +23,6 @@ class RansomwareExtensions(Signature):
     authors = ["Kevin Ross"]
 
     indicators = [
-        (".*\.aaa$", ["TelsaCrypt"]),
-        (".*\.aba$", ["TelsaCrypt"]),
-        (".*\.ccc$", ["TelsaCrypt"]),
-        (".*\.ecc$", ["TelsaCrypt"]),
-        (".*\.exx$", ["TelsaCrypt"]),
-        (".*\.ezz$", ["TelsaCrypt"]),
-        (".*\.vvv$", ["TelsaCrypt"]),
-        (".*\.rdm$", ["TelsaCrypt"]),
-        (".*\.rrk$", ["TelsaCrypt"]),
         (".*\.toxcrypt$", ["ToxCrypt"]),
         (".*\.hydracrypt_ID_[a-z0-9]{8}$", ["HydraCrypt"]),
         (".*\.hydracrypttmp_ID_[a-z0-9]{8}$", ["HydraCrypt"]),
@@ -50,6 +41,7 @@ class RansomwareExtensions(Signature):
         (".*\.cryp1$", ["CryptXXX"]),
         (".*\.[0-9A-F]{32}\.[0-9A-F]{5}$", ["CryptXXX"]),
         (".*\.id_[^\/]*\.scl$", ["CryptFile2"]),
+        (".*\.id_[^\/]*\.rscl$", ["CryptFile2"]),
         (".*\.razy$", ["Razy"]),
         (".*\.Venus(f|p)$", ["VenusLocker"]),
         (".*\.fs0ciety$", ["Fsociety"]),
@@ -58,13 +50,35 @@ class RansomwareExtensions(Signature):
         (".*\.fantom$", ["Fantom"]),
         (".*_nullbyte$", ["Nullbyte"]),
         (".*\.purge$", ["Globe"]),
+        (".*\.globe$", ["Globe"]),
+        (".*\.raid10$", ["Globe"]),
         (".*\.domino$", ["Domino"]),
+        (".*\.wflx$", ["WildFire-Locker"]),
         (".*\.locky$", ["Locky"]),
-        (".*\.wflx$", ["Locky"]),
         (".*\.zepto$", ["Locky"]),
         (".*\.odin$", ["Locky"]),
+        (".*\.shit$", ["Locky"]),
+        (".*\.thor$", ["Locky"]),
         (".*\.locked$", ["multi-family"]),
         (".*\.encrypted$", ["multi-family"]),
+        (".*dxxd$", ["DXXD"]),
+        (".*\.~HL[A-Z0-9]{5}$", ["HadesLocker"]),
+        (".*\.exotic$", ["Exotic"]),
+        (".*\.k0stya$", ["Kostya"]),
+        (".*\.1txt$", ["Enigma"]),
+        (".*\.0x5bm$", ["Nuke"]),
+        (".*\.nuclear55$", ["Nuke"]),
+        (".*\.comrade$", ["Comrade-Circle"]),
+        (".*\.rip$", ["KillerLocker"]),
+        (".*\.adk$", ["AngryDuck"]),
+        (".*\.lock93$", ["Lock93"]),
+        (".*\.Alcatraz$", ["Alcatraz-Locker"]),
+        (".*\.dCrypt$", ["DummyLocker"]),
+        (".*\.enc$", ["encryptJJS"]),
+        (".*\.rnsmwr$", ["Gremit"]),
+        (".*\.da_vinci_code$", ["Troldesh"]),
+        (".*\.magic_software_syndicate$", ["Troldesh"]),
+        (".*_luck$", ["CryptoLuck"]),
     ]
 
     def on_complete(self):
@@ -73,8 +87,8 @@ class RansomwareExtensions(Signature):
                 self.mark_ioc("file", filepath)
                 if indicator[1]:
                     self.description = (
-                        "Appends known %s ransomware file extensions to "
-                        "files that have been encrypted." %
+                        "Appends a known %s ransomware file extension to "
+                        "files that have been encrypted" %
                         "/".join(indicator[1])
                     )
 
