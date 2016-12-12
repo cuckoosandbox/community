@@ -52,6 +52,7 @@ class RansomwareExtensions(Signature):
         (".*\.purge$", ["Globe"]),
         (".*\.globe$", ["Globe"]),
         (".*\.raid10$", ["Globe"]),
+        (".*\.lovewindows$", ["Globe"]),
         (".*\.domino$", ["Domino"]),
         (".*\.wflx$", ["WildFire-Locker"]),
         (".*\.locky$", ["Locky"]),
