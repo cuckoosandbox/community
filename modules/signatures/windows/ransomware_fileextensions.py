@@ -85,6 +85,10 @@ class RansomwareExtensions(Signature):
         (".*\.no_more_ransom$", ["Troldesh"]),
         (".*_luck$", ["CryptoLuck"]),
         (".*\.CHIP$", ["CHIP"]),
+        (".*\.DALE$", ["CHIP"]),
+        (".*\.sexy$", ["PayDay"]),
+        (".*\.kraken$", ["Kraken"]),
+        (".*\.lesli$", ["CryptoMix"]),
     ]
 
     def on_complete(self):
