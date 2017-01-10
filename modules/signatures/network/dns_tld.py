@@ -14,11 +14,12 @@ class Suspicious_TLD(Signature):
     minimum = "2.0"
 
     domains_re = [
-        (".*\\.onion$", "TOR Onion domain TLD"),
+        (".*\\.by$", "Belarus domain TLD"),
         (".*\\.cc$", "Cocos Islands domain TLD"),
+        (".*\\.onion$", "TOR Onion domain TLD"),
+        (".*\\.pw$", "Palau domain TLD"),
         (".*\\.ru$", "Russian Federation domain TLD"),
         (".*\\.su$", "Soviet Union domain TLD"),
-        (".*\\.by$", "Belarus domain TLD"),
         (".*\\.top$", "Generic top level domain TLD"),
     ]
     queried_domains = []
