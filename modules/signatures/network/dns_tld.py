@@ -16,7 +16,7 @@ class Suspicious_TLD(Signature):
     domains_re = [
         (".*\\.by$", "Belarus domain TLD"),
         (".*\\.cc$", "Cocos Islands domain TLD"),
-        (".*\\.onion$", "TOR Onion domain TLD"),
+        (".*\\.onion$", "TOR Onion hidden services domain TLD"),
         (".*\\.pw$", "Palau domain TLD"),
         (".*\\.ru$", "Russian Federation domain TLD"),
         (".*\\.su$", "Soviet Union domain TLD"),
