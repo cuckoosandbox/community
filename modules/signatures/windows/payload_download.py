@@ -30,7 +30,7 @@ class NetworkDocumentFile(Signature):
     proc_list = [
         "wordview.exe", "winword.exe", "excel.exe", "powerpnt.exe",
         "outlook.exe", "acrord32.exe", "acrord64.exe", "wscript.exe",
-        "mspub.exe",
+        "mspub.exe", "powershell.exe",
     ]
 
     filter_apinames = [
@@ -72,7 +72,7 @@ class NetworkEXE(Signature):
     high_risk_proc = [
         "wordview.exe", "winword.exe", "excel.exe", "powerpnt.exe",
         "outlook.exe", "acrord32.exe", "acrord64.exe", "wscript.exe",
-        "java.exe", "javaw.exe",
+        "java.exe", "javaw.exe", "powershell.exe",
     ]
 
     filter_apinames = "recv", "InternetReadFile"
@@ -113,7 +113,7 @@ class SuspiciousWriteEXE(Signature):
 
     susp_proc_list = [
         "wordview.exe", "winword.exe", "excel.exe", "powerpnt.exe",
-        "outlook.exe", "wscript.exe", "java.exe", "javaw.exe",
+        "outlook.exe", "wscript.exe", "java.exe", "javaw.exe", "powershell.exe",
     ]
 
     filter_apinames = [
