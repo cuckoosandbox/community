@@ -35,7 +35,7 @@ class NetworkDocumentFile(Signature):
 
     filter_apinames = [
         "InternetCrackUrlW", "InternetCrackUrlA", "URLDownloadToFileW",
-        "HttpOpenRequestW", "WSASend",
+        "HttpOpenRequestW", "WSASend", "send",
     ]
 
     filter_analysistypes = "file",
@@ -129,7 +129,7 @@ class SuspiciousWriteEXE(Signature):
         if pname in self.susp_proc_list:
             if call["api"] == "NtWriteFile" and call["arguments"].get("filepath"):
                 filepath = call["arguments"]["filepath"]
-                if filepath.endswith(".exe") or (buff and len(buff) > 2 and buff.startswith("MZ") and "This program" in buff):
+                if filepath.endswith(".exe") or (buff and len(buff) > 2 and buff.startswith("MZ") and "This program" in buff) and "powershell_ise.exe" not in filepath:
                     for white in self.whitelist:
                         if white not in filepath:
                             if pname not in self.pname:
@@ -138,7 +138,7 @@ class SuspiciousWriteEXE(Signature):
                                self.exes.append(filepath)
             elif call["api"] == "NtCreateFile" and call["arguments"].get("filepath"):
                 filepath = call["arguments"]["filepath"]
-                if filepath.endswith(".exe"):
+                if filepath.endswith(".exe") and "powershell_ise.exe" not in filepath:
                     for white in self.whitelist:
                         if white not in filepath:
                             if pname not in self.pname:
