@@ -90,6 +90,7 @@ class RansomwareExtensions(Signature):
         (".*\.kraken$", ["Kraken"]),
         (".*\.lesli$", ["CryptoMix"]),
         (".*\.sage$", ["Sage"]),
+        (".*\.CRYPTOSHIELD$", ["CryptoShield"]),
     ]
 
     def on_complete(self):
