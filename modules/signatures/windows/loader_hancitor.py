@@ -1,15 +1,7 @@
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Copyright (C) 2010-2013 Claudio Guarnieri.
+# Copyright (C) 2014-2016 Cuckoo Foundation.
+# This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
+# See the file 'docs/LICENSE' for copying permission.
 
 import base64
 import re
@@ -25,40 +17,36 @@ class Hancitor(Signature):
     authors = ["ronbarrey"]
     minimum = "2.0"
 
-    urls_re = [
-        ".*api.ipify.org",
-        ".*com\/ls[0-9]\/.*.php",
-        ".*ru\/ls[0-9]\/.*.php",
-    ]
+    filter_apinames = "HttpSendRequestA", "InternetCrackUrlA", "InternetReadFile"
 
+    url_re = ".*[\.com|ru]\/ls[0-9]\/.*\.php"
+    post_re = "GUID\=\d+\&BUILD\=\w+\&INFO\=.*\&IP\=[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\&TYPE\=\d+\&WIN\=.*"
     c2_re = "^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=|[A-Za-z0-9+\/]{4})$"
 
     c2_xor_key = 122
 
-    def on_complete(self):
-        for procmem in self.get_results("procmemory", []):
-            for url in procmem.get("urls", []):
-                for indicator in self.urls_re:
-                    match = self._check_value(pattern=indicator, subject=url,
-                                              regex=True, all=all)
-                    if match:
-                        self.mark_ioc("url", url)
+    def on_call(self, call, process):
+        post = call["arguments"].get("post_data", {})
+        url = call["arguments"].get("url", {})
+        buffer = call["arguments"].get("buffer", {})
 
-        for process in self.get_results("behavior", {}).get("processes", []):
-            if not process["calls"]:
-                for call in process["calls"]:
-                    match = self._check_value(pattern=self.c2_re,
-                                              subject=call.get("arguments",
-                                                               {}).get(
-                                                  "buffer", {}),
-                                              regex=True, all=all)
-                    if match:
-                        decoded = base64.b64decode(match[0])
-                        decrypted = ""
-                        for ch in decoded:
-                            decrypted += chr(ord(ch) ^ self.c2_xor_key)
-                        c2 = re.findall("\{.*\}", decrypted)
-                        if c2:
-                            self.mark_ioc("c2", c2[0])
+        if post:
+            if re.match(self.post_re, post):
+                self.mark_ioc("post_data", post, process["process_name"])
+
+        if buffer:
+            match = re.match(self.c2_re, buffer, re.I)
+            if match:
+                decoded = base64.b64decode(buffer)
+                decrypted = ""
+                for ch in decoded:
+                    decrypted += chr(ord(ch) ^ self.c2_xor_key)
+                c2 = re.findall("\{.*\}", decrypted)
+                if c2:
+                    self.mark_ioc("c2", c2[0], process["process_name"])
+
+        if url:
+            if re.findall(self.url_re, url):
+                self.mark_ioc("url", url, process["process_name"])
 
         return self.has_marks()
