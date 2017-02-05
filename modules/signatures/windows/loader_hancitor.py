@@ -27,16 +27,15 @@ class Hancitor(Signature):
 
     def on_call(self, call, process):
         post = call["arguments"].get("post_data", {})
-        url = call["arguments"].get("url", {})
         buffer = call["arguments"].get("buffer", {})
+        url = call["arguments"].get("url", {})
 
         if post:
             if re.match(self.post_re, post):
                 self.mark_ioc("post_data", post, process["process_name"])
 
         if buffer:
-            match = re.match(self.c2_re, buffer, re.I)
-            if match:
+            if re.match(self.c2_re, buffer, re.I):
                 decoded = base64.b64decode(buffer)
                 decrypted = ""
                 for ch in decoded:
