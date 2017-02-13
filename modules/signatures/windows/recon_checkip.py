@@ -61,6 +61,8 @@ class CheckIP(Signature):
         "www.myip.nl",
         "myip.dnsomatic.com",
         "www.geoip.co.uk",
+        "ipecho.net",
+        "wtfismyip.com",
     ]
 
     def on_complete(self):
