@@ -28,7 +28,8 @@ class Dropper(Signature):
         self.executed = []
         self.exe = False
         if self.get_results("target", {}).get("category") == "file":
-            if "PE32 executable" in self.get_results("target", {})["file"]["type"]:
+            f = self.get_results("target", {}).get("file", {})
+            if "PE32 executable" in f.get("type", ""):
                 self.exe = True
 
     filter_apinames = "CreateProcessInternalW", "ShellExecuteExW"
