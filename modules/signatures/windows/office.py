@@ -74,6 +74,51 @@ class OfficeHttpRequest(Signature):
             self.mark_ioc("payload_url", call["arguments"]["args"][1])
             return True
 
+class OfficeNetworkExe(Signature):
+    name = "office_network_exe"
+    description = "Office document has downloaded a PE file (possibly malware)"
+    severity = 5
+    categories = ["vba"]
+    authors = "FDD @ Cuckoo Sandbox"
+    minimum = "2.0"
+    filter_apinames = "vbe6_Invoke"
+
+    gets_response = False
+    writes_disk   = False
+
+    def on_call(self, call, process):
+        if call["arguments"]["funcname"] == "ResponseText" or
+           call["arguments"]["funcname"] == "ResponseBody":
+            self.gets_response = True
+            return
+
+        buf = call["arguments"]["args"][0]
+        if call["arguments"]["funcname"] == "Write" and
+           buf.startswith("MZ") and
+           "This program cannot be run in DOS mode" in buf:
+            self.writes_disk = True
+
+    def on_complete(self):
+        return gets_response and writes_disk
+
+class OfficeWritesExe(Signature):
+    name = "office_writes_exe"
+    description = "Office document has written a PE file to disk"
+    severity = 5
+    categories = ["vba"]
+    authors = "FDD @ Cuckoo Sandbox"
+    minimum = 2.0
+    filter_apinames = "vbe6_Invoke"
+
+    def on_call(self, call, process):
+        if call["arguments"]["funcname"] != "Write":
+            return
+
+        buf = call["arguments"]["args"][0]
+        if buf.startswith("MZ") and
+           "This program cannot be run in DOS mode" in buf:
+            return True
+
 class OfficeRecentFiles(Signature):
     name = "office_recent_files"
     description = "Uses RecentFiles to determine whether it is running in a sandbox"
