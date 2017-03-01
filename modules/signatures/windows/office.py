@@ -94,8 +94,7 @@ class OfficeNetworkExe(Signature):
 
         buf = call["arguments"]["args"][0]
         if call["arguments"]["funcname"] == "Write" and
-           buf.startswith("MZ") and
-           "This program cannot be run in DOS mode" in buf:
+           buf.startswith("MZ") and "This program cannot be run in DOS mode" in buf:
             self.writes_disk = True
 
     def on_complete(self):
@@ -115,11 +114,14 @@ class OfficeWritesExe(Signature):
             buf = call["arguments"]["args"][0]
             if buf.startswith("MZ") and
             "This program cannot be run in DOS mode" in buf:
-                return True
+                self.mark_call()
 
         if call["arguments"]["funcname"] != "SaveToFile":
             filename = call["arguments"]["args"][0]
             self.mark_ioc("file", filename)
+            self.mark_call()
+
+        return self.has_marks()
 
 class OfficeExec(Signature):
     name = "office_writes_exe"
@@ -136,7 +138,7 @@ class OfficeExec(Signature):
 
         cmd = call["arguments"]["args"][1]
         self.mark_ioc("cmd", cmd)
-        return self.has_marks()
+        return True
 
 
 class OfficeRecentFiles(Signature):
