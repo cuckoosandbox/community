@@ -133,10 +133,11 @@ class OfficeExec(Signature):
     filter_apinames = "vbe6_Invoke"
 
     def on_call(self, call, process):
-        if call["arguments"]["funcname"] != "Exec":
+        if call["arguments"]["funcname"] != "Exec" and
+           call["arguments"]["funcname"] != "Run":
             return
 
-        cmd = call["arguments"]["args"][1]
+        cmd = call["arguments"]["args"][0]
         self.mark_ioc("cmd", cmd)
         return True
 
