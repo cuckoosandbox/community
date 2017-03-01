@@ -111,13 +111,33 @@ class OfficeWritesExe(Signature):
     filter_apinames = "vbe6_Invoke"
 
     def on_call(self, call, process):
-        if call["arguments"]["funcname"] != "Write":
+        if call["arguments"]["funcname"] == "Write":
+            buf = call["arguments"]["args"][0]
+            if buf.startswith("MZ") and
+            "This program cannot be run in DOS mode" in buf:
+                return True
+
+        if call["arguments"]["funcname"] != "SaveToFile":
+            filename = call["arguments"]["args"][0]
+            self.mark_ioc("file", filename)
+
+class OfficeExec(Signature):
+    name = "office_writes_exe"
+    description = "Office document executes commands or files"
+    severity = 5
+    categories = ["vba"]
+    authors = "FDD @ Cuckoo Sandbox"
+    minimum = 2.0
+    filter_apinames = "vbe6_Invoke"
+
+    def on_call(self, call, process):
+        if call["arguments"]["funcname"] != "Exec":
             return
 
-        buf = call["arguments"]["args"][0]
-        if buf.startswith("MZ") and
-           "This program cannot be run in DOS mode" in buf:
-            return True
+        cmd = call["arguments"]["args"][1]
+        self.mark_ioc("cmd", cmd)
+        return self.has_marks()
+
 
 class OfficeRecentFiles(Signature):
     name = "office_recent_files"
