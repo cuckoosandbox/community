@@ -24,7 +24,7 @@ class NetworkSMTP(Signature):
     minimum = "2.0.0"
 
     def on_complete(self):
-        for s in self.get_net_smtp():
+        for s in getattr(self, "get_net_smtp_ex", lambda: [])():
             if s["req"].get("username") is None:
                 self.mark(server=s["dst"], sender=s["req"].get("mail_from"),
                           receiver=s["req"].get("mail_to"))
@@ -34,4 +34,8 @@ class NetworkSMTP(Signature):
                           user=s["req"].get("username"),
                           password=s["req"].get("password")
                 )
-        return self.has_marks()
+
+        if not self.has_marks():
+            return len(self.get_net_smtp()) > 0
+        else:
+            return True
