@@ -71,6 +71,7 @@ class OfficeHttpRequest(Signature):
 
         # Usually ["GET", "url", False].
         if len(call["arguments"]["args"]) == 3:
+            self.mark_call()
             self.mark_ioc("payload_url", call["arguments"]["args"][1])
             return True
 
@@ -100,7 +101,7 @@ class OfficeNetworkExe(Signature):
             self.writes_disk = True
 
     def on_complete(self):
-        return gets_response and writes_disk
+        return self.gets_response and self.writes_disk
 
 class OfficeWritesExe(Signature):
     name = "office_writes_exe"
@@ -118,7 +119,7 @@ class OfficeWritesExe(Signature):
                 "This program cannot be run in DOS mode" in buf):
                 self.mark_call()
 
-        if call["arguments"]["funcname"] != "SaveToFile":
+        if call["arguments"]["funcname"] == "SaveToFile":
             filename = call["arguments"]["args"][0]
             self.mark_ioc("file", filename)
             self.mark_call()
@@ -126,7 +127,7 @@ class OfficeWritesExe(Signature):
         return self.has_marks()
 
 class OfficeExec(Signature):
-    name = "office_writes_exe"
+    name = "office_exec"
     description = "Office document executes commands or files"
     severity = 5
     categories = ["vba"]
@@ -139,6 +140,7 @@ class OfficeExec(Signature):
             call["arguments"]["funcname"] != "Run"):
             return
 
+        self.mark_call()
         cmd = call["arguments"]["args"][0]
         self.mark_ioc("cmd", cmd)
         return True
