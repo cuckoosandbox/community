@@ -87,14 +87,14 @@ class OfficeNetworkExe(Signature):
     writes_disk   = False
 
     def on_call(self, call, process):
-        if call["arguments"]["funcname"] == "ResponseText" or
-           call["arguments"]["funcname"] == "ResponseBody":
+        if (call["arguments"]["funcname"] == "ResponseText" or
+            call["arguments"]["funcname"] == "ResponseBody"):
             self.gets_response = True
             return
 
         buf = call["arguments"]["args"][0]
-        if call["arguments"]["funcname"] == "Write" and
-           buf.startswith("MZ") and "This program cannot be run in DOS mode" in buf:
+        if (call["arguments"]["funcname"] == "Write" and
+            buf.startswith("MZ") and "This program cannot be run in DOS mode" in buf):
             self.writes_disk = True
 
     def on_complete(self):
@@ -106,14 +106,14 @@ class OfficeWritesExe(Signature):
     severity = 5
     categories = ["vba"]
     authors = "FDD @ Cuckoo Sandbox"
-    minimum = 2.0
+    minimum = "2.0"
     filter_apinames = "vbe6_Invoke"
 
     def on_call(self, call, process):
         if call["arguments"]["funcname"] == "Write":
             buf = call["arguments"]["args"][0]
-            if buf.startswith("MZ") and
-            "This program cannot be run in DOS mode" in buf:
+            if (buf.startswith("MZ") and
+                "This program cannot be run in DOS mode" in buf):
                 self.mark_call()
 
         if call["arguments"]["funcname"] != "SaveToFile":
@@ -129,12 +129,12 @@ class OfficeExec(Signature):
     severity = 5
     categories = ["vba"]
     authors = "FDD @ Cuckoo Sandbox"
-    minimum = 2.0
+    minimum = "2.0"
     filter_apinames = "vbe6_Invoke"
 
     def on_call(self, call, process):
-        if call["arguments"]["funcname"] != "Exec" and
-           call["arguments"]["funcname"] != "Run":
+        if (call["arguments"]["funcname"] != "Exec" and
+            call["arguments"]["funcname"] != "Run"):
             return
 
         cmd = call["arguments"]["args"][0]
