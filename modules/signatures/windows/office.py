@@ -92,9 +92,11 @@ class OfficeNetworkExe(Signature):
             self.gets_response = True
             return
 
+        if call["arguments"]["funcname"] != "Write":
+            return
+
         buf = call["arguments"]["args"][0]
-        if (call["arguments"]["funcname"] == "Write" and
-            buf.startswith("MZ") and "This program cannot be run in DOS mode" in buf):
+        if buf.startswith("MZ") and "This program cannot be run in DOS mode" in buf:
             self.writes_disk = True
 
     def on_complete(self):
