@@ -110,7 +110,7 @@ class OfficeWritesExe(Signature):
     categories = ["vba"]
     authors = "FDD @ Cuckoo Sandbox"
     minimum = "2.0"
-    filter_apinames = "vbe6_Invoke"
+    filter_apinames = "vbe6_Invoke",
 
     def on_call(self, call, process):
         if call["arguments"]["funcname"] == "Write":
@@ -133,7 +133,7 @@ class OfficeExec(Signature):
     categories = ["vba"]
     authors = "FDD @ Cuckoo Sandbox"
     minimum = "2.0"
-    filter_apinames = "vbe6_Invoke"
+    filter_apinames = "vbe6_Invoke",
 
     def on_call(self, call, process):
         if (call["arguments"]["funcname"] != "Exec" and
