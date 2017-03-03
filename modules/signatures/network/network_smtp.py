@@ -25,14 +25,14 @@ class NetworkSMTP(Signature):
 
     def on_complete(self):
         for s in getattr(self, "get_net_smtp_ex", lambda: [])():
-            if s["req"].get("username") is None:
-                self.mark(server=s["dst"], sender=s["req"].get("mail_from"),
-                          receiver=s["req"].get("mail_to"))
+            if s["req"]["username"] is None:
+                self.mark(server=s["dst"], sender=s["req"]["mail_from"],
+                          receiver=s["req"]["mail_to"])
             else:
-                self.mark(server=s["dst"], sender=s["req"].get("mail_from"),
-                          receiver=s["req"].get("mail_to"),
-                          user=s["req"].get("username"),
-                          password=s["req"].get("password")
+                self.mark(server=s["dst"], sender=s["req"]["mail_from"],
+                          receiver=s["req"]["mail_to"],
+                          user=s["req"]["username"],
+                          password=s["req"]["password"]
                 )
 
         if not self.has_marks():
