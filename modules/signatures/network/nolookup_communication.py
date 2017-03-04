@@ -14,7 +14,7 @@ class NoLookupCommunication(Signature):
 
     def on_complete(self):
         address_types = ["A", "AAAA"]
-        hosts = self.get_net_hosts()
+        hosts = list(self.get_net_hosts())
 
         for query in self.get_net_generic("dns"):
             if query["type"] not in address_types:
