@@ -26,7 +26,13 @@ class SuspiciousPowershell(Signature):
                 if features == "":
                     features = "Attempts to bypass execution policy"
                 else:
-                    features += ", Attempts to bypass execution policy"       
+                    features += ", Attempts to bypass execution policy"
+
+            if "-ep unrestricted" in lower or "-executionpolicy unrestricted" in lower:
+                if features == "":
+                    features = "Attempts to run an unrestricted execution policy"
+                else:
+                    features += ", Attempts to run an unrestricted execution policy"         
 
             if "-nop" in lower or "-noprofile" in lower:
                 if features == "":
@@ -51,6 +57,12 @@ class SuspiciousPowershell(Signature):
                     features = "Creates a new process"
                 else:
                     features += ", Creates a new process"
+
+            if "-noni" in lower:
+                if features == "":
+                    features = "Creates a non-interactive prompt"
+                else:
+                    features += ", Creates a non-interactive prompt"
 
             if "-enc" in lower or "-encodedcommand" in lower:
                 # This has to be improved.
