@@ -63,6 +63,24 @@ class SuspiciousPowershell(Signature):
                     features = "Creates a non-interactive prompt"
                 else:
                     features += ", Creates a non-interactive prompt"
+                    
+            if "system.net.webrequest" in lower and "create(" in lower and "getresponse" in lower:
+                if features == "":
+                    features = "Uses System.Net.WebRequest method to perform a HTTP request"
+                else:
+                    features += ", Uses System.Net.WebRequest method to perform a HTTP request"
+                    
+            if "start-bitstransfer" in lower:
+                if features == "":
+                    features = "Uses BitsTransfer to download a file"
+                else:
+                    features += ", Uses BitsTransfer to download a file"
+                    
+            if "invoke-item" in lower:
+                if features == "":
+                    features = "Uses Invoke-Item to execute a file"
+                else:
+                    features += ", Uses Invoke-Item to execute a file"
 
             if "-enc" in lower or "-encodedcommand" in lower:
                 # This has to be improved.
