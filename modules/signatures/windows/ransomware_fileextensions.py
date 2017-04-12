@@ -93,6 +93,7 @@ class RansomwareExtensions(Signature):
         (".*\.CRYPTOSHIELD$", ["CryptoShield"]),
         (".*\.serpent$", ["Serpent"]),
         (".*\.REVENGE$", ["Revenge"]),
+        (".*\.MOLE$", ["Mole"]),
     ]
 
     def on_complete(self):
