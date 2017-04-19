@@ -29,7 +29,7 @@ class PowershellDFSP(Signature):
           strings:
             $Net = "new-object system.net.webclient" nocase
             $Download = "downloadfile(" nocase
-						$Start = "Start-Process" nocase
+            $Start = "Start-Process" nocase
             $Payload = /(https?|ftp):\/\/[^\s\/$.?#].[^\s"']*/
 
           condition:
