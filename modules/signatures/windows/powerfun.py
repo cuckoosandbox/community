@@ -65,8 +65,8 @@ class Powerfun(Signature):
                                     if string[1] == "$Shellcode":
                                         b64 = (re.search("\(['\"]+([\w=\/\+]+)['\"]+\)", string[2])
                                                  .group(1))
-                                        compressed = bytearray(b64.decode("base64"))
-                                        shellcode = zlib.decompress(bytes(compressed), 15+32)
+                                        compressed = bytes(b64.decode("base64"))
+                                        shellcode = zlib.decompress(compressed, 15+32)
                                         self.mark_ioc("Invoked script", shellcode)
                             break
                     except Exception as e:
