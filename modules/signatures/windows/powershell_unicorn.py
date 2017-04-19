@@ -60,11 +60,14 @@ class PowershellUnicorn(Signature):
 
                         if matches:
                             self.mark_ioc("Malware family", "Unicorn generated script")
-														self.mark_ioc("Tool referece", "https://github.com/trustedsec/unicorn")
                             for m in matches:
                                 for string in m.strings:
                                     if string[1] == "$Shellcode":
-                                        self.mark_ioc("Shellcode", string[2])
+                                        shellcode = (string[2].replace("=", "")
+                                                              .replace(";", "")
+                                                              .replace(",", " ")
+                                                              .strip())
+                                        self.mark_ioc("Shellcode", shellcode)
                             break
                     except Exception as e:
                         traceback.print_exc(e)
