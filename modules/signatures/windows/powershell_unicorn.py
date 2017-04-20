@@ -6,6 +6,7 @@ import shlex
 import yara
 import logging
 import traceback
+import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -47,7 +48,8 @@ class PowershellUnicorn(Signature):
             if "powershell" not in lower:
                 continue
 
-            if "-enc" in lower or "-encodedcommand" in lower:
+            cmdpattern = re.compile("\-[e^]{1,2}[ncodema^]+")
+            if cmdpattern.search(lower):
                 script, args = None, shlex.split(cmdline)
                 for idx, arg in enumerate(args):
                     if "-enc" not in arg.lower() and "-encodedcommand" not in arg.lower():

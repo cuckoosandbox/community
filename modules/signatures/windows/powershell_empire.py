@@ -6,6 +6,7 @@ import shlex
 import yara
 import logging
 import traceback
+import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -31,7 +32,7 @@ class PowershellEmpire(Signature):
             $UAString = "User-Agent"
             $Net = "new-object system.net.webclient" nocase
             $Download = "downloadstring(" nocase
-            $Payload = /(https?|ftp):\/\/[^\s\/$.?#].[^\s"]*/
+            $Payload = /(https?|ftp):\/\/[^\s\/$.?#].[^\s'"]*/
 
           condition:
             all of them
@@ -43,8 +44,8 @@ class PowershellEmpire(Signature):
             if "powershell" not in lower:
                 continue
 
-            if "-enc" in lower or "-encodedcommand" in lower:
-                # This has to be improved.
+            cmdpattern = re.compile("\-[e^]{1,2}[ncodema^]+")
+            if cmdpattern.search(lower):
                 script, args = None, shlex.split(cmdline)
                 for idx, arg in enumerate(args):
                     if "-enc" not in arg.lower() and "-encodedcommand" not in arg.lower():
@@ -61,8 +62,7 @@ class PowershellEmpire(Signature):
                                 for string in m.strings:
                                     if string[1] == "$Payload":
                                         self.mark_ioc("Payload", string[2])
-
-                        break
+                            break
                     except Exception as e:
                         traceback.print_exc(e)
                         pass
