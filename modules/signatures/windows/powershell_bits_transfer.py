@@ -13,11 +13,11 @@ from cuckoo.misc import cwd
 
 log = logging.getLogger()
 
-class PowershellMeterpreter(Signature):
-    name = "powershell_meterpreter"
-    description = "Meterpreter execution throught Powershell detected"
+class PowershellBitsTransfer(Signature):
+    name = "powershell_bitstransfer"
+    description = "Powershell BITS Transfer detected (dropper malware)"
     severity = 5
-    categories = ["script", "meterpreter", "powershell", "malware"]
+    categories = ["script", "dropper", "downloader", "malware", "powershell"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
 
@@ -36,16 +36,16 @@ class PowershellMeterpreter(Signature):
                         continue
 
                     try:
-                        script = args[idx+1].decode("base64").decode("utf16").encode("utf8")
-                        rule = yara.compile(cwd("yara", "scripts", "powershell_meterpreter.yar"))
+                        script = args[idx+1].decode("base64").decode("utf16")
+                        rule = yara.compile(cwd("yara", "scripts", "powershell_BITS_transfer.yar"))
                         matches = rule.match(data=script)
 
                         if matches:
+                            self.mark_ioc("Malware family", "Powershell BITS Transfer dropper")
                             for m in matches:
                                 for string in m.strings:
-                                    if (string[1] == "$Host" or string[1] == "$Port" or
-                                        string[1] == "$Package"):
-                                        self.mark_ioc(string[1][1:], string[2])
+                                    if string[1] == "$Payload":
+                                        self.mark_ioc("Payload", string[2])
                             break
                     except Exception as e:
                         traceback.print_exc(e)

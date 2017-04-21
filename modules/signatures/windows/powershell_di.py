@@ -9,6 +9,7 @@ import traceback
 import re
 
 from lib.cuckoo.common.abstracts import Signature
+from cuckoo.misc import cwd
 
 log = logging.getLogger()
 
@@ -53,7 +54,7 @@ class PowershellDI(Signature):
 
                     try:
                         script = args[idx+1].decode("base64").decode("utf16")
-                        rule = yara.compile(source=_rule)
+                        rule = yara.compile(cwd("yara", "scripts", "powershell_di.yar"))
                         matches = rule.match(data=script)
 
                         if matches:

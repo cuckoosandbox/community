@@ -9,6 +9,7 @@ import traceback
 import re
 
 from lib.cuckoo.common.abstracts import Signature
+from cuckoo.misc import cwd
 
 log = logging.getLogger()
 
@@ -21,22 +22,6 @@ class PowershellDFSP(Signature):
     minimum = "2.0"
 
     def on_complete(self):
-        psempire_rule = """
-        rule PowershellDFSP {
-          meta:
-            author = "FDD"
-            description = "Rule for Powershell DFSP detection"
-
-          strings:
-            $Net = "new-object system.net.webclient" nocase
-            $Download = "downloadfile(" nocase
-            $Start = "Start-Process" nocase
-            $Payload = /(https?|ftp):\/\/[^\s\/$.?#].[^\s"']*/
-
-          condition:
-            all of them
-        }
-        """
         for cmdline in self.get_command_lines():
             lower = cmdline.lower()
 
@@ -52,7 +37,7 @@ class PowershellDFSP(Signature):
 
                     try:
                         script = args[idx+1].decode("base64").decode("utf16")
-                        rule = yara.compile(source=psempire_rule)
+                        rule = yara.compile(cwd("yara", "scripts", "powershell_dfsp.yar"))
                         matches = rule.match(data=script)
 
                         if matches:

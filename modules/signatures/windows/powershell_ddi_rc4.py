@@ -9,6 +9,7 @@ import traceback
 import re
 
 from lib.cuckoo.common.abstracts import Signature
+from cuckoo.misc import cwd
 
 log = logging.getLogger()
 
@@ -21,24 +22,6 @@ class PowershellDdiRc4(Signature):
     minimum = "2.0"
 
     def on_complete(self):
-        _rule = """
-        rule PowershellDdiRc4 {
-          meta:
-            author = "FDD"
-            description = "Rule for Powershell DDI RC4 detection"
-
-          strings:
-            $Net = "new-object system.net.webclient" nocase
-            $Download = "downloaddata(" nocase
-            $Start = "iex" nocase
-            $Key = /\[system\.text\.encoding\]::ascii\.getbytes\(['"][^'"]+['"]\)/ nocase
-            $Host = /(https?|ftp):\/\/[^\s\/$.?#].[^\s"']*/
-            $Path = /['"](\/[^\/]+)+['"]/
-
-          condition:
-            all of them
-        }
-        """
         for cmdline in self.get_command_lines():
             lower = cmdline.lower()
 
@@ -54,7 +37,7 @@ class PowershellDdiRc4(Signature):
 
                     try:
                         script = args[idx+1].decode("base64").decode("utf16")
-                        rule = yara.compile(source=_rule)
+                        rule = yara.compile(cwd("yara", "scripts", "powershell_ddi_rc4.yar"))
                         matches = rule.match(data=script)
 
                         if matches:

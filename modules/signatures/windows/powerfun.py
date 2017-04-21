@@ -10,6 +10,7 @@ import re
 import zlib
 
 from lib.cuckoo.common.abstracts import Signature
+from cuckoo.misc import cwd
 
 log = logging.getLogger()
 
@@ -22,25 +23,6 @@ class Powerfun(Signature):
     minimum = "2.0"
 
     def on_complete(self):
-        powerfun_rule = """
-        rule Powerfun {
-          meta:
-            author = "FDD @ Cuckoo Sandbox"
-            description = "Rule for the Powefun shellcode injector"
-
-          strings:
-            $obj1 = "New-Object System.Diagnostics.ProcessStartInfo" nocase
-            $fn1 = "IEX" nocase
-            $fn2 = "IO.Compression.GzipStream" nocase
-            $fn3 = "[System.Diagnostics.Process]::Start" nocase
-            $fn4 = "::Decompress" nocase
-            $Shellcode = /FromBase64String\(['"]+[\w=\/\+]+['"]+\)/ nocase
-
-          condition:
-            all of them
-
-        }
-        """
         for cmdline in self.get_command_lines():
             lower = cmdline.lower()
 
@@ -56,7 +38,7 @@ class Powerfun(Signature):
 
                     try:
                         script = args[idx+1].decode("base64").decode("utf16")
-                        rule = yara.compile(source=powerfun_rule)
+                        rule = yara.compile(cwd("yara", "scripts", "powerfun.yar"))
                         matches = rule.match(data=script)
 
                         if matches:

@@ -9,6 +9,7 @@ import traceback
 import re
 
 from lib.cuckoo.common.abstracts import Signature
+from cuckoo.misc import cwd
 
 log = logging.getLogger()
 
@@ -21,22 +22,6 @@ class AmsiBypass(Signature):
     minimum = "2.0"
 
     def on_complete(self):
-        psamsi_rule = """
-        rule PowershellAMSI {
-          meta:
-            author = "FDD"
-            description = "Powershell AMSI Bypass"
-
-          strings:
-            $obj1 = "assembly" nocase
-            $fn1 = "GetType('System.Management.Automation.AmsiUtils')" nocase
-            $fn2 = "GetField('amsiInitFailed','NonPublic,Static')" nocase
-            $fn3 = "SetValue($Null,$True)" nocase
-
-          condition:
-            all of them
-        }
-        """
         for cmdline in self.get_command_lines():
             lower = cmdline.lower()
 
@@ -52,7 +37,7 @@ class AmsiBypass(Signature):
 
                     try:
                         script = args[idx+1].decode("base64").decode("utf16")
-                        rule = yara.compile(source=psamsi_rule)
+                        rule = yara.compile(cwd("yara", "scripts", "powershell_AMSI.yar"))
                         matches = rule.match(data=script)
 
                         if matches:

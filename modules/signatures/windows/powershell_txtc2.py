@@ -9,6 +9,7 @@ import traceback
 import re
 
 from lib.cuckoo.common.abstracts import Signature
+from cuckoo.misc import cwd
 
 log = logging.getLogger()
 
@@ -21,20 +22,6 @@ class PowershellCcDns(Signature):
     minimum = "2.0"
 
     def on_complete(self):
-        psempire_rule = """
-        rule PowershellCcDns {
-          meta:
-            author = "FDD"
-            description = "Rule for Powershell bot detection (C2 over DNS queries)"
-
-          strings:
-            $Start = "iex" nocase
-            $DNS = /nslookup -q=txt [\w.]+/ nocase
-
-          condition:
-            all of them
-        }
-        """
         for cmdline in self.get_command_lines():
             lower = cmdline.lower()
 
@@ -50,7 +37,7 @@ class PowershellCcDns(Signature):
 
                     try:
                         script = args[idx+1].decode("base64").decode("utf16")
-                        rule = yara.compile(source=psempire_rule)
+                        rule = yara.compile(cwd("yara", "scripts", "powershell_txt_c2.yar"))
                         matches = rule.match(data=script)
 
                         if matches:

@@ -9,6 +9,7 @@ import traceback
 import re
 
 from lib.cuckoo.common.abstracts import Signature
+from cuckoo.misc import cwd
 
 log = logging.getLogger()
 
@@ -21,23 +22,6 @@ class PowershellEmpire(Signature):
     minimum = "2.0"
 
     def on_complete(self):
-        psempire_rule = """
-        rule PowershellEmpire {
-          meta:
-            author = "FDD"
-            description = "Rule for Powershell Empire post-exploitation tool"
-
-          strings:
-            $UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko"
-            $UAString = "User-Agent"
-            $Net = "new-object system.net.webclient" nocase
-            $Download = "downloadstring(" nocase
-            $Payload = /(https?|ftp):\/\/[^\s\/$.?#].[^\s'"]*/
-
-          condition:
-            all of them
-        }
-        """
         for cmdline in self.get_command_lines():
             lower = cmdline.lower()
 
@@ -53,7 +37,7 @@ class PowershellEmpire(Signature):
 
                     try:
                         script = args[idx+1].decode("base64").decode("utf16")
-                        rule = yara.compile(source=psempire_rule)
+                        rule = yara.compile(cwd("yara", "scripts", "powershell_empire.yar"))
                         matches = rule.match(data=script)
 
                         if matches:
