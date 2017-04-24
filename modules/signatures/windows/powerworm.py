@@ -10,6 +10,7 @@ import re
 import zlib
 
 from lib.cuckoo.common.abstracts import Signature
+from cuckoo.misc import cwd
 
 log = logging.getLogger()
 
@@ -22,27 +23,6 @@ class Powerworm(Signature):
     minimum = "2.0"
 
     def on_complete(self):
-        powerworm_rule = """
-        rule PowerWorm {
-            meta:
-                author = "FDD @ Cuckoo Sandbox"
-                description = "Rule for PowerWorm script detection"
-        
-            strings:
-                /* .onion URL for payload */
-                $payload = /(https?|ftp):\/\/[^\s\/$.?#].[^\s'"]*/
-                $uuid = "(get-wmiobject Win32_ComputerSystemProduct).UUID" nocase
-                $run = "Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run"
-                $tor = "Bootstrapped 100%: Done."
-                $socks = "socksParentProxy=localhost:"
-                $proxy = "New-Object System.Net.WebProxy" nocase
-                /* PowerWorm uses junk strings in between code to obfuscate it */
-                $junk = /;('|")[^'"]+('|")/
-        
-            condition:
-                all of them
-        }
-       """
         for cmdline in self.get_command_lines():
             lower = cmdline.lower()
 
@@ -58,7 +38,7 @@ class Powerworm(Signature):
 
                     try:
                         script = args[idx+1].decode("base64").decode("utf16")
-                        rule = yara.compile(source=powerworm_rule)
+                        rule = yara.compile(cwd("yara", "scripts", "powerworm.yar"))
                         matches = rule.match(data=script)
 
                         if matches:
