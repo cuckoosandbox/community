@@ -53,7 +53,7 @@ class Powerworm(Signature):
             if cmdpattern.search(lower):
                 script, args = None, shlex.split(cmdline)
                 for idx, arg in enumerate(args):
-                    if "-enc" not in arg.lower() and "-encodedcommand" not in arg.lower():
+                    if not cmdpattern.search(arg.lower()):
                         continue
 
                     try:

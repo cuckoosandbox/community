@@ -22,23 +22,6 @@ class PowershellDI(Signature):
     minimum = "2.0"
 
     def on_complete(self):
-        _rule = """
-        rule PowershellDI {
-          meta:
-            author = "FDD"
-            description = "Extract Download/Invoke calls from powershell script"
-
-          strings:
-            $d1 = /downloaddata\([^)]+\)/ nocase
-            $d2 = /downloadstring\([^)]+\)/ nocase
-            $d3 = /downloadfile\([^)]+\)/ nocase
-            $i1 = /invoke[^;]*/ nocase
-            $i2 = /iex[^;]*/ nocase
-
-          condition:
-            any of ($d*) and any of ($i*)
-        }
-        """
         for cmdline in self.get_command_lines():
             lower = cmdline.lower()
 
@@ -49,7 +32,7 @@ class PowershellDI(Signature):
             if cmdpattern.search(lower):
                 script, args = None, shlex.split(cmdline)
                 for idx, arg in enumerate(args):
-                    if "-enc" not in arg.lower() and "-encodedcommand" not in arg.lower():
+                    if not cmdpattern.search(arg.lower()):
                         continue
 
                     try:
