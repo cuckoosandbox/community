@@ -63,6 +63,8 @@ class CheckIP(Signature):
         "www.geoip.co.uk",
         "ipecho.net",
         "wtfismyip.com",
+        "ipaddress.pro",
+        "ip-api.com",
     ]
 
     def on_complete(self):
