@@ -1,19 +1,9 @@
 # Copyright (C) 2013 Lord Alfred Remorin
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Copyright (C) 2014-2017 Cuckoo Foundation.
+# This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
+# See the file 'docs/LICENSE' for copying permission.
 
-from math import fabs
+import math
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -38,9 +28,10 @@ class Polymorphic(Signature):
         if self.get_results("target", {}).get("category") != "file":
             return
 
-        target_ssdeep = self.get_results("target", {})["file"]["ssdeep"]
-        target_sha1 = self.get_results("target", {})["file"]["sha1"]
-        target_size = self.get_results("target", {})["file"]["size"]
+        f = self.get_results("target", {}).get("file", {})
+        target_ssdeep = f.get("ssdeep")
+        target_sha1 = f.get("sha1")
+        target_size = f.get("size")
 
         if not target_ssdeep:
             return
@@ -49,7 +40,7 @@ class Polymorphic(Signature):
             if drop["sha1"] == target_sha1:
                 continue
 
-            if fabs(target_size - drop["size"]) >= 1024:
+            if math.fabs(target_size - drop["size"]) >= 1024:
                 continue
 
             drop_ssdeep = drop["ssdeep"]
