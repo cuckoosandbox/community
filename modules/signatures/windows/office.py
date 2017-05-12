@@ -75,33 +75,49 @@ class OfficeHttpRequest(Signature):
             self.mark_ioc("payload_url", call["arguments"]["args"][1])
             return True
 
-#class OfficeNetworkExe(Signature):
-#    name = "office_network_exe"
-#    description = "Office document has downloaded a PE file (possibly malware)"
-#    severity = 5
-#    categories = ["vba"]
-#    authors = "FDD @ Cuckoo Sandbox"
-#    minimum = "2.0"
-#    filter_apinames = "vbe6_Invoke"
-#
-#    gets_response = False
-#    writes_disk   = False
-#
-#    def on_call(self, call, process):
-#        if (call["arguments"]["funcname"] == "ResponseText" or
-#            call["arguments"]["funcname"] == "ResponseBody"):
-#            self.gets_response = True
-#            return
-#
-#        if call["arguments"]["funcname"] != "Write":
-#            return
-#
-#        buf = call["arguments"]["args"][0]
-#        if buf.startswith("MZ") and "This program cannot be run in DOS mode" in buf:
-#            self.writes_disk = True
-#
-#    def on_complete(self):
-#        return self.gets_response and self.writes_disk
+class OfficeCertutil(Signature):
+    name = "office_certutil"
+    description = "Office invokes certutil (possible abuse)"
+    severity = 3
+    categories = ["vba", "tool abuse"]
+    authors = ["FDD @ Cuckoo Technologies"]
+    minimum = "2.0"
+
+    filter_apinames = "vbe6_Shell",
+
+    def on_call(self, call, process):
+        if ("certutil" in call["arguments"]["command_line"].lower() and
+            "-decode" in call["arguments"]["command_line"].lower()):
+            self.mark_call()
+            return True
+
+class OfficeNetworkExe(Signature):
+    name = "office_network_exe"
+    description = "Office document has downloaded a PE file (possibly malware)"
+    severity = 5
+    categories = ["vba"]
+    authors = "FDD @ Cuckoo Sandbox"
+    minimum = "2.0"
+    filter_apinames = "vbe6_Invoke"
+
+    gets_response = False
+    writes_disk   = False
+
+    def on_call(self, call, process):
+        if (call["arguments"]["funcname"] == "ResponseText" or
+            call["arguments"]["funcname"] == "ResponseBody"):
+            self.gets_response = True
+            return
+
+        if call["arguments"]["funcname"] != "Write":
+            return
+
+        buf = call["arguments"]["args"][0]
+        if buf.startswith("MZ") and "This program cannot be run in DOS mode" in buf:
+            self.writes_disk = True
+
+    def on_complete(self):
+        return self.gets_response and self.writes_disk
 
 class OfficeWritesExe(Signature):
     name = "office_writes_exe"
@@ -110,7 +126,7 @@ class OfficeWritesExe(Signature):
     categories = ["vba"]
     authors = "FDD @ Cuckoo Sandbox"
     minimum = "2.0"
-    filter_apinames = "vbe6_Invoke",
+    filter_apinames = "vbe6_Invoke"
 
     def on_call(self, call, process):
         if call["arguments"]["funcname"] == "Write":
@@ -133,7 +149,7 @@ class OfficeExec(Signature):
     categories = ["vba"]
     authors = "FDD @ Cuckoo Sandbox"
     minimum = "2.0"
-    filter_apinames = "vbe6_Invoke",
+    filter_apinames = "vbe6_Invoke"
 
     def on_call(self, call, process):
         if (call["arguments"]["funcname"] != "Exec" and
@@ -145,6 +161,39 @@ class OfficeExec(Signature):
         self.mark_ioc("cmd", cmd)
         return True
 
+class OfficeRegWrite(Signature):
+    name = "office_reg_write"
+    description = "Office document modifies the registry"
+    severity = 4
+    categories = ["vba", "registry"]
+    authors = "FDD @ Cuckoo Sandbox"
+    minimum = "2.0"
+    filter_apinames = "vbe6_Invoke"
+
+    def on_call(self, call, process):
+        if call["arguments"]["funcname"] != "regwrite":
+            return
+
+        self.mark_call()
+        return True
+
+class OfficeSetRunOnLogin(Signature):
+    name = "office_set_run_on_login"
+    description = "Office document adds a program to startup by modifying registry"
+    severity = 5
+    categories = ["vba", "registry"]
+    authors = "FDD @ Cuckoo Sandbox"
+    minimum = "2.0"
+    filter_apinames = "vbe6_Invoke"
+
+    def on_call(self, call, process):
+        if call["arguments"]["funcname"] != "regwrite":
+            return
+
+        for arg in call["arguments"]["args"]:
+            if "HKCU\Software\Microsoft\Windows\CurrentVersion\Run\\" in arg:
+                self.mark_call()
+                return True
 
 class OfficeRecentFiles(Signature):
     name = "office_recent_files"
@@ -173,6 +222,20 @@ class HasOfficeEps(Signature):
         office = self.get_results("static", {}).get("office", {})
         if office.get("eps", []):
             return True
+
+class OfficeRCE(Signature):
+    name = "office_rce"
+    description = "Office document embeds a CVE-2017-262 exploit EPS image"
+    severity = 5
+    categories = ["office", "exploit", "rce"]
+    authors = ["FDD @ Cuckoo Technologies"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        office = self.get_results("static", {}).get("office", {})
+        for eps in office.get("eps", []):
+            if "exch" in eps and "mod get xor put" in eps:
+                return True
 
 class OfficeEpsStrings(Signature):
     name = "office_eps_strings"
