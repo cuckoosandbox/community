@@ -99,6 +99,7 @@ class RansomwareExtensions(Signature):
         (".*\.onion$", ["Dharma"]),
         (".*\.grt$", ["Karmen"]),
         (".*\.mordor$", ["Mordor"]),
+        (".*\.jaff$", ["Jaff"]),
     ]
 
     def on_complete(self):
