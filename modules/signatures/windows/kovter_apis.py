@@ -43,21 +43,24 @@ class Kovter_APIs(Signature):
 
     def on_call(self, call, process):
         if call["api"] == "NtSetValueKey" or call["api"].startswith("RegSetValueEx"):
-            vallen = len(call["arguments"]["value"])
-            if vallen:
-                length = int(vallen)
-                if length > 16 * 1024:
-                    self.saw_large = True
+            if isinstance(call["arguments"]["value"], basestring):
+                vallen = len(call["arguments"]["value"])
+                if vallen:
+                    length = int(vallen)
+                    if length > 16 * 1024:
+                        self.saw_large = True
 
         continueChain = False
         if call["status"]:
-            if call["api"] == "LdrGetProcedureAddress":
+            if (call["api"] == "LdrGetProcedureAddress" 
+                    and "function_name" in call["arguments"]):
                 resolved = call["arguments"]["function_name"]
                 if resolved and resolved == "IsWow64Process":
                     continueChain = True
 
             elif call["api"] == "NtCreateSection":
-                if self.lastapi == "LdrGetProcedureAddress" and self.chain:
+                if (self.lastapi == "LdrGetProcedureAddress" and self.chain
+                        and "section_name" in call["arguments"]):
                     attribs = call["arguments"]["section_name"]
                     if attribs and re.match("^[0-9A-F]{32}$", attribs):
                         continueChain = True
