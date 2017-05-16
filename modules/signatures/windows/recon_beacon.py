@@ -29,48 +29,56 @@ class Recon_Beacon(Signature):
         Signature.__init__(self, *args, **kwargs)
         self.computerdetails = []
 
-    filter_apinames = set(["GetComputerNameA","GetComputerNameW","GetUserNameA","GetUserNameW","HttpSendRequestA","HttpSendRequestW","HttpOpenRequestA","HttpOpenRequestW","InternetCrackUrlA","InternetCrackUrlW","WSASend","CryptHashData"])
+    filter_apinames = set(["GetComputerNameA","GetComputerNameW","GetUserNameA",
+                            "GetUserNameW","HttpSendRequestA","HttpSendRequestW",
+                            "HttpOpenRequestA","HttpOpenRequestW","InternetCrackUrlA",
+                            "InternetCrackUrlW","WSASend","CryptHashData"])
     filter_analysistypes = set(["file"])
 
     def on_call(self, call, process):
         # Here we check for interesting bits of data which may be queried and used in cnc for computer identification
-        if call["api"] == "GetComputerNameA" or call["api"] == "GetComputerNameW":
+        if (call["api"] == "GetComputerNameA" or call["api"] == "GetComputerNameW" and
+            "computer_name" in call["arguments"]):
             compname = call["arguments"]["computer_name"]
             if compname:
                 self.computerdetails.append(compname)
 
-        elif call["api"] == "GetUserNameA" or call["api"] == "GetUserNameW":
+        elif (call["api"] == "GetUserNameA" or call["api"] == "GetUserNameW" and
+             "user_name" in call["arguments"]):
             compname = call["arguments"]["user_name"]
             if compname:
                 self.computerdetails.append(compname)
 
         # Here we check for the interesting data appearing in buffers from network calls for CnC
-        elif call["api"] == "HttpSendRequestA" or call["api"] == "HttpSendRequestW":
+        elif (call["api"] == "HttpSendRequestA" or call["api"] == "HttpSendRequestW" and
+            "post_data" in call["arguments"]):
             buff = call["arguments"]["post_data"]
             for compdetails in self.computerdetails:
                 if compdetails in buff:
                     self.mark_call()
 
-        elif call["api"] == "HttpOpenRequestA" or call["api"] == "HttpOpenRequestW":
+        elif (call["api"] == "HttpOpenRequestA" or call["api"] == "HttpOpenRequestW" and
+            "path" in call["arguments"]):
             buff = call["arguments"]["path"]
             for compdetails in self.computerdetails:
                 if compdetails in buff:
                     self.mark_call()
 
-        elif call["api"] == "InternetCrackUrlW" or call["api"] == "InternetCrackUrlW":
+        elif (call["api"] == "InternetCrackUrlW" or call["api"] == "InternetCrackUrlW" and
+                "url" in call["arguments"]):
             buff = call["arguments"]["url"]
             for compdetails in self.computerdetails:
                 if compdetails in buff:
                     self.mark_call()
 
-        elif api == "WSASend":
+        elif call["api"] == "WSASend" and "buffer" in call["arguments"]:
             buff = call["arguments"]["buffer"]
             for compdetails in self.computerdetails:
                 if compdetails in buff:
                     self.mark_call()
 
         # Here we check API calls which may be used for obfuscating data prior to CnC
-        elif api == "CryptHashData":
+        elif call["api"] == "CryptHashData" and "buffer" in call["arguments"]:
             buff = call["arguments"]["buffer"]
             for compdetails in self.computerdetails:
                 if compdetails in buff:
