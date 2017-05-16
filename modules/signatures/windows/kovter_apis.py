@@ -77,9 +77,9 @@ class Kovter_APIs(Signature):
             for procmem in self.get_results("procmemory", []):
                 for url in procmem.get("urls", []):
                     if url.endswith(".php"):
-                       if url not in self.c2:
-                           self.c2.append(url)
-                           self.mark_ioc("C2", url)
+                        if url not in self.c2:
+                            self.c2.append(url)
+                            self.mark_ioc("C2", url)
                     
         if self.kovterchain and self.saw_large and len(self.c2) > 0:
             return self.has_marks()
