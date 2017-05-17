@@ -26,3 +26,24 @@ class UsesWindowsUtilities(Signature):
                     self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
+
+class ModifiesFileACLs(Signature):
+    name = "modifies_file_acls"
+    description = "Uses Windows utilities to modify file/folder permissions"
+    severity = 3
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    utilities = [
+        "cacls",
+        "icalcs",
+        "xcalcs",
+    ]
+
+    def on_complete(self):
+        for cmdline in self.get_command_lines():
+            for utility in self.utilities:
+                if utility in cmdline.lower():
+                    self.mark_ioc("cmdline", cmdline)
+
+        return self.has_marks()
