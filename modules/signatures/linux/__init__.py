@@ -2,4 +2,8 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
-from . import android, cross, darwin, linux, network, windows
+from ..compat import enumerate_signatures
+
+plugins = enumerate_signatures(
+    __file__, "linux", globals(), dict(platform="linux")
+)
