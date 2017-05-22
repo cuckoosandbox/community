@@ -1,4 +1,4 @@
-# Copyright (C) 2015 Will Metcalf william.metcalf@gmail.com, Updated 2016 for Cuckoo 2.0
+# Copyright (C) 2016 Kevin Ross
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,25 +15,35 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class OfficeWriteEXE(Signature):
-    name = "office_write_exe"
-    description = "An office file wrote an executable file to disk"
-    severity = 3
-    categories = ["exploit", "downloader", "virus"]
-    authors = ["Will Metcalf"]
+class AntiVMDiskSize(Signature):
+    name = "antivm_disk_size"
+    description = "Queries the disk size which could be used to detect virtual machine with small fixed size or dynamic allocation"
+    severity = 2
+    categories = ["anti-vm"]
+    authors = ["Kevin Ross"]
     minimum = "2.0"
+    evented = True
 
-    office_proc_list =["wordview.exe","winword.exe","excel.exe","powerpnt.exe","outlook.exe"]
+    filter_apinames = "GetDiskFreeSpaceExW", "GetDiskFreeSpaceExW"
 
-    filter_apinames = set(["NtWriteFile"])
-    filter_analysistypes = set(["file"])
+    whitelistprocs = [
+        "iexplore.exe",
+        "firefox.exe",
+        "chrome.exe",
+        "safari.exe",
+        "acrord32.exe",
+        "acrord64.exe",
+        "wordview.exe",
+        "winword.exe",
+        "excel.exe",
+        "powerpnt.exe",
+        "outlook.exe",
+        "mspub.exe"
+    ]
 
     def on_call(self, call, process):
-        pname = process["process_name"].lower()
-        if pname in self.office_proc_list:
-            buff = call["arguments"]["buffer"]
-            if buff and len(buff) > 2 and buff.startswith("MZ") and "This program" in buff:
-                self.mark_call()
+        if process["process_name"].lower() not in self.whitelistprocs:
+            self.mark_call()
 
     def on_complete(self):
         return self.has_marks()

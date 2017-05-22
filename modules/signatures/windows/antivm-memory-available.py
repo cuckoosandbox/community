@@ -15,28 +15,35 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class WscriptDownloader(Signature):
-    name = "network_wscript_downloader"
-    description = "Wscript.exe initiated network communications indicative of a script based payload download"
-    severity = 3
-    categories = ["downloader"]
+class MemoryAvailable(Signature):
+    name = "antivm_memory_available"
+    description = "Checks amount of memory in system, this can be used to detect virtual machines that have a low amount of memory available"
+    severity = 1
+    categories = ["anti-vm"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
     filter_apinames = [
-        "InternetCrackUrlW",
-        "InternetCrackUrlA",
-        "URLDownloadToFileW",
-        "HttpOpenRequestW",
-        "InternetReadFile",
-        "WSASend",
+        "GlobalMemoryStatusEx", "GetPhysicallyInstalledSystemMemory",
     ]
 
-    filter_analysistypes = "file",
+    whitelistprocs = [
+        "iexplore.exe",
+        "firefox.exe",
+        "chrome.exe",
+        "safari.exe",
+        "acrord32.exe",
+        "acrord64.exe",
+        "wordview.exe",
+        "winword.exe",
+        "excel.exe",
+        "powerpnt.exe",
+        "outlook.exe",
+        "mspub.exe"
+    ]
 
     def on_call(self, call, process):
-        if process["process_name"].lower() == "wscript.exe":
+        if process["process_name"].lower() not in self.whitelistprocs:
             self.mark_call()
 
-    def on_complete(self):
         return self.has_marks()

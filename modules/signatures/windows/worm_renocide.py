@@ -20,7 +20,6 @@ class Renocide(Signature):
 
     files_re = [
         ".*95a1sd\\.xx",
-        ".*autorun\\.i",
         ".*\\\\Temp\\\\nrrtrvm",
         ".*\\\\Temp\\\\aut1\\.tmp",
     ]

@@ -1,4 +1,4 @@
-# Copyright (C) 2012 Claudio "nex" Guarnieri (@botherder)
+# Copyright (C) 2016 Kevin Ross
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,18 +15,20 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class ADS(Signature):
-    name = "persistence_ads"
-    description = "Creates an Alternate Data Stream (ADS)"
+class AntiVMSharedDevice(Signature):
+    name = "antivm_shared_device"
+    description = "Attempts to detect a virtual machine by the use of a pseudo device"
     severity = 3
-    categories = ["persistence", "ads"]
-    authors = ["nex"]
+    categories = ["anti-vm"]
+    authors = ["Kevin Ross"]
     minimum = "2.0"
 
+    filter_apinames = "NtCreateFile",
+
+    def on_call(self, call, process):
+        filepath = call["arguments"]["filepath"].lower()
+        if filepath.endswith(("\\??\\hgfs", "\\??\\vmci")):
+            self.mark_call()
+
     def on_complete(self):
-        for filepath in self.get_files():
-            parts = filepath.replace("/", "\\").split("\\")
-            if ":" in parts[-1]:
-                self.mark_ioc("file", filepath)
-                
         return self.has_marks()

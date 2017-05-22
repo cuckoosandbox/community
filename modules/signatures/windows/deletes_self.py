@@ -1,4 +1,4 @@
-# Copyright (C) 2012 Claudio "nex" Guarnieri (@botherder)
+# Copyright (C) 2014 Optiv Inc. (brad.spengler@optiv.com), Converted 2016 for Cuckoo 2.0
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,18 +15,24 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class ADS(Signature):
-    name = "persistence_ads"
-    description = "Creates an Alternate Data Stream (ADS)"
+class DeletesSelf(Signature):
+    name = "deletes_self"
+    description = "Deletes its original binary from disk"
     severity = 3
-    categories = ["persistence", "ads"]
-    authors = ["nex"]
+    categories = ["persistence", "stealth"]
+    authors = ["Optiv", "Kevin Ross"]
     minimum = "2.0"
+    evented = True
 
     def on_complete(self):
-        for filepath in self.get_files():
-            parts = filepath.replace("/", "\\").split("\\")
-            if ":" in parts[-1]:
-                self.mark_ioc("file", filepath)
-                
+        processes = []
+        for process in self.get_results("behavior", {}).get("generic", []):
+            for cmdline in process.get("summary", {}).get("command_line", []):
+                processes.append(cmdline)
+
+        if processes:
+            for deletedfile in self.get_files(actions=["file_deleted"]):
+                if deletedfile in processes[0]:
+                    self.mark_ioc("file", deletedfile)
+
         return self.has_marks()

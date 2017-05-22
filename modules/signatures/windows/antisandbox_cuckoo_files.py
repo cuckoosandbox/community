@@ -1,4 +1,4 @@
-# Copyright (C) 2012 Claudio "nex" Guarnieri (@botherder)
+# Copyright (C) 2016 Brad Spengler, Updated 2016 for Cuckoo 2.0
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,18 +15,25 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class ADS(Signature):
-    name = "persistence_ads"
-    description = "Creates an Alternate Data Stream (ADS)"
+class CuckooDetectFiles(Signature):
+    name = "antisandbox_cuckoo_files"
+    description = "Attempts to detect Cuckoo Sandbox through the presence of a file"
     severity = 3
-    categories = ["persistence", "ads"]
-    authors = ["nex"]
+    categories = ["anti-sandbox"]
+    authors = ["Brad Spengler"]
     minimum = "2.0"
 
+    file_indicators = [
+        ".*\\\\agent\\.py$",
+        ".*\\\\agent\\.pyw$",
+        ".*\\\\analyzer\\.py$",
+        ".*\\\\cuckoo\\\\dll",
+        ".*\\\\pipe\\\\cuckoo",
+    ]
+
     def on_complete(self):
-        for filepath in self.get_files():
-            parts = filepath.replace("/", "\\").split("\\")
-            if ":" in parts[-1]:
-                self.mark_ioc("file", filepath)
-                
+        for indicator in self.file_indicators:
+            for match in self.check_file(pattern=indicator, regex=True, all=True):
+                self.mark_ioc("file", match)
+
         return self.has_marks()

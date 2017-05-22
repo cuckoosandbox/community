@@ -1,4 +1,4 @@
-# Copyright (C) 2014 Optiv Inc. (brad.spengler@optiv.com), Converted 2016 for Cuckoo 2.0
+# Copyright (C) 2017 Kevin Ross
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,23 +15,19 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class DeletesSelf(Signature):
-    name = "deletes_self"
-    description = "Deletes its original binary from disk"
-    severity = 3
-    categories = ["persistence", "stealth"]
-    authors = ["Optiv", "Kevin Ross"]
+class DisplaysHTA(Signature):
+    name = "displays_hta"
+    description = "Displays a HTA file to the user common in ransomware"
+    severity = 2
+    categories = ["ransomware"]
+    authors = ["Kevin Ross"]
     minimum = "2.0"
-    evented = True
 
     def on_complete(self):
-        processes = []
-        for process in self.get_results("behavior", {}).get("generic", []):
-            for cmdline in process.get("summary", {}).get("command_line", []):
-                processes.append(cmdline)
+        for cmdline in self.get_command_lines():
+            lower = cmdline.lower()
 
-        for deletedfile in self.get_files(actions=["file_deleted"]):
-            if deletedfile in processes[0]:
-                self.mark_ioc("file", deletedfile)
+            if "mshta" in lower:
+                self.mark(cmdline=cmdline)
 
         return self.has_marks()

@@ -30,6 +30,8 @@ class AntiSandboxSleep(Signature):
         "adobearm.exe",
         "iexplore.exe",
         "acrord32.exe",
+        "winword.exe",
+        "excel.exe",
     ]
 
     def init(self):
