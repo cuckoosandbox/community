@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class PersistanceRegJavaScript(Signature):
     name = "persistance_registry_javascript"
-    description = "Stored JavaScript in registry key value likely for persistance"
+    description = "Uses JavaScript in registry key values likely for persistance"
     severity = 3
     categories = ["persistance"]
     authors = ["Kevin Ross"]
@@ -30,10 +30,7 @@ class PersistanceRegJavaScript(Signature):
         regkey = call["arguments"]["regkey"]
         regvalue = call["arguments"]["value"]
         if "javascript:" in regvalue:
-            self.mark(
-                key=regkey,
-                value=regvalue,
-            )
+            self.mark_call()
 
     def on_complete(self):
         return self.has_marks()
