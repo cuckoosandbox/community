@@ -6,6 +6,22 @@ import shlex
 
 from lib.cuckoo.common.abstracts import Signature
 
+class PowershellCommand(Signature):
+    name = "powershell_command"
+    description = "Creates a Powershell process"
+    severity = 2
+    categories = ["script"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        for cmdline in self.get_command_lines():
+            lower = cmdline.lower()
+            if "powershell" in lower:            
+                self.mark_ioc("cmdline", cmdline)
+
+        return self.has_marks()
+
 class SuspiciousPowershell(Signature):
     name = "suspicious_powershell"
     description = "Creates a suspicious Powershell process"
