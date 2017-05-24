@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class PersistanceRegJavaScript(Signature):
     name = "persistance_registry_javascript"
-    description = "Uses JavaScript in registry key values likely for persistance"
+    description = "Stored JavaScript in registry key value likely for persistance"
     severity = 3
     categories = ["persistance"]
     authors = ["Kevin Ross"]
