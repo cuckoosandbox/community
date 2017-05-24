@@ -50,6 +50,7 @@ class RansomwareExtensions(Signature):
         (".*\.herbst$", ["Herbst"]),
         (".*\.(?:hydracrypt_ID_[a-z0-9]{8}|hydracrypttmp_ID_[a-z0-9]{8})$", ["HydraCrypt"]),
         (".*\.jaff$", ["Jaff"]),
+        (".*\.(?:jaff|wlu)$", ["Jaff"]),
         (".*\.kraken$", ["Kraken"]),
         (".*\.grt$", ["Karmen"]),
         (".*\.rip$", ["KillerLocker"]),
