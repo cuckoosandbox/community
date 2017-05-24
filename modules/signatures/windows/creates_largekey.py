@@ -15,35 +15,37 @@
 
 import sys
 
+try:
+    import re2 as re
+except ImportError:
+    import re
+
 from lib.cuckoo.common.abstracts import Signature
 
 class CreatesLargeKey(Signature):
     name = "creates_largekey"
     description = "Creates or sets a registry key to a long series of bytes, possibly to store a binary or malware config"
     severity = 3
-    confidence = 80
     categories = ["stealth"]
     authors = ["Optiv"]
     minimum = "2.0"
     evented = True
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.saw_large = False
-        self.regkeyvals = set()
     filter_apinames = set(["NtSetValueKey", "RegSetValueExA", "RegSetValueExW"])
 
+    whitelist = [
+        ".*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\StartPage2\\\\ProgramsCache$",
+    ]
+
     def on_call(self, call, process):
-        vallen = sys.getsizeof(call["arguments"]["value"])
-        if vallen:
-            length = int(vallen)
-            if length > 16 * 1024:
-                self.regkeyvals.add(call["arguments"]["regkey"])
-                self.saw_large = True
+        if call["status"]:
+            vallen = sys.getsizeof(call["arguments"]["value"])
+            if vallen:
+                length = int(vallen)
+                if length > 16 * 1024:
+                    for whitelist in self.whitelist:
+                        if not re.match(whitelist, call["arguments"]["regkey"]):    
+                            self.mark_call()
 
     def on_complete(self):
-        if self.saw_large:
-            for keyval in self.regkeyvals:
-                self.mark_ioc("registry", keyval)
-
         return self.has_marks()
