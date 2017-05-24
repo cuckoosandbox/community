@@ -38,8 +38,8 @@ class CreatesUserFolderEXE(Signature):
     minimum = "2.0"
 
     directories_re = [
-        "^[a-zA-Z]:\\\\Users\\\\.*\\\\AppData\\\\.*",
-        "^[a-zA-Z]:\\\\Documents\\ and\\ Settings\\\\.*\\\\Local\\ Settings\\\\.*",
+        "^[a-zA-Z]:\\\\Users\\\\[^\\\\]+\\\\AppData\\\\.*",
+        "^[a-zA-Z]:\\\\Documents\\ and\\ Settings\\\\[^\\\\]+\\\\Local\\ Settings\\\\.*",
     ]
 
     def on_complete(self):
