@@ -29,7 +29,7 @@ class Autorun(Signature):
     description = "Installs itself for autorun at Windows startup"
     severity = 3
     categories = ["persistence"]
-    authors = ["Michael Boman", "nex", "securitykitten", "Cuckoo Technologies", "Optiv", "KillerInstinct"]
+    authors = ["Michael Boman", "nex", "securitykitten", "Cuckoo Technologies", "Optiv", "KillerInstinct", "Kevin Ross"]
     minimum = "2.0"
 
     regkeys_re = [
@@ -53,7 +53,7 @@ class Autorun(Signature):
         ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\ShellServiceObjectDelayLoad\\\\.*",
         ".*\\\\System\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\Session\\ Manager\\\\AppCertDlls\\\\.*",
         ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\InprocServer32\\\\.*",
-        ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\LocalServer32\\\\.*"
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\LocalServer32\\\\.*",
     ]
 
     files_re = [
@@ -80,8 +80,10 @@ class Autorun(Signature):
             servicename = call["arguments"]["service_name"]
             servicepath = call["arguments"]["filepath"]
             if starttype < 3:
-                self.mark_ioc("service name", servicename)
-                self.mark_ioc("service path", servicepath)
+                self.mark(
+                    service_name=servicename,
+                    service_path=servicepath,
+                )
 
         elif call["status"]:
             regkey = call["arguments"]["regkey"]
@@ -94,8 +96,10 @@ class Autorun(Signature):
             if not in_whitelist:
                 for indicator in self.regkeys_re:
                     if re.match(indicator, regkey, re.IGNORECASE) and regvalue != "c:\\program files\\java\\jre7\\bin\jp2iexp.dll":
-                        self.mark_ioc("registry key", regkey)
-                        self.mark_ioc("registry value", regvalue)
+                        self.mark(
+                            reg_key=regkey,
+                            reg_value=regvalue,
+                        )
 
     def on_complete(self):
         for indicator in self.files_re:
