@@ -1,17 +1,8 @@
-# Copyright (C) 2010-2015 Cuckoo Foundation.
+# Copyright (C) 2017 Cuckoo Foundation.
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
-import shlex
-import yara
-import logging
-import traceback
-import re
-
 from lib.cuckoo.common.abstracts import Signature
-from cuckoo.misc import cwd
-
-log = logging.getLogger()
 
 class PowershellDI(Signature):
     name = "powershell_di"
@@ -19,34 +10,29 @@ class PowershellDI(Signature):
     severity = 1
     categories = ["script", "dropper", "downloader", "malware", "powershell"]
     authors = ["FDD", "Cuckoo Technologies"]
-    minimum = "2.0"
+    minimum = "2.0.4"
 
-    def on_complete(self):
-        for cmdline in self.get_command_lines():
-            lower = cmdline.lower()
+    def on_yara(self, category, filepath, match):
+        if match.name != "PowershellDI":
+            return
 
-            if "powershell" not in lower:
-                continue
+        if "d1" in match.offsets:
+            url = match.string("d1", 0)
+        if "d2" in match.offsets:
+            url = match.string("d2", 0)
+        if "d3" in match.offsets:
+            url = match.string("d3", 0)
 
-            cmdpattern = re.compile("\-[e^]{1,2}[ncodema^]+")
-            if cmdpattern.search(lower):
-                script, args = None, shlex.split(cmdline)
-                for idx, arg in enumerate(args):
-                    if not cmdpattern.search(arg.lower()):
-                        continue
+        if url.count('"') == 2:
+            url = url.split('"')[1]
+        elif url.count("'") == 2:
+            url = url.split("'")[1]
+        else:
+            url = None
 
-                    try:
-                        script = args[idx+1].decode("base64").decode("utf16")
-                        rule = yara.compile(cwd("yara", "scripts", "powershell_di.yar"))
-                        matches = rule.match(data=script)
-
-                        if matches:
-                            for m in matches:
-                                for string in m.strings:
-                                    self.mark_ioc("Call", string[2])
-                            break
-                    except Exception as e:
-                        traceback.print_exc(e)
-                        pass
-
-        return self.has_marks()
+        if url:
+            self.mark_config({
+                "family": "Powershell Download & Invoke",
+                "url": url,
+            })
+            return True
