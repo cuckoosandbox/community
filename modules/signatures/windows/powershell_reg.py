@@ -1,17 +1,11 @@
-# Copyright (C) 2010-2015 Cuckoo Foundation.
+# Copyright (C) 2017 Cuckoo Foundation.
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
-import shlex
-import yara
-import logging
-import traceback
 import re
+import shlex
 
 from lib.cuckoo.common.abstracts import Signature
-from cuckoo.misc import cwd
-
-log = logging.getLogger()
 
 class PowershellRegAdd(Signature):
     name = "powershell_reg_add"
@@ -19,7 +13,7 @@ class PowershellRegAdd(Signature):
     severity = 3
     categories = ["script", "powershell"]
     authors = ["FDD", "Cuckoo Technologies"]
-    minimum = "2.0"
+    minimum = "2.0.4"
 
     def on_complete(self):
         lower = "".join(self.get_command_lines()).lower()
@@ -43,12 +37,7 @@ class PowershellRegAdd(Signature):
                         if "reg add" in script.lower():
                             self.mark_ioc("cmd", script)
                             return True
-                        
-                    except Exception as e:
-                        traceback.print_exc(e)
+                    except:
                         pass
 
         return False
-
-
-
