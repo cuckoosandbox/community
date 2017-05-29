@@ -2,6 +2,7 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
+import re
 from lib.cuckoo.common.abstracts import Signature
 
 class StealthHiddenDir(Signature):
@@ -32,7 +33,8 @@ class StealthHiddenDir(Signature):
             return
 
         for name in self.reserved_names:
-            if "\\" + name in path.lower():
+            pathre = re.compile(r"\\" + re.escape(name) + r"({|\\)")
+            if pathre.search(path):
                 self.mark_call()
 
         return self.has_marks()
