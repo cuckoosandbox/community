@@ -72,7 +72,13 @@ class Autorun(Signature):
         ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\InprocServer32\\\\ThreadingModel$"
     ]
 
-    filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey", "CreateServiceA", "CreateServiceW"])
+    filter_apinames = [
+        "RegSetValueExA",
+        "RegSetValueExW",
+        "NtSetValueKey",
+        "CreateServiceA",
+        "CreateServiceW",
+    ]
 
     def on_call(self, call, process):
         if call["api"] == "CreateServiceA" or call["api"] == "CreateServiceW":
