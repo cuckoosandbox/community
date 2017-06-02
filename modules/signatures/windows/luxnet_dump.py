@@ -4,16 +4,10 @@
 
 import logging
 import traceback
-from Crypto.Cipher import ARC4
 import yara
-import base64
-import struct
-import json
 import re
 import string
 from struct import unpack
-import pefile
-from binascii import *
 
 from lib.cuckoo.common.abstracts import Signature
 

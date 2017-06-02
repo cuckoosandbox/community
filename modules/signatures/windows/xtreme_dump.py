@@ -3,11 +3,8 @@
 # See the file 'docs/LICENSE' for copying permission.
 
 import logging
-from Crypto.Cipher import ARC4
 import yara
-import base64
 import struct
-import json
 import re
 import string
 from struct import unpack

@@ -3,16 +3,12 @@
 # See the file 'docs/LICENSE' for copying permission.
 
 import logging
-from Crypto.Cipher import ARC4
+import traceback
 import yara
-import base64
 import struct
-import json
 import re
 import string
-from struct import unpack
 import pefile
-from binascii import *
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -125,6 +121,7 @@ class GreameDump(Signature):
         try:
             cfg = config(open(filepath, 'rb').read())
         except Exception as e:
+            traceback.print_exc()
             pass
 
         if not cfg:

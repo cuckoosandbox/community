@@ -6,15 +6,11 @@ import logging
 from Crypto.Cipher import DES, AES
 import zlib
 import yara
-import base64
 import struct
-import json
 import re
-import string
 import traceback
 from struct import unpack
 import pefile
-from binascii import *
 from pbkdf2 import PBKDF2
 
 from lib.cuckoo.common.abstracts import Signature
