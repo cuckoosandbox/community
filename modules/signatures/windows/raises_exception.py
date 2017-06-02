@@ -45,8 +45,8 @@ class RaisesException(Signature):
             self.severity = 5
             self.description = self.exception_codes[exception_code]
         elif exception_code in self.exception_codes_ignore:
-            self.severity = 0
             self.description = self.exception_codes_ignore[exception_code]
+            return False
         else:
             # There's no point in keeping track of the API call for the
             # exception documented above.
