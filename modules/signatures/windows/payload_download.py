@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class NetworkDocumentFile(Signature):
     name = "network_document_file"
-    description = "A document file initiated network communications indicative of a potential exploit or payload download"
+    description = "A document or script file initiated network communications indicative of a potential exploit or payload download"
     severity = 3
     categories = ["exploit", "downloader"]
     authors = ["Kevin Ross", "Will Metcalf"]
@@ -30,12 +30,12 @@ class NetworkDocumentFile(Signature):
     proc_list = [
         "wordview.exe", "winword.exe", "excel.exe", "powerpnt.exe",
         "outlook.exe", "acrord32.exe", "acrord64.exe", "wscript.exe",
-        "mspub.exe",
+        "mspub.exe", "powershell.exe",
     ]
 
     filter_apinames = [
         "InternetCrackUrlW", "InternetCrackUrlA", "URLDownloadToFileW",
-        "HttpOpenRequestW", "WSASend",
+        "URLDownloadToCacheFileW", "HttpOpenRequestW", "WSASend", "send"
     ]
 
     filter_analysistypes = "file",
@@ -72,7 +72,7 @@ class NetworkEXE(Signature):
     high_risk_proc = [
         "wordview.exe", "winword.exe", "excel.exe", "powerpnt.exe",
         "outlook.exe", "acrord32.exe", "acrord64.exe", "wscript.exe",
-        "java.exe", "javaw.exe",
+        "java.exe", "javaw.exe", "powershell.exe",
     ]
 
     filter_apinames = "recv", "InternetReadFile"
@@ -102,7 +102,7 @@ class SuspiciousWriteEXE(Signature):
     description = "Wrote an executable file to disk"
     severity = 3
     categories = ["exploit", "downloader", "virus"]
-    authors = ["Will Metcalf"]
+    authors = ["Will Metcalf", "Kevin Ross"]
     minimum = "2.0"
 
     def __init__(self, *args, **kwargs):
@@ -113,26 +113,40 @@ class SuspiciousWriteEXE(Signature):
 
     susp_proc_list = [
         "wordview.exe", "winword.exe", "excel.exe", "powerpnt.exe",
-        "outlook.exe", "wscript.exe", "java.exe", "javaw.exe",
+        "outlook.exe", "wscript.exe", "java.exe", "javaw.exe", "powershell.exe",
     ]
 
     filter_apinames = [
-        "NtWriteFile", "CreateProcessInternalW", "ShellExecuteExW",
+        "NtCreateFile", "NtWriteFile", "CreateProcessInternalW", "ShellExecuteExW",
+    ]
+
+    whitelist = [
+        "\Windows\System32\wscript.exe",
     ]
 
     def on_call(self, call, process):
         pname = process["process_name"].lower()
         if pname in self.susp_proc_list:
             if call["api"] == "NtWriteFile" and call["arguments"].get("filepath"):
-                buff = call["arguments"]["buffer"]
                 filepath = call["arguments"]["filepath"]
-                if filepath.endswith(".exe") or (buff and len(buff) > 2 and buff.startswith("MZ") and "This program" in buff):
-                    if pname not in self.pname:
-                        self.pname.append(pname)
-                    if filepath not in self.exes:
-                        self.exes.append(filepath)
-
-            if call["api"] == "CreateProcessInternalW" or call["api"] == "ShellExecuteExW":
+                buff = call["arguments"]["buffer"]
+                if filepath.endswith(".exe") or (buff and len(buff) > 2 and buff.startswith("MZ") and "This program" in buff) and "powershell_ise.exe" not in filepath:
+                    for white in self.whitelist:
+                        if white not in filepath:
+                            if pname not in self.pname:
+                                self.pname.append(pname)
+                            if filepath not in self.exes:
+                               self.exes.append(filepath)
+            elif call["api"] == "NtCreateFile" and call["arguments"].get("filepath"):
+                filepath = call["arguments"]["filepath"]
+                if filepath.endswith(".exe") and "powershell_ise.exe" not in filepath:
+                    for white in self.whitelist:
+                        if white not in filepath:
+                            if pname not in self.pname:
+                                self.pname.append(pname)
+                            if filepath not in self.exes:
+                                self.exes.append(filepath)
+            elif call["api"] == "CreateProcessInternalW" or call["api"] == "ShellExecuteExW":
                 filepath = call["arguments"]["filepath"]
                 if filepath in self.exes and pname in self.pname:
                     self.executed = True
