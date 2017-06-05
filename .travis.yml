@@ -17,23 +17,23 @@ script:
   - cd cuckoo
 
   - git checkout 2.0-rc1
-  - sed -ip 's/.*pefile.*//g' requirements.txt
+  - sed -i 's/.*pefile.*//g' requirements.txt
   - pip install -r requirements.txt
   - python utils/community.py -waf ../master.tar.gz >/dev/null
   - python cuckoo.py -d 2>&1|grep "Unable to bind ResultServer"
   - rm -rf * && git checkout .
 
   - git checkout 2.0-rc2
-  - sed -ip s/lxml==3.6.0//g requirements.txt
-  - sed -ip s/peepdf==0.3.2//g requirements.txt
+  - sed -i s/lxml==3.6.0//g requirements.txt
+  - sed -i s/peepdf==0.3.2//g requirements.txt
   - pip install -r requirements.txt
   - python utils/community.py -waf ../master.tar.gz >/dev/null
   - python cuckoo.py -d 2>&1|grep "Unable to bind ResultServer"
   - rm -rf * && git checkout .
 
   - git checkout legacy
-  - sed -ip s/lxml==3.6.0//g requirements.txt
-  - sed -ip s/peepdf==0.3.2//g requirements.txt
+  - sed -i s/lxml==3.6.0//g requirements.txt
+  - sed -i s/peepdf==0.3.2//g requirements.txt
   - pip install -r requirements.txt
   - python utils/community.py -waf ../master.tar.gz >/dev/null
   - python cuckoo.py -d 2>&1|grep "Unable to bind ResultServer"
