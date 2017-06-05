@@ -1,4 +1,4 @@
-# Copyright (C) 2016 Kevin Ross, KillerInstinct
+# Copyright (C) 2016 Kevin Ross
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,8 +20,12 @@ class ProcMemDumpYara(Signature):
     description = "Yara rule detected in process memory"
     severity = 2
     categories = ["generic"]
-    authors = ["Kevin Ross", "KillerInstinct"]
+    authors = ["Kevin Ross"]
     minimum = "2.0"
+
+    malicious_rules = [
+    "Ransomware_Message",
+    ]
 
     def on_complete(self):
         for procmem in self.get_results("procmemory", []):
@@ -32,5 +36,7 @@ class ProcMemDumpYara(Signature):
                     rule=yararule,
                     description=ruledescription,                      
                 )
+                if yararule in self.malicious_rules:
+                    self.severity = 3
 
         return self.has_marks()
