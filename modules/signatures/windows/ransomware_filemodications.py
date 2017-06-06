@@ -47,7 +47,7 @@ class RamsomwareFileMoves(Signature):
 
 class RansomwareAppendsExtension(Signature):
     name = "ransomware_appends_extensions"
-    description = "Appends a new file extension to %d files indicative of a ransomware file encryption process"
+    description = "Appends a new file extension or content to %d files indicative of a ransomware file encryption process"
     severity = 3
     categories = ["ransomware"]
     authors = ["Kevin Ross"]
