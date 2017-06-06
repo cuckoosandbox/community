@@ -39,7 +39,7 @@ class NetworkC2Details(Signature):
             if compname:
                 self.computerdetails.append(compname)
 
-        if (api == "GetUserNameA" or api == "GetUserNameW" and
+        if ((api == "GetUserNameA" or api == "GetUserNameW") and
                 "user_name" in call["arguments"]):
             compname = call["arguments"]["user_name"]
             if compname:
