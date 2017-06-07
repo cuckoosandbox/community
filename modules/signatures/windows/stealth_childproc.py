@@ -16,6 +16,7 @@ class StealthChildProc(Signature):
         "NtCreateProcess",
         "NtCreateProcessEx",
         "RtlCreateUserProcess",
+        "CreateProcessInternalW",
     ]
 
     current_process = [
