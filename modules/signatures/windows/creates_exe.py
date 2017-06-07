@@ -47,7 +47,7 @@ class CreatesUserFolderEXE(Signature):
             if "filepath" in dropped:
                 droppedtype = dropped["type"]
                 filepath = dropped["filepath"]
-                if "PE32 executable" in droppedtype:
+                if "MS-DOS executable" in droppedtype:
                     for directory in self.directories_re:
                         if re.match(directory, filepath):
                             self.mark_ioc("file", filepath)
