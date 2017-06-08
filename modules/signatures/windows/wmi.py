@@ -46,7 +46,7 @@ class Win32ProcessCreate(Signature):
 
 class WMIAntiVM(Signature):
     name = "wmi_antivm"
-    description = "Executes one or more WMI queries which could be used to identify virtual machines"
+    description = "Executes one or more WMI queries which can be used to identify virtual machines"
     severity = 2
     categories = ["wmi", "anti-vm"]
     authors = ["Kevin Ross"]
@@ -59,6 +59,8 @@ class WMIAntiVM(Signature):
         "win32_computersystem",
         "win32_physicalmemory",
         "deviceid",
+        "win32_networkadapterconfiguration",
+        "win32_nteventlogfile",
     ]
 
     def on_complete(self):
