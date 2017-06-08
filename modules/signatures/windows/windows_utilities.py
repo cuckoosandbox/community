@@ -17,6 +17,7 @@ class UsesWindowsUtilities(Signature):
         "netsh",
         "netstat",
         "bitsadmin",
+        "attrib",
     ]
 
     def on_complete(self):
