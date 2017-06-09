@@ -96,3 +96,4 @@ class Recon_Beacon(Signature):
 
     def on_complete(self):
         return self.has_marks()
+
