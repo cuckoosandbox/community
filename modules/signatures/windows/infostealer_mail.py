@@ -13,17 +13,21 @@ class MailStealer(Signature):
     minimum = "2.0"
 
     regkeys_re = [
-        ".*\\\\Software\\\\IncrediMail",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?IncrediMail"
         ".*\\\\RIT\\\\The\\ Bat\\!",
         ".*\\\\Microsoft\\\\Internet\\ Account\\ Manager\\\\Accounts",
         ".*\\\\Software\\\\Microsoft\\\\Windows\\ Mail",
-        ".*\\\\Software\\\\Microsoft\\\\Windows\\ Live\\ Mail",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\ Live\\ Mail",
+        ".*\\\\Microsoft\\\\Windows\\ Messaging\\ Subsystem\\\\MSMapiApps",
+        ".*\\\\Microsoft\\\\Windows\\ Messaging\\ Subsystem\\\\Profiles.*",
         ".*\\\\Software\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Windows\\ Messaging\\ Subsystem",
         ".*\\\\Software\\\\Microsoft\\\\Internet\\ Account\\ Manager",
         ".*\\\\Software\\\\Microsoft\\\\Office\\\\Outlook\\\\OMI\\ Account\\ Manager",
         ".*\\\\Software\\\\RimArts\\\\B2\\\\Settings",
         ".*\\\\Software\\\\Poco\\ Systems\\ Inc",
         ".*\\\\Software\\\\Mozilla\\\\Mozilla\\ Thunderbird",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Clients\\\\Mail",
+        ".*\\\\Microsoft\\\\Office\\\\.*\\\\Outlook\\\\Profiles\\\\Outlook",
         # Well, strictly speaking..
         ".*\\\\Software\\\\Google\\\\Google\\ Talk",
     ]
@@ -34,6 +38,14 @@ class MailStealer(Signature):
         ".*\\\\Miranda\\\\",
         ".*\\\\SmartFTP\\\\",
         ".*\\\\QIP\\\\",
+        ".*\.pst$",
+        ".*\\\\Microsoft\\\\Windows\\ Live\\ Mail.*",
+        ".*\\\\Microsoft\\\\Address\\ Book\\\\.*\.wab$",
+        ".*\\\\Microsoft\\\\Outlook\\ Express\\\\.*\.dbx$",
+        ".*\\\\Foxmail\\\\mail\\\\.*\\\\Account\.stg$",
+        ".*\\\\Foxmail.*\\\\Accounts\.tdat$",
+        ".*\\\\Thunderbird\\\\Profiles\\\\.*\.default$",
+        ".*\\\\AppData\\\\Roaming\\\\Thunderbird\\\\profiles.ini$",
     ]
 
     # To be replaced by a check_file(dirs=True) whenever we can do that in a
