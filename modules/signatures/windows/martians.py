@@ -1,26 +1,66 @@
-# Copyright (C) 2016 Cuckoo Foundation.
+# Copyright (C) 2016 Cuckoo Foundation, Will Metcalf (william.metcalf@gmail.com), Kevin Ross
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
-import re
+try:
+    import re2 as re
+except ImportError:
+    import re
 
 from lib.cuckoo.common.abstracts import Signature
 
-class IEMartian(Signature):
-    name = "ie_martian"
-    description = "Internet Explorer creates one or more martian processes"
+class ProcessMartian(Signature):
+    name = "process_martian"
+    description = "One or more martian processes was created"
     severity = 3
-    categories = ["martian"]
-    authors = ["Cuckoo Technologies"]
+    categories = ["martian", "exploit", "dropper"]
+    authors = ["Cuckoo Technologies", "Will Metcalf", "Kevin Ross"]
     minimum = "2.0"
 
-    whitelist_re = [
-        "\\\"C:\\\\\Program\\ Files(\\ \\(x86\\))?\\\\Internet\\ Explorer\\\\iexplore\\.exe\\\"\\ SCODEF:\\d+ CREDAT:\\d+$",
-    ]
+    def __init__(self, *args, **kwargs):
+        Signature.__init__(self, *args, **kwargs)
+        self.whitelist_procs = [
+            "iexplore.exe",
+            "firefox.exe",
+            "chrome.exe",
+            "winword.exe",
+            "outlook.exe",
+            "powerpnt.exe",
+            "excel.exe",
+            "wordview.exe",
+            "wspub.exe",
+            "acrord32.exe",
+            "acrord64.exe",
+            "wscript.exe"
+        ]
+
+        self.whitelist_re = [
+            "\\\"C:\\\\\Program\\ Files(\\ \\(x86\\))?\\\\Internet\\ Explorer\\\\iexplore\\.exe\\\"\\ SCODEF:\\d+ CREDAT:\\d+",
+            "^[A-Z]\:\\Program Files(?:\s\(x86\))?\\Microsoft Office\\(?:Office1[1-5]\\)?(?:WINWORD|OUTLOOK|POWERPNT|EXCEL|WORDVIEW)\.EXE",
+            "C\\:\\\\Windows\\\\System32\\\\wscript\\.exe",
+            "C\\:\\\\Program Files(?:\s\\(x86\\))?\\\\Adobe\\\\Reader\\ \\d+\\.\\d+\\\\Reader\\\\AcroRd64\\.exe",
+            "C\\:\\\\Program Files(?:\s\\(x86\\))?\\\\Adobe\\\\Reader\\ \\d+\\.\\d+\\\\Reader\\\\AcroRd64\\.exe",
+            "C\\:\\\\Program Files(?:\s\\(x86\\))?\\\\Java\\\\jre\\d+\\\\bin\\\\j(?:avaw?|p2launcher)\\.exe",
+            "C\\:\\\\Program Files(?:\s\\(x86\\))?\\\\Microsoft SilverLight\\\\(?:\\d+\\.)+\\d\\\\agcp\\.exe",
+            "C\\:\\\\Windows\\\\System32\\\\ntvdm\\.exe",
+            "C\\:\\\\Windows\\\\System32\\\\svchost\\.exe",
+            "C\\:\\\\Program Files(?:\s\\(x86\\))?\\\\internet explorer\\\\iexplore\.exe",
+            # remove this one at some point
+            "C\\:\\\\Windows\\\\System32\\\\rundll32\\.exe",
+            "C\\:\\\\Windows\\\\System32\\\\drwtsn32\\.exe",
+            "C\\:\\\\Windows\\\\splwow64\\.exe",
+            "C\\:\\\\Program Files(?:\s\\(x86\\))?\\\\Common Files\\\\Microsoft Shared\\\\office1[1-6]\\\\off(?:lb|diag)\\.exe",
+            "C\\:\\\\Program Files(?:\s\\(x86\\))?\\\\Common Files\\\\Microsoft Shared\\\\dw\\\\dw(?:20)?\\.exe",
+            "C\\:\\\\Windows\\\\system32\\\\dwwin\\.exe",
+            "C\\:\\\\Windows\\\\system32\\\\WerFault\\.exe",
+            "C\\:\\\\Windows\\\\syswow64\\\\WerFault\\.exe"
+        ]
+
+        self.martian_pnames = []
 
     def on_complete(self):
         for process in self.get_results("behavior", {}).get("generic", []):
-            if process["process_name"] != "iexplore.exe":
+            if process["process_name"].lower() not in self.whitelist_procs:
                 continue
 
             for cmdline in process.get("summary", {}).get("command_line", []):
@@ -28,6 +68,18 @@ class IEMartian(Signature):
                     if re.match(regex, cmdline, re.I):
                         break
                 else:
-                    self.mark_ioc("cmdline", cmdline)
+                    pname = process["process_name"].lower()
+                    if pname not in self.martian_pnames:
+                        self.martian_pnames.append(pname)
+                    if cmdline != "":
+                        self.mark_ioc("process", cmdline)
 
+        if len(self.martian_pnames) == 1:
+            self.description = "One or more martian processes was created by the process "
+            for pname in self.martian_pnames:
+                self.description += pname
+        elif len(self.martian_pnames) > 1:
+            self.description = "One or more martian processes was created by the processes "
+            list = ", ".join(self.martian_pnames )
+            self.description += list
         return self.has_marks()
