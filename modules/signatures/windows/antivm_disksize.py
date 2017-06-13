@@ -52,7 +52,7 @@ class AntiVMDiskSize(Signature):
             if call["api"] == "DeviceIoControl":
                 if call["arguments"]["control_code"] == 475228:
                     self.mark_call()
-            elif call["api"] in ["GetDiskFreeSpaceExA", "GetDiskFreeSpaceExW"]:
+            elif call["api"].startswith("GetDiskFreeSpace"):
                 self.mark_call()
 
     def on_complete(self):
