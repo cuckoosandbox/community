@@ -24,7 +24,13 @@ class AntiVMDiskSize(Signature):
     minimum = "2.0"
     evented = True
 
-    filter_apinames = "GetDiskFreeSpaceExW", "GetDiskFreeSpaceExW"
+    filter_apinames = [
+        "GetDiskFreeSpaceA",
+        "GetDiskFreeSpaceW",
+        "GetDiskFreeSpaceExA",
+        "GetDiskFreeSpaceExW",
+        "DeviceIoControl"
+    ]
 
     whitelistprocs = [
         "iexplore.exe",
@@ -43,7 +49,11 @@ class AntiVMDiskSize(Signature):
 
     def on_call(self, call, process):
         if process["process_name"].lower() not in self.whitelistprocs:
-            self.mark_call()
+            if call["api"] == "DeviceIoControl":
+                if call["arguments"]["control_code"] == 475228:
+                    self.mark_call()
+            elif call["api"] in ["GetDiskFreeSpaceExA", "GetDiskFreeSpaceExW"]:
+                self.mark_call()
 
     def on_complete(self):
         return self.has_marks()
