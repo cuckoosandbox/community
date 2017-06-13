@@ -24,6 +24,8 @@ class PDFJavaScript(Signature):
     minimum = "2.0"
 
     def on_complete(self):
-        for pdf in self.get_results("static", {}).get("pdf", []):
+        for pdf in self.get_results("static", {}).get("pdf", {}):
             if "javascript" in pdf and len(pdf["javascript"]) > 0:
+                for js in pdf["javascript"]:
+                    self.mark_ioc("Javascript code", js["beautified"])
                 return True
