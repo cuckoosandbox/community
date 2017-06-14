@@ -29,3 +29,47 @@ class PDFJavaScript(Signature):
                 for js in pdf["javascript"]:
                     self.mark_ioc("Javascript code", js["beautified"])
                 return True
+
+class PDFAttachments(Signature):
+    name = "pdf_attachments"
+    description = "The PDF file contains an attachment"
+    severity = 2
+    categories = ["static"]
+    authors = ["FDD @ Cuckoo Sandbox"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        for pdf in self.get_results("static", {}).get("pdf", {}):
+            if "attachments" in pdf and len(pdf["attachments"]) > 0:
+                for att in pdf["attachments"]:
+                    self.mark_ioc("Attached file", att["filename"])
+                return True
+
+class PDFOpenAction(Signature):
+    name = "pdf_openaction"
+    description = "The PDF file contains an open action"
+    severity = 2
+    categories = ["static"]
+    authors = ["FDD @ Cuckoo Sandbox"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        for pdf in self.get_results("static", {}).get("pdf", {}):
+            if "openaction" in pdf and pdf["openaction"]:
+                self.mark_ioc("Open action", pdf["openaction"])
+                return True
+
+class PDFOpenActionJS(Signature):
+    name = "pdf_openaction_js"
+    description = "The PDF open action contains JavaScript code"
+    severity = 3
+    categories = ["static"]
+    authors = ["FDD @ Cuckoo Sandbox"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        for pdf in self.get_results("static", {}).get("pdf", {}):
+            if ("openaction" in pdf and pdf["openaction"] and 
+                    ("/JavaScript" in pdf["openaction"] or "/JS" in pdf["openaction"])):
+                self.mark_ioc("Open action", pdf["openaction"])
+                return True
