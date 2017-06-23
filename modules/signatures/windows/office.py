@@ -102,21 +102,6 @@ class HasOfficeEps(Signature):
         if office.get("eps", []):
             return True
 
-class DocumentClose(Signature):
-    name = "document_close"
-    description = "Word document hooks document close"
-    severity = 2
-    categories = ["office"]
-    authors = ["Cuckoo Technologies"]
-    minimum = "2.0"
-
-    def on_complete(self):
-        office = self.get_results("static", {}).get("office", {})
-        if "macros" in office:
-            for macro in office["macros"]:
-                if "Sub Document_Close()" in macro["deobf"]:
-                    return True
-
 class DocumentEmbeddedObject(Signature):
     name = "document_embedded_object"
     description = "Document has embedded objects"
@@ -133,21 +118,6 @@ class DocumentEmbeddedObject(Signature):
         for filename, data in office["objects"].iteritems():
             self.mark(filename=filename, content=data)
         return self.has_marks()
-
-class DocumentOpen(Signature):
-    name = "document_open"
-    description = "Word document hooks document open"
-    severity = 2
-    categories = ["office"]
-    authors = ["Cuckoo Technologies"]
-    minimum = "2.0"
-
-    def on_complete(self):
-        office = self.get_results("static", {}).get("office", {})
-        if "macros" in office:
-            for macro in office["macros"]:
-                if "Sub Document_Open()" in macro["deobf"]:
-                    return True
 
 class OfficeEpsStrings(Signature):
     name = "office_eps_strings"
