@@ -27,6 +27,11 @@ class ADS(Signature):
         for filepath in self.get_files():
             parts = filepath.replace("/", "\\").split("\\")
             if ":" in parts[-1]:
-                self.mark_ioc("file", filepath)
+                if len(parts[-1].split(":")[-1]) > 0:
+                    self.mark_ioc("file", filepath)
+                if parts[-1].split(":")[-1] == "Zone.Identifier":
+                    self.severity=0
+                    self.description="Creates a Zone.Identifier Alternate Data Stream (ADS)"
+
                 
         return self.has_marks()
