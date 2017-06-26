@@ -7,7 +7,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class DNS_TLD_CC(Signature):
     name = "dns_tld_cc"
-    description = "Resolves .CC Belarus TLD, Possibly Malicious"
+    description = "Resolves .CC Cocos Islands TLD, Possibly Malicious"
     severity = 2
     categories = ["tldwatch"]
     authors = ["RedSocks"]
