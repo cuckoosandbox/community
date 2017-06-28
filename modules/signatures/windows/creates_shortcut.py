@@ -27,9 +27,17 @@ class CreatesShortcut(Signature):
         ".*\.lnk$",
     ]
 
+    whitelist = [
+        "C:\Users\Administrator\AppData\Local\Temp\%ProgramData%\Microsoft\Windows\Start Menu\Programs\Accessories\Windows PowerShell\Windows PowerShell.lnk",
+        "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Accessories\Windows PowerShell\Windows PowerShell.lnk",
+    ]
+
     def on_complete(self):
         for indicator in self.files_re:
             for match in self.check_file(pattern=indicator, regex=True, all=True):
+                if match in self.whitelist:
+                    continue
+
                 self.mark_ioc("file", match)
 
         return self.has_marks()

@@ -14,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from lib.cuckoo.common.abstracts import Signature
+import hashlib
 
 class NetworkDocumentFile(Signature):
     name = "network_document_file"
@@ -117,11 +118,13 @@ class SuspiciousWriteEXE(Signature):
     ]
 
     filter_apinames = [
+        "NtWriteFile", "CreateProcessInternalW", "ShellExecuteExW",
         "NtCreateFile", "NtWriteFile", "CreateProcessInternalW", "ShellExecuteExW",
     ]
 
     whitelist = [
         "\Windows\System32\wscript.exe",
+        "\Windows\hh.exe",
     ]
 
     def on_call(self, call, process):
@@ -132,20 +135,26 @@ class SuspiciousWriteEXE(Signature):
                 buff = call["arguments"]["buffer"]
                 if filepath.endswith(".exe") or (buff and len(buff) > 2 and buff.startswith("MZ") and "This program" in buff) and "powershell_ise.exe" not in filepath:
                     for white in self.whitelist:
-                        if white not in filepath:
-                            if pname not in self.pname:
-                                self.pname.append(pname)
-                            if filepath not in self.exes:
-                               self.exes.append(filepath)
+                        if white in filepath:
+                            return
+
+                    if pname not in self.pname:
+                        self.pname.append(pname)
+                    if filepath not in self.exes:
+                       self.exes.append(filepath)
+
             elif call["api"] == "NtCreateFile" and call["arguments"].get("filepath"):
                 filepath = call["arguments"]["filepath"]
                 if filepath.endswith(".exe") and "powershell_ise.exe" not in filepath:
                     for white in self.whitelist:
-                        if white not in filepath:
-                            if pname not in self.pname:
-                                self.pname.append(pname)
-                            if filepath not in self.exes:
-                                self.exes.append(filepath)
+                        if white in filepath:
+                            return
+
+                    if pname not in self.pname:
+                        self.pname.append(pname)
+                    if filepath not in self.exes:
+                        self.exes.append(filepath)
+
             elif call["api"] == "CreateProcessInternalW" or call["api"] == "ShellExecuteExW":
                 filepath = call["arguments"]["filepath"]
                 if filepath in self.exes and pname in self.pname:
@@ -157,12 +166,12 @@ class SuspiciousWriteEXE(Signature):
                 self.description = "The process %s wrote an executable file to disk" % pname
                 if self.executed:
                     self.description += " which it then attempted to execute"
-                    self.severity == 6
+                    self.severity = 6
         elif len(self.pname) > 1:
             self.description = "The processes %s wrote an executable file to disk" % ", ".join(self.pname)
             if self.executed:
                 self.description += " which it then attempted to execute"
-                self.severity == 6
+                self.severity = 6
         for exe in self.exes:
             self.mark_ioc("file", exe)
         return self.has_marks()
