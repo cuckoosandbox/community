@@ -9,17 +9,18 @@ class TrickbotMutexes(Signature):
     name = "trickbot_mutexes"
     description = "Trickbot mutex has been observed"
     severity = 3
-    categories = ["virus"]
+    categories = ["banker"]
     authors = ["FDD @ Cuckoo Sandbox"]
     minimum = "2.0"
 
     mutexes_re = [
-        ".*TrickBot",
+        "Global\\TrickBot",
+        "Global\\MGlob"
     ]
 
     def on_complete(self):
         for indicator in self.mutexes_re:
-            mutex = self.check_mutex(pattern=indicator, regex=True)
+            mutex = self.check_mutex(pattern=indicator, regex=False)
             if mutex:
                 self.mark_ioc("mutex", mutex)
 
