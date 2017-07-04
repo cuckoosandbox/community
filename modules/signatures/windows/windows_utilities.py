@@ -33,6 +33,8 @@ class UsesWindowsUtilities(Signature):
         "regsrv32",
         "runas",
         "rwinsta",
+        "sc ",
+        "sc.exe",
         "schtasks",
         "shutdown",
         "systeminfo",
