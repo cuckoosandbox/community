@@ -8,16 +8,35 @@ class UsesWindowsUtilities(Signature):
     name = "uses_windows_utilities"
     description = "Uses Windows utilities for basic Windows functionality"
     severity = 2
+    categories = ["commands", "lateral"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    references = ["http://blog.jpcert.or.jp/2016/01/windows-commands-abused-by-attackers.html"]
 
     utilities = [
-        "tasklist",
-        "taskkill",
+        "at ",
+        "at.exe",
+        "attrib",
+        "dir",
+        "fsutil",
+        "ipconfig",
+        "net ",
+        "net.exe",
         "netsh",
         "netstat",
-        "bitsadmin",
-        "attrib",
+        "ping",
+        "qwinsta",
+        "reg",
+        "runas",
+        "rwinsta",
+        "shutdown",
+        "systeminfo",
+        "tasklist",
+        "taskkill",
+        "telnet",
+        "wevtutil",
+        "whoami",
+        "wusa"
     ]
 
     def on_complete(self):
@@ -28,23 +47,52 @@ class UsesWindowsUtilities(Signature):
 
         return self.has_marks()
 
-class ModifiesFileACLs(Signature):
-    name = "modifies_file_acls"
-    description = "Uses Windows utilities to modify file/folder permissions"
+class SuspiciousCommandTools(Signature):
+    name = "suspicious_command_tools"
+    description = "Uses suspicious command line tools"
     severity = 3
+    categories = ["commands", "lateral"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
     utilities = [
+        "accesschk",
+        "accessenum",
+        "adexplorer",
+        "adinsight",
+        "adrestore",
+        "autologon",
+        "autoruns",
+        "bitsadmin",
+        "bginfo",
         "cacls",
-        "icalcs",
-        "xcalcs",
+        "csvde",
+        "dsquery",
+        "icacls",
+        "psexec",        
+        "psfile",
+        "psgetsid",
+        "psinfo",
+        "psping",
+        "pskill",
+        "pslist",
+        "psloggedon",
+        "psloglist",
+        "pspasswd",
+        "psservice",
+        "psshutdown",
+        "pssuspend",
+        "shareenum",
+        "shellrunas",
+        "volumeid",
+        "whois"
+        "xcacls"
     ]
 
     def on_complete(self):
         for cmdline in self.get_command_lines():
             for utility in self.utilities:
-                if utility in cmdline.lower():
+                if cmdline.lower().startswith(utility):
                     self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
