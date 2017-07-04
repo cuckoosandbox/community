@@ -31,6 +31,7 @@ class UsesWindowsUtilities(Signature):
         "qwinsta",
         "reg",
         "regsrv32",
+        "route",
         "runas",
         "rwinsta",
         "sc ",
