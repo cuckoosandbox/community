@@ -43,7 +43,6 @@ class UsesWindowsUtilities(Signature):
         "tasklist",
         "taskkill",
         "telnet",
-        "wevtutil",
         "whoami",
         "wusa"
     ]
@@ -95,6 +94,7 @@ class SuspiciousCommandTools(Signature):
         "shareenum",
         "shellrunas",
         "volumeid",
+        "wevtutil",
         "whois"
         "xcacls"
     ]
