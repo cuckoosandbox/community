@@ -20,18 +20,20 @@ class ProcessMartian(Signature):
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
         self.whitelist_procs = [
-            "iexplore.exe",
-            "firefox.exe",
-            "chrome.exe",
-            "winword.exe",
-            "outlook.exe",
-            "powerpnt.exe",
-            "excel.exe",
-            "wordview.exe",
-            "wspub.exe",
             "acrord32.exe",
             "acrord64.exe",
+            "chrome.exe",
+            "cscript.exe",
+            "excel.exe",
+            "firefox.exe",
+            "iexplore.exe",
+            "outlook.exe",
+            "powerpnt.exe",
+            "powershell.exe",
+            "winword.exe",
+            "wordview.exe",
             "wscript.exe"
+            "wspub.exe"
         ]
 
         self.whitelist_re = [
@@ -56,8 +58,6 @@ class ProcessMartian(Signature):
             "C\\:\\\\Windows\\\\syswow64\\\\WerFault\\.exe"
         ]
 
-        self.martian_pnames = []
-
     def on_complete(self):
         for process in self.get_results("behavior", {}).get("generic", []):
             if process["process_name"].lower() not in self.whitelist_procs:
@@ -69,17 +69,10 @@ class ProcessMartian(Signature):
                         break
                 else:
                     pname = process["process_name"].lower()
-                    if pname not in self.martian_pnames:
-                        self.martian_pnames.append(pname)
                     if cmdline != "":
-                        self.mark_ioc("process", cmdline)
+                        self.mark(
+                            parent_process=pname,
+                            martian_process=cmdline,
+                        )
 
-        if len(self.martian_pnames) == 1:
-            self.description = "One or more martian processes was created by the process "
-            for pname in self.martian_pnames:
-                self.description += pname
-        elif len(self.martian_pnames) > 1:
-            self.description = "One or more martian processes was created by the processes "
-            list = ", ".join(self.martian_pnames )
-            self.description += list
         return self.has_marks()
