@@ -89,6 +89,7 @@ class SuspiciousCommandTools(Signature):
         "psservice",
         "psshutdown",
         "pssuspend",
+        "rexec",
         "shareenum",
         "shellrunas",
         "volumeid",
