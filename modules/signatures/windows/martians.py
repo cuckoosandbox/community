@@ -23,6 +23,7 @@ class ProcessMartian(Signature):
             "acrord32.exe",
             "acrord64.exe",
             "chrome.exe",
+            "cscript.exe",
             "excel.exe",
             "firefox.exe",
             "iexplore.exe",
