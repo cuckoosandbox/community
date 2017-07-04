@@ -42,14 +42,14 @@ class UsesWindowsUtilities(Signature):
     def on_complete(self):
         for cmdline in self.get_command_lines():
             for utility in self.utilities:
-                if utility in cmdline.lower():
+                if cmdline.lower().startswith(utility):
                     self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
 
 class SuspiciousCommandTools(Signature):
     name = "suspicious_command_tools"
-    description = "Uses suspicious command line tools"
+    description = "Uses suspicious command line tools or Windows utilities"
     severity = 3
     categories = ["commands", "lateral"]
     authors = ["Kevin Ross"]
