@@ -71,8 +71,8 @@ class ProcessMartian(Signature):
                     pname = process["process_name"].lower()
                     if cmdline != "":
                         self.mark(
-                            process=pname,
-                            command=cmdline,
+                            parent_process=pname,
+                            martian_process=cmdline,
                         )
 
         return self.has_marks()
