@@ -3,6 +3,7 @@
 # See the file 'docs/LICENSE' for copying permission.
 
 import ntpath
+import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -48,6 +49,85 @@ class OfficeCreateObject(Signature):
         description = self.descriptions[self.objects[objname.lower()]]
         self.mark_ioc("com_class", objname, description)
         return True
+
+class OfficeCheckProjectName(Signature):
+    name = "office_check_project_name"
+    description = "Office checks VB project name"
+    severity = 1
+    categories = ["vba"]
+    authors = ["FDD", "Cuckoo Sandbox"]
+    minimum = "2.0"
+
+    filter_apinames = "vbe6_Invoke",
+
+    def on_call(self, call, process):
+        if call["arguments"]["funcname"] != "macroname":
+            return
+
+        self.mark_call()
+        return True
+
+
+
+class OfficeCountDirectories(Signature):
+    name = "office_count_dirs"
+    description = "Office document invokes CountDirectories (possible anti-sandbox)"
+    severity = 2
+    categories = ["vba"]
+    authors = ["FDD @ Cuckoo Technologies"]
+    minimum = "2.0"
+
+    filter_apinames = "vbe6_Invoke",
+
+    def on_call(self, call, process):
+        if call["arguments"]["funcname"] != "CountDirectories":
+            return
+
+        self.mark_call()
+        return True
+
+class OfficeCheckVersion(Signature):
+    name = "office_appinfo_version"
+    description = "Office document checks Office version (possible anti-sandbox)"
+    severity = 2
+    categories = ["vba"]
+    authors = ["FDD", "Cuckoo Technologies"]
+    minimum = "2.0"
+
+    filter_apinames = "vbe6_Invoke",
+
+    def on_call(self, call, process):
+        if not "args" in call["arguments"]:
+            return
+
+        if (call["arguments"]["funcname"] != "AppInfo" or
+                call["arguments"]["args"][0] != 2):
+            return
+
+        self.mark_call()
+        return True
+
+class OfficeCheckWindow(Signature):
+    name = "office_check_window"
+    description = "Office document checks Office window size (possible anti-sandbox)"
+    severity = 2
+    categories = ["vba"]
+    authors = ["FDD @ Cuckoo Technologies"]
+    minimum = "2.0"
+
+    filter_apinames = "vbe6_Invoke",
+
+    def on_call(self, call, process):
+        if not "args" in call["arguments"]:
+            return
+
+        if (call["arguments"]["funcname"] != "AppInfo" or
+                call["arguments"]["args"][0] != 7):
+            return
+
+        self.mark_call()
+        return True
+
 
 class OfficeHttpRequest(Signature):
     name = "office_http_request"
@@ -102,12 +182,132 @@ class HasOfficeEps(Signature):
         if office.get("eps", []):
             return True
 
+class DocumentEmbeddedObject(Signature):
+    name = "document_embedded_object"
+    description = "Document has embedded objects"
+    severity = 2
+    categories = ["office"]
+    authors = ["FDD", "Cuckoo Technologies"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        office = self.get_results("static", {}).get("office", {})
+        if not "objects" in office:
+            return
+
+        for filename, data in office["objects"].iteritems():
+            self.mark(filename=filename, content=data)
+        return self.has_marks()
+
+
+class DocumentEmbeddedDangerousObject(Signature):
+    name = "document_embedded_dangerous_object"
+    description = "Document has a potentially dangerous embedded object"
+    severity = 4
+    categories = ["office"]
+    authors = ["FDD", "Cuckoo Technologies"]
+    minimum = "2.0"
+
+    dangerous_extensions = [
+        ".vbs", ".js", ".wsc", ".wsf", ".py", ".exe", ".dll",
+        ".rb", ".hta"
+    ]
+
+    def on_complete(self):
+        office = self.get_results("static", {}).get("office", {})
+        if not "objects" in office:
+            return
+
+        for filename, data in office["objects"].iteritems():
+            for ext in self.dangerous_extensions:
+                if not filename or "unnamed_" in filename:
+                    # Try to get embedded filenames
+                    pathre = re.compile(r"(?:[a-zA-Z]\:|\\\\[\w\.]+\\[\w~.$]+)\\(?:[\w~]+\\\\?)*\w([\w.])+")
+                    match = pathre.search(data)
+                    if match:
+                        filename = match.group(0)
+
+                if ext in filename:
+                    self.mark(filename=filename, content=data)
+
+        return self.has_marks()
+
+class OfficeIndirectCall(Signature):
+    name = "office_indirect_call"
+    description = "Office document has indirect calls"
+    severity = 1
+    categories = ["office"]
+    authors = ["FDD @ Cuckoo Technologies"]
+    minimum = "2.0"
+
+    patterns = [
+        "CallByName[^\r\n;']*",
+    ]
+
+    def on_complete(self):
+        office = self.get_results("static", {}).get("office", {})
+        if "macros" in office:
+            for macro in office["macros"]:
+                for pattern in self.patterns:
+                    matches = re.findall(pattern, macro["deobf"])
+                    for match in matches:
+                        self.mark_ioc("Statement", match)
+                    
+            return self.has_marks()
+
+class OfficeCheckName(Signature):
+    name = "office_check_doc_name"
+    description = "Office document checks it's own name"
+    severity = 2
+    categories = ["office"]
+    authors = ["FDD", "Cuckoo Technologies"]
+    minimum = "2.0"
+
+    patterns = [
+        "[^\n\r;']*Me.Name[^\n\r;']*",
+    ]
+
+    def on_complete(self):
+        office = self.get_results("static", {}).get("office", {})
+        if "macros" in office:
+            for macro in office["macros"]:
+                for pattern in self.patterns:
+                    matches = re.findall(pattern, macro["deobf"])
+                    for match in matches:
+                        self.mark_ioc("Statement", match)
+                    
+            return self.has_marks()
+
+class OfficePlatformDetect(Signature):
+    name = "office_platform_detect"
+    description = "Office document tries to detect platform"
+    severity = 2
+    categories = ["office"]
+    authors = ["FDD @ Cuckoo Technologies"]
+    minimum = "2.0"
+
+    patterns = [
+        "#If\s+(?:Not\s+)?Win32",
+        "#If\s+Mac\s*=\s(?:1|0)"
+    ]
+
+    def on_complete(self):
+        office = self.get_results("static", {}).get("office", {})
+        if "macros" in office:
+            for macro in office["macros"]:
+                for pattern in self.patterns:
+                    matches = re.findall(pattern, macro["deobf"])
+                    for match in matches:
+                        self.mark_ioc("Statement", match)
+                    
+            return self.has_marks()
+
 class DocumentClose(Signature):
     name = "document_close"
     description = "Word document hooks document close"
     severity = 2
     categories = ["office"]
-    authors = ["Cuckoo Technologies"]
+    authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
 
     def on_complete(self):
@@ -122,7 +322,7 @@ class DocumentOpen(Signature):
     description = "Word document hooks document open"
     severity = 2
     categories = ["office"]
-    authors = ["Cuckoo Technologies"]
+    authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
 
     def on_complete(self):
