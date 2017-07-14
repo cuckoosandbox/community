@@ -67,8 +67,6 @@ class OfficeCheckProjectName(Signature):
         self.mark_call()
         return True
 
-
-
 class OfficeCountDirectories(Signature):
     name = "office_count_dirs"
     description = "Office document invokes CountDirectories (possible anti-sandbox)"
