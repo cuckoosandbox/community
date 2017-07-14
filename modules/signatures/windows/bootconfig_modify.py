@@ -1,3 +1,5 @@
+# Copyright (C) 2016 Kevin Ross
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -13,30 +15,23 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class ModifiesFiles(Signature):
-    name = "modifies_files"
-    description = "This sample modifies more than %d files through " \
-        "suspicious ways, likely a polymorphic virus or a ransomware"
+class ModifiesBootConfig(Signature):
+    name = "modifies_boot_config"
+    description = "Modifies boot configuration settings"
     severity = 3
-    families = ["ransomware"]
+    categories = ["persistance", "ransomware"]
+    authors = ["Kevin Ross"]
     minimum = "2.0"
 
-    filter_apinames = "MoveFileWithProgressW",
+    filter_apinames = "ShellExecuteExW", "CreateProcessInternalW",
 
     def on_call(self, call, process):
-        self.mark_call()
+        if call["api"] == "CreateProcessInternalW":
+            buf = call["arguments"]["command_line"].lower()
+        else:
+            buf = call["arguments"]["filepath"].lower()
+        if "bcdedit" in buf and "set" in buf:
+            self.mark_ioc("command", buf)
 
     def on_complete(self):
-        if self.has_marks(500):
-            self.description = self.description % 500
-            self.severity = 6
-        elif self.has_marks(100):
-            self.description = self.description % 100
-            self.severity = 5
-        elif self.has_marks(50):
-            self.description = self.description % 50
-            self.severity = 4
-        else:
-            self.description = self.description % 5
-
-        return self.has_marks(5)
+        return self.has_marks()

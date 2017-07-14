@@ -1,4 +1,4 @@
-# Copyright (C) 2016 Kevin Ross
+# Copyright (C) 2017 Kevin Ross
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,39 +15,29 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class AntiVMComputernameQuery(Signature):
-    name = "antivm_queries_computername"
-    description = "Queries for the computername"
-    severity = 1
-    categories = ["AntiVM"]
+class CreatesShortcut(Signature):
+    name = "creates_shortcut"
+    description = "Creates a shortcut to an executable file"
+    severity = 2
+    categories = ["persistance"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
-    filter_apinames = [
-        "GetComputerNameA",
-        "GetComputerNameW",
-        "GetComputerNameExA",
-        "GetComputerNameExW",
-    ]
-    
-    whitelistprocs = [
-        "iexplore.exe",
-        "firefox.exe",
-        "chrome.exe",
-        "safari.exe",
-        "acrord32.exe",
-        "acrord64.exe",
-        "wordview.exe",
-        "winword.exe",
-        "excel.exe",
-        "powerpnt.exe",
-        "outlook.exe",
-        "mspub.exe"
+    files_re = [
+        ".*\.lnk$",
     ]
 
-    def on_call(self, call, process):
-        if process["process_name"].lower() not in self.whitelistprocs:
-            self.mark_call()
+    whitelist = [
+        "C:\Users\Administrator\AppData\Local\Temp\%ProgramData%\Microsoft\Windows\Start Menu\Programs\Accessories\Windows PowerShell\Windows PowerShell.lnk",
+        "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Accessories\Windows PowerShell\Windows PowerShell.lnk",
+    ]
 
     def on_complete(self):
+        for indicator in self.files_re:
+            for match in self.check_file(pattern=indicator, regex=True, all=True):
+                if match in self.whitelist:
+                    continue
+
+                self.mark_ioc("file", match)
+
         return self.has_marks()

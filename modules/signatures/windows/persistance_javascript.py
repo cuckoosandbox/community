@@ -1,4 +1,4 @@
-# Copyright (C) 2016 Kevin Ross
+# Copyright (C) 2017 Kevin Ross
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,38 +15,22 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class AntiVMComputernameQuery(Signature):
-    name = "antivm_queries_computername"
-    description = "Queries for the computername"
-    severity = 1
-    categories = ["AntiVM"]
+class PersistanceRegJavaScript(Signature):
+    name = "persistance_registry_javascript"
+    description = "Used JavaScript in registry key value likely for persistance"
+    severity = 3
+    categories = ["persistance"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    evented = True
 
-    filter_apinames = [
-        "GetComputerNameA",
-        "GetComputerNameW",
-        "GetComputerNameExA",
-        "GetComputerNameExW",
-    ]
-    
-    whitelistprocs = [
-        "iexplore.exe",
-        "firefox.exe",
-        "chrome.exe",
-        "safari.exe",
-        "acrord32.exe",
-        "acrord64.exe",
-        "wordview.exe",
-        "winword.exe",
-        "excel.exe",
-        "powerpnt.exe",
-        "outlook.exe",
-        "mspub.exe"
-    ]
+    filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey"])
 
     def on_call(self, call, process):
-        if process["process_name"].lower() not in self.whitelistprocs:
+        value = call["arguments"]["value"]
+        if not isinstance(value, basestring):
+            return
+        if value and "javascript:" in value:
             self.mark_call()
 
     def on_complete(self):

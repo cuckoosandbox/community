@@ -1,4 +1,4 @@
-# Copyright (C) 2016 Kevin Ross
+# Copyright (C) 2015 Kevin Ross
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,39 +15,24 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class AntiVMComputernameQuery(Signature):
-    name = "antivm_queries_computername"
-    description = "Queries for the computername"
-    severity = 1
-    categories = ["AntiVM"]
+class ModifiesCertificates(Signature):
+    name = "modifies_certificates"
+    description = "Attempts to create or modify system certificates"
+    severity = 3
+    categories = ["infostealer", "banker"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
-    filter_apinames = [
-        "GetComputerNameA",
-        "GetComputerNameW",
-        "GetComputerNameExA",
-        "GetComputerNameExW",
-    ]
-    
-    whitelistprocs = [
-        "iexplore.exe",
-        "firefox.exe",
-        "chrome.exe",
-        "safari.exe",
-        "acrord32.exe",
-        "acrord64.exe",
-        "wordview.exe",
-        "winword.exe",
-        "excel.exe",
-        "powerpnt.exe",
-        "outlook.exe",
-        "mspub.exe"
+    regkeys_re = [
+        ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\SystemCertificates\\\\.*\\\\Certificates\\\\.*",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\SystemCertificates\\\\.*\\\\Certificates\\\\.*",
     ]
 
-    def on_call(self, call, process):
-        if process["process_name"].lower() not in self.whitelistprocs:
-            self.mark_call()
+    filter_analysistypes = set(["file"])
 
     def on_complete(self):
+        for indicator in self.regkeys_re:
+            for regkey in self.check_key(pattern=indicator, regex=True, actions=["regkey_written"], all=True):
+                self.mark_ioc("registry", regkey)
+
         return self.has_marks()

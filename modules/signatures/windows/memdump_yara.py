@@ -15,39 +15,28 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class AntiVMComputernameQuery(Signature):
-    name = "antivm_queries_computername"
-    description = "Queries for the computername"
-    severity = 1
-    categories = ["AntiVM"]
+class ProcMemDumpYara(Signature):
+    name = "memdump_yara"
+    description = "Yara rule detected in process memory"
+    severity = 2
+    categories = ["generic"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
-    filter_apinames = [
-        "GetComputerNameA",
-        "GetComputerNameW",
-        "GetComputerNameExA",
-        "GetComputerNameExW",
+    malicious_rules = [
+    "Ransomware_Message",
     ]
-    
-    whitelistprocs = [
-        "iexplore.exe",
-        "firefox.exe",
-        "chrome.exe",
-        "safari.exe",
-        "acrord32.exe",
-        "acrord64.exe",
-        "wordview.exe",
-        "winword.exe",
-        "excel.exe",
-        "powerpnt.exe",
-        "outlook.exe",
-        "mspub.exe"
-    ]
-
-    def on_call(self, call, process):
-        if process["process_name"].lower() not in self.whitelistprocs:
-            self.mark_call()
 
     def on_complete(self):
+        for procmem in self.get_results("procmemory", []):
+            for yara in procmem.get("yara", []):
+                yararule = yara["name"]
+                ruledescription = yara["meta"]["description"]
+                self.mark(
+                    rule=yararule,
+                    description=ruledescription,                      
+                )
+                if yararule in self.malicious_rules:
+                    self.severity = 3
+
         return self.has_marks()
