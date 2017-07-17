@@ -66,6 +66,8 @@ class CheckIP(Signature):
         "ipinfo.io",
         "ip.anysrc.net",
         "checkip.amazonaws.com",
+        "ipaddress.pro",
+        "ip-api.com",
     ]
 
     def on_complete(self):
