@@ -13,7 +13,7 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class RamsomwareFileMoves(Signature):
+class RansomwareFileMoves(Signature):
     name = "ransomware_file_moves"
     description = "Performs %d file moves indicative of a ransomware file encryption process"
     severity = 3
