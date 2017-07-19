@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class InjectionExplorer(Signature):
     name = "injection_explorer"
-    description = "Performs code injection into Explorer process using the Shell_TrayWnd technique"
+    description = "Performs code injection into the Explorer process using the Shell_TrayWnd technique"
     severity = 3
     categories = ["injection"]
     authors = ["Kevin Ross"]
