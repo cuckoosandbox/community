@@ -47,7 +47,6 @@ class InjectionExplorer(Signature):
 
         elif call["api"] == "SendNotifyMessageA":
             if call["arguments"]["process_identifier"] in self.explorerpids and int(call["arguments"]["window_handle"], 16) == self.windowhandle:
-            
                 self.injected = True
                 self.mark_call()
 
