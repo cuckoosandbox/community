@@ -19,7 +19,7 @@ class InjectionExplorer(Signature):
     name = "injection_explorer"
     description = "Performs code injection into Explorer process using the Shell_TrayWnd technique"
     severity = 3
-    categories = ["Kevin Ross"]
+    categories = ["injection"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
     references = ["www.endgame.com/blog/technical-blog/ten-process-injection-techniques-technical-survey-common-and-trending-process"]
