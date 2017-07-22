@@ -13,6 +13,7 @@ class SuspiciousPowershell(Signature):
     categories = ["script", "dropper", "downloader", "packer"]
     authors = ["Kevin Ross", "Cuckoo Technologies", "FDD"]
     minimum = "2.0"
+    references = ["www.symantec.com/content/dam/symantec/docs/security-center/white-papers/increased-use-of-powershell-in-attacks-16-en.pdf"]
 
     def on_complete(self):
         for cmdline in self.get_command_lines():
