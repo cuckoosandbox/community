@@ -51,8 +51,8 @@ class SuspiciousPowershell(Signature):
             if m:
                 self.mark(value="Prevents creating an interactive prompt for the user", option=m.group(0))
 
-            if "downloadfile(" in lower:
-                self.mark(value="Uses powershell to execute a file download from the command line")
+            if "downloadfile(" in lower or "downloadstring(" in lower or "invoke-webrequest" in lower:
+                self.mark(value="Uses powershell to to download a file download from the command line")
 
         return self.has_marks()
 
