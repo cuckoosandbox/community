@@ -123,8 +123,8 @@ class RansomwareMessage(Signature):
     def on_complete(self):
         return self.has_marks()
 
-class RansomwareMessageImage(Signature):
-    name = "ransomware_message_image"
+class RansomwareMessageOCR(Signature):
+    name = "ransomware_message_ocr"
     description = "Displays a potential ransomware message to the user (check screenshots)"
     severity = 3
     categories = ["ransomware", "ocr"]
