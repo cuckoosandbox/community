@@ -19,17 +19,17 @@ class InjectionCreateSuspended(Signature):
     name = "injection_create_suspended"
     description = "Created a process in a suspended state common in code injection or process hollowing"
     severity = 3
-    categories = ["injection"]
+    categories = ["injection", "unpacking"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
     evented = True
 
     filter_apinames = [
-        "CreateProcessInternalW"
+        "CreateProcessInternalW",
     ]
 
     def on_call(self, call, process):
-        if call["arguments"]["creation_flags"] == 4:
+        if "CREATE_SUSPENDED" in call["flags"]["creation_flags"]:
             self.mark_call()
 
     def on_complete(self):
