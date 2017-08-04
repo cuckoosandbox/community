@@ -23,7 +23,7 @@ class AllocatesRWX(Signature):
 
 class AllocatesRWXRemoteProccess(Signature):
     name = "allocates_rwx_remote_process"
-    description = "Allocates read-write-execute memory to another process indicating possible code injection"
+    description = "Allocates read-write-execute memory to another process indicative of possible code injection"
     severity = 3
     categories = ["injection", "shellcode"]
     authors = ["Kevin Ross"]
