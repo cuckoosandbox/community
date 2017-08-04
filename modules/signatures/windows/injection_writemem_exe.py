@@ -29,9 +29,8 @@ class InjectionWriteMemoryEXE(Signature):
     ]
 
     def on_call(self, call, process):
-        if call["api"] == "WriteProcessMemory":
-            if call["arguments"]["buffer"].startswith("MZ") and not call["arguments"]["process_handle"].startswith("0xfffffff"):
-                self.mark_call()
+        if call["arguments"]["buffer"].startswith("MZ") and not call["arguments"]["process_handle"].startswith("0xfffffff"):
+            self.mark_call()
 
     def on_complete(self):
         return self.has_marks()
