@@ -15,9 +15,29 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
+class InjectionWriteMemory(Signature):
+    name = "injection_write_memory"
+    description = "Potential code injection by writing to the memory of another process"
+    severity = 2
+    categories = ["injection"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    filter_apinames = [
+        "NtWriteVirtualmemory",
+        "WriteProcessMemory",
+    ]
+
+    def on_call(self, call, process):
+        if len(call["arguments"]["buffer"]) > 0 and not call["arguments"]["process_handle"].startswith("0xfffffff"):
+            self.mark_call()
+
+    def on_complete(self):
+        return self.has_marks()
+
 class InjectionWriteMemoryEXE(Signature):
     name = "injection_write_memory_exe"
-    description = "Writes an executable/dll to the memory of another process"
+    description = "Code injection by writing an executable/dll to the memory of another process"
     severity = 3
     categories = ["injection", "unpacking"]
     authors = ["Kevin Ross"]
