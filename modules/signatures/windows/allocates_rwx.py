@@ -21,9 +21,9 @@ class AllocatesRWX(Signature):
     def on_complete(self):
         return self.has_marks()
 
-class AllocatesRWXRemoteProccess(Signature):
-    name = "allocates_rwx_remote_process"
-    description = "Allocates read-write-execute memory to another process indicative of possible code injection"
+class AllocatesExecuteRemoteProccess(Signature):
+    name = "allocates_execute_remote_process"
+    description = "Allocates execute permission to another process indicative of possible code injection"
     severity = 3
     categories = ["injection", "shellcode"]
     authors = ["Kevin Ross"]
@@ -32,7 +32,8 @@ class AllocatesRWXRemoteProccess(Signature):
     filter_apinames = "NtAllocateVirtualMemory", "NtProtectVirtualMemory"
 
     def on_call(self, call, process):
-        if call["flags"]["protection"] == "PAGE_EXECUTE_READWRITE" and not call["arguments"]["process_handle"].startswith("0xfffffff"):
+        protection = call["flags"]["protection"]
+        if (protection == "PAGE_EXECUTE_READWRITE" or protection == "PAGE_EXECUTE" or protection == "PAGE_EXECUTE_WRITECOPY") and not call["arguments"]["process_handle"].startswith("0xfffffff"):
             self.mark_call()
 
     def on_complete(self):
