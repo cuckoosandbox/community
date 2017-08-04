@@ -37,7 +37,7 @@ class InjectionWriteMemory(Signature):
 
 class InjectionWriteMemoryEXE(Signature):
     name = "injection_write_memory_exe"
-    description = "Code injection by writing an executable/dll to the memory of another process"
+    description = "Code injection by writing an executable or DLL to the memory of another process"
     severity = 3
     categories = ["injection", "unpacking"]
     authors = ["Kevin Ross"]
