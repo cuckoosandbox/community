@@ -24,6 +24,7 @@ class InjectionWriteMemoryEXE(Signature):
     minimum = "2.0"
 
     filter_apinames = [
+        "NtWriteVirtualmemory",
         "WriteProcessMemory",
     ]
 
