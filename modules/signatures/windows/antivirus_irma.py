@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class AntiVirusIRMA(Signature):
     name = "antivirus_irma"
-    description = "File has been identified by at least one AntiVirus scanned by IRMA as malicious"
+    description = "File has been identified by at least one AntiVirus engine on IRMA as malicious"
     severity = 3
     categories = ["antivirus"]
     authors = ["Kevin Ross"]
