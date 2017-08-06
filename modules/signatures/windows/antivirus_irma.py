@@ -24,13 +24,14 @@ class AntiVirusIRMA(Signature):
     minimum = "2.0"
 
     def on_complete(self):
-        results = self.get_results("irma", [])
-        if results.get("probe_results"):
-            results = results.get("probe_results")
-            for result in results:
-                engine = result["name"]
-                verdict = result["results"]
-                if verdict:
-                    self.mark_ioc(engine, verdict)                    
+        if self.get_results("irma", []):
+            results = self.get_results("irma", [])
+            if results.get("probe_results"):
+                results = results.get("probe_results")
+                for result in results:
+                    engine = result["name"]
+                    verdict = result["results"]
+                    if verdict:
+                        self.mark_ioc(engine, verdict)                    
 
         return self.has_marks()
