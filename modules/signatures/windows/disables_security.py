@@ -48,7 +48,6 @@ class UACBypassRegistryHijack(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
     references = ["enigma0x3.net/2016/08/15/fileless-uac-bypass-using-eventvwr-exe-and-registry-hijacking/"]
-    # Other https://www.joesecurity.org/reports/report-1144eeaebb15044fa64f4d9bb5670349.html
 
     def on_complete(self):
         for process in self.get_results("behavior", {}).get("generic", []):
