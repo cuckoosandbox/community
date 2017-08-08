@@ -39,3 +39,24 @@ class DisablesSecurity(Signature):
 
         self.severity = min(self.severity, 5)
         return self.has_marks()
+
+class UACBypassRegistryHijack(Signature):
+    name = "uac_bypass_registry_hijack"
+    description = "User Access Control (UAC) bypass using eventvwr registry hijack method"
+    severity = 3
+    categories = ["anti-av"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+    references = ["enigma0x3.net/2016/08/15/fileless-uac-bypass-using-eventvwr-exe-and-registry-hijacking/"]
+    # Other https://www.joesecurity.org/reports/report-1144eeaebb15044fa64f4d9bb5670349.html
+
+    def on_complete(self):
+        for process in self.get_results("behavior", {}).get("generic", []):
+            if "eventvwr.exe" in process["process_name"].lower():
+                continue
+
+        for cmdline in self.get_command_lines():
+            if "\mscfile\shell\open\command" in cmdline.lower():
+                self.mark_ioc("cmdline", cmdline)
+        
+        return self.has_marks()
