@@ -81,12 +81,6 @@ class SuspiciousPowershell(Signature):
                     features = "Creates a new process"
                 else:
                     features += ", Creates a new process"
-
-            if "-noni" in lower:
-                if features == "":
-                    features = "Creates a non-interactive prompt"
-                else:
-                    features += ", Creates a non-interactive prompt"
                     
             if "system.net.webrequest" in lower and "create(" in lower and "getresponse" in lower:
                 if features == "":
