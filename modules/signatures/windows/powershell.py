@@ -17,6 +17,7 @@ class SuspiciousPowershell(Signature):
     def on_complete(self):
         for cmdline in self.get_command_lines():
             lower = cmdline.lower()
+            features = ""
 
             if "powershell" not in lower:
                 continue
@@ -24,35 +25,110 @@ class SuspiciousPowershell(Signature):
             epre = re.compile("\-[e^]{1,2}[xecution]*[p^]{0,2}[olicy]*[\s]+bypass")
             m = epre.search(lower)
             if m:
-                self.mark(value="Attempts to bypass execution policy", option=m.group(0))
+                if features == "":
+                    features = "Attempts to bypass execution policy"
+                else:
+                    features += ", Attempts to bypass execution policy"
 
             epre = re.compile("\-[e^]{1,2}[xecution]*[p^]{0,2}[olicy]*[\s]+unrestricted")
             m = epre.search(lower)
             if m:
-                self.mark(value="Attempts to bypass execution policy", option=m.group(0))
+                if features == "":
+                    features = "Attempts to bypass execution policy"
+                else:
+                    features += ", Attempts to bypass execution policy"
 
             nopre = re.compile("\-nop[rofile]*")
             m = nopre.search(lower)
             if m:
-                self.mark(value="Does not load current user profile", option=m.group(0))
+                if features == "":
+                    features = "Does not load current user profile"
+                else:
+                    features += ", Does not load current user profile"
 
             nolre = re.compile("\-nol[og]*")
             m = nolre.search(lower)
             if m:
-                self.mark(value="Hides the copyright banner when PowerShell launches", option=m.group(0))
+                if features == "":
+                    features = "Hides the copyright banner when PowerShell launches"
+                else:
+                    features += ", Hides the copyright banner when PowerShell launches"
 
             hiddenre = re.compile("\-[w^]{1,2}[indowstyle^]*[\s]+hidden")
             m = hiddenre.search(lower)
             if m:
-                self.mark(value="Attempts to execute command with a hidden window", option=m.group(0))
+                if features == "":
+                    features = "Attempts to execute command with a hidden window"
+                else:
+                    features += ", Attempts to execute command with a hidden window"
 
             nonire = re.compile("\-noni[nteraciv]*")
             m = nonire.search(lower)
             if m:
-                self.mark(value="Prevents creating an interactive prompt for the user", option=m.group(0))
+                if features == "":
+                    features = "Prevents creating an interactive prompt for the user"
+                else:
+                    features += ", Prevents creating an interactive prompt for the user"
 
-            if "downloadfile(" in lower:
-                self.mark(value="Uses powershell to execute a file download from the command line")
+            if "downloadfile(" in lower or "downloadstring(" in lower:
+                if features == "":
+                    features = "Uses powershell to execute a file download from the command line"
+                else:
+                    features += ", Uses powershell to execute a file download from the command line"
+
+            if "start-process" in lower or "shellexecute" in lower or "createprocess" in lower:
+                if features == "":
+                    features = "Creates a new process"
+                else:
+                    features += ", Creates a new process"
+
+            if "-noni" in lower:
+                if features == "":
+                    features = "Creates a non-interactive prompt"
+                else:
+                    features += ", Creates a non-interactive prompt"
+                    
+            if "system.net.webrequest" in lower and "create(" in lower and "getresponse" in lower:
+                if features == "":
+                    features = "Uses System.Net.WebRequest method to perform a HTTP request"
+                else:
+                    features += ", Uses System.Net.WebRequest method to perform a HTTP request"
+                    
+            if "start-bitstransfer" in lower:
+                if features == "":
+                    features = "Uses BitsTransfer to download a file"
+                else:
+                    features += ", Uses BitsTransfer to download a file"
+                    
+            if "invoke-item" in lower:
+                if features == "":
+                    features = "Uses Invoke-Item to execute a file"
+                else:
+                    features += ", Uses Invoke-Item to execute a file"
+
+            if "-enc" in lower:
+                # This has to be improved.
+                script, args = None, shlex.split(cmdline)
+                for idx, arg in enumerate(args):
+                    if "-enc" not in arg.lower() and "-encodedcommand" not in arg.lower():
+                        continue
+
+                    try:
+                        script = args[idx+1].decode("base64").decode("utf16")
+                        break
+                    except:
+                        pass
+
+                if features == "":
+                    features = "Uses a base64 encoded command value"
+                else:
+                    features += ", Uses a base64 encoded command value"
+
+            if len(features) > 0:
+                if "base64 encoded command value" in features:
+                    self.mark(cmdline=cmdline, description=features, script=script)
+                else:                 
+                    self.mark(cmdline=cmdline, description=features)
 
         return self.has_marks()
 
