@@ -131,7 +131,25 @@ class DocumentOpen(Signature):
             for macro in office["macros"]:
                 if "Sub Document_Open()" in macro["deobf"]:
                     return True
+                
+class OfficeMacro(Signature):
+    name = "office_macro"
+    description = "Office document contains one or more macros"
+    severity = 2
+    categories = ["office"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
 
+    def on_complete(self):
+        office = self.get_results("static", {}).get("office", [])
+        for macro in office["macros"]:
+            self.mark(
+                macro_filename=macro["filename"],
+                macro_stream=macro["stream"],
+            )
+
+        return self.has_marks()
+    
 class OfficeEpsStrings(Signature):
     name = "office_eps_strings"
     description = "Suspicious keywords embedded in an Encapsulated Post Script (EPS) file"
