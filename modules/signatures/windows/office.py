@@ -318,6 +318,56 @@ class OfficeEpsStrings(Signature):
 
         return self.has_marks()
 
+class DocumentEmbeddedObject(Signature):
+    name = "document_embedded_object"
+    description = "Document has embedded objects"
+    severity = 2
+    categories = ["office"]
+    authors = ["FDD", "Cuckoo Technologies"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        office = self.get_results("static", {}).get("office", {})
+        if not "objects" in office:
+            return
+
+        for filename, data in office["objects"].iteritems():
+            self.mark(filename=filename, content=data)
+        return self.has_marks()
+
+
+class DocumentEmbeddedDangerousObject(Signature):
+    name = "document_embedded_dangerous_object"
+    description = "Document has a potentially dangerous embedded object"
+    severity = 4
+    categories = ["office"]
+    authors = ["FDD", "Cuckoo Technologies"]
+    minimum = "2.0"
+
+    dangerous_extensions = [
+        ".vbs", ".js", ".wsc", ".wsf", ".py", ".exe", ".dll",
+        ".rb", ".hta"
+    ]
+
+    def on_complete(self):
+        office = self.get_results("static", {}).get("office", {})
+        if not "objects" in office:
+            return
+
+        for filename, data in office["objects"].iteritems():
+            for ext in self.dangerous_extensions:
+                if not filename or "unnamed_" in filename:
+                    # Try to get embedded filenames
+                    pathre = re.compile(r"(?:[a-zA-Z]\:|\\\\[\w\.]+\\[\w~.$]+)\\(?:[\w~]+\\\\?)*\w([\w.])+")
+                    match = pathre.search(data)
+                    if match:
+                        filename = match.group(0)
+
+                if ext in filename:
+                    self.mark(filename=filename, content=data)
+
+        return self.has_marks()
+
 class OfficeVulnerableGuid(Signature):
     name = "office_vuln_guid"
     description = "GUIDs known to be associated with a CVE were requested (may be False Positive)"
