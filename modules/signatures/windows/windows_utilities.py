@@ -17,17 +17,26 @@ class UsesWindowsUtilities(Signature):
         "at ",
         "at.exe",
         "attrib",
-        "del",
-        "dir",
-        "erase",
+        "chcp",
+        "del ",
+        "del.exe",
+        "dir ",
+        "dir.exe",
+        "driverquery",
+        "erase ",
+        "erase.exe",
         "fsutil",
         "getmac",
         "ipconfig",
+        "nbtstat",
         "net ",
         "net.exe",
         "netsh",
         "netstat",
-        "ping",
+        "nslookup",
+        "pathping",
+        "ping ",
+        "ping.exe",
         "qwinsta",
         "reg ",
         "reg.exe",
@@ -39,18 +48,20 @@ class UsesWindowsUtilities(Signature):
         "sc.exe",
         "schtasks",
         "shutdown",
+        "sigverif",
         "systeminfo",
         "tasklist",
         "taskkill",
         "telnet",
         "whoami",
+        "wmic",
         "wusa"
     ]
 
     def on_complete(self):
         for cmdline in self.get_command_lines():
             for utility in self.utilities:
-                if cmdline.lower().startswith(utility):
+                if utility in cmdline.lower():
                     self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
@@ -77,6 +88,7 @@ class SuspiciousCommandTools(Signature):
         "csvde",
         "dsquery",
         "icacls",
+        "nltest",
         "psexec",        
         "psfile",
         "psgetsid",
@@ -91,18 +103,19 @@ class SuspiciousCommandTools(Signature):
         "psshutdown",
         "pssuspend",
         "rexec",
+        "sdbinst",
         "shareenum",
         "shellrunas",
         "volumeid",
         "wevtutil",
-        "whois"
+        "whois",
         "xcacls"
     ]
 
     def on_complete(self):
         for cmdline in self.get_command_lines():
             for utility in self.utilities:
-                if cmdline.lower().startswith(utility):
+                if utility in cmdline.lower():
                     self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
