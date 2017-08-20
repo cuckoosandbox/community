@@ -57,7 +57,7 @@ class RansomwareExtensions(Signature):
         (".*\.k0stya$", ["Kostya"]),
         (".*\.lock93$", ["Lock93"]),
         (".*\.locklock$", ["LockLock"]),
-        (".*\.(?:locky|zepto|odin|shit|thor|aesir|zzzzz|osiris)$", ["Locky"]),
+        (".*\.(?:locky|zepto|odin|shit|thor|aesir|zzzzz|osiris|lukitus)$", ["Locky"]),
         (".*\.MOLE$", ["Mole"]),
         (".*\.mordor$", ["Mordor"]),
         (".*\.(?:crypted|crypt|encrypted|encrypt|enc|locked|lock)$", ["multi-family"]),
