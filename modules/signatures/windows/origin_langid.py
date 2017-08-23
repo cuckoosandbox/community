@@ -55,15 +55,22 @@ class BuildLangID(Signature):
 
     def on_complete(self):
         for resource in self.get_results("static", {}).get("pe_resources", []):
-                for language in self.languages:
-                    if language in resource["language"] or language in resource["sublanguage"]:
-                        self.mark(
-                            name=resource["name"],
-                            language=resource["language"],
-                            filetype=resource["filetype"],
-                            sublanguage=resource["sublanguage"],
-                            offset=resource["offset"],
-                            size=resource["size"],
-                        )
-                    
+            for language in self.languages:
+                r = 0
+                if resource["language"] and language in resource["language"]:
+                    r += 1
+
+                if resource["sublanguage"] and language in resource["sublanguage"]:
+                    r += 2
+
+                if r:
+                    self.mark(
+                        name=resource["name"],
+                        language=resource["language"],
+                        filetype=resource["filetype"],
+                        sublanguage=resource["sublanguage"],
+                        offset=resource["offset"],
+                        size=resource["size"],
+                    )
+
         return self.has_marks()
