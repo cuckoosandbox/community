@@ -15,13 +15,14 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class NetworkDNSBlockchain(Signature):
-    name = "network_dns_blockchain"
-    description = "DNS lookup of a Bitcoin blockchain or node domain"
+class NetworkDNSBitcoin(Signature):
+    name = "network_dns_bitcoin"
+    description = "DNS lookup of a Bitcoin blockchain or payment domain"
     severity = 2
     categories = ["bitcoin", "dns"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    references = ["https://howtobuybitcoins.info"]
 
     domains_re = [
         ".*\\.blockchain\\.com$",
@@ -39,6 +40,57 @@ class NetworkDNSBlockchain(Signature):
         ".*\\.nodecounter\\.com$",
         ".*\\.bitnodes\\.21\\.co$",
         ".*\\.coin\\.dance$",
+        ".*\\.cex\\.io$",
+        ".*\\.btcdirect\\.eu$",
+        ".*\\.bitquick\\.co$",
+        ".*\\.cashintocoins\\.com$",
+        ".*\\.coinjar\\.com$",
+        ".*\\.anxpro\\.com$",
+        ".*\\.bittylicious\\.com$",
+        ".*\\.btc-e\\.com$",
+        ".*\\.coinbase\\.com$",
+        ".*\\.quoine\\.com$",
+        ".*\\.btcchina\\.com$",
+        ".*\\.kraken\\.com$",
+        ".*\\.bitfinex\\.com$",
+        ".*\\.bitstamp\\.net$",
+        ".*\\.anxbtc\\.com$",
+        ".*\\.bitcurex\\.com$",
+        ".*\\.ice3x\\.com$",
+        ".*\\.itbit\\.com$",
+        ".*\\.btcmarkets\\.com$",
+        ".*\\.coinsetter\\.com$",
+        ".*\\.hitbtc\\.com$",
+        ".*\\.lakebtc\\.com$",
+        ".*\\.therocktrading\\.com$",
+        ".*\\.mercadobitcoin\\.com\\.br$",
+        ".*\\.paymium\\.com$",
+        ".*\\.clevercoin\\.com$",
+        ".*\\.gatecoin\\.com$",
+        ".*\\.coinspot\\.com\\.au$",
+        ".*\\.crypto\\.bg$",
+        ".*\\.exmo\\.com$",
+        ".*\\.morrex\\.com$",
+        ".*\\.mrcoin\\.eu$",
+        ".*\\.ripio\\.com$",
+        ".*\\.satoshitango\\.com$",
+        ".*\\.satoshitango\\.com\\.ar$",
+        ".*\\.vbtc\\.exchange$",
+        ".*\\.shapeshift\\.io$",
+        ".*\\.bitkonan\\.com$",
+        ".*\\.bitmarket\\.pl$",
+        ".*\\.campbx\\.com$",
+        ".*\\.cavirtex\\.com$",
+        ".*\\.coinfloor\\.co\\.uk$",
+        ".*\\.fybse\\.se$",
+        ".*\\.okcoin\\.com$",
+        ".*\\.bitbay\\.net$",
+        ".*\\.okcoin\\.cn$",
+        ".*\\.bitcoin\\.co\\.id$",
+        ".*\\.gocelery\\.com$",
+        ".*\\.coinmate\\.io$",
+        ".*\\.cryptopay\\.me$",
+        ".*\\.bity\\.com$",
     ]
 
     def on_complete(self):
