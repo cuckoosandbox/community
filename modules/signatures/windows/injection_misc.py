@@ -28,7 +28,7 @@ class InjectionDuplicateHandle(Signature):
     ]
 
     def on_call(self, call, process):
-        if call["arguments"]["source_process_identifier"] != call["arguments"]["target_process_identifier"] and not call["arguments"]["source_process_handle"].startswith("0xfffffff") and call["arguments"]["target_process_handle"].startswith("0xfffffff"):
+        if call["arguments"]["source_process_identifier"] != call["arguments"]["target_process_identifier"] and call["arguments"]["source_process_identifier"] != 0 and not call["arguments"]["source_process_handle"].startswith("0xfffffff") and call["arguments"]["target_process_handle"].startswith("0xfffffff"):
             self.mark_call()
 
     def on_complete(self):
