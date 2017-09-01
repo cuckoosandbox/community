@@ -189,7 +189,7 @@ class OfficeCreatesEPS(Signature):
         if process["process_name"].lower() in self.office_procs:           
             buf = call["arguments"]["buffer"]
             if buf.startswith("%!PS-Adobe-3.0 EPSF-3.0"):
-                self.mark_ioc("eps_file", filepath)
+                self.mark_call()
                 
     def on_complete(self):
         return self.has_marks()
