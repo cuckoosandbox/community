@@ -167,6 +167,33 @@ class OfficeRecentFiles(Signature):
             self.mark_call()
             return True
 
+class OfficeCreatesEPS(Signature):
+    name = "office_creates_eps"
+    description = "Office has created an Encapsulated Post Script (EPS) file indicative of a possible exploit"
+    severity = 3
+    categories = ["exploit", "office"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    office_procs = [
+        "excel.exe",
+        "outlook.exe",
+        "powerpnt.exe",
+        "powershell.exe",
+        "winword.exe",
+    ]
+
+    filter_apinames = "NtWriteFile",
+
+    def on_call(self, call, process):
+        if process["process_name"].lower() in self.office_procs:           
+            buf = call["arguments"]["buffer"]
+            if buf.startswith("%!PS-Adobe-3.0 EPSF-3.0"):
+                self.mark_ioc("eps_file", filepath)
+                
+    def on_complete(self):
+        return self.has_marks()
+
 class HasOfficeEps(Signature):
     name = "has_office_eps"
     description = "Located potentially malicious Encapsulated Post Script (EPS) file"
