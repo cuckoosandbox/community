@@ -45,3 +45,79 @@ class KnownVirustotal(Signature):
                     self.mark_ioc(engine, signature["result"])
 
         return self.has_marks()
+
+class AntiVirusVirustotalExploit(Signature):
+    name = "antivirus_virustotal_exploit"
+    description = "File has been identified by VirusTotal as containing a possible exploit"
+    severity = 3
+    categories = ["antivirus", "exploit"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    terms = [
+    "exploit",
+    "cve-",
+    ]
+
+    def on_complete(self):
+        results = self.get_virustotal()
+        if results.get("positives"):
+            for engine, signature in results["scans"].items():
+                if signature["detected"]:
+                    for term in self.terms:
+                        if term in signature["result"].lower():
+                            self.mark_ioc(engine, signature["result"])
+
+        return self.has_marks(5)
+
+class AntiVirusVirustotalRansomware(Signature):
+    name = "antivirus_virustotal_ransomware"
+    description = "File has been identified by VirusTotal as potential ransomware"
+    severity = 3
+    categories = ["antivirus", "ransomware"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    terms = [
+    "ransom",
+    "filecoder",
+    ]
+
+    def on_complete(self):
+        results = self.get_virustotal()
+        if results.get("positives"):
+            for engine, signature in results["scans"].items():
+                if signature["detected"]:
+                    for term in self.terms:
+                        if term in signature["result"].lower():
+                            self.mark_ioc(engine, signature["result"])
+
+        return self.has_marks(5)
+
+class AntiVirusVirustotalRootkit(Signature):
+    name = "antivirus_virustotal_rootkit"
+    description = "File has been identified by VirusTotal as a potential rookit or bootkit"
+    severity = 3
+    categories = ["antivirus", "rootkit", "bootkit"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    terms = [
+    "rootkit",
+    "bootkit",
+    "boot.",
+    "boot/",
+    "mbr/",
+    "mbr.",
+    ]
+
+    def on_complete(self):
+        results = self.get_virustotal()
+        if results.get("positives"):
+            for engine, signature in results["scans"].items():
+                if signature["detected"]:
+                    for term in self.terms:
+                        if term in signature["result"].lower():
+                            self.mark_ioc(engine, signature["result"])
+
+        return self.has_marks(5)
