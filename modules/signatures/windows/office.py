@@ -178,7 +178,30 @@ class HasOfficeEps(Signature):
     def on_complete(self):
         office = self.get_results("static", {}).get("office", {})
         if office.get("eps", []):
-            return True
+            for match in office.get("eps", []):
+                self.mark_ioc("eps_string", match)
+                           
+        return self.has_marks()
+
+class OfficeEpsStrings(Signature):
+    name = "office_eps_strings"
+    description = "Suspicious keywords embedded in an Encapsulated Post Script (EPS) file"
+    severity = 3
+    categories = ["office"]
+    authors = ["Cuckoo Technologies"]
+    minimum = "2.0"
+
+    keywords = [
+        "longjmp", "NtCreateEvent", "NtProtectVirtualMemory", "VirtualProtect"
+    ]
+
+    def on_complete(self):
+        office = self.get_results("static", {}).get("office", {})
+        for s in office.get("eps", []):
+            if s.strip() in self.keywords:
+                self.mark_ioc("eps_string", s)
+
+        return self.has_marks()
 
 class OfficeIndirectCall(Signature):
     name = "office_indirect_call"
@@ -295,26 +318,6 @@ class OfficeMacro(Signature):
                 macro_filename=macro["filename"],
                 macro_stream=macro["stream"],
             )
-
-        return self.has_marks()
-
-class OfficeEpsStrings(Signature):
-    name = "office_eps_strings"
-    description = "Suspicious keywords embedded in an Encapsulated Post Script (EPS) file"
-    severity = 3
-    categories = ["office"]
-    authors = ["Cuckoo Technologies"]
-    minimum = "2.0"
-
-    keywords = [
-        "longjmp", "NtCreateEvent", "NtProtectVirtualMemory",
-    ]
-
-    def on_complete(self):
-        office = self.get_results("static", {}).get("office", {})
-        for s in office.get("eps", []):
-            if s.strip() in self.keywords:
-                self.mark_ioc("eps_string", s)
 
         return self.has_marks()
 
