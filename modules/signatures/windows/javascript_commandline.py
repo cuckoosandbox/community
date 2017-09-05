@@ -19,7 +19,7 @@ class JavaScriptCommandline(Signature):
     name = "javascript_commandline"
     description = "Executes JavaScript in a commandline"
     severity = 3
-    categories = ["javascript"]
+    categories = ["javascript", "persistence", "downloader"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
