@@ -26,7 +26,8 @@ class PUB_SERV_ABUSE(Signature):
     patterns = [
         ".*my.sharepoint.com.*",
         "https://www.evernote.com/shard/.+/sh/.+/res/.*",
-        "https://docs.google.com/uc\?authuser=\d{1}&id=[\w\d]+&export=download"
+        "https://docs.google.com/uc\?authuser=\d{1}&id=[\w\d]+&export=download",
+        "https://onedrive.live.com/redir.aspx\?cid=",
     ]
 
     def on_complete(self):
