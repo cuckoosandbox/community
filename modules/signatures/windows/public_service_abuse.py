@@ -28,6 +28,7 @@ class PUB_SERV_ABUSE(Signature):
         "https://www.evernote.com/shard/.+/sh/.+/res/.*",
         "https://docs.google.com/uc\?authuser=\d{1}&id=[\w\d]+&export=download",
         "https://onedrive.live.com/redir.aspx\?cid=",
+        "https://www.dropbox.com/l/scl/",
     ]
 
     def on_complete(self):
