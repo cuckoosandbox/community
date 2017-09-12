@@ -1,17 +1,6 @@
-# Copyright (C) 2012 Claudio "nex" Guarnieri (@botherder)
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Copyright (C) 2010-2017 Cuckoo Foundation.
+# This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
+# See the file 'docs/LICENSE' for copying permission.
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -26,8 +15,8 @@ class PUB_SERV_ABUSE(Signature):
     patterns = [
         ".*my.sharepoint.com.*",
         "https://www.evernote.com/shard/.+/sh/.+/res/.*",
-        "https://docs.google.com/uc\?authuser=\d{1}&id=[\w\d]+&export=download",
-        "https://onedrive.live.com/redir.aspx\?cid=",
+        "https://docs.google.com/uc\\?authuser=\\d{1}&id=[\\w\\d]+&export=download",
+        "https://onedrive.live.com/redir.aspx\\?cid=",
         "https://www.dropbox.com/l/scl/",
     ]
 
@@ -40,11 +29,9 @@ class PUB_SERV_ABUSE(Signature):
             )
 
         for pattern in self.patterns:
-            url = self._check_value(pattern=pattern,
-                                     subject=list(urls),
-                                     regex=True,
-                                     all=False)
-            if url:
-                self.mark_ioc("url", url)
+            for url in urls:
+                url = re.match(pattern, url)
+                if url:
+                    self.mark_ioc("url", url.string)
 
         return self.has_marks()
