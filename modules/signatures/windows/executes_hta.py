@@ -15,11 +15,11 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class DisplaysHTA(Signature):
-    name = "displays_hta"
-    description = "Displays a HTA file to the user common in ransomware"
+class ExecutesHTA(Signature):
+    name = "executes_hta"
+    description = "Executes a HTA file"
     severity = 2
-    categories = ["ransomware"]
+    categories = ["ransomware", "exploit", "persistence"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
