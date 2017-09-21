@@ -77,7 +77,7 @@ class ProcessMartian(Signature):
 
 class MartianCommandProcess(Signature):
     name = "martian_command_process"
-    description = "A command shell or script process was run by an unexpected parent process"
+    description = "A command shell or script process was created by an unexpected parent process"
     severity = 3
     categories = ["martian", "exploit", "dropper"]
     authors = ["Cuckoo Technologies", "Will Metcalf", "Kevin Ross"]
