@@ -33,6 +33,7 @@ If you have one or more Signatures you'd like to share, please make a pull
 request and we'll take care of it eventually.
 
 Before submitting your request make sure that:
+* You take a look at the [community guidelines](http://docs.cuckoosandbox.org/en/latest/introduction/community)
 * Your code is working.
 * Your code is unique: don't reinvent the wheel and check whether someone already provided a similar solution.
 * Your code is relevant to the project and actually adds some value.
