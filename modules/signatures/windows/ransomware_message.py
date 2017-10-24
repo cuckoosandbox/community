@@ -115,7 +115,7 @@ class RansomwareMessage(Signature):
     def on_call(self, call, process):
         if process["process_name"].lower() not in self.whitelistprocs:
             buff = call["arguments"]["buffer"].lower()
-            if len(buff) >= 128 and (call["arguments"]["filepath"].endswith(".txt") or call["arguments"]["filepath"].endswith(".html")):
+            if len(buff) >= 128 and (call["arguments"]["filepath"].endswith(".txt") or call["arguments"]["filepath"].endswith(".htm") or call["arguments"]["filepath"].endswith(".html")):
                 patterns = "|".join(self.indicators)
                 if len(re.findall(patterns, buff)) > 1:
                     self.mark_call()
