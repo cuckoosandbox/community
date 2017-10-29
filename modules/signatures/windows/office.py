@@ -166,6 +166,49 @@ class OfficeRecentFiles(Signature):
         if call["arguments"]["funcname"] == "RecentFiles":
             self.mark_call()
             return True
+        
+class OfficeVBAImport(Signature):
+    name = "office_vba_api_import"
+    description = "Imports API functions using VBA code"
+    severity = 3
+    categories = ["vba"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    filter_apinames = "vbe6_Import",
+
+    def on_call(self, call, process):
+        self.mark_call()
+
+    def on_complete(self):
+        return self.has_marks()
+
+class OfficeCreatesEPS(Signature):
+    name = "office_creates_eps"
+    description = "Office has created an Encapsulated Post Script (EPS) file indicative of a possible exploit"
+    severity = 3
+    categories = ["exploit", "office"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    office_procs = [
+        "excel.exe",
+        "outlook.exe",
+        "powerpnt.exe",
+        "powershell.exe",
+        "winword.exe",
+    ]
+
+    filter_apinames = "NtWriteFile",
+
+    def on_call(self, call, process):
+        if process["process_name"].lower() in self.office_procs:           
+            buf = call["arguments"]["buffer"]
+            if buf.startswith("%!PS-Adobe-3.0 EPSF-3.0"):
+                self.mark_call()
+                
+    def on_complete(self):
+        return self.has_marks()
 
 class HasOfficeEps(Signature):
     name = "has_office_eps"
@@ -178,7 +221,100 @@ class HasOfficeEps(Signature):
     def on_complete(self):
         office = self.get_results("static", {}).get("office", {})
         if office.get("eps", []):
-            return True
+            for match in office.get("eps", []):
+                self.mark_ioc("eps_string", match)
+                           
+        return self.has_marks()
+
+class OfficeEpsStrings(Signature):
+    name = "office_eps_strings"
+    description = "Suspicious keywords embedded in an Encapsulated Post Script (EPS) file"
+    severity = 3
+    categories = ["office"]
+    authors = ["Cuckoo Technologies"]
+    minimum = "2.0"
+
+    keywords = [
+        "longjmp", "NtCreateEvent", "NtProtectVirtualMemory", "VirtualProtect"
+    ]
+
+    def on_complete(self):
+        office = self.get_results("static", {}).get("office", {})
+        for s in office.get("eps", []):
+            if s.strip() in self.keywords:
+                self.mark_ioc("eps_string", s)
+
+        return self.has_marks()
+
+class OfficeIndirectCall(Signature):
+    name = "office_indirect_call"
+    description = "Office document has indirect calls"
+    severity = 1
+    categories = ["office"]
+    authors = ["FDD @ Cuckoo Technologies"]
+    minimum = "2.0"
+
+    patterns = [
+        "CallByName[^\r\n;']*",
+    ]
+
+    def on_complete(self):
+        office = self.get_results("static", {}).get("office", {})
+        if "macros" in office:
+            for macro in office["macros"]:
+                for pattern in self.patterns:
+                    matches = re.findall(pattern, macro["deobf"])
+                    for match in matches:
+                        self.mark_ioc("Statement", match)
+                    
+            return self.has_marks()
+
+class OfficeCheckName(Signature):
+    name = "office_check_doc_name"
+    description = "Office document checks it's own name"
+    severity = 2
+    categories = ["office"]
+    authors = ["FDD", "Cuckoo Technologies"]
+    minimum = "2.0"
+
+    patterns = [
+        "[^\n\r;']*Me.Name[^\n\r;']*",
+    ]
+
+    def on_complete(self):
+        office = self.get_results("static", {}).get("office", {})
+        if "macros" in office:
+            for macro in office["macros"]:
+                for pattern in self.patterns:
+                    matches = re.findall(pattern, macro["deobf"])
+                    for match in matches:
+                        self.mark_ioc("Statement", match)
+                    
+            return self.has_marks()
+
+class OfficePlatformDetect(Signature):
+    name = "office_platform_detect"
+    description = "Office document tries to detect platform"
+    severity = 2
+    categories = ["office"]
+    authors = ["FDD @ Cuckoo Technologies"]
+    minimum = "2.0"
+
+    patterns = [
+        "#If\s+(?:Not\s+)?Win32",
+        "#If\s+Mac\s*=\s(?:1|0)"
+    ]
+
+    def on_complete(self):
+        office = self.get_results("static", {}).get("office", {})
+        if "macros" in office:
+            for macro in office["macros"]:
+                for pattern in self.patterns:
+                    matches = re.findall(pattern, macro["deobf"])
+                    for match in matches:
+                        self.mark_ioc("Statement", match)
+                    
+            return self.has_marks()
 
 class OfficeIndirectCall(Signature):
     name = "office_indirect_call"
@@ -280,23 +416,71 @@ class DocumentOpen(Signature):
                 if "Sub Document_Open()" in macro["deobf"]:
                     return True
 
-class OfficeEpsStrings(Signature):
-    name = "office_eps_strings"
-    description = "Suspicious keywords embedded in an Encapsulated Post Script (EPS) file"
-    severity = 3
+class OfficeMacro(Signature):
+    name = "office_macro"
+    description = "Office document contains one or more macros"
+    severity = 2
     categories = ["office"]
-    authors = ["Cuckoo Technologies"]
+    authors = ["Kevin Ross"]
     minimum = "2.0"
 
-    keywords = [
-        "longjmp", "NtCreateEvent", "NtProtectVirtualMemory",
+    def on_complete(self):
+        office = self.get_results("static", {}).get("office", [])
+        for macro in office["macros"]:
+            self.mark(
+                macro_filename=macro["filename"],
+                macro_stream=macro["stream"],
+            )
+
+        return self.has_marks()
+
+class DocumentEmbeddedObject(Signature):
+    name = "document_embedded_object"
+    description = "Document has embedded objects"
+    severity = 2
+    categories = ["office"]
+    authors = ["FDD", "Cuckoo Technologies"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        office = self.get_results("static", {}).get("office", {})
+        if not "objects" in office:
+            return
+
+        for filename, data in office["objects"].iteritems():
+            self.mark(filename=filename, content=data)
+        return self.has_marks()
+
+
+class DocumentEmbeddedDangerousObject(Signature):
+    name = "document_embedded_dangerous_object"
+    description = "Document has a potentially dangerous embedded object"
+    severity = 4
+    categories = ["office"]
+    authors = ["FDD", "Cuckoo Technologies"]
+    minimum = "2.0"
+
+    dangerous_extensions = [
+        ".vbs", ".js", ".wsc", ".wsf", ".py", ".exe", ".dll",
+        ".rb", ".hta"
     ]
 
     def on_complete(self):
         office = self.get_results("static", {}).get("office", {})
-        for s in office.get("eps", []):
-            if s.strip() in self.keywords:
-                self.mark_ioc("eps_string", s)
+        if not "objects" in office:
+            return
+
+        for filename, data in office["objects"].iteritems():
+            for ext in self.dangerous_extensions:
+                if not filename or "unnamed_" in filename:
+                    # Try to get embedded filenames
+                    pathre = re.compile(r"(?:[a-zA-Z]\:|\\\\[\w\.]+\\[\w~.$]+)\\(?:[\w~]+\\\\?)*\w([\w.])+")
+                    match = pathre.search(data)
+                    if match:
+                        filename = match.group(0)
+
+                if ext in filename:
+                    self.mark(filename=filename, content=data)
 
         return self.has_marks()
 
