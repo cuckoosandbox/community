@@ -166,6 +166,22 @@ class OfficeRecentFiles(Signature):
         if call["arguments"]["funcname"] == "RecentFiles":
             self.mark_call()
             return True
+        
+class OfficeVBAImport(Signature):
+    name = "office_vba_api_import"
+    description = "Imports API functions using VBA code"
+    severity = 3
+    categories = ["vba"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    filter_apinames = "vbe6_Import",
+
+    def on_call(self, call, process):
+        self.mark_call()
+
+    def on_complete(self):
+        return self.has_marks()
 
 class OfficeCreatesEPS(Signature):
     name = "office_creates_eps"
