@@ -209,21 +209,6 @@ class OfficeCreatesEPS(Signature):
                 
     def on_complete(self):
         return self.has_marks()
-class VbaApiImport(Signature):
-    name = "vba_api_import"
-    description = "Imports API functions using VBA code"
-    severity = 3
-    categories = ["vba"]
-    authors = ["Kevin Ross"]
-    minimum = "2.0"
-
-    filter_apinames = "vbe6_Import",
-
-    def on_call(self, call, process):
-        self.mark_call()
-
-    def on_complete(self):
-        return self.has_marks()
 
 class HasOfficeEps(Signature):
     name = "has_office_eps"
