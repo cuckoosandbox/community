@@ -67,8 +67,8 @@ class AntiSandboxSleep(Signature):
 
         return self.has_marks()
 
-class AntiSandboxGetTime(Signature):
-    name = "antisandbox_gettime"
+class AntiSandboxSystemTime(Signature):
+    name = "antisandbox_systemtime"
     description = "A process repeatedly queried for the system time potentially as a sleep evasion"
     severity = 2
     categories = ["anti-sandbox"]
