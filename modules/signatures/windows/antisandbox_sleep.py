@@ -69,7 +69,7 @@ class AntiSandboxSleep(Signature):
 
 class AntiSandboxGetTime(Signature):
     name = "antisandbox_gettime"
-    description = "A process repeatedly queried the system time potentially for sleep evasion"
+    description = "A process repeatedly queried for the system time potentially as a sleep evasion"
     severity = 2
     categories = ["anti-sandbox"]
     authors = ["Kevin Ross"]
