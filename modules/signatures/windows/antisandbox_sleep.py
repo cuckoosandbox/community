@@ -75,7 +75,7 @@ class AntiSandboxGetTime(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
-    filter_apinames = "timeGetTime",
+    filter_apinames = "GetLocalTime", "GetSystemTime", "GetSystemTimeAsFileTime", "NtQuerySystemTime", "timeGetTime",
 
     whitelistprocs = [
         "iexplore.exe",
