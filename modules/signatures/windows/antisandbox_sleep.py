@@ -97,4 +97,4 @@ class AntiSandboxGetTime(Signature):
             self.mark_call()
 
     def on_complete(self):
-        return self.has_marks(30)
+        return self.has_marks(50)
