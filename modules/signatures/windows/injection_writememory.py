@@ -18,7 +18,7 @@ from lib.cuckoo.common.abstracts import Signature
 class InjectionWriteMemory(Signature):
     name = "injection_write_memory"
     description = "Potential code injection by writing to the memory of another process"
-    severity = 2
+    severity = 3
     categories = ["injection"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
