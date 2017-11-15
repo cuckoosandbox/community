@@ -20,6 +20,36 @@ except ImportError:
 
 from lib.cuckoo.common.abstracts import Signature
 
+class NetworkHTTPPOST(Signature):
+    name = "network_http_post"
+    description = "Sends data using the HTTP POST Method"
+    severity = 1
+    categories = ["http", "cnc"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    filter_analysistypes = set(["file"])
+
+    def on_complete(self):
+
+        whitelist = [
+            "microsoft.com",
+            "windowsupdate\.com",
+            "adobe.com",
+            ]
+
+        for http in getattr(self, "get_net_http_ex", lambda: [])():
+            is_whitelisted = False
+            for whitelisted in whitelist:
+                if whitelisted in http["host"]:
+                    is_whitelisted = True
+
+            if not is_whitelisted and http["method"] == "POST":
+                request = "%s %s://%s%s" % (http["method"], http["protocol"], http["host"], http["uri"])
+                self.mark_ioc("request", request)
+
+        return self.has_marks()
+
 class NetworkCnCHTTP(Signature):
     name = "network_cnc_http"
     description = "HTTP traffic contains suspicious features which may be indicative of malware related traffic"
@@ -44,7 +74,7 @@ class NetworkCnCHTTP(Signature):
             is_whitelisted = False
             for whitelisted in whitelist:
                 if whitelisted in http["host"]:
-                    is_whitelisted = True                              
+                    is_whitelisted = True                           
 
             # Check HTTP features
             reasons = []
