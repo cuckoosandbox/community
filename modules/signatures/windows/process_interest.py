@@ -78,3 +78,24 @@ class ProcessInterest(Signature):
                 self.mark_ioc(description, proc)
 
             return self.has_marks()
+
+class InjectionProcessSearch(Signature):
+    name = "injection_process_search"
+    description = "Searches running processes potentially to identify processes for sandbox evasion, code injection or memory dumping"
+    severity = 1
+    categories = ["generic"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    pids = []
+
+    filter_apinames = "Process32FirstW", "Process32NextW",
+
+    def on_call(self, call, process):
+        if call["arguments"]["process_identifier"] not in self.pids:
+            self.pids.append(call["arguments"]["process_identifier"])
+            self.mark_call()
+
+    def on_complete(self):
+        if len(self.pids) > 10:
+            return self.has_marks()
