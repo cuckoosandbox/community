@@ -23,7 +23,7 @@ from lib.cuckoo.common.abstracts import Signature
 class NetworkHTTPPOST(Signature):
     name = "network_http_post"
     description = "Sends data using the HTTP POST Method"
-    severity = 1
+    severity = 2
     categories = ["http", "cnc"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
