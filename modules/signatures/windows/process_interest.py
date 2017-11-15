@@ -82,7 +82,7 @@ class ProcessInterest(Signature):
 class InjectionProcessSearch(Signature):
     name = "injection_process_search"
     description = "Searches running processes potentially to identify processes for sandbox evasion, code injection or memory dumping"
-    severity = 1
+    severity = 2
     categories = ["generic"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
