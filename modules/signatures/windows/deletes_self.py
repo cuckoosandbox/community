@@ -32,7 +32,7 @@ class DeletesSelf(Signature):
 
         if processes:
             for deletedfile in self.get_files(actions=["file_deleted"]):
-                if deletedfile in processes[0]:
+                if deletedfile in processes:
                     self.mark_ioc("file", deletedfile)
 
         return self.has_marks()
