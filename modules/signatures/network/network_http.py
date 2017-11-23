@@ -23,10 +23,17 @@ class NetworkHTTP(Signature):
     authors = ["nex"]
     minimum = "2.0"
 
+    host_whitelist = [
+        "www.msftncsi.com"
+    ]
+
     def on_complete(self):
         for http in getattr(self, "get_net_http_ex", lambda: [])():
+            if http["host"] in self.host_whitelist:
+                continue
+
             self.mark_ioc("request", "%s %s://%s%s" % (
                 http["method"], http["protocol"], http["host"], http["uri"],
             ))
 
-        return self.get_net_http() or self.has_marks()
+        return self.has_marks()

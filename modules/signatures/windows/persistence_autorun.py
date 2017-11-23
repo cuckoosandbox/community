@@ -1,4 +1,4 @@
-# Copyright (C) 2012 Michael Boman (@mboman)
+# Copyright (C) 2012,2014,2015 Michael Boman (@mboman), Optiv, Inc. (brad.spengler@optiv.com)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,7 +17,10 @@
 
 # Additional keys added from SysInternals Administrators Guide
 
-import re
+try:
+    import re2 as re
+except ImportError:
+    import re
 
 from lib.cuckoo.common.abstracts import Signature
 
@@ -26,45 +29,85 @@ class Autorun(Signature):
     description = "Installs itself for autorun at Windows startup"
     severity = 3
     categories = ["persistence"]
-    authors = ["Michael Boman", "nex", "securitykitten", "Cuckoo Technologies"]
+    authors = ["Michael Boman", "nex", "securitykitten", "Cuckoo Technologies", "Optiv", "KillerInstinct", "Kevin Ross"]
     minimum = "2.0"
 
     regkeys_re = [
-        ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run",
-        ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnce",
-        ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunServices",
-        ".*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnceEx",
-        ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunServicesOnce",
-        ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Winlogon$",
-        ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Winlogon\\\\Notify$",
-        ".*\\\\Software\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Winlogon\\\\Userinit$",
-        ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run$",
-        ".*\\\\SOFTWARE\\\\Microsoft\\\\Active\\ Setup\\\\Installed Components\\\\.*",
-        ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Windows\\\\Appinit_Dlls.*",
-        ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\SharedTaskScheduler.*",
-        ".*\\\\Software\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Image\\ File\\ Execution\\ Options\\\\[^\\\\]+\\\\(?!DisableExceptionChainValidation$).*",
-        ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Winlogon\\\\Shell$",
-        ".*\\\\System\\\\CurrentControlSet\\\\Services.*",
-        ".*\\\\SOFTWARE\\\\Classes\\\\Exefile\\\\Shell\\\\Open\\\\Command\\\\\\(Default\\).*",
-        ".*\\\\Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Windows\\\\load$",
-        ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\ShellServiceObjectDelayLoad$",
+        ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\.*",
+        ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnce\\\\.*",
+        ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunServices\\\\.*",
+        ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnceEx\\\\.*",
+        ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunServicesOnce\\\\.*",
+        ".*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Winlogon\\\\Notify\\\\.*",
+        ".*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Winlogon\\\\Userinit$",
+        ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\\\\.*",
+        ".*\\\\Microsoft\\\\Active\\ Setup\\\\Installed Components\\\\.*",
+        ".*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Windows\\\\AppInit_DLLs$",
+        ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\SharedTaskScheduler\\\\.*",
+        ".*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Image\\ File\\ Execution\\ Options\\\\[^\\\\]*\\\\\Debugger$",
+        ".*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Winlogon\\\\Shell$",
+        ".*\\\\System\\\\(CurrentControlSet|ControlSet001)\\\\Services\\\\[^\\\\]*\\\\ImagePath$",
+        ".*\\\\System\\\\(CurrentControlSet|ControlSet001)\\\\Services\\\\[^\\\\]*\\\\Parameters\\\\ServiceDLL$",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\Exefile\\\\Shell\\\\Open\\\\Command\\\\\(Default\)$",
+        ".*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Windows\\\\load$",
+        ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\ShellServiceObjectDelayLoad\\\\.*",
+        ".*\\\\System\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\Session\\ Manager\\\\AppCertDlls\\\\.*",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\InprocServer32\\\\.*",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\LocalServer32\\\\.*",
     ]
 
     files_re = [
         ".*\\\\win\.ini$",
-        ".*\\\\system\\.ini$",
-        ".*\\\\Start\\ Menu\\\\Programs\\\\Startup",
+        ".*\\\\system\.ini$",
+        ".*\\\\Start Menu\\\\Programs\\\\Startup\\\\.*",
+        ".*\\\\WINDOWS\\\\Tasks\\\\.*"
     ]
 
     command_lines_re = [
         ".*schtasks.*/create.*/sc",
     ]
 
-    def on_complete(self):
-        for indicator in self.regkeys_re:
-            for regkey in self.check_key(pattern=indicator, regex=True, actions=["regkey_written"], all=True):
-                self.mark_ioc("registry", regkey)
+    whitelists = [
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\{CAFEEFAC-0017-0000-FFFF-ABCDEFFEDCBA}\\\\InprocServer32\\\\.*",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\InprocServer32\\\\ThreadingModel$"
+    ]
 
+    filter_apinames = [
+        "RegSetValueExA",
+        "RegSetValueExW",
+        "NtSetValueKey",
+        "CreateServiceA",
+        "CreateServiceW",
+    ]
+
+    def on_call(self, call, process):
+        if call["api"] == "CreateServiceA" or call["api"] == "CreateServiceW":
+            starttype = call["arguments"]["start_type"]
+            servicename = call["arguments"]["service_name"]
+            servicepath = call["arguments"]["filepath"]
+            if starttype < 3:
+                self.mark(
+                    service_name=servicename,
+                    service_path=servicepath,
+                )
+
+        elif call["status"]:
+            regkey = call["arguments"]["regkey"]
+            regvalue = call["arguments"]["value"]
+            in_whitelist = False
+            for whitelist in self.whitelists:
+                if re.match(whitelist, regkey, re.IGNORECASE):
+                    in_whitelist = True
+                    break
+            if not in_whitelist:
+                for indicator in self.regkeys_re:
+                    if re.match(indicator, regkey, re.IGNORECASE) and regvalue != "c:\\program files\\java\\jre7\\bin\jp2iexp.dll":
+                        self.mark(
+                            reg_key=regkey,
+                            reg_value=regvalue,
+                        )
+
+    def on_complete(self):
         for indicator in self.files_re:
             for filepath in self.check_file(pattern=indicator, regex=True, actions=["file_written"], all=True):
                 self.mark_ioc("file", filepath)

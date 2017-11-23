@@ -1,4 +1,4 @@
-# Copyright (C) 2012 Claudio "nex" Guarnieri (@botherder)
+# Copyright (C) 2012,2015 Claudio "nex" Guarnieri (@botherder), Optiv, Inc. (brad.spengler@optiv.com)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,6 +13,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+try:
+    import re2 as re
+except ImportError:
+    import re
+
 from lib.cuckoo.common.abstracts import Signature
 
 class ADS(Signature):
@@ -20,13 +25,18 @@ class ADS(Signature):
     description = "Creates an Alternate Data Stream (ADS)"
     severity = 3
     categories = ["persistence", "ads"]
-    authors = ["nex"]
+    authors = ["nex", "Optiv"]
     minimum = "2.0"
 
     def on_complete(self):
         for filepath in self.get_files():
-            parts = filepath.replace("/", "\\").split("\\")
-            if ":" in parts[-1]:
-                self.mark_ioc("file", filepath)
-                
+            if len(filepath) <= 3:
+                continue
+
+            if ":" in filepath.split("\\")[-1]:
+                if not filepath.lower().startswith("c:\\dosdevices\\") and not filepath[-1] == ":":
+                    # we have a different signature to deal with removal of Zone.Identifier
+                    if not filepath.startswith("\\??\\http://") and not filepath.endswith(":Zone.Identifier") and not re.match(r'^[A-Z]?:\\(Users|Documents and Settings)\\[^\\]+\\Favorites\\Links\\Suggested Sites\.url:favicon$', filepath, re.IGNORECASE):
+                        self.mark_ioc("file", filepath)
+
         return self.has_marks()

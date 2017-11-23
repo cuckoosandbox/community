@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class Tor(Signature):
     name = "network_tor"
-    description = "Installs Tor on the infected machine"
+    description = "Installs Tor on the machine"
     severity = 3
     categories = ["network", "anonimity", "tor"]
     authors = ["nex"]

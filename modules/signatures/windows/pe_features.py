@@ -8,7 +8,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class PEFeatures(Signature):
     name = "pe_features"
-    description = "The executable has PE anomalies (could be a false positive)"
+    description = "The executable contains unknown PE section names indicative of a packer (could be a false positive)"
     severity = 1
     categories = ["packer"]
     authors = ["Cuckoo Technologies"]
@@ -34,5 +34,20 @@ class PEFeatures(Signature):
                     break
             else:
                 self.mark_ioc("section", section["name"])
+
+        return self.has_marks()
+
+class PEIDPacker(Signature):
+    name = "peid_packer"
+    description = "The executable uses a known packer"
+    severity = 1
+    categories = ["packer"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        if self.get_results("static", {}).get("peid_signatures", []):
+            for peid in self.get_results("static", {}).get("peid_signatures", []):
+                self.mark_ioc("packer", peid)
 
         return self.has_marks()
