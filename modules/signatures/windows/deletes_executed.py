@@ -15,9 +15,9 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class DeletesSelf(Signature):
-    name = "deletes_self"
-    description = "Deletes its original binary from disk"
+class DeletesExecutedFiles(Signature):
+    name = "deletes_executed_files"
+    description = "Deletes executed files from disk"
     severity = 3
     categories = ["persistence", "stealth"]
     authors = ["Optiv", "Kevin Ross"]
