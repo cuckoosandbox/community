@@ -33,7 +33,7 @@ class AllocatesExecuteRemoteProccess(Signature):
 
     def on_call(self, call, process):
         protection = call["flags"]["protection"]
-        if (protection == "PAGE_EXECUTE_READWRITE" or protection == "PAGE_EXECUTE" or protection == "PAGE_EXECUTE_WRITECOPY") and not call["arguments"]["process_handle"].startswith("0xfffffff"):
+        if protection in ("PAGE_EXECUTE_READWRITE", "PAGE_EXECUTE", "PAGE_EXECUTE_WRITECOPY") and not call["arguments"]["process_handle"].startswith("0xfffffff"):
             self.mark_call()
 
     def on_complete(self):
