@@ -48,7 +48,10 @@ class PersistenceRegistryEXE(Signature):
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey"])
 
     def on_call(self, call, process):
-        if call["arguments"]["value"].startswith("MZ"):
+        value = call["arguments"]["value"]
+        if not isinstance(value, basestring):
+            return
+        if value.startswith("MZ"):
             self.mark_call()
 
     def on_complete(self):
@@ -66,7 +69,10 @@ class PersistenceRegistryPowershell(Signature):
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey"])
 
     def on_call(self, call, process):
-        if "powershell " in call["arguments"]["value"] or "powershell.exe" in call["arguments"]["value"]:
+        value = call["arguments"]["value"]
+        if not isinstance(value, basestring):
+            return
+        if "powershell " in value or "powershell.exe" in value:
             self.mark_call()
 
     def on_complete(self):
