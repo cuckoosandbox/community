@@ -28,10 +28,15 @@ class InjectionWriteMemory(Signature):
         "WriteProcessMemory",
     ]
 
+    process_handles = ["0xffffffff", "0xffffffffffffffff"]
+
     def on_call(self, call, process):
-        if len(call["arguments"]["buffer"]) > 0 and not call["arguments"]["process_handle"].startswith("0xfffffff"):
+        proc_handle = call["arguments"]["process_handle"]
+
+        if len(call["arguments"]["buffer"]) > 0 and proc_handle not in self.process_handles:
             injected_pid = call["arguments"]["process_identifier"]
             call_process = self.get_process_by_pid(injected_pid)
+
             if not call_process or call_process["ppid"] != process["pid"]:
                 self.mark_ioc(
                     "Process injection",
@@ -56,10 +61,15 @@ class InjectionWriteMemoryEXE(Signature):
         "WriteProcessMemory",
     ]
 
+    process_handles = ["0xffffffff", "0xffffffffffffffff"]
+
     def on_call(self, call, process):
-        if call["arguments"]["buffer"].startswith("MZ") and not call["arguments"]["process_handle"].startswith("0xfffffff"):
+        proc_handle = call["arguments"]["process_handle"]
+
+        if call["arguments"]["buffer"].startswith("MZ") and proc_handle not in self.process_handles:
             injected_pid = call["arguments"]["process_identifier"]
             call_process = self.get_process_by_pid(injected_pid)
+
             if not call_process or call_process["ppid"] != process["pid"]:
                 self.mark_ioc(
                     "Process injection",

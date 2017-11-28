@@ -13,9 +13,12 @@ class AllocatesRWX(Signature):
     minimum = "2.0"
 
     filter_apinames = "NtAllocateVirtualMemory", "NtProtectVirtualMemory"
+    process_handles = ["0xffffffff", "0xffffffffffffffff"]
 
     def on_call(self, call, process):
-        if call["flags"]["protection"] == "PAGE_EXECUTE_READWRITE" and call["arguments"]["process_handle"].startswith("0xfffffff"):
+        proc_handle = call["arguments"]["process_handle"]
+
+        if call["flags"]["protection"] == "PAGE_EXECUTE_READWRITE" and proc_handle in self.process_handles:
             self.mark_call()
 
     def on_complete(self):
@@ -30,10 +33,12 @@ class AllocatesExecuteRemoteProccess(Signature):
     minimum = "2.0"
 
     filter_apinames = "NtAllocateVirtualMemory", "NtProtectVirtualMemory"
+    process_handles = ["0xffffffff", "0xffffffffffffffff"]
 
     def on_call(self, call, process):
         protection = call["flags"]["protection"]
-        if protection in ("PAGE_EXECUTE_READWRITE", "PAGE_EXECUTE", "PAGE_EXECUTE_WRITECOPY") and not call["arguments"]["process_handle"].startswith("0xfffffff"):
+        proc_handle = call["arguments"]["process_handle"]
+        if protection in ("PAGE_EXECUTE_READWRITE", "PAGE_EXECUTE", "PAGE_EXECUTE_WRITECOPY") and proc_handle not in self.process_handles:
             self.mark_call()
 
     def on_complete(self):
