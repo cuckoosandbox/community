@@ -149,12 +149,10 @@ class PowershellDI(Signature):
         if match.name != "PowershellDI":
             return
 
-        if "d1" in match.offsets:
-            url = match.string("d1", 0)
-        if "d2" in match.offsets:
-            url = match.string("d2", 0)
-        if "d3" in match.offsets:
-            url = match.string("d3", 0)
+        for name in ("d1", "d2", "d3", "d4"):
+            if name in match.offsets:
+                url = match.string(name, 0)
+                break
 
         if url.count('"') == 2:
             url = url.split('"')[1]
