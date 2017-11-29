@@ -10,8 +10,13 @@ ns = {
     "w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
 }
 
-class OfficeDDE(Extractor):
-    yara_rules = "OfficeDDE"
+def push_command_line(self, cmdline):
+    if cmdline.startswith(("DDE ", "DDEAUTO ")):
+        cmdline = cmdline.split(None, 1)[1]
+    self.push_command_line(cmdline)
+
+class OfficeDDE1(Extractor):
+    yara_rules = "OfficeDDE1"
     minimum = "2.0.5"
 
     def handle_yara(self, filepath, match):
@@ -21,8 +26,21 @@ class OfficeDDE(Extractor):
         for element in root.findall(".//w:instrText", ns):
             elements.append(element.text)
 
-        cmdline = "".join(elements).strip()
-        if cmdline.startswith(("DDE ", "DDEAUTO ")):
-            cmdline = cmdline.split(None, 1)[1]
+        push_command_line(self, "".join(elements).strip())
 
-        self.push_command_line(cmdline)
+class OfficeDDE2(Extractor):
+    yara_rules = "OfficeDDE2"
+    minimum = "2.0.5"
+
+    def handle_yara(self, filepath, match):
+        root = ET.parse(filepath)
+
+        cmdline = None
+        for element in root.findall(".//w:fldSimple", ns):
+            cmdline = element.get("{%s}instr" % ns["w"], "").strip()
+            break
+
+        if not cmdline:
+            return
+
+        push_command_line(self, cmdline)

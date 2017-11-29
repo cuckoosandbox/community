@@ -15,7 +15,7 @@ class OfficeDDE(Signature):
         if match.category != "office":
             return
 
-        if not match.yara or match.yara[0].name != "OfficeDDE":
+        if not match.yara or not match.yara[0].name.startswith("OfficeDDE"):
             return
 
         self.mark_config({
