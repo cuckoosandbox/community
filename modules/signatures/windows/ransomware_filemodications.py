@@ -122,7 +122,7 @@ class OverwritesFiles(Signature):
     count = 0
 
     def on_call(self, call, process):
-        if call["arguments"]["create_disposition"] == 5:
+        if call["arguments"]["create_disposition"] == 5 and "\\AppData\\Local\\Microsoft\\Windows\\Temporary Internet Files\\" not in call["arguments"]["filepath"] and "\\AppData\\Local\\Temp\\" not in call["arguments"]["filepath"]:
             self.count += 1
             self.mark_call()
 
