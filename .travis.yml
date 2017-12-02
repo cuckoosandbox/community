@@ -53,7 +53,7 @@ script:
   - cp -rf ../community/data/monitor/* cuckoo/data/monitor
   - git checkout cuckoo/data/monitor/latest
   - pip uninstall -y cuckoo idna pyOpenSSL cryptography
-  - pip install .
+  - python setup.py sdist install
   - cuckoo init
   - cuckoo community --file ../master.tar.gz
   - cuckoo -d 2>&1|grep "Unable to bind ResultServer"
@@ -63,7 +63,7 @@ script:
   - cp -rf ../community/data/monitor/* cuckoo/data/monitor
   - git checkout cuckoo/data/monitor/latest
   - pip uninstall -y cuckoo
-  - pip install .
+  - python setup.py sdist install
   - cuckoo init
   - cuckoo community --file ../master.tar.gz
   - cuckoo -d 2>&1|grep "Unable to bind ResultServer"
