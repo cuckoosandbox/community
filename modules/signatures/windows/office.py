@@ -95,11 +95,13 @@ class OfficeCheckVersion(Signature):
     filter_apinames = "vbe6_Invoke",
 
     def on_call(self, call, process):
-        if not "args" in call["arguments"]:
+        if "args" not in call["arguments"]:
             return
 
-        if (call["arguments"]["funcname"] != "AppInfo" or
-                call["arguments"]["args"][0] != 2):
+        if call["arguments"]["funcname"] != "AppInfo":
+            return
+
+        if call["arguments"]["args"][0] != 2:
             return
 
         self.mark_call()
@@ -116,16 +118,17 @@ class OfficeCheckWindow(Signature):
     filter_apinames = "vbe6_Invoke",
 
     def on_call(self, call, process):
-        if not "args" in call["arguments"]:
+        if "args" not in call["arguments"]:
             return
 
-        if (call["arguments"]["funcname"] != "AppInfo" or
-                call["arguments"]["args"][0] != 7):
+        if call["arguments"]["funcname"] != "AppInfo":
+            return
+
+        if call["arguments"]["args"][0] != 7:
             return
 
         self.mark_call()
         return True
-
 
 class OfficeHttpRequest(Signature):
     name = "office_http_request"
@@ -200,7 +203,7 @@ class OfficeIndirectCall(Signature):
                     matches = re.findall(pattern, macro["deobf"])
                     for match in matches:
                         self.mark_ioc("Statement", match)
-                    
+
             return self.has_marks()
 
 class OfficeCheckName(Signature):
@@ -223,7 +226,7 @@ class OfficeCheckName(Signature):
                     matches = re.findall(pattern, macro["deobf"])
                     for match in matches:
                         self.mark_ioc("Statement", match)
-                    
+
             return self.has_marks()
 
 class OfficePlatformDetect(Signature):
@@ -247,7 +250,7 @@ class OfficePlatformDetect(Signature):
                     matches = re.findall(pattern, macro["deobf"])
                     for match in matches:
                         self.mark_ioc("Statement", match)
-                    
+
             return self.has_marks()
 
 class DocumentClose(Signature):
