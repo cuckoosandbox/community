@@ -59,6 +59,7 @@ script:
   - cuckoo -d 2>&1|grep "Unable to bind ResultServer"
   - rm -rf ~/.cuckoo
 
+  - git checkout cuckoo/data-private/cwd/hashes.txt
   - git checkout master
   - cp -rf ../community/data/monitor/* cuckoo/data/monitor
   - git checkout cuckoo/data/monitor/latest
