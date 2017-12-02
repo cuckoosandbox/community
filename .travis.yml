@@ -42,7 +42,8 @@ script:
   - git checkout 2.0.0
   - cp -rf ../community/data/monitor/* cuckoo/data/monitor
   - git checkout cuckoo/data/monitor/latest
-  - pip install pyOpenSSL==0.15.1 cryptography==1.3.2 .
+  - pip install pyOpenSSL==0.15.1 cryptography==1.3.2
+  - python setup.py develop
   - cuckoo init
   - cuckoo community --file ../master.tar.gz
   - cuckoo -d 2>&1|grep "Unable to bind ResultServer"
