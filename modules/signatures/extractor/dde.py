@@ -24,7 +24,7 @@ class OfficeDDE1(Extractor):
 
         elements = []
         for element in root.findall(".//w:instrText", ns):
-            elements.append(element.text)
+            element.text and elements.append(element.text)
 
         push_command_line(self, "".join(elements).strip())
 
@@ -35,12 +35,6 @@ class OfficeDDE2(Extractor):
     def handle_yara(self, filepath, match):
         root = ET.parse(filepath)
 
-        cmdline = None
         for element in root.findall(".//w:fldSimple", ns):
             cmdline = element.get("{%s}instr" % ns["w"], "").strip()
-            break
-
-        if not cmdline:
-            return
-
-        push_command_line(self, cmdline)
+            cmdline and push_command_line(self, cmdline)

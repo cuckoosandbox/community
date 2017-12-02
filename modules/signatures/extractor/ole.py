@@ -20,7 +20,7 @@ class OleStream(Extractor):
             content = ole.openstream(stream).read()
             stream = oletools.oleobj.OleNativeStream(content)
             self.push_blob(stream.data, "binaries", None, {
-                "filename": stream.filename,
-                "src_path": stream.src_path,
-                "temp_path": stream.temp_path,
+                "filename": stream.filename.decode("latin-1"),
+                "src_path": stream.src_path.decode("latin-1"),
+                "temp_path": stream.temp_path.decode("latin-1"),
             })
