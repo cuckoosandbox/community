@@ -19,7 +19,7 @@ class InjectionModifiesMemory(Signature):
     name = "injection_modifies_memory"
     description = "Manipulates memory of a non-child process indicative of code injection"
     severity = 3
-    categories = ["injection"]
+    categories = ["injection", "shellcode"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
     references = ["www.endgame.com/blog/technical-blog/ten-process-injection-techniques-technical-survey-common-and-trending-process"]
