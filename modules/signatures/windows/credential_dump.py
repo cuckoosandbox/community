@@ -23,6 +23,7 @@ class CredentialDumpingLsass(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
     evented = True
+    references = ["cyberwardog.blogspot.co.uk/2017/03/chronicles-of-threat-hunter-hunting-for_22.html", "cyberwardog.blogspot.co.uk/2017/04/chronicles-of-threat-hunter-hunting-for.html"]
 
     lsasspid = []
     lsasshandle = []
@@ -38,8 +39,9 @@ class CredentialDumpingLsass(Signature):
 
         if call["api"] == "NtOpenProcess":
             if call["arguments"]["process_identifier"] in self.lsasspid:
-                self.lsasshandle.append(call["arguments"]["process_handle"])
-                self.mark_call()
+                if call["arguments"]["desired_access"] in ["0x00001010", "0x00001038"]:
+                    self.lsasshandle.append(call["arguments"]["process_handle"])
+                    self.mark_call()
 
         if call["api"] == "ReadProcessMemory":
             if call["arguments"]["process_handle"] in self.lsasshandle:
@@ -73,7 +75,7 @@ class CredentialDumpingLsassAccess(Signature):
 
         if call["api"] == "NtOpenProcess":
             if call["arguments"]["process_identifier"] in self.lsasspid:
-                if call["arguments"]["desired_access"] == "0x00001010" or call["arguments"]["desired_access"] == "0x00001038":
+                if call["arguments"]["desired_access"] in ["0x00001010", "0x00001038"]:
                     self.creddump = True
                     self.mark_call()
 
