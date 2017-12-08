@@ -138,3 +138,18 @@ class OverwritesFiles(Signature):
             elif self.count > 100:
                 self.severity = 3
             return self.has_marks()
+
+class RansomwareMassFileDelete(Signature):
+    name = "ransomware_mass_file_delete"
+    description = "Deletes a large number of files from the system indicative of ransomware, wiper malware or system destruction"
+    severity = 3
+    categories = ["ransomware", "wiper"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+    evented = True
+
+    def on_complete(self):
+        for deletedfile in self.get_files(actions=["file_deleted"]):
+            self.mark_ioc("file", deletedfile)
+
+        return self.has_marks(200)
