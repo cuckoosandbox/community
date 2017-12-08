@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class CredentialDumpingLsass(Signature):
     name = "credential_dumping_lsass"
-    description = "Locates and dumps memory from the lsass.exe process indicative of potential credential dumping"
+    description = "Locates and dumps memory from the lsass.exe process indicative of credential dumping"
     severity = 3
     categories = ["persistence", "lateral_movement"]
     authors = ["Kevin Ross"]
