@@ -26,6 +26,7 @@ class InjectionModifiesMemory(Signature):
 
     filter_apinames = [
         "NtAllocateVirtualMemory",
+        "NtMapViewOfSection",
         "NtProtectVirtualMemory",
         "NtWow64WriteVirtualMemory64",
         "NtWriteVirtualMemory",
