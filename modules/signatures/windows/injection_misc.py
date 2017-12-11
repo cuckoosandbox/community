@@ -33,7 +33,7 @@ class InjectionDuplicateHandle(Signature):
 
     def on_complete(self):
         return self.has_marks()
-    
+
 class OpenProcessNonChild(Signature):
     name = "openprocess_nonchild"
     description = "Attempts to open access to a non-child process"
@@ -58,6 +58,26 @@ class OpenProcessNonChild(Signature):
                                                                injected_pid)
                 )
                 self.mark_call()
+
+    def on_complete(self):
+        return self.has_marks()
+
+class CreateProcessSuspended(Signature):
+    name = "create_process_suspended"
+    description = "Created a process in a suspended state indicative of process hollowing code injection or unpacking"
+    severity = 2
+    categories = ["injection", "packer"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+    references = ["www.endgame.com/blog/technical-blog/ten-process-injection-techniques-technical-survey-common-and-trending-process"]
+
+    filter_apinames = [
+        "CreateProcessInternalW",
+    ]
+
+    def on_call(self, call, process):
+        if "CREATE_SUSPENDED" in call["flags"]["creation_flags"]:
+            self.mark_call()
 
     def on_complete(self):
         return self.has_marks()
