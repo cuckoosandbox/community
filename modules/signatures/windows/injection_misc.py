@@ -33,3 +33,31 @@ class InjectionDuplicateHandle(Signature):
 
     def on_complete(self):
         return self.has_marks()
+    
+class OpenProcessNonChild(Signature):
+    name = "openprocess_nonchild"
+    description = "Attempts to open access to a non-child process"
+    severity = 2
+    categories = ["injection", "infostealer"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+    references = ["www.endgame.com/blog/technical-blog/ten-process-injection-techniques-technical-survey-common-and-trending-process"]
+
+    filter_apinames = [
+        "NtOpenProcess",
+    ]
+
+    def on_call(self, call, process):
+        if call["arguments"]["process_handle"] != "0xffffffff" and call["arguments"]["process_handle"] != "0xffffffffffffffff":
+            injected_pid = call["arguments"]["process_identifier"]
+            call_process = self.get_process_by_pid(injected_pid)
+            if not call_process or call_process["ppid"] != process["pid"]:
+                self.mark_ioc(
+                    "Opened Process",
+                    "Process %s accessed non-child process %s" % (process["pid"],
+                                                               injected_pid)
+                )
+                self.mark_call()
+
+    def on_complete(self):
+        return self.has_marks()
