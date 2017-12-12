@@ -19,7 +19,7 @@ class InjectionDuplicateHandle(Signature):
     name = "injection_duplicate_handle"
     description = "Duplicates the process handle of an other process to obtain access rights to that process"
     severity = 3
-    categories = ["injection", "privilege escalation"]
+    categories = ["injection", "privilege_escalation"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
@@ -28,7 +28,11 @@ class InjectionDuplicateHandle(Signature):
     ]
 
     def on_call(self, call, process):
-        if call["arguments"]["source_process_identifier"] != call["arguments"]["target_process_identifier"] and call["arguments"]["source_process_identifier"] != 0 and not call["arguments"]["source_process_handle"].startswith("0xfffffff") and call["arguments"]["target_process_handle"].startswith("0xfffffff"):
+        sourcepid = call["arguments"]["source_process_identifier"]
+        targetpid = call["arguments"]["target_process_identifier"]
+        sourcehandle = call["arguments"]["source_process_handle"]
+        targethandle = call["arguments"]["target_process_handle"]
+        if sourcepid != targetpid and sourcepid != 0 and sourcehandle != "0xffffffff" and sourcehandle != "0xffffffffffffffff" and (targethandle == "0xffffffff" or targethandle == "0xffffffffffffffff"):
             self.mark_call()
 
     def on_complete(self):
