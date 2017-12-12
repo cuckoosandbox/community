@@ -33,7 +33,7 @@ class InjectionCreateRemoteThread(Signature):
         if call["arguments"]["process_handle"] != "0xffffffff" and call["arguments"]["process_handle"] != "0xffffffffffffffff":
             injected_pid = call["arguments"]["process_identifier"]
             call_process = self.get_process_by_pid(injected_pid)
-            if not call_process or call_process["ppid"] != process["pid"]:
+            if not call_process or call_process["ppid"] != process["pid"] and process["pid"] != injected_pid:
                 self.mark_ioc(
                     "Process injection",
                     "Process %s created a remote thread in non-child process %s" % (process["pid"],
@@ -63,6 +63,32 @@ class InjectionQueueApcThread(Signature):
             self.mark_ioc(
                 "Process injection",
                 "Process %s created a thread in remote process %s" % (process["pid"],
+                                                               injected_pid)
+            )
+            self.mark_call()
+
+    def on_complete(self):
+        return self.has_marks()
+
+class ResumeThread(Signature):
+    name = "injection_resumethread"
+    description = "Resumed a suspended thread in a remote process potentially indicative of code injection"
+    severity = 3
+    categories = ["injection"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+    references = ["www.endgame.com/blog/technical-blog/ten-process-injection-techniques-technical-survey-common-and-trending-process"]
+
+    filter_apinames = [
+        "NtResumeThread",
+    ]
+
+    def on_call(self, call, process):
+        injected_pid = call["arguments"]["process_identifier"]
+        if process["pid"] != injected_pid:
+            self.mark_ioc(
+                "Process injection",
+                "Process %s resumed thread in remote process %s" % (process["pid"],
                                                                injected_pid)
             )
             self.mark_call()
