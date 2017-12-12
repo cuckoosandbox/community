@@ -29,8 +29,6 @@ class InjectionModifiesMemory(Signature):
         "NtMapViewOfSection",
         "NtProtectVirtualMemory",
         "NtUnmapViewOfSection",
-        "NtWow64WriteVirtualMemory64",
-        "NtWriteVirtualMemory",
         "VirtualProtectEx",
     ]
 
