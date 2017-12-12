@@ -88,7 +88,7 @@ class ResumeThread(Signature):
         if process["pid"] != injected_pid:
             self.mark_ioc(
                 "Process injection",
-                "Process %s resumed thread in remote process %s" % (process["pid"],
+                "Process %s resumed a thread in remote process %s" % (process["pid"],
                                                                injected_pid)
             )
             self.mark_call()
