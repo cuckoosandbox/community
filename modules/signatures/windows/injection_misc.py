@@ -55,7 +55,7 @@ class OpenProcessNonChild(Signature):
         if call["arguments"]["process_handle"] != "0xffffffff" and call["arguments"]["process_handle"] != "0xffffffffffffffff":
             injected_pid = call["arguments"]["process_identifier"]
             call_process = self.get_process_by_pid(injected_pid)
-            if not call_process or call_process["ppid"] != process["pid"]:
+            if not call_process or call_process["ppid"] != process["pid"] and process["pid"] != injected_pid:
                 self.mark_ioc(
                     "Opened Process",
                     "Process %s accessed non-child process %s" % (process["pid"],
@@ -69,7 +69,7 @@ class OpenProcessNonChild(Signature):
 class CreateProcessSuspended(Signature):
     name = "create_process_suspended"
     description = "Created a process in a suspended state indicative of process hollowing code injection or unpacking"
-    severity = 2
+    severity = 3
     categories = ["injection", "packer"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
