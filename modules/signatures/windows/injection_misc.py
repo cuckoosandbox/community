@@ -40,8 +40,8 @@ class InjectionDuplicateHandle(Signature):
 
 class OpenProcessNonChild(Signature):
     name = "openprocess_nonchild"
-    description = "Attempts to open access to a non-child process"
-    severity = 2
+    description = "Attempts to open access to a remote process"
+    severity = 1
     categories = ["injection", "infostealer"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
