@@ -46,7 +46,7 @@ class InjectionCreateRemoteThread(Signature):
 
 class InjectionQueueApcThread(Signature):
     name = "injection_queueapcthread"
-    description = "Creates a thread using NtQueueApcThread in a remote process potentially indicative of code injection"
+    description = "Creates a thread using NtQueueApcThread in a remote process potentially indicative of process injection"
     severity = 3
     categories = ["injection"]
     authors = ["Kevin Ross"]
@@ -72,7 +72,7 @@ class InjectionQueueApcThread(Signature):
 
 class ResumeThread(Signature):
     name = "injection_resumethread"
-    description = "Resumed a suspended thread in a remote process potentially indicative of code injection"
+    description = "Resumed a suspended thread in a remote process potentially indicative of process injection"
     severity = 3
     categories = ["injection"]
     authors = ["Kevin Ross"]
