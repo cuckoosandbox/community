@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class InjectionModifiesMemory(Signature):
     name = "injection_modifies_memory"
-    description = "Manipulates memory of a non-child process indicative of code injection"
+    description = "Manipulates memory of a non-child process indicative of process injection"
     severity = 3
     categories = ["injection"]
     authors = ["Kevin Ross"]
