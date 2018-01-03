@@ -68,7 +68,7 @@ class OpenProcessNonChild(Signature):
 
 class CreateProcessSuspended(Signature):
     name = "create_process_suspended"
-    description = "Created a process in a suspended state indicative of process hollowing code injection or unpacking"
+    description = "Created a process in a suspended state indicative of process hollowing or unpacking"
     severity = 3
     categories = ["injection", "packer"]
     authors = ["Kevin Ross"]
