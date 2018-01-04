@@ -160,3 +160,33 @@ class CommandObfuscation(Signature):
                         self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
+
+class AddsUser(Signature):
+    name = "adds_user"
+    description = "Uses windows command to add a user to the system"
+    severity = 2
+    categories = ["commands"]
+    authors = ["Kevin"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        for cmdline in self.get_command_lines():
+                if cmdline.lower().startswith("net") and "user /add" in cmdline.lower():
+                    self.mark_ioc("cmdline", cmdline)
+
+        return self.has_marks()
+
+class AddsUserAdmin(Signature):
+    name = "adds_user_admin"
+    description = "Uses windows command to add a user to the administrator group"
+    severity = 3
+    categories = ["commands"]
+    authors = ["Kevin"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        for cmdline in self.get_command_lines():
+                if cmdline.lower().startswith("net") and "localgroup administrators" in cmdline.lower():
+                    self.mark_ioc("cmdline", cmdline)
+
+        return self.has_marks()
