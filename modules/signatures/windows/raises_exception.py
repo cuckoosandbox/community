@@ -27,7 +27,7 @@ class RaisesException(Signature):
     }
 
     def on_call(self, call, process):
-        """Pretify the display of the call in the Signature."""
+        """Prettify the display of the call in the Signature."""
         call["raw"] = "stacktrace",
         call["arguments"]["stacktrace"] = \
             "\n".join(call["arguments"]["stacktrace"])
@@ -80,7 +80,7 @@ class ApplicationExceptionCrash(Signature):
     }
 
     def on_call(self, call, process):
-        """Pretify the display of the call in the Signature."""
+        """Prettify the display of the call in the Signature."""
         call["raw"] = "stacktrace",
         call["arguments"]["stacktrace"] = \
             "\n".join(call["arguments"]["stacktrace"])
