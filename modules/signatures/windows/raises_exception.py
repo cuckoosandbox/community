@@ -46,7 +46,7 @@ class RaisesException(Signature):
 
 class ApplicationExceptionCrash(Signature):
     name = "applcation_raises_exception"
-    description = "An application raised an exception which can be indicative of an exploit crash"
+    description = "An application raised an exception which may be indicative of an exploit crash"
     severity = 2
     categories = ["exploit", "crash"]
     authors = ["Cuckoo Technologies", "Kevin Ross"]
