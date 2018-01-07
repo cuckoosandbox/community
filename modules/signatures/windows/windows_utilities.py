@@ -110,57 +110,6 @@ class SuspiciousCommandTools(Signature):
 
         return self.has_marks()
 
-class LongCommandLine(Signature):
-    name = "long_command_line"
-    description = "A suspiciously long command line or script command was executed"
-    severity = 2
-    categories = ["commands"]
-    authors = ["Kevin Ross"]
-    minimum = "2.0"
-
-    utilities = [
-        "cmd",
-        "cscript",
-        "hta",
-        "powershell",
-        "wscript",
-    ]
-
-    def on_complete(self):
-        for cmdline in self.get_command_lines():
-            for utility in self.utilities:
-                if cmdline.lower().startswith(utility) and len(cmdline) > 150:
-                    self.mark_ioc("cmdline", cmdline)
-
-        return self.has_marks()
-
-class CommandObfuscation(Signature):
-    name = "command_obfuscation"
-    description = "A command line or script command was executed containing high entropy indicative of obfuscation"
-    severity = 2
-    categories = ["commands"]
-    authors = ["Kevin Ross"]
-    minimum = "2.0"
-
-    utilities = [
-        "cmd.exe",
-        "cmd ",
-        "cscript",
-        "hta.exe",
-        "hta ",
-        "powershell",
-        "wscript",
-    ]
-
-    def on_complete(self):
-        for cmdline in self.get_command_lines():
-            for utility in self.utilities:
-                if cmdline.lower().startswith(utility):
-                    if entropy.shannon_entropy(cmdline) > 0.56:
-                        self.mark_ioc("cmdline", cmdline)
-
-        return self.has_marks()
-
 class AddsUser(Signature):
     name = "adds_user"
     description = "Uses windows command to add a user to the system"
