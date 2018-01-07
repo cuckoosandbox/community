@@ -137,7 +137,7 @@ class LongCommandLine(Signature):
 class CommandObfuscation(Signature):
     name = "command_obfuscation"
     description = "A command line or script command was executed containing high entropy indicative of obfuscation"
-    severity = 3
+    severity = 2
     categories = ["commands"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
