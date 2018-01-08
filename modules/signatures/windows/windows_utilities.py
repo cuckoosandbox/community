@@ -56,6 +56,8 @@ risk_utilities = [
     "dsquery",
     "icacls",
     "nltest",
+    "regsvcs",
+    "regasm",
     "rexec",
     "sdbinst",
     "volumeid",
