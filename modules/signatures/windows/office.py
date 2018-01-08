@@ -470,3 +470,146 @@ class OfficeVulnModules(Signature):
             if module.lower() in self.bad_modules:
                 self.mark_ioc("cve", self.bad_modules[module.lower()])
         return self.has_marks()
+
+class UnconventionalOfficeCodePage(Signature):
+    name = "unconventional_office_code_page"
+    description = "Office file uses an unconventional code page"
+    severity = 2
+    categories = ["office"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    codepages = [
+        {"language" : "Arabic (ASMO 708)", "code" : "Code page: 708,"},
+        {"language" : "Arabic (ASMO-449+, BCON V4)", "code" : "Code page: 709,"},
+        {"language" : "Arabic - Transparent Arabic", "code" : "Code page: 710,"},
+        {"language" : "Arabic (Transparent ASMO); Arabic (DOS)", "code" : "Code page: 720,"},
+        {"language" : "OEM Baltic; Baltic (DOS)", "code" : "Code page: 775,"},
+        {"language" : "OEM Cyrillic (primarily Russian)", "code" : "Code page: 855,"},
+        {"language" : "OEM Turkish; Turkish (DOS)", "code" : "Code page: 857,"},
+        {"language" : "OEM Arabic; Arabic (864)", "code" : "Code page: 864,"},
+        {"language" : "OEM Russian; Cyrillic (DOS)", "code" : "Code page: 866,"},
+        {"language" : "ANSI/OEM Simplified Chinese (PRC, Singapore); Chinese Simplified (GB2312)", "code" : "Code page: 936,"},
+        {"language" : "ANSI/OEM Traditional Chinese (Taiwan; Hong Kong SAR, PRC); Chinese Traditional (Big5)", "code" : "Code page: 950,"},
+        {"language" : "IBM EBCDIC Turkish (Latin 5)", "code" : "Code page: 1026,"},
+        {"language" : "ANSI Cyrillic; Cyrillic (Windows)", "code" : "Code page: 1251,"},
+        {"language" : "ANSI Turkish; Turkish (Windows)", "code" : "Code page: 1254,"},
+        {"language" : "ANSI Arabic; Arabic (Windows)", "code" : "Code page: 1256,"},
+        {"language" : "ANSI/OEM Vietnamese; Vietnamese (Windows)", "code" : "Code page: 1257,"},
+        {"language" : "MAC Traditional Chinese (Big5); Chinese Traditional (Mac)", "code" : "Code page: 10002,"},
+        {"language" : "Arabic (Mac)", "code" : "Code page: 10004,"},
+        {"language" : "Cyrillic (Mac)", "code" : "Code page: 10007,"},
+        {"language" : "MAC Simplified Chinese (GB 2312); Chinese Simplified (Mac)", "code" : "Code page: 10008,"},
+        {"language" : "Romanian (Mac)", "code" : "Code page: 10010,"},
+        {"language" : "Turkish (Mac)", "code" : "Code page: 10017,"},
+        {"language" : "Croatian (Mac)", "code" : "Code page: 10082,"},
+        {"language" : "CNS Taiwan; Chinese Traditional (CNS)", "code" : "Code page: 20000,"},
+        {"language" : "Eten Taiwan; Chinese Traditional (Eten)", "code" : "Code page: 20002,"},
+        {"language" : "IBM EBCDIC Arabic", "code" : "Code page: 20420,"},
+        {"language" : "Russian (KOI8-R); Cyrillic (KOI8-R)", "code" : "Code page: 20866,"},
+        {"language" : "IBM EBCDIC Cyrillic Russian", "code" : "Code page: 20880,"},
+        {"language" : "IBM EBCDIC Turkish", "code" : "Code page: 20905,"},
+        {"language" : "Simplified Chinese (GB2312); Chinese Simplified (GB2312-80)", "code" : "Code page: 20936,"},
+        {"language" : "IBM EBCDIC Cyrillic Serbian-Bulgarian", "code" : "Code page: 21025,"},
+        {"language" : "Ukrainian (KOI8-U); Cyrillic (KOI8-U)", "code" : "Code page: 21866,"},
+        {"language" : "ISO 8859-4 Baltic", "code" : "Code page: 28594,"},
+        {"language" : "ISO 8859-5 Cyrillic", "code" : "Code page: 28595,"},
+        {"language" : "ISO 8859-6 Arabic", "code" : "Code page: 28596,"},
+        {"language" : "ISO 8859-9 Turkish", "code" : "Code page: 28599,"},
+        {"language" : "ISO 8859-13 Estonian", "code" : "Code page: 28603,"},
+        {"language" : "ISO 2022 Simplified Chinese; Chinese Simplified (ISO 2022)", "code" : "Code page: 50227,"},
+        {"language" : "ISO 2022 Traditional Chinese", "code" : "50229,"},
+        {"language" : "EBCDIC Simplified Chinese Extended and Simplified Chinese", "code" : "Code page: 50935,"},
+        {"language" : "EBCDIC Simplified Chinese", "code" : "Code page: 50936,"},
+        {"language" : "EUC Traditional Chinese", "code" : "Code page: 51950,"},
+        {"language" : "HZ-GB2312 Simplified Chinese; Chinese Simplified (HZ)", "code" : "Code page: 52936,"},
+        {"language" : "GB18030 Simplified Chinese (4 byte); Chinese Simplified (GB18030)", "code" : "Code page: 54936,"},
+        {"language" : "ISCII Devanagari", "code" : "Code page: 57002,"},
+        {"language" : "ISCII Bangla", "code" : "Code page: 57003,"},
+        {"language" : "ISCII Tamil", "code" : "Code page: 57004,"},
+        {"language" : "ISCII Telugu", "code" : "Code page: 57005,"},
+        {"language" : "ISCII Assamese", "code" : "Code page: 57006,"},
+        {"language" : "ISCII Odia", "code" : "Code page: 57007,"},
+        {"language" : "ISCII Kannada", "code" : "Code page: 57008,"},
+        {"language" : "ISCII Malayalam", "code" : "Code page: 57009,"},
+        {"language" : "ISCII Gujarati", "code" : "Code page: 57010,"},
+        {"language" : "ISCII Punjabi", "code" : "Code page: 57011,"}
+    ]
+
+    def on_complete(self):
+        filetype = self.get_results("target", {})["file"]["type"]
+        name = self.get_results("target", {})["file"]["name"]
+        for codepage in self.codepages:
+            if codepage["code"] in filetype:
+                self.mark(
+                    filename=name,
+                    codepage_language=codepage["language"],
+                )
+            # Check dropped files too in case dropped from Internet, another office document embedded in PDF or created as a decoy document from an exploit etc.
+            for dropped in self.get_results("dropped", []):
+                if "filepath" in dropped:
+                    droppedtype = dropped["type"]
+                    droppedname = dropped["name"]
+                    if codepage["code"] in droppedtype:
+                        self.mark(
+                            dropped_filename=droppedname,
+                            codepage_language=codepage["language"],
+                        )
+            
+        return self.has_marks()
+
+class OfficeNoEditTime(Signature):
+    name = "office_no_edit_time"
+    description = "Office file has no edit time indicating it may have been automatically generated"
+    severity = 1
+    categories = ["office"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        filetype = self.get_results("target", {})["file"]["type"]
+        name = self.get_results("target", {})["file"]["name"]
+        if "Total Editing Time: 00:00" in filetype:
+            self.mark(
+                filename=name,
+                filetype_details=filetype,
+            )
+            for dropped in self.get_results("dropped", []):
+                if "filepath" in dropped:
+                    droppedtype = dropped["type"]
+                    droppedname = dropped["name"]
+                    if "Total Editing Time: 00:00" in droppedtype:
+                        self.mark(
+                            dropped_filename=droppedname,
+                            dropped_filetype_details=filetype,
+                        )
+            
+        return self.has_marks()
+
+class OfficeNoContent(Signature):
+    name = "office_no_content"
+    description = "Office file has no word content indicating it may have been automatically generated"
+    severity = 1
+    categories = ["office"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        filetype = self.get_results("target", {})["file"]["type"]
+        name = self.get_results("target", {})["file"]["name"]
+        if "Number of Words: 0, Number of Characters: 0," in filetype:
+            self.mark(
+                filename=name,
+                filetype_details=filetype,
+            )
+            for dropped in self.get_results("dropped", []):
+                if "filepath" in dropped:
+                    droppedtype = dropped["type"]
+                    droppedname = dropped["name"]
+                    if "Number of Words: 0, Number of Characters: 0," in droppedtype:
+                        self.mark(
+                            dropped_filename=droppedname,
+                            dropped_filetype_details=filetype,
+                        )
+            
+        return self.has_marks()
