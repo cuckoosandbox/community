@@ -18,6 +18,7 @@ utilities = [
     "erase.exe",
     "fsutil",
     "getmac",
+    "installutil"
     "ipconfig",
     "nbtstat",
     "net ",
