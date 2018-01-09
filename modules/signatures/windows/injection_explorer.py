@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class InjectionExplorer(Signature):
     name = "injection_explorer"
-    description = "Performs code injection into the Explorer process using the Shell_TrayWnd technique"
+    description = "Performs process injection into the Explorer process using the Shell_TrayWnd technique"
     severity = 3
     categories = ["injection"]
     authors = ["Kevin Ross"]
@@ -28,6 +28,7 @@ class InjectionExplorer(Signature):
         "Process32NextW",
         "FindWindowW",
         "SendNotifyMessageA",
+        "SendNotifyMessageW",
     ]
 
     explorerpids = []
@@ -45,8 +46,41 @@ class InjectionExplorer(Signature):
                 self.windowhandle = call["return_value"]
                 self.mark_call()
 
-        elif call["api"] == "SendNotifyMessageA":
+        elif call["api"].startswith("SendNotifyMessage"):
             if call["arguments"]["process_identifier"] in self.explorerpids and int(call["arguments"]["window_handle"], 16) == self.windowhandle:
+                self.injected = True
+                self.mark_call()
+
+    def on_complete(self):
+        if self.injected:
+            return self.has_marks()
+
+class InjectionExplorerSendNotifyMessage(Signature):
+    name = "injection_explorer"
+    description = "SendNotifyMessage API call to explorer.exe process indicative of process injection"
+    severity = 3
+    categories = ["injection"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+    references = ["www.endgame.com/blog/technical-blog/ten-process-injection-techniques-technical-survey-common-and-trending-process"]
+
+    filter_apinames = [
+        "Process32NextW",
+        "SendNotifyMessageA",
+        "SendNotifyMessageW",
+    ]
+
+    explorerpids = []
+    injected = False
+
+    def on_call(self, call, process):
+        if call["api"] == "Process32NextW":
+            if call["arguments"]["process_name"] == "explorer.exe":
+                self.explorerpids.append(call["arguments"]["process_identifier"])
+                self.mark_call()
+
+        elif call["api"].startswith("SendNotifyMessage"):
+            if call["arguments"]["process_identifier"] in self.explorerpids:
                 self.injected = True
                 self.mark_call()
 
