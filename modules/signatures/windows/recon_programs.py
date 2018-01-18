@@ -12,7 +12,7 @@ class InstalledApps(Signature):
     authors = ["Optiv"]
     minimum = "2.0"
 
-    filter_apinames = "RegQueryValueExA", "RegQueryValueExW"
+    filter_apinames = "RegOpenKeyExA", "RegOpenKeyExW", "RegQueryValueExA", "RegQueryValueExW"
 
     def on_call(self, call, process):
         keyname = call["arguments"]["regkey"]
@@ -21,6 +21,22 @@ class InstalledApps(Signature):
             app = call["arguments"]["value"]
             if app:
                 self.mark_call()
+
+class QueriesInstalledApps(Signature):
+    name = "queries_programs"
+    description = "Queries for potentially installed applications"
+    severity = 2
+    categories = ["recon"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    filter_apinames = "RegOpenKeyExA", "RegOpenKeyExW"
+
+    def on_call(self, call, process):
+        keyname = call["arguments"]["regkey"]
+        uninstall = "\\microsoft\\windows\\currentversion\\uninstall"
+        if (keyname and uninstall in keyname.lower()):
+            self.mark_call()
 
     def on_complete(self):
         return self.has_marks()
