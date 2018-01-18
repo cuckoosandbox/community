@@ -22,16 +22,17 @@ class VBoxDetectKeys(Signature):
     categories = ["anti-vm"]
     authors = ["nex", "Brad Spengler"]
     minimum = "2.0"
-
+    
     regkeys_re = [
         ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Oracle\\\\VirtualBox\\ Guest\\ Additions",
         ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall\\\\Oracle\\ VM\\ VirtualBox\\ Guest\\ Additions",
+        ".*\\\\CurrentControlSet\\\\Services\\\\VBoxGuest",
         ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\PCI\\\\VEN_80EE&DEV_BEEF&SUBSYS_00000000&REV_00",
         ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\PCI\\\\VEN_80EE&DEV_CAFE&SUBSYS_00000000&REV_00",
         ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Control\\\\VirtualDeviceDrivers",
         ".*\\\\HARDWARE\\\\ACPI\\\\(DSDT|FADT|RSDT)\\\\VBOX__.*",
     ]
-    
+
     def on_complete(self):
         for indicator in self.regkeys_re:
             for regkey in self.check_key(pattern=indicator, regex=True, all=True):
