@@ -12,7 +12,7 @@ class InstalledApps(Signature):
     authors = ["Optiv"]
     minimum = "2.0"
 
-    filter_apinames = "RegOpenKeyExA", "RegOpenKeyExW", "RegQueryValueExA", "RegQueryValueExW"
+    filter_apinames = "RegQueryValueExA", "RegQueryValueExW"
 
     def on_call(self, call, process):
         keyname = call["arguments"]["regkey"]
