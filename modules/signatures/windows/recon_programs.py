@@ -22,6 +22,9 @@ class InstalledApps(Signature):
             if app:
                 self.mark_call()
 
+    def on_complete(self):
+        return self.has_marks()
+
 class QueriesInstalledApps(Signature):
     name = "queries_programs"
     description = "Queries for potentially installed applications"
