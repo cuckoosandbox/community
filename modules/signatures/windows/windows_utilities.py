@@ -2,149 +2,10 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
+# This requires python entropy package to be installed with "pip install entropy"
+import entropy
+
 from lib.cuckoo.common.abstracts import Signature
-
-utilities = [
-    "at ",
-    "at.exe",
-    "attrib",
-    "chcp",
-    "del ",
-    "del.exe",
-    "dir ",
-    "dir.exe",
-    "driverquery",
-    "erase ",
-    "erase.exe",
-    "fsutil",
-    "getmac",
-    "installutil"
-    "ipconfig",
-    "nbtstat",
-    "net ",
-    "net.exe",
-    "netsh",
-    "netstat",
-    "nslookup",
-    "pathping",
-    "ping ",
-    "ping.exe",
-    "qwinsta",
-    "reg ",
-    "reg.exe",
-    "regsrv32",
-    "route",
-    "runas",
-    "rwinsta",
-    "sc ",
-    "sc.exe",
-    "schtasks",
-    "shutdown",
-    "sigverif",
-    "systeminfo",
-    "tasklist",
-    "taskkill",
-    "telnet",
-    "whoami",
-    "wmic",
-    "wusa",
-]
-
-risk_utilities = [
-    "bitsadmin",
-    "cacls",
-    "csvde",
-    "dsquery",
-    "icacls",
-    "nltest",
-    "regsvcs",
-    "regasm",
-    "rexec",
-    "sdbinst",
-    "volumeid",
-    "vssadmin",
-    "wevtutil",
-    "whois",
-    "xcacls",
-]
-
-sysinternals = [
-    "accesschk",
-    "accessenum",
-    "adexplorer",
-    "adinsight",
-    "adrestore",
-    "autologon",
-    "autoruns",
-    "bginfo",
-    "bluescreen",
-    "clockres",
-    "contig",
-    "coreinfo",
-    "ctrl2cap",
-    "debugview",
-    "desktops",
-    "disk2vhd",
-    "diskext",
-    "diskmon",
-    "du ",
-    "du.exe",
-    "efsdump",
-    "findlinks",
-    "handle ",
-    "handle.exe",
-    "hex2dec",
-    "junction",
-    "ldmdump",
-    "listdlls",
-    "livekd",
-    "loadorder",
-    "logonsessions",
-    "movefile",
-    "notmyfault",
-    "ntfsinfo",
-    "pendmoves",
-    "pipelist",
-    "portmon",
-    "procdump",
-    "psexec",
-    "psfile",
-    "bginfo",
-    "psgetsid",
-    "psinfo",
-    "pskill",
-    "pslist",
-    "psloggedon",
-    "psloglist",
-    "pspasswd",
-    "psping",
-    "psservice",
-    "psshutdown",
-    "pssuspend",
-    "pstools",
-    "rammap",
-    "regdelnull",
-    "ru ",
-    "ru.exe",
-    "regjump",
-    "sdelete",
-    "shareenum",
-    "shellrunas",
-    "sigcheck",
-    "streams ",
-    "streams.exe",
-    "strings ",
-    "strings.exe",
-    "sync ",
-    "sync.exe",
-    "sysmon",
-    "tcpview",
-    "vmmap",
-    "volumeid",
-    "whois",
-    "winobj",
-    "zoomit",
-]
 
 class UsesWindowsUtilities(Signature):
     name = "uses_windows_utilities"
@@ -155,10 +16,71 @@ class UsesWindowsUtilities(Signature):
     minimum = "2.0"
     references = ["http://blog.jpcert.or.jp/2016/01/windows-commands-abused-by-attackers.html"]
 
+    utilities = [
+        "at ",
+        "at.exe",
+        "attrib",
+        "copy ",
+        "copy.exe",
+        "dir ",
+        "dir.exe",
+        "echo"
+        "erase",
+        "fsutil",
+        "getmac",
+        "ipconfig",
+        "md ",
+        "md.exe",
+        "mkdir",
+        "move ",
+        "move.exe",
+        "nbtstat",
+        "net ",
+        "net.exe",
+        "netsh",
+        "netstat",
+        "nslookup",
+        "ping",
+        "powershell",
+        "qprocess",
+        "query ",
+        "query.exe",
+        "quser",
+        "qwinsta",
+        "reg ",
+        "reg.exe",
+        "regsrv32",
+        "ren ",
+        "ren.exe",
+        "rename ",
+        "rename.exe",
+        "route",
+        "runas",
+        "rwinsta",
+        "sc ",
+        "sc.exe",
+        "schtasks",
+        "set ",
+        "set.exe",
+        "shutdown",
+        "systeminfo",
+        "tasklist",
+        "telnet",
+        "tracert",
+        "tree ",
+        "tree.exe",
+        "type",
+        "ver ",
+        "ver.exe",
+        "whoami",
+        "wmic",
+        "wusa"
+    ]
+
     def on_complete(self):
         for cmdline in self.get_command_lines():
-            for utility in utilities:
-                if utility in cmdline.lower():
+            for utility in self.utilities:
+                if cmdline.lower().startswith(utility):
                     self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
@@ -171,27 +93,106 @@ class SuspiciousCommandTools(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
+    utilities = [
+        "accesschk",
+        "accessenum",
+        "adexplorer",
+        "adinsight",
+        "adrestore",
+        "autologon",
+        "autoruns",
+        "bitsadmin",
+        "bginfo",
+        "cacls",
+        "csvde",
+        "del ",
+        "del.exe",
+        "dsquery",
+        "icacls",
+        "klist",
+        "psexec",        
+        "psfile",
+        "psgetsid",
+        "psinfo",
+        "psping",
+        "pskill",
+        "pslist",
+        "psloggedon",
+        "psloglist",
+        "pspasswd",
+        "psservice",
+        "psshutdown",
+        "pssuspend",
+        "rd ",
+        "rd.exe",
+        "rexec",
+        "shareenum",
+        "shellrunas",
+        "taskkill",
+        "volumeid",
+        "wevtutil",
+        "whois"
+        "xcacls"
+    ]
+
     def on_complete(self):
         for cmdline in self.get_command_lines():
-            for utility in risk_utilities:
-                if utility in cmdline.lower():
+            for utility in self.utilities:
+                if cmdline.lower().startswith(utility):
                     self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
 
-class SysInternalsToolsUsage(Signature):
-    name = "sysinternals_tools_usage"
-    description = "Uses Sysinternals tools in order to add additional command line functionality"
-    severity = 3
-    categories = ["commands", "lateral"]
+class LongCommandLine(Signature):
+    name = "long_command_line"
+    description = "A suspiciously long command line or script command was executed"
+    severity = 2
+    categories = ["commands"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    references = ["docs.microsoft.com/en-us/sysinternals/downloads/"]
+
+    utilities = [
+        "cmd",
+        "cscript",
+        "hta",
+        "powershell",
+        "wscript",
+    ]
 
     def on_complete(self):
         for cmdline in self.get_command_lines():
-            for utility in sysinternals:
-                if utility in cmdline.lower():
+            for utility in self.utilities:
+                if cmdline.lower().startswith(utility) and len(cmdline) > 250:
+                    self.mark_ioc("cmdline", cmdline)
+
+        return self.has_marks()
+
+class AddsUser(Signature):
+    name = "adds_user"
+    description = "Uses windows command to add a user to the system"
+    severity = 2
+    categories = ["commands"]
+    authors = ["Kevin"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        for cmdline in self.get_command_lines():
+                if cmdline.lower().startswith("net") and "user /add" in cmdline.lower():
+                    self.mark_ioc("cmdline", cmdline)
+
+        return self.has_marks()
+
+class AddsUserAdmin(Signature):
+    name = "adds_user_admin"
+    description = "Uses windows command to add a user to the administrator group"
+    severity = 3
+    categories = ["commands"]
+    authors = ["Kevin"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        for cmdline in self.get_command_lines():
+                if cmdline.lower().startswith("net") and "localgroup administrators" in cmdline.lower():
                     self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
