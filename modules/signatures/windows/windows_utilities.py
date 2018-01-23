@@ -9,7 +9,7 @@ class UsesWindowsUtilities(Signature):
     description = "Uses Windows utilities for basic Windows functionality"
     severity = 2
     categories = ["commands", "lateral"]
-    authors = ["Cuckoo Technologies"]
+    authors = ["Cuckoo Technologies", "Kevin Ross"]
     minimum = "2.0"
     references = ["http://blog.jpcert.or.jp/2016/01/windows-commands-abused-by-attackers.html"]
 
@@ -17,8 +17,7 @@ class UsesWindowsUtilities(Signature):
         "at ",
         "at.exe",
         "attrib",
-        "copy ",
-        "copy.exe",
+        "copy",
         "dir ",
         "dir.exe",
         "echo"
@@ -49,8 +48,7 @@ class UsesWindowsUtilities(Signature):
         "regsrv32",
         "ren ",
         "ren.exe",
-        "rename ",
-        "rename.exe",
+        "rename",
         "route",
         "runas",
         "rwinsta",
