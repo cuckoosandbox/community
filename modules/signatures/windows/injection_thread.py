@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class InjectionCreateRemoteThread(Signature):
     name = "injection_createremotethread"
-    description = "Creates a thread using CreateRemoteThread in a non-child process indicative of code injection"
+    description = "Creates a thread using CreateRemoteThread in a non-child process indicative of process injection"
     severity = 3
     categories = ["injection"]
     authors = ["Kevin Ross"]
