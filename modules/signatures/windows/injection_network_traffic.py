@@ -16,7 +16,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class InjectionNetworkTraffic(Signature):
     name = "injection_network_trafic"
-    description = "A system process is connecting to the network likely as a result of code injection"
+    description = "A system process is connecting to the network likely as a result of process injection"
     severity = 3
     categories = ["injection", "cnc", "stealth"]
     authors = ["Kevin Ross"]
