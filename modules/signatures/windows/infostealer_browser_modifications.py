@@ -64,20 +64,21 @@ class DisablesSPDYChrome(Signature):
 
 class ModifiesFirefoxConfiguration(Signature):
     name = "modifies_firefox_configuration"
-    description = "Modifies the Firefox configuration file"
+    description = "Modifies or creates Firefox configuration file"
     severity = 3
     categories = ["infostealer", "banker"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
     filter_apinames = [
+        "NtCreateFile",
         "NtWriteFile", 
     ]
 
     def on_call(self, call, process):
         if process["process_name"] != "firefox.exe":
-            key = call["arguments"]["filepath"].lower()
-            if "\\mozilla\\firefox\\profiles\\" in key and  key.endswith("prefs.js"):
+            filepath = call["arguments"]["filepath"].lower()
+            if "\\mozilla\\firefox\\profiles\\" in filepath and filepath.endswith("prefs.js"):
                 self.mark_call()
 
     def on_complete(self):
