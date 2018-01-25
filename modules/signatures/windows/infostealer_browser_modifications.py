@@ -64,11 +64,12 @@ class DisablesSPDYChrome(Signature):
 
 class ModifiesFirefoxConfiguration(Signature):
     name = "modifies_firefox_configuration"
-    description = "Modifies or creates Firefox configuration file"
+    description = "Modifies or creates Firefox preferences configuration file"
     severity = 3
     categories = ["infostealer", "banker"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    references = ["developer.mozilla.org/en-US/docs/Mozilla/Preferences/A_brief_guide_to_Mozilla_preferences"]
 
     filter_apinames = [
         "NtCreateFile",
