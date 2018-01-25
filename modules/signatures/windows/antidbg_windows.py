@@ -65,6 +65,9 @@ class AntiDBGWindows(Signature):
         "SmartSniff",
         "ConsoleWindowClass",
         "18467-41",
+        "wireshark.exe",
+        "iptools.exe",
+        "ProcessHacker",
     ]]
 
     def on_call(self, call, process):
@@ -74,4 +77,6 @@ class AntiDBGWindows(Signature):
 
             if indicator == window_name or indicator == class_name:
                 self.mark_call()
-                return True
+
+    def on_complete(self):
+        return self.has_marks()
