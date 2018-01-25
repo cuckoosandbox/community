@@ -95,3 +95,30 @@ class ResumeThread(Signature):
 
     def on_complete(self):
         return self.has_marks()
+
+class NtSetContextThreadRemote(Signature):
+    name = "injection_ntsetcontextthread"
+    description = "Used NtSetContextThread to potentially modify a thread in a remote process indicative of process injection"
+    severity = 3
+    categories = ["injection", "shellcode"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+    references = ["www.endgame.com/blog/technical-blog/ten-process-injection-techniques-technical-survey-common-and-trending-process"]
+
+
+    filter_apinames = [
+        "NtSetContextThread",
+    ]
+
+    def on_call(self, call, process):
+        injected_pid = call["arguments"]["process_identifier"]
+        if process["pid"] != injected_pid:
+            self.mark_ioc(
+                "Process injection",
+                "Process %s called NtSetContextThread to modify thread in remote process %s" % (process["pid"],
+                                                               injected_pid)
+            )
+            self.mark_call()
+
+    def on_complete(self):
+        return self.has_marks()
