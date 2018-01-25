@@ -98,7 +98,7 @@ class ResumeThread(Signature):
 
 class NtSetContextThreadRemote(Signature):
     name = "injection_ntsetcontextthread"
-    description = "Used NtSetContextThread to potentially modify a thread in a remote process indicative of process injection"
+    description = "Used NtSetContextThread to modify a thread in a remote process indicative of process injection"
     severity = 3
     categories = ["injection", "shellcode"]
     authors = ["Kevin Ross"]
