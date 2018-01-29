@@ -41,8 +41,9 @@ class DisablesSPDYIE(Signature):
 
     def on_call(self, call, process):
         key = call["arguments"]["regkey_r"].lower()
-        if key == "enablespdy3_0" and call["arguments"]["value"] == 0:
-            self.mark_call()
+        if key:
+            if key == "enablespdy3_0" and call["arguments"]["value"] == 0:
+                self.mark_call()
 
     def on_complete(self):
         return self.has_marks()
@@ -64,23 +65,22 @@ class DisablesSPDYChrome(Signature):
 
 class ModifiesFirefoxConfiguration(Signature):
     name = "modifies_firefox_configuration"
-    description = "Modifies or creates Firefox preferences configuration file"
+    description = "Modifies the Firefox configuration file"
     severity = 3
     categories = ["infostealer", "banker"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    references = ["developer.mozilla.org/en-US/docs/Mozilla/Preferences/A_brief_guide_to_Mozilla_preferences"]
 
     filter_apinames = [
-        "NtCreateFile",
         "NtWriteFile", 
     ]
 
     def on_call(self, call, process):
         if process["process_name"] != "firefox.exe":
-            filepath = call["arguments"]["filepath"].lower()
-            if "\\mozilla\\firefox\\profiles\\" in filepath and filepath.endswith("prefs.js"):
-                self.mark_call()
+            key = call["arguments"]["filepath"].lower()
+            if key:
+                if "\\mozilla\\firefox\\profiles\\" in key and  key.endswith("prefs.js"):
+                    self.mark_call()
 
     def on_complete(self):
         return self.has_marks()
@@ -107,9 +107,10 @@ class DisablesIEHTTP2(Signature):
 
     def on_call(self, call, process):
         key = call["arguments"]["regkey_r"].lower()
-        for http2key in self.http2keys:
-            if key == http2key and call["arguments"]["value"] == 0:
-                self.mark_call()
+        if key:
+            for http2key in self.http2keys:
+                if key == http2key and call["arguments"]["value"] == 0:
+                    self.mark_call()
 
     def on_complete(self):
         return self.has_marks()
