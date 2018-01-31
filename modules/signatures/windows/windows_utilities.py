@@ -37,6 +37,7 @@ class UsesWindowsUtilities(Signature):
         "netstat",
         "nslookup",
         "ping",
+        "powercfg"
         "powershell",
         "qprocess",
         "query ",
