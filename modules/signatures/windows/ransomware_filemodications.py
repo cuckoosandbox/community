@@ -122,4 +122,4 @@ class RansomwareMassFileDelete(Signature):
         for deletedfile in self.get_files(actions=["file_deleted"]):
             self.mark_ioc("file", deletedfile)
 
-        return self.has_marks(200)
+        return self.has_marks(100)
