@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class NetworkDNSTXTLookup(Signature):
     name = "network_dns_txt_lookup"
-    description = "Performs a TXT record DNS lookup potentially for DNS based command and control or covert channel"
+    description = "Performs a TXT record DNS lookup potentially for command and control or covert channel"
     severity = 3
     categories = ["dns", "cnc"]
     authors = ["Kevin Ross"]
