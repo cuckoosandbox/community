@@ -40,16 +40,16 @@ class P2PCnC(Signature):
     def on_complete(self):
         for tcp in self.get_results("network", {}).get("tcp", []):
             if tcp["dport"] > 1023 and tcp["dport"] not in self.ignoreports:
-                if tcp["dst"] not in self.servers and not tcp["dst"].startswith(("0.", "127.", "169.254.", "10.", "220", "224", "239", "172.16.", "192.168.")):
+                if tcp["dst"] not in self.servers and not tcp["dst"].startswith(("0.", "127.", "169.254.", "10.", "220.", "224.", "239.", "240.", "172.16.", "192.168.", "255.255.255.255")):
                     self.servers.append(tcp["dst"])
 
         for udp in self.get_results("network", {}).get("udp", []):
             if udp["dport"] > 1023 and udp["dport"] not in self.ignoreports:
-                if udp["dst"] not in self.servers and not udp["dst"].startswith(("0.", "127.", "169.254.", "10.", "220", "224", "239", "172.16.", "192.168.")):
+                if udp["dst"] not in self.servers and not udp["dst"].startswith(("0.", "127.", "169.254.", "10.", "220.", "224.", "239.", "240.", "172.16.", "192.168.", "255.255.255.255")):
                     self.servers.append(udp["dst"])
 
-            if len(self.servers) > 4:
-                for server in self.servers:
-                    self.mark_ioc("ip", server)
+        if len(self.servers) > 4:
+            for server in self.servers:
+                self.mark_ioc("ip", server)
 
         return self.has_marks()
