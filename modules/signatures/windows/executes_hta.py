@@ -34,7 +34,7 @@ class ExecutesHTA(Signature):
 
 class ExecutesHTAJavaScript(Signature):
     name = "executes_hta_javascript"
-    description = "Executes JavaScript using mshta utility"
+    description = "Executes JavaScript using the mshta utility"
     severity = 3
     categories = ["ransomware", "downloader", "exploit"]
     authors = ["Kevin Ross"]
