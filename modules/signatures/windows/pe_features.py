@@ -54,7 +54,7 @@ class PEIDPacker(Signature):
     
 class PEUnknownResourceName(Signature):
     name = "pe_unknown_resource_name"
-    description = "The file contains an unknown resource name possibly indicative of a packer"
+    description = "The file contains an unknown PE resource name possibly indicative of a packer"
     severity = 1
     categories = ["packer"]
     authors = ["Kevin Ross"]
