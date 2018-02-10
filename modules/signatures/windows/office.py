@@ -15,6 +15,88 @@ network_objects = [
     "winhttp.winhttprequest.5.1",
 ]
 
+class OfficeMacros(Signature):
+    name = "office_macros"
+    description = "Office document has macros"
+    severity = 2
+    categories = ["vba", "office"]
+    authors = ["FDD @ Cuckoo Technologies"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        office = self.get_results("static", {}).get("office", {})
+        if office and "macros" in office and office["macros"]:
+            return True
+
+class OfficeCertutil(Signature):
+    name = "office_certutil"
+    description = "Office invokes certutil (possible abuse)"
+    severity = 3
+    categories = ["vba", "tool abuse"]
+    authors = ["FDD @ Cuckoo Technologies"]
+    minimum = "2.0"
+
+    filter_apinames = "vbe6_Shell", "vbe6_Invoke"
+
+    def on_call(self, call, process):
+        cmd = None
+        if "command_line" in call["arguments"]:
+            cmd = call["arguments"]["command_line"]
+        elif "args" in call["arguments"]:
+            args = filter(lambda item: isinstance(item, basestring), call["arguments"]["args"])
+            cmd = "".join(args)
+
+        if cmd and "certutil" in cmd.lower() and "-decode" in cmd.lower():
+            self.mark_call()
+            return True
+
+class OfficeExec(Signature):
+    name = "office_exec"
+    description = "Office document executes commands or files"
+    severity = 5
+    categories = ["vba"]
+    authors = "FDD @ Cuckoo Sandbox"
+    minimum = "2.0"
+    filter_apinames = "vbe6_Invoke"
+
+    def on_call(self, call, process):
+        if (call["arguments"]["funcname"] != "Exec" and
+            call["arguments"]["funcname"] != "Run"):
+            return
+
+        self.mark_call()
+        cmd = call["arguments"]["args"][0]
+        self.mark_ioc("cmd", cmd)
+        return True
+
+class OfficeLures(Signature):
+    name = "office_lures"
+    description = "Office document has common phishing lures"
+    severity = 3
+    categories = ["vba", "office", "phishing", "lure"]
+    authors = ["FDD @ Cuckoo Technologies"]
+    minimum = "2.0"
+
+    lures = [
+        "bank account", "enable content",
+        "tools > macro", "macros must be enabled",
+        "enable macro", "control panel"
+    ]
+
+    def on_complete(self):
+        office = self.get_results("static", {}).get("office", {})
+        if "text" in office and office["text"]:
+            found = set()
+            for lure in self.lures:
+                if lure in office["text"].lower():
+                    found.add(lure)
+
+            for lure in found:
+                self.mark_ioc("Lure found", lure)
+
+        return self.has_marks()
+
+
 class OfficeCreateObject(Signature):
     name = "office_create_object"
     description = "Creates suspicious VBA object"
