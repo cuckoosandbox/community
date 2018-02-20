@@ -1,11 +1,19 @@
-# Copyright (C) 2010-2018 Cuckoo Foundation.
+# Copyright (C) 2015-2018 Cuckoo Foundation.
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
+
 import re
+
 from lib.cuckoo.common.abstracts import Signature
 
-dict = {
-    'lokibot': 'loki'
+mapping = {
+    "lokibot": "loki",
+}
+
+# Obviously needs some more work.
+protocols = {
+    80: "http",
+    443: "https",
 }
 
 class SuricataAlert(Signature):
@@ -16,77 +24,55 @@ class SuricataAlert(Signature):
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
 
+    et_trojan = "ET TROJAN", "ETPRO TROJAN"
+    blacklist = (
+        "executable", "potential", "likely", "rogue", "supicious", "generic",
+        "possible", "known", "common", "troj", "trojan", "team", "probably",
+        "w2km", "http", "abuse", "win32", "unknown", "single", "filename",
+        "worm", "fake", "malicious", "observed", "windows",
+    )
+    family_next = (
+        "win32", "win64", "w32", "ransomware",
+    )
+
+    def extract_family(self, signature):
+        words = re.findall("[A-Za-z0-9]+", signature)
+
+        family = words[2].lower()
+        if family in self.family_next:
+            family = words[3].lower()
+
+        if family in self.blacklist or len(family) < 4:
+            return
+
+        # If it exists in our mapping, normalize the name.
+        return mapping.get(family, family)
+
     def on_complete(self):
-
         alerts = []
-
         for alert in self.get_results("suricata", {}).get("alerts", []):
-                if alert["signature"] not in alerts:
-                    if alert["signature"].startswith("ET TROJAN") or alert["signature"].startswith("ETPRO TROJAN"):
+            if alert["signature"] in alerts:
+                continue
+            if not alert["signature"].startswith(self.et_trojan):
+                continue
 
-                        # extract text between parantheses
-                        type = None
-                        reg_type = re.search(r"\(([A-Za-z0-9_]+)\)", alert["signature"])
-                        if reg_type is not None:
-                            type = reg_type.group(1)
+            # Extract text between parentheses.
+            reg_type = re.search("\\(([A-Za-z0-9_]+)\\)", alert["signature"])
+            reg_type = reg_type.group(1) if reg_type else None
 
-                        words = re.findall(r"[A-Za-z0-9]+", alert["signature"])
-                        famcheck = words[2]
-                        famchecklower = famcheck.lower()
-                        if famchecklower == "win32" or famchecklower == "w32" or famchecklower == "ransomware":
-                            famcheck = words[3]
-                            famchecklower = famcheck.lower()
+            family = self.extract_family(alert["signature"])
+            if not family:
+                continue
 
-                        blacklist = [
-                            "executable",
-                            "potential",
-                            "likely",
-                            "rogue",
-                            "supicious",
-                            "generic",
-                            "possible",
-                            "known",
-                            "common",
-                            "troj",
-                            "trojan",
-                            "team",
-                            "probably",
-                            "w2km",
-                            "http",
-                            "abuse",
-                            "win32",
-                            "unknown",
-                            "single",
-                            "filename",
-                            "worm",
-                            "fake",
-                            "malicious",
-                            "observed",
-                            "windows",
-                        ]
-                        isgood = True
-                        for black in blacklist:
-                            if black == famchecklower:
-                                isgood = False
-                                break
-                        if len(famcheck) < 4:
-                            isgood = False
+            self.mark_config({
+                "family": family.title(),
+                "cnc": "%s://%s:%s" % (
+                    protocols.get(alert["dst_port"], "tcp"),
+                    alert["dst_ip"], alert["dst_port"]
+                ),
+                "type": reg_type,
+            })
 
-                        if isgood:
-                            if famchecklower in dict:
-                                famchecklower = dict[famchecklower]
-
-                            family = famchecklower.title()
-                            self.mark_config({
-                                "family": family,
-                                "cnc": [
-                                    alert["dst_ip"] + ":" + str(alert["dst_port"])
-                                ],
-                                "type": type
-                            })
-
-                        else:
-                            self.mark_ioc("suricata", alert["signature"])
-
-                    alerts.append(alert["signature"])
+            self.mark_ioc("suricata", alert["signature"])
+            alerts.append(alert["signature"])
         return self.has_marks()
