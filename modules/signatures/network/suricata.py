@@ -37,9 +37,11 @@ class SuricataAlert(Signature):
 
     def extract_family(self, signature):
         words = re.findall("[A-Za-z0-9]+", signature)
+        if len(words) < 3:
+            return
 
         family = words[2].lower()
-        if family in self.family_next:
+        if family in self.family_next and len(words) > 3:
             family = words[3].lower()
 
         if family in self.blacklist or len(family) < 4:
