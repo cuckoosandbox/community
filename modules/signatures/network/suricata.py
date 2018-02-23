@@ -29,7 +29,8 @@ class SuricataAlert(Signature):
         "executable", "potential", "likely", "rogue", "supicious", "generic",
         "possible", "known", "common", "troj", "trojan", "team", "probably",
         "w2km", "http", "abuse", "win32", "unknown", "single", "filename",
-        "worm", "fake", "malicious", "observed", "windows", "flashpoint"
+        "worm", "fake", "malicious", "observed", "windows", "flashpoint",
+        "msil"
     )
     family_next = (
         "win32", "win64", "w32", "ransomware", "backdoor"
