@@ -36,7 +36,7 @@ class SuricataAlert(Signature):
     )
 
     def extract_family(self, signature):
-        words = re.findall("[A-Za-z0-9]+", signature)
+        words = re.findall("[A-Za-z0-9_]+", signature)
         if len(words) < 3:
             return
 
