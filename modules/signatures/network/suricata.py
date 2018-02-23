@@ -36,6 +36,13 @@ class SuricataAlert(Signature):
     )
 
     def extract_family(self, signature):
+        # Extract research lab between square brackets []
+        res_lab = re.search("\[([A-Za-z0-9])+\]", signature)
+        res_lab = res_lab.group(0) if res_lab else None
+        # Remove research lab from signature, to get family extracted in the next lines
+        if res_lab:
+            signature = signature.replace(res_lab, "")
+
         words = re.findall("[A-Za-z0-9_]+", signature)
         if len(words) < 3:
             return
