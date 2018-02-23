@@ -32,7 +32,7 @@ class SuricataAlert(Signature):
         "worm", "fake", "malicious", "observed", "windows",
     )
     family_next = (
-        "win32", "win64", "w32", "ransomware",
+        "win32", "win64", "w32", "ransomware", "backdoor"
     )
 
     def extract_family(self, signature):
