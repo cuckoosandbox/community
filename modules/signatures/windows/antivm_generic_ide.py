@@ -24,7 +24,7 @@ class AntiVMIDE(Signature):
     minimum = "2.0"
 
     def on_complete(self):
-        for regkey in self.check_key(pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)(\\\\Services\\\\Disk\\\\Enum\\\\.*|\\\\Enum\\\\IDE)", regex=True, all=True):
+        for regkey in self.check_key(pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\IDE", regex=True, all=True):
             self.mark_ioc("registry", regkey)
 
         return self.has_marks()
