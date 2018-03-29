@@ -20,15 +20,16 @@ class MemoryProtectionRX(Signature):
         self.allocated_addresses = []
         self.alloc_apis = ["VirtualAllocEx", "NtAllocateVirtualMemory"]
         self.protect_apis = ["NtProtectVirtualMemory", "VirtualProtectEx"]
- 
+        self.write_constants = "PAGE_READWRITE", "PAGE_EXECUTE_WRITECOPY", "PAGE_WRITECOPY"
+        self.execute_constants = "PAGE_EXECUTE_WRITECOPY", "PAGE_EXECUTE_READ", "PAGE_EXECUTE"
+        
     def on_call(self, call, process):
         prot = call["flags"]["protection"]
         api = call["api"]
         addr = call["arguments"]["base_address"]
-        if api in self.alloc_apis and prot == "PAGE_READWRITE":
+        if api in self.alloc_apis and prot in self.write_constants:
             self.allocated_addresses.append( addr )
-        elif api in self.protect_apis:
-            if prot == "PAGE_EXECUTE_READ":
-                if addr in self.allocated_addresses:
+        elif api in self.protect_apis and prot in self.execute_constants:
+            if addr in self.allocated_addresses:
                     self.mark_call()
                     return True
