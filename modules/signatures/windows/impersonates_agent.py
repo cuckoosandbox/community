@@ -4,9 +4,9 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class ImpersonatesUserAgent(Signature):
-    name = "impersonates_user_agent"
-    description = "Reads the systems User Agent and subsequently uses it in its own requests"
+class ReadsUserAgent(Signature):
+    name = "reads_user_agent"
+    description = "Reads the systems User Agent and subsequently performs requests"
     authors = ["Cuckoo Technologies"]
     severity = 2
     categories = ["stealth"]
@@ -16,14 +16,13 @@ class ImpersonatesUserAgent(Signature):
     
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.system_user_agent = "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E)"
+        self.queried_user_agent = False
         
     def on_call(self, call, process):
         api = call["api"]
         agent = call["arguments"]["user_agent"]
         if api == "ObtainUserAgentString":
-            #self.system_user_agent = agent
-            pass
-        elif agent == self.system_user_agent:
+            self.queried_user_agent = True
+        elif self.queried_user_agent :
             self.mark_call()
             return True
