@@ -12,7 +12,7 @@ class AllocatesRWX(Signature):
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
 
-    filter_apinames = "NtAllocateVirtualMemory", "NtProtectVirtualMemory"
+    filter_apinames = "NtAllocateVirtualMemory", "NtProtectVirtualMemory", "VirtualAllocEx", "VirtualProtectEx"
 
     def on_call(self, call, process):
         if call["flags"]["protection"] == "PAGE_EXECUTE_READWRITE":
