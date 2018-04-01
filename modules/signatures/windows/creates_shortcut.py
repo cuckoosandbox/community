@@ -24,12 +24,12 @@ class CreatesShortcut(Signature):
     minimum = "2.0"
 
     files_re = [
-        ".*\.lnk$",
+        ".*\\.lnk$",
     ]
 
     whitelist = [
-        "C:\Users\Administrator\AppData\Local\Temp\%ProgramData%\Microsoft\Windows\Start Menu\Programs\Accessories\Windows PowerShell\Windows PowerShell.lnk",
-        "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Accessories\Windows PowerShell\Windows PowerShell.lnk",
+        "C:\\Users\\Administrator\\AppData\\Local\\Temp\\%ProgramData%\\Microsoft\\Windows\\Start Menu\\Programs\\Accessories\\Windows PowerShell\\Windows PowerShell.lnk",
+        "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Accessories\\Windows PowerShell\\Windows PowerShell.lnk",
     ]
 
     def on_complete(self):
