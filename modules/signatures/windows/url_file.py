@@ -25,4 +25,4 @@ class URLFile(Signature):
             urls = self.file.get("urls", [])
             for url in urls:
                 self.mark_ioc("extracted URL", url)
-            return True
+            return self.has_marks()
