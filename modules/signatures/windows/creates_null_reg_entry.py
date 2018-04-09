@@ -30,10 +30,16 @@ class CreatesNullRegistryEntry(Signature):
         value = ""
         if "SetValue" in api:
             regvalue = arg["value"]
-            if isinstance(regvalue, str) and regvalue.startswith(null_byte):
+            if not isinstance(regvalue, (str, unicode)):
+                regvalue = str(regvalue)
+            regvalue = regvalue.encode('utf-8')
+            if regvalue.startswith(null_byte):
                 self.mark_call()
         if "RegSetValue" in api:
-            regkey_r = str(arg["regkey_r"])
+            regkey_r = arg["regkey_r"]
+            if not isinstance(regkey_r, (str, unicode)):
+                regvalue = str(regkey_r)
+            regkey_r = regkey_r.encode('utf-8')
         else:
             regkey_r = str(regkey).split("\\")[-1]
         if regkey_r.startswith(null_byte):
