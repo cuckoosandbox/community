@@ -13,6 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import re
+
 from lib.cuckoo.common.abstracts import Signature
 
 class CryptoMiningStratumCommand(Signature):
@@ -20,12 +22,18 @@ class CryptoMiningStratumCommand(Signature):
     description = "A stratum cryptocurrency mining command was executed"
     severity = 3
     categories = ["mining", "cryptocurrency"]
-    authors = ["Kevin Ross"]
+    authors = ["Kevin Ross", "Cuckoo Technologies"]
     minimum = "2.0"
 
     def on_complete(self):
+        xmr_address_re = '-u[ ]*4[0-9AB][123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{93}'
+        xmr_strings = ["stratum+tcp://", "xmrig", "xmr-stak", "supportxmr.com:", "dwarfpool.com:", "minergate"]
+
         for cmdline in self.get_command_lines():
-            if "stratum+tcp://" in cmdline.lower():
+            if re.search(xmr_address_re, cmdline):
                 self.mark_ioc("cmdline", cmdline)
+            for xmr_string in xmr_strings:
+                if xmr_string in cmdline.lower():
+                    self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
