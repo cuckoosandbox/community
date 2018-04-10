@@ -40,7 +40,9 @@ class DisablesSPDYIE(Signature):
     ]
 
     def on_call(self, call, process):
-        key = call["arguments"]["regkey_r"].lower()
+        key = call['arguments'].get('regkey_r', '').lower()
+        if key == '':
+            key = call['arguments']['regkey'].split('\\')[-1]
         if key:
             if key == "enablespdy3_0" and call["arguments"]["value"] == 0:
                 self.mark_call()
@@ -106,7 +108,9 @@ class DisablesIEHTTP2(Signature):
 
 
     def on_call(self, call, process):
-        key = call["arguments"]["regkey_r"].lower()
+        key = call['arguments'].get('regkey_r', '').lower()
+        if key == '':
+            key = call['arguments']['regkey'].split('\\')[-1]
         if key:
             for http2key in self.http2keys:
                 if key == http2key and call["arguments"]["value"] == 0:
