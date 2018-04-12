@@ -17,12 +17,13 @@ class URLFile(Signature):
         Signature.__init__(self, *args, **kwargs)
         if self.get_results("target", {}).get("category") == "file":
             self.file = self.get_results("target", {}).get("file", {})
-            if "Internet shortcut" not in self.file.get("type", ""):
-                self.ignore = True
 
     def on_complete(self):
+        if "Internet shortcut" not in self.file.get("type", ""):
+            return
         if "urls" in self.file:
             urls = self.file.get("urls", [])
             for url in urls:
                 self.mark_ioc("extracted URL", url)
             return self.has_marks()
+                                         
