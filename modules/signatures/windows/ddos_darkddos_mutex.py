@@ -21,5 +21,5 @@ class DarkddosMutexes(Signature):
 
     def on_complete(self):
         for indicator in self.mutexes_re:
-            if self.check_mutex(pattern=indicator):
+            if self.check_mutex(pattern=indicator, regex=True):
                 return True
