@@ -70,3 +70,43 @@ class WMIAntiVM(Signature):
                     self.mark_ioc("wmi", query)
 
         return self.has_marks()
+    
+class WMIPersistance(Signature):
+    name = "wmi_persistance"
+    description = "Executes one or more WMI queries which can be used for persistance"
+    severity = 3
+    categories = ["persistance"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    persistance = [
+        "win32_startupcommand",
+    ]
+
+    def on_complete(self):
+        for command in self.persistance:
+            for query in self.get_wmi_queries():
+                if command in query.lower():
+                    self.mark_ioc("wmi", query)
+
+        return self.has_marks()
+
+class WMIService(Signature):
+    name = "wmi_service"
+    description = "Executes one or more WMI queries which can be used to create or modify services"
+    severity = 3
+    categories = ["persistance"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    persistance = [
+        "win32_service",
+    ]
+
+    def on_complete(self):
+        for command in self.persistance:
+            for query in self.get_wmi_queries():
+                if command in query.lower():
+                    self.mark_ioc("wmi", query)
+
+        return self.has_marks()
