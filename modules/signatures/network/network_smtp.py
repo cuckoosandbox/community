@@ -20,9 +20,22 @@ class NetworkSMTP(Signature):
     description = "Makes SMTP requests, possibly sending spam"
     severity = 3
     categories = ["smtp", "spam"]
-    authors = ["nex"]
-    minimum = "2.0"
+    authors = ["nex", "RicoVZ"]
+    minimum = "2.0.0"
 
     def on_complete(self):
-        if self.get_net_smtp():
+        for s in getattr(self, "get_net_smtp_ex", lambda: [])():
+            if s["req"]["username"] is None:
+                self.mark(server=s["dst"], sender=s["req"]["mail_from"],
+                          receiver=s["req"]["mail_to"])
+            else:
+                self.mark(server=s["dst"], sender=s["req"]["mail_from"],
+                          receiver=s["req"]["mail_to"],
+                          user=s["req"]["username"],
+                          password=s["req"]["password"]
+                )
+
+        if not self.has_marks():
+            return len(self.get_net_smtp()) > 0
+        else:
             return True

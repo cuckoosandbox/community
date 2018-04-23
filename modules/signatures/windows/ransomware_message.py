@@ -20,6 +20,22 @@ try:
 except ImportError:
     import re
 
+indicators = [
+    "your files", "your data", "your documents", "restore files",
+    "restore data", "restore the files", "restore the data", "recover files",
+    "recover data", "recover the files", "recover the data", "has been locked",
+    "pay fine", "pay a fine", "pay the fine", "decrypt", "encrypt",
+    "recover files", "recover data", "recover them", "recover your",
+    "recover personal", "bitcoin", "secret server", "secret internet server",
+    "install tor", "download tor", "tor browser", "tor gateway",
+    "tor-browser", "tor-gateway", "torbrowser", "torgateway", "torproject.org",
+    "ransom", "bootkit", "rootkit", "payment", "victim", "AES128", "AES256",
+    "AES 128", "AES 256", "AES-128", "AES-256", "RSA1024", "RSA2048",
+    "RSA4096", "RSA 1024", "RSA 2048", "RSA 4096", "RSA-1024", "RSA-2048",
+    "RSA-4096", "private key", "personal key", "your code", "private code",
+    "personal code", "enter code", "your key", "unique key"
+]
+
 class RansomwareMessage(Signature):
     name = "ransomware_message"
     description = "Writes a potential ransom message to disk"
@@ -28,87 +44,11 @@ class RansomwareMessage(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-        self.indicators = [
-            "your files",
-            "your data",
-            "your documents",
-            "restore files",
-            "restore data",
-            "restore the files",
-            "restore the data",
-            "recover files",
-            "recover data"
-            "recover the files",
-            "recover the data",
-            "has been locked",
-            "pay fine",
-            "pay a fine",
-            "pay the fine",
-            "decrypt",
-            "encrypt",
-            "recover files",
-            "recover data",
-            "recover them",
-            "recover your",
-            "recover personal",
-            "bitcoin",
-            "secret server",
-            "secret internet server",
-            "install tor",
-            "download tor",
-            "tor browser",
-            "tor gateway",
-            "tor-browser",
-            "tor-gateway",
-            "torbrowser",
-            "torgateway",
-            "torproject.org",
-            "ransom",
-            "bootkit",
-            "rootkit",
-            "payment",
-            "victim",
-            "AES128",
-            "AES256",
-            "AES 128",
-            "AES 256",
-            "AES-128",
-            "AES-256",
-            "RSA1024",
-            "RSA2048",
-            "RSA4096",
-            "RSA 1024",
-            "RSA 2048",
-            "RSA 4096",
-            "RSA-1024",
-            "RSA-2048",
-            "RSA-4096",
-            "private key",
-            "personal key",
-            "your code",
-            "private code",
-            "personal code",
-            "enter code",
-            "your key",
-            "unique key"
-        ]
-
-        self.whitelistprocs = [
-            "iexplore.exe",
-            "firefox.exe",
-            "chrome.exe",
-            "safari.exe",
-            "acrord32.exe",
-            "acrord64.exe",
-            "wordview.exe",
-            "winword.exe",
-            "excel.exe",
-            "powerpnt.exe",
-            "outlook.exe",
-            "mspub.exe"
-        ]
+    whitelistprocs = [
+        "iexplore.exe", "firefox.exe", "chrome.exe", "safari.exe",
+        "acrord32.exe", "acrord64.exe", "wordview.exe", "winword.exe",
+        "excel.exe", "powerpnt.exe", "outlook.exe", "mspub.exe"
+    ]
 
     filter_apinames = set(["NtWriteFile"])
 
@@ -116,9 +56,32 @@ class RansomwareMessage(Signature):
         if process["process_name"].lower() not in self.whitelistprocs:
             buff = call["arguments"]["buffer"].lower()
             if len(buff) >= 128:
-                patterns = "|".join(self.indicators)
+                patterns = "|".join(indicators)
                 if len(re.findall(patterns, buff)) > 1:
                     self.mark_call()
 
     def on_complete(self):
+        return self.has_marks()
+
+class RansomwareMessageOCR(Signature):
+    name = "ransomware_message_ocr"
+    description = "Displays a potential ransomware message to the user (check screenshots)"
+    severity = 3
+    categories = ["ransomware", "ocr"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    # NOTE: This requires OCR analysis to be correctly setup.
+    # Enable in processing.conf after following this guide for Ubuntu or
+    # relevant guide for your OS
+    # https://www.linux.com/blog/using-tesseract-ubuntu
+
+    def on_complete(self):
+        for screenshot in self.get_results("screenshots", []):
+            if "ocr" in screenshot:
+                ocr = screenshot["ocr"].lower()
+                patterns = "|".join(indicators)
+                if len(re.findall(patterns, ocr)) > 1:
+                    self.mark_ioc("message", ocr)
+
         return self.has_marks()

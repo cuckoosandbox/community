@@ -15,22 +15,22 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class PersistanceRegJavaScript(Signature):
-    name = "persistance_registry_javascript"
-    description = "Used JavaScript in registry key value likely for persistance"
-    severity = 3
-    categories = ["persistance"]
+class ConsoleOutput(Signature):
+    name = "console_output"
+    description = "Command line console output was observed"
+    severity = 1
+    categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    evented = True
 
-    filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey"])
+    filter_apinames = [
+        "WriteConsoleA",
+        "WriteConsoleW",
+    ]
 
     def on_call(self, call, process):
-        value = call["arguments"]["value"]
-        if not isinstance(value, basestring):
-            return
-        if value and "javascript:" in value:
+        buf = call["arguments"]["buffer"]
+        if len(buf) > 0 and any(c.isalpha() for c in buf):
             self.mark_call()
 
     def on_complete(self):
