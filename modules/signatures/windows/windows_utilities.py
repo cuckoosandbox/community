@@ -2,6 +2,9 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
+# This requires python entropy package to be installed with "pip install entropy"
+import entropy
+
 from lib.cuckoo.common.abstracts import Signature
 
 class UsesWindowsUtilities(Signature):
