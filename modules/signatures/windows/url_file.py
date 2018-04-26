@@ -1,4 +1,4 @@
-# Copyright (C) 2010-2018 Cuckoo Foundation.
+# Copyright (C) 2018 Cuckoo Foundation.
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
@@ -11,7 +11,6 @@ class URLFile(Signature):
     severity = 2
     categories = ["generic"]
     minimum = "2.0"
-
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -26,4 +25,3 @@ class URLFile(Signature):
             for url in urls:
                 self.mark_ioc("extracted URL", url)
             return self.has_marks()
-                                         
