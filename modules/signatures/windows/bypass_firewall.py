@@ -34,7 +34,7 @@ class BypassFirewall(Signature):
             return True
 
         for cmdline in self.get_command_lines():
-                if "netsh" in cmdline.lower() and "advfirewall" in cmdline.lower():
-                    self.mark_ioc("cmdline", cmdline)
+            if "netsh" in cmdline.lower() and "advfirewall" in cmdline.lower():
+                self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
