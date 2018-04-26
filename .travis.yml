@@ -8,17 +8,18 @@ before_install:
   - sudo apt-get install python-dev libffi-dev libssl-dev libjpeg-dev
 
 script:
-  - |
-    cd ..
-    tar cfz master.tar.gz community
-    pip install -U pip setuptools
+  - cd ..
+  - tar cfz master.tar.gz community
+  - pip install -U pip setuptools
 
   - git clone https://github.com/cuckoosandbox/cuckoo.git
   - cd cuckoo
 
   - git checkout 2.0-rc1
   - sed -i 's/.*pefile.*//g' requirements.txt
+  - sed -i s/six==1.9.0/six==1.11.0/g requirements.txt
   - pip install -r requirements.txt
+  - rm -rf data/monitor
   - python utils/community.py -waf ../master.tar.gz >/dev/null
   - python cuckoo.py -d 2>&1|grep "Unable to bind ResultServer"
   - rm -rf * && git checkout .
@@ -26,7 +27,9 @@ script:
   - git checkout 2.0-rc2
   - sed -i s/lxml==3.6.0//g requirements.txt
   - sed -i s/peepdf==0.3.2//g requirements.txt
+  - sed -i s/six==1.9.0/six==1.11.0/g requirements.txt
   - pip install -r requirements.txt
+  - rm -rf data/monitor
   - python utils/community.py -waf ../master.tar.gz >/dev/null
   - python cuckoo.py -d 2>&1|grep "Unable to bind ResultServer"
   - rm -rf * && git checkout .
@@ -34,7 +37,9 @@ script:
   - git checkout legacy
   - sed -i s/lxml==3.6.0//g requirements.txt
   - sed -i s/peepdf==0.3.2//g requirements.txt
+  - sed -i s/six==1.9.0/six==1.11.0/g requirements.txt
   - pip install -r requirements.txt
+  - rm -rf data/monitor
   - python utils/community.py -waf ../master.tar.gz >/dev/null
   - python cuckoo.py -d 2>&1|grep "Unable to bind ResultServer"
   - rm -rf * && git checkout .
