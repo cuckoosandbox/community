@@ -15,23 +15,23 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class PersistanceRegJavaScript(Signature):
-    name = "persistance_registry_javascript"
-    description = "Used JavaScript in registry key value likely for persistance"
+class AntiVirusIRMA(Signature):
+    name = "antivirus_irma"
+    description = "File has been identified by at least one AntiVirus engine on IRMA as malicious"
     severity = 3
-    categories = ["persistance"]
+    categories = ["antivirus"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    evented = True
-
-    filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey"])
-
-    def on_call(self, call, process):
-        value = call["arguments"]["value"]
-        if not isinstance(value, basestring):
-            return
-        if value and "javascript:" in value:
-            self.mark_call()
 
     def on_complete(self):
+        if self.get_results("irma", []):
+            results = self.get_results("irma", [])
+            if results.get("probe_results"):
+                results = results.get("probe_results")
+                for result in results:
+                    engine = result["name"]
+                    verdict = result["results"]
+                    if verdict:
+                        self.mark_ioc(engine, verdict)
+
         return self.has_marks()
