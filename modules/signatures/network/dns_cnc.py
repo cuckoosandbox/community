@@ -34,7 +34,7 @@ class NetworkDNSTXTLookup(Signature):
             for whitelisted in self.whitelist:
                 if whitelisted in dns["request"]:
                     is_whitelisted = True
-            
+
             if not is_whitelisted:
                 if dns["type"] == "TXT":
                     self.mark_ioc("domain", dns["request"])
