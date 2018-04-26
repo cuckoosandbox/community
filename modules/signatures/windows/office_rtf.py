@@ -40,7 +40,7 @@ class RTFUnknownVersion(Signature):
                             dropped_filename=droppedname,
                             dropped_filetype_details=filetype,
                         )
-            
+
         return self.has_marks()
 
 class RTFCharacterSet(Signature):
@@ -68,5 +68,5 @@ class RTFCharacterSet(Signature):
                             dropped_filename=droppedname,
                             dropped_filetype_details=filetype,
                         )
-            
+
         return self.has_marks()

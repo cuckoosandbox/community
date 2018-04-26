@@ -70,7 +70,7 @@ class WMIAntiVM(Signature):
                     self.mark_ioc("wmi", query)
 
         return self.has_marks()
-    
+
 class WMIPersistance(Signature):
     name = "wmi_persistance"
     description = "Executes one or more WMI queries which can be used for persistance"

@@ -34,7 +34,7 @@ class DisablesSPDYIE(Signature):
     references = ["www.windows-security.org/65bb16b8e4a8cda95159541fcf31fcd7/allow-internet-explorer-to-use-the-spdy3-network-protocol"]
 
     filter_apinames = [
-        "RegSetValueExA", 
+        "RegSetValueExA",
         "RegSetValueExW",
         "NtSetValueKey",
     ]
@@ -74,7 +74,7 @@ class ModifiesFirefoxConfiguration(Signature):
     minimum = "2.0"
 
     filter_apinames = [
-        "NtWriteFile", 
+        "NtWriteFile",
     ]
 
     def on_call(self, call, process):
@@ -101,7 +101,7 @@ class DisablesIEHTTP2(Signature):
     ]
 
     filter_apinames = [
-        "RegSetValueExA", 
+        "RegSetValueExA",
         "RegSetValueExW",
         "NtSetValueKey",
     ]

@@ -1,4 +1,4 @@
-# Copyright (C) 2014 Optiv, Inc. (brad.spengler@optiv.com), Updated 2016 for Cukoo 2.0
+# Copyright (C) 2014 Optiv, Inc. (brad.spengler@optiv.com), Updated 2016 for Cuckoo 2.0
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 

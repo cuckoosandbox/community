@@ -68,13 +68,13 @@ class NetworkCnCHTTP(Signature):
             "adobe.com",
             ]
 
-        suspectrequests = []        
+        suspectrequests = []
 
         for http in getattr(self, "get_net_http_ex", lambda: [])():
             is_whitelisted = False
             for whitelisted in whitelist:
                 if whitelisted in http["host"]:
-                    is_whitelisted = True                           
+                    is_whitelisted = True
 
             # Check HTTP features
             reasons = []
@@ -93,7 +93,7 @@ class NetworkCnCHTTP(Signature):
 
             if not is_whitelisted and ip.match(http["host"]):
                 reasons.append("Connection to IP address")
-                
+
             if len(reasons) > 0:
                 request = "%s %s://%s%s" % (http["method"], http["protocol"], http["host"], http["uri"])
                 if request not in suspectrequests:

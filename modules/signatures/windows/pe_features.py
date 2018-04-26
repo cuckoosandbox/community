@@ -51,7 +51,7 @@ class PEIDPacker(Signature):
                 self.mark_ioc("packer", peid)
 
         return self.has_marks()
-    
+
 class PEUnknownResourceName(Signature):
     name = "pe_unknown_resource_name"
     description = "The file contains an unknown PE resource name possibly indicative of a packer"
@@ -59,7 +59,7 @@ class PEUnknownResourceName(Signature):
     categories = ["packer"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    
+
     names = [
         "RT_ACCELERATOR",
         "RT_ANICURSOR",

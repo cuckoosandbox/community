@@ -25,7 +25,7 @@ class ModifiesProxyWPAD(Signature):
     evented = True
 
     filter_apinames = [
-        "RegSetValueExA", 
+        "RegSetValueExA",
         "RegSetValueExW",
         "NtSetValueKey",
     ]
@@ -49,7 +49,7 @@ class ModifiesProxyOverride(Signature):
     evented = True
 
     filter_apinames = [
-        "RegSetValueExA", 
+        "RegSetValueExA",
         "RegSetValueExW",
         "NtSetValueKey",
     ]
@@ -73,7 +73,7 @@ class ModifiesProxyAutoConfig(Signature):
     evented = True
 
     filter_apinames = [
-        "RegSetValueExA", 
+        "RegSetValueExA",
         "RegSetValueExW",
         "NtSetValueKey",
     ]
@@ -97,7 +97,7 @@ class DisablesProxy(Signature):
     evented = True
 
     filter_apinames = [
-        "RegSetValueExA", 
+        "RegSetValueExA",
         "RegSetValueExW",
         "NtSetValueKey",
     ]

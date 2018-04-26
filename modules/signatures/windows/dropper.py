@@ -50,7 +50,7 @@ class Dropper(Signature):
                             self.severity = 3
 
         return self.has_marks()
-    
+
 class ExeAppData(Signature):
     name = "exe_appdata"
     description = "Drops an executable to the user AppData folder"
@@ -65,5 +65,5 @@ class ExeAppData(Signature):
                 filepath = dropped["filepath"]
                 if "\\Users\\" in filepath and "\\AppData\\" in filepath:
                     self.mark_ioc("file", filepath)
-         
+
         return self.has_marks()

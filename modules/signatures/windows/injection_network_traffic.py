@@ -41,7 +41,7 @@ class InjectionNetworkTraffic(Signature):
 
     filter_apinames = [
         "InternetConnectA", "InternetConnectW", "InternetCrackUrlA", "InternetCrackUrlW", "InternetCrackUrlA", "InternetCrackUrlW",
-        "URLDownloadToFileA","URLDownloadToFileW", "URLDownloadToCacheFileA", "URLDownloadToCacheFileW", "HttpOpenRequestA", 
+        "URLDownloadToFileA","URLDownloadToFileW", "URLDownloadToCacheFileA", "URLDownloadToCacheFileW", "HttpOpenRequestA",
         "HttpOpenRequestW", "WSASend", "send", "sendto", "connect",
     ]
 
@@ -63,7 +63,7 @@ class InjectionNetworkTraffic(Signature):
                 if pname not in self.pname:
                     self.pname.append(pname)
                 self.mark_call()
-            
+
     def on_complete(self):
         if len(self.pname) == 1:
             self.description = "Network communications indicative of possible code injection originated from the process "
