@@ -50,3 +50,20 @@ class Dropper(Signature):
                             self.severity = 3
 
         return self.has_marks()
+    
+class ExeAppData(Signature):
+    name = "exe_appdata"
+    description = "Drops an executable to the user AppData folder"
+    severity = 2
+    categories = ["dropper", "persistence"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        for dropped in self.get_results("dropped", []):
+            if "filepath" in dropped and dropped["type"].startswith("PE32 executable"):
+                filepath = dropped["filepath"]
+                if "\\Users\\" in filepath and "\\AppData\\" in filepath:
+                    self.mark_ioc("file", filepath)
+         
+        return self.has_marks()

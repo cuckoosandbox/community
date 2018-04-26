@@ -51,3 +51,42 @@ class PEIDPacker(Signature):
                 self.mark_ioc("packer", peid)
 
         return self.has_marks()
+    
+class PEUnknownResourceName(Signature):
+    name = "pe_unknown_resource_name"
+    description = "The file contains an unknown PE resource name possibly indicative of a packer"
+    severity = 1
+    categories = ["packer"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+    
+    names = [
+        "RT_ACCELERATOR",
+        "RT_ANICURSOR",
+        "RT_ANIICON",
+        "RT_BITMAP",
+        "RT_CURSOR",
+        "RT_DIALOG",
+        "RT_DLGINCLUDE",
+        "RT_FONT",
+        "RT_FONTDIR",
+        "RT_GROUP_CURSOR",
+        "RT_GROUP_ICON",
+        "RT_HTML",
+        "RT_ICON",
+        "RT_MANIFEST",
+        "RT_MENU",
+        "RT_MESSAGETABLE",
+        "RT_PLUGPLAY",
+        "RT_RCDATA",
+        "RT_STRING",
+        "RT_VERSION",
+        "RT_VXD",
+    ]
+
+    def on_complete(self):
+        for resource in self.get_results("static", {}).get("pe_resources", []):
+            if resource["name"] not in self.names:
+                self.mark_ioc("resource name", resource["name"])
+
+        return self.has_marks()

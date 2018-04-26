@@ -24,3 +24,22 @@ class InstalledApps(Signature):
 
     def on_complete(self):
         return self.has_marks()
+
+class QueriesInstalledApps(Signature):
+    name = "queries_programs"
+    description = "Queries for potentially installed applications"
+    severity = 2
+    categories = ["recon"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    filter_apinames = "RegOpenKeyExA", "RegOpenKeyExW"
+
+    def on_call(self, call, process):
+        keyname = call["arguments"]["regkey"]
+        uninstall = "\\microsoft\\windows\\currentversion\\uninstall"
+        if (keyname and uninstall in keyname.lower()):
+            self.mark_call()
+
+    def on_complete(self):
+        return self.has_marks()

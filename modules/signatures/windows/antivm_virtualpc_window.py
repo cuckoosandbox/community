@@ -1,4 +1,4 @@
-# Copyright (C) 2012 Claudio "nex" Guarnieri (@botherder)
+# Copyright (C) 2018 Kevin Ross
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,22 +15,20 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class VBoxDetectWindow(Signature):
-    name = "antivm_vbox_window"
-    description = "Detects VirtualBox through the presence of a window"
+class VirtualPCDetectWindow(Signature):
+    name = "antivm_virtualpc_window"
+    description = "Detects VirtualPC through the presence of a window"
     severity = 3
     categories = ["anti-vm"]
-    authors = ["nex"]
+    authors = ["Kevin Ross"]
     minimum = "2.0"
 
     filter_categories = "ui",
 
     # Lowercase all indicators.
     indicators = [indicator.lower() for indicator in [
-        "VBoxTrayToolWndClass",
-        "VBoxTrayToolWnd",
-        "VBoxTray.exe",
-        "VBoxService.exe",
+        "vmusrvc.exe",
+        "vmsrvc.exe",
     ]]
 
     def on_call(self, call, process):

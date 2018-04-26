@@ -1,4 +1,4 @@
-# Copyright (C) 2017 Kevin Ross
+# Copyright (C) 2018 Kevin Ross
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,19 +15,28 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class DisplaysHTA(Signature):
-    name = "displays_hta"
-    description = "Displays a HTA file to the user common in ransomware"
-    severity = 2
-    categories = ["ransomware"]
+class NetworkDNSTXTLookup(Signature):
+    name = "network_dns_txt_lookup"
+    description = "Performs a TXT record DNS lookup potentially for command and control or covert channel"
+    severity = 3
+    categories = ["dns", "cnc"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
-    def on_complete(self):
-        for cmdline in self.get_command_lines():
-            lower = cmdline.lower()
+    whitelist = [
+            "google.com",
+            "abobe.com",
+        ]
 
-            if "mshta" in lower:
-                self.mark(cmdline=cmdline)
+    def on_complete(self):
+        for dns in self.get_results("network", {}).get("dns", []):
+            is_whitelisted = False
+            for whitelisted in self.whitelist:
+                if whitelisted in dns["request"]:
+                    is_whitelisted = True
+            
+            if not is_whitelisted:
+                if dns["type"] == "TXT":
+                    self.mark_ioc("domain", dns["request"])
 
         return self.has_marks()
