@@ -1,4 +1,4 @@
-# Copyright (C) 2010-2015 Cuckoo Foundation.
+# Copyright (C) 2015-2018 Cuckoo Foundation.
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
@@ -12,7 +12,10 @@ class AllocatesRWX(Signature):
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
 
-    filter_apinames = "NtAllocateVirtualMemory", "NtProtectVirtualMemory", "VirtualAllocEx", "VirtualProtectEx"
+    filter_apinames = (
+        "NtAllocateVirtualMemory", "NtProtectVirtualMemory",
+        "VirtualAllocEx", "VirtualProtectEx",
+    )
 
     def on_call(self, call, process):
         if call["flags"]["protection"] == "PAGE_EXECUTE_READWRITE":

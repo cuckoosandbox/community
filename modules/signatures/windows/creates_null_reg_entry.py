@@ -1,4 +1,5 @@
-# Copyright (C) 2010-2018 Cuckoo Foundation.
+# Copyright (C) 2014 Optiv Inc. (brad.spengler@optiv.com)
+# Copyright (C) 2018 Cuckoo Foundation.
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
@@ -12,14 +13,10 @@ class CreatesNullRegistryEntry(Signature):
     categories = ["stealth"]
     minimum = "2.0"
 
-    filter_apinames = [
-        "NtSetValueKey", 
-        "NtCreateKey", 
-        "RegCreateKeyExA", 
-        "RegCreateKeyExW",
-        "RegSetValueExA",
-        "RegSetValueExW"
-        ]
+    filter_apinames = (
+        "NtSetValueKey", "NtCreateKey", "RegCreateKeyExA",
+        "RegCreateKeyExW", "RegSetValueExA", "RegSetValueExW",
+    )
 
     def on_call(self, call, process):
         api = call["api"]

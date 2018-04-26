@@ -1,4 +1,4 @@
-# Copyright (C) 2010-2018 Cuckoo Foundation.
+# Copyright (C) 2018 Cuckoo Foundation.
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
@@ -12,10 +12,12 @@ class MovesSelf(Signature):
     categories = ["stealth"]
     minimum = "2.0"
 
-    filter_apinames = "MoveFileWithProgressW", "MoveFileWithProgressTransactedW"
-    
+    filter_apinames = (
+        "MoveFileWithProgressW", "MoveFileWithProgressTransactedW",
+    )
+
     def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs) 
+        Signature.__init__(self, *args, **kwargs)
         self.initial_process = self.get_results("target", {}).get("file", {}).get("name", [])
 
     def on_call(self, call, process):

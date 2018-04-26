@@ -1,4 +1,5 @@
-# Copyright (C) 2010-2018 Cuckoo Foundation.
+# Copyright (C) 2014 Brad Spengler.
+# Copyright (C) 2018 Cuckoo Foundation.
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
@@ -12,12 +13,12 @@ class CreatesHiddenFile(Signature):
     categories = ["stealth"]
     minimum = "2.0"
 
+    filter_apinames = "NtCreateFile", "SetFileAttributesW"
+
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.hidden_attrs = [2,4]
-        self.open_dispositions = [1,3]
-
-    filter_apinames = "NtCreateFile", "SetFileAttributesW" 
+        self.hidden_attrs = [2, 4]
+        self.open_dispositions = [1, 3]
 
     def on_call(self, call, process):
         attr = call["arguments"]["file_attributes"]
