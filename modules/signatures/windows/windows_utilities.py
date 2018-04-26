@@ -17,9 +17,12 @@ class UsesWindowsUtilities(Signature):
         "at ",
         "at.exe",
         "attrib",
-        "del",
-        "dir",
-        "erase",
+        "del ",
+        "del.exe",
+        "dir ",
+        "dir.exe",
+        "erase ",
+        "erase.exe",
         "fsutil",
         "getmac",
         "ipconfig",
@@ -27,7 +30,8 @@ class UsesWindowsUtilities(Signature):
         "net.exe",
         "netsh",
         "netstat",
-        "ping",
+        "ping ",
+        "ping.exe",
         "qwinsta",
         "reg ",
         "reg.exe",
@@ -50,7 +54,7 @@ class UsesWindowsUtilities(Signature):
     def on_complete(self):
         for cmdline in self.get_command_lines():
             for utility in self.utilities:
-                if cmdline.lower().startswith(utility):
+                if utility in cmdline.lower():
                     self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
@@ -102,7 +106,7 @@ class SuspiciousCommandTools(Signature):
     def on_complete(self):
         for cmdline in self.get_command_lines():
             for utility in self.utilities:
-                if cmdline.lower().startswith(utility):
+                if utility in cmdline.lower():
                     self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
