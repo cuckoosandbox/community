@@ -15,36 +15,34 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class ExecutesHTA(Signature):
-    name = "executes_hta"
-    description = "Executes or displays a HTA file"
+class StealthSystemProcName(Signature):
+    name = "stealth_system_procname"
+    description = "Created a process named as a common system process"
     severity = 2
-    categories = ["ransomware", "downloader", "exploit"]
+    categories = ["stealth"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
+    filter_apinames = "CreateProcessInternalW", "ShellExecuteExW",
+
+    systemprocs = [
+        "csrss.exe",
+        "explorer.exe",
+        "lsass.exe",
+        "spoolsv.exe",
+        "services.exe",
+        "svchost.exe",
+        "taskmgr.exe",
+        "winlogin.exe",
+    ]
+
+    def on_call(self, call, process):
+        filepath = call["arguments"]["filepath"].lower()
+        for systemproc in self.systemprocs:
+            if filepath.endswith(systemproc):
+                if not filepath.endswith("svchost.exe"):
+                    self.severity = 3
+                self.mark_call()
+
     def on_complete(self):
-        for cmdline in self.get_command_lines():
-            lower = cmdline.lower()
-
-            if "mshta" in lower:
-                self.mark(cmdline=cmdline)
-
-        return self.has_marks()
-
-class ExecutesHTAJavaScript(Signature):
-    name = "executes_hta_javascript"
-    description = "Executes JavaScript using the mshta utility"
-    severity = 3
-    categories = ["ransomware", "downloader", "exploit"]
-    authors = ["Kevin Ross"]
-    minimum = "2.0"
-
-    def on_complete(self):
-        for cmdline in self.get_command_lines():
-            lower = cmdline.lower()
-
-            if "mshta" in lower and "javascript:" in lower:
-                self.mark(cmdline=cmdline)
-
         return self.has_marks()

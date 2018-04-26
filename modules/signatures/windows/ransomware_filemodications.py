@@ -109,32 +109,17 @@ class RansomwareDroppedFiles(Signature):
                 self.severity = 4
             return self.has_marks()
 
-class OverwritesFiles(Signature):
-    name = "overwites_files"
-    description = "Overwrites %d files indicative of destructive file actions such as from ransomware"
-    severity = 2
-    families = ["ransomware"]
+class RansomwareMassFileDelete(Signature):
+    name = "ransomware_mass_file_delete"
+    description = "Deletes a large number of files from the system indicative of ransomware, wiper malware or system destruction"
+    severity = 3
+    categories = ["ransomware", "wiper"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-
-    filter_apinames = "NtCreateFile",
-
-    count = 0
-
-    def on_call(self, call, process):
-        if call["arguments"]["create_disposition"] == 5:
-            self.count += 1
-            self.mark_call()
+    evented = True
 
     def on_complete(self):
-        if self.count > 50:
-            self.description = self.description % self.count
-            if self.count > 1000:
-                self.severity = 6
-            elif self.count > 500:
-                self.severity = 5
-            elif self.count > 200:
-                self.severity = 4
-            elif self.count > 100:
-                self.severity = 3
-            return self.has_marks()
+        for deletedfile in self.get_files(actions=["file_deleted"]):
+            self.mark_ioc("file", deletedfile)
+
+        return self.has_marks(100)
