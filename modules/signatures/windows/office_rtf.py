@@ -24,8 +24,9 @@ class RTFUnknownVersion(Signature):
     minimum = "2.0"
 
     def on_complete(self):
-        filetype = self.get_results("target", {})["file"]["type"]
-        name = self.get_results("target", {})["file"]["name"]
+        target = self.get_results("target", {})
+        filetype = target.get("file", {}).get("type") or ""
+        name = target.get("file", {}).get("name")
         if "Rich Text Format data" in filetype and "unknown version" in filetype:
             self.mark(
                 filename=name,
@@ -52,8 +53,9 @@ class RTFCharacterSet(Signature):
     minimum = "2.0"
 
     def on_complete(self):
-        filetype = self.get_results("target", {})["file"]["type"]
-        name = self.get_results("target", {})["file"]["name"]
+        target = self.get_results("target", {})
+        filetype = target.get("file", {}).get("type") or ""
+        name = target.get("file", {}).get("name")
         if "Rich Text Format data" in filetype and "unknown character set" in filetype:
             self.mark(
                 filename=name,

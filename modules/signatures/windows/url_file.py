@@ -14,14 +14,16 @@ class URLFile(Signature):
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        if self.get_results("target", {}).get("category") == "file":
-            self.file = self.get_results("target", {}).get("file", {})
+
+        target = self.get_results("target", {})
+        if target.get("category") == "file":
+            self.filetype = target.get("file", {}).get("type") or ""
+        else:
+            self.filetype = ""
 
     def on_complete(self):
-        if "Internet shortcut" not in self.file.get("type", ""):
+        if "Internet shortcut" not in self.filetype:
             return
-        if "urls" in self.file:
-            urls = self.file.get("urls", [])
-            for url in urls:
-                self.mark_ioc("extracted URL", url)
-            return self.has_marks()
+        for url in self.file.get("urls", []):
+            self.mark_ioc("extracted URL", url)
+        return self.has_marks()
