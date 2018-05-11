@@ -33,7 +33,7 @@ class InjectionRunPE(Signature):
         "NtAllocateVirtualMemory",
         "NtGetContextThread",
         "WriteProcessMemory",
-        "NtWriteVirtualmemory",
+        "NtWriteVirtualMemory",
         "NtMapViewOfSection",
         "NtSetContextThread",
         "NtResumeThread",
