@@ -14,8 +14,8 @@ class URLFile(Signature):
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        if self.get_results("target", {}).get("category") == "file":
-            self.file = self.get_results("target", {}).get("file", {})
+
+        self.file = self.get_results("target", {}).get("file", {})
 
     def on_complete(self):
         if "Internet shortcut" not in self.file.get("type", ""):
