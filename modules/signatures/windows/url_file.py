@@ -2,6 +2,8 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
+import os
+
 from lib.cuckoo.common.abstracts import Signature
 
 class URLFile(Signature):
@@ -12,18 +14,18 @@ class URLFile(Signature):
     categories = ["generic"]
     minimum = "2.0"
 
-    def __init__(self, *args, **kwargs):
-        Signature.__init__(self, *args, **kwargs)
-
-        target = self.get_results("target", {})
-        if target.get("category") == "file":
-            self.filetype = target.get("file", {}).get("type") or ""
-        else:
-            self.filetype = ""
-
     def on_complete(self):
-        if "Internet shortcut" not in self.filetype:
+        target = self.get_results("target", {})
+
+        if target.get("category") != "file":
             return
-        for url in self.file.get("urls", []):
+
+        targetfile = target.get("file", {})
+        if "Internet shortcut" not in (targetfile.get("type") or ""):
+            name, ext = os.path.splitext(targetfile.get("name", ""))
+            if ext != ".url":
+                return
+
+        for url in targetfile.get("urls", []):
             self.mark_ioc("extracted URL", url)
         return self.has_marks()
