@@ -72,3 +72,163 @@ class RTFCharacterSet(Signature):
                         )
 
         return self.has_marks()
+    
+class RTFOLEStreamURL(Signature):
+    name = "rtf_olestream_url"
+    description = "RTF OLE stream contains a URL"
+    severity = 3
+    categories = ["rtf", "office"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    filter_apinames = [
+        "OleConvertOLESTREAMToIStorage",
+    ]
+
+    def on_call(self, call, process):
+        olestream = call["arguments"]["ole2"].lower()
+        if "http://" in olestream or "https://" in olestream:
+            self.mark_call()
+
+    def on_complete(self):
+        return self.has_marks()
+
+class RTFOLEStreamEXE(Signature):
+    name = "rtf_olestream_exe"
+    description = "RTF OLE stream references an executable file or command"
+    severity = 3
+    categories = ["rtf", "office", "executable"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    filter_apinames = [
+        "OleConvertOLESTREAMToIStorage",
+    ]
+
+    def on_call(self, call, process):
+        olestream = call["arguments"]["ole2"].lower()
+        if ".exe" in olestream:
+            self.mark_call()
+
+    def on_complete(self):
+        return self.has_marks()
+
+class RTFOLEStreamHTA(Signature):
+    name = "rtf_olestream_hta"
+    description = "RTF OLE stream references a HTA file potentially as part of an exploit"
+    severity = 3
+    categories = ["rtf", "office", "exploit"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    filter_apinames = [
+        "OleConvertOLESTREAMToIStorage",
+    ]
+
+    def on_call(self, call, process):
+        olestream = call["arguments"]["ole2"].lower()
+        if ".hta" in olestream:
+            self.mark_call()
+
+    def on_complete(self):
+        return self.has_marks()
+
+class RTFOLEStreamBAT(Signature):
+    name = "rtf_olestream_bat"
+    description = "RTF OLE stream references a .bat file potentially as part of an exploit payload"
+    severity = 3
+    categories = ["rtf", "office", "exploit"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    filter_apinames = [
+        "OleConvertOLESTREAMToIStorage",
+    ]
+
+    def on_call(self, call, process):
+        olestream = call["arguments"]["ole2"].lower()
+        if ".bat" in olestream:
+            self.mark_call()
+
+    def on_complete(self):
+        return self.has_marks()
+
+class RTFOLEStreamPowerShell(Signature):
+    name = "rtf_olestream_powershell"
+    description = "RTF OLE stream references a powershell command potentially as part of an exploit payload"
+    severity = 3
+    categories = ["rtf", "office", "exploit"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    filter_apinames = [
+        "OleConvertOLESTREAMToIStorage",
+    ]
+
+    def on_call(self, call, process):
+        olestream = call["arguments"]["ole2"].lower()
+        if "powershell" in olestream:
+            self.mark_call()
+
+    def on_complete(self):
+        return self.has_marks()
+
+class RTFOLEStreamCmd(Signature):
+    name = "rtf_olestream_cmd"
+    description = "RTF OLE stream references a cmd command potentially as part of an exploit payload"
+    severity = 3
+    categories = ["rtf", "office", "exploit"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    filter_apinames = [
+        "OleConvertOLESTREAMToIStorage",
+    ]
+
+    def on_call(self, call, process):
+        olestream = call["arguments"]["ole2"].lower()
+        if "cmd " in olestream or "cmd.exe" in olestream:
+            self.mark_call()
+
+    def on_complete(self):
+        return self.has_marks()
+
+class RTFOLEStreamTemp(Signature):
+    name = "rtf_olestream_temp"
+    description = "RTF OLE stream references %TEMP% folder variable commonly used as part of an exploit payload"
+    severity = 3
+    categories = ["rtf", "office", "exploit"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    filter_apinames = [
+        "OleConvertOLESTREAMToIStorage",
+    ]
+
+    def on_call(self, call, process):
+        olestream = call["arguments"]["ole2"].lower()
+        if "%temp%" in olestream:
+            self.mark_call()
+
+    def on_complete(self):
+        return self.has_marks()
+
+class RTFOLEStreamEquation(Signature):
+    name = "rtf_olestream_equation"
+    description = "RTF OLE stream references equation edtor indicating possible use of CVE-2017-11882 exploit"
+    severity = 3
+    categories = ["rtf", "office", "exploit"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    filter_apinames = [
+        "OleConvertOLESTREAMToIStorage",
+    ]
+
+    def on_call(self, call, process):
+        olestream = call["arguments"]["ole2"].lower()
+        if "equation" in olestream:
+            self.mark_call()
+
+    def on_complete(self):
+        return self.has_marks()
