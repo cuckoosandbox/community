@@ -16,12 +16,12 @@ class URLFile(Signature):
 
     def on_complete(self):
         target = self.get_results("target", {})
-
         if target.get("category") != "file":
             return
 
         targetfile = target.get("file", {})
-        if "Internet shortcut" not in (targetfile.get("type") or ""):
+        file_type = targetfile.get("type") or ""
+        if "Internet shortcut" not in file_type:
             name, ext = os.path.splitext(targetfile.get("name", ""))
             if ext != ".url":
                 return
