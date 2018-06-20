@@ -123,8 +123,8 @@ class SuspiciousWriteEXE(Signature):
     ]
 
     whitelist = [
-        "\Windows\System32\wscript.exe",
-        "\Windows\hh.exe",
+        "\\Windows\\System32\\wscript.exe",
+        "\\Windows\\hh.exe",
     ]
 
     def on_call(self, call, process):
