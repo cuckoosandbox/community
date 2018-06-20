@@ -34,16 +34,6 @@ script:
   - python cuckoo.py -d 2>&1|grep "Unable to bind ResultServer"
   - rm -rf * && git checkout .
 
-  - git checkout legacy
-  - sed -i s/lxml==3.6.0//g requirements.txt
-  - sed -i s/peepdf==0.3.2//g requirements.txt
-  - sed -i s/six==1.9.0/six==1.11.0/g requirements.txt
-  - pip install -r requirements.txt
-  - rm -rf data/monitor
-  - python utils/community.py -waf ../master.tar.gz >/dev/null
-  - python cuckoo.py -d 2>&1|grep "Unable to bind ResultServer"
-  - rm -rf * && git checkout .
-
   - git checkout 2.0.0
   - cp -rf ../community/data/monitor/* cuckoo/data/monitor
   - git checkout cuckoo/data/monitor/latest
