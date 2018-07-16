@@ -32,7 +32,7 @@ class AntiAVSquiblydooBypass(Signature):
 
 class AntiAVRegsvrScriptLaunch(Signature):
     name = "antiav_regsrv_script_launch"
-    description = "Regsrv32 launching script module"
+    description = "Regsrv32 launched a scripting module"
     severity = 3
     categories = ["bypass"]
     authors = ["Kevin Ross"]
