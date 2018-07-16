@@ -62,7 +62,7 @@ class AntiAVRegsvrHTTP(Signature):
 
     class RegistryRegsvrBypass(Signature):
     name = "registry_regsvr_bypass"
-    description = "Stores a regsrv32 command in registry containing potential AV/Application Whitelist bypass attempt"
+    description = "Stores a regsrv32 command in registry containing an AV/Application Whitelist bypass attempt"
     severity = 3
     categories = ["bypass", "persistence"]
     authors = ["Kevin Ross"]
