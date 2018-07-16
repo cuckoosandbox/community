@@ -59,3 +59,24 @@ class AntiAVRegsvrHTTP(Signature):
                 self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
+
+    class RegistryRegsvrBypass(Signature):
+    name = "registry_regsvr_bypass"
+    description = "Stores a regsrv32 command in registry containing potential AV/Application Whitelist bypass attempt"
+    severity = 3
+    categories = ["bypass", "persistence"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+    evented = True
+
+    filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey"])
+
+    def on_call(self, call, process):
+        value = call["arguments"]["value"]
+        if not isinstance(value, basestring):
+            return
+        if value and "regsvr32" in value.lower() and ("scrobj.dll" in value.lower() or "jscript.dll" in value.lower() or "vbscript.dll" in value.lower()):
+            self.mark_call()
+
+    def on_complete(self):
+        return self.has_marks()
