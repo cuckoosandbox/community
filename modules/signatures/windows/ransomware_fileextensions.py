@@ -73,6 +73,8 @@ class RansomwareExtensions(Signature):
         (".*\.Venus(f|p)$", ["VenusLocker"]),
         (".*\.(?:WNCRY|WNCRYT|WCRY)$", ["WannaCry"]),
         (".*\.wflx$", ["WildFire-Locker"]),
+        (".*\.KRAB$", ["GandCrab v4"]),
+        (".*\.CRAB$", ["GandCrab v2"]),
     ]
 
     def on_complete(self):
