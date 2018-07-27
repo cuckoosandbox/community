@@ -17,9 +17,9 @@ import re
 
 from lib.cuckoo.common.abstracts import Signature
 
-class CryptoMiningStratumCommand(Signature):
-    name = "cryptomining_stratum_command"
-    description = "A stratum cryptocurrency mining command was executed"
+class CryptoMiningCommand(Signature):
+    name = "cryptomining_command"
+    description = "A cryptocurrency mining command was executed"
     severity = 3
     categories = ["mining", "cryptocurrency"]
     authors = ["Kevin Ross", "Cuckoo Technologies"]
@@ -27,7 +27,7 @@ class CryptoMiningStratumCommand(Signature):
 
     def on_complete(self):
         xmr_address_re = '-u[ ]*4[0-9AB][123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{93}'
-        xmr_strings = ["stratum+tcp://", "xmrig", "xmr-stak", "supportxmr.com:", "dwarfpool.com:", "minergate"]
+        xmr_strings = ["stratum+tcp://", "xmrig", "xmr-stak", "supportxmr.com:", "dwarfpool.com:", "minergate", "minexmr", "xmrpool", "moneropool", "xmr."]
 
         for cmdline in self.get_command_lines():
             if re.search(xmr_address_re, cmdline):
