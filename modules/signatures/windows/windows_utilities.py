@@ -62,6 +62,8 @@ risk_utilities = [
     "vssadmin",
     "wevtutil",
     "whois",
+    "winrm",
+    "winrs",
     "xcacls",
 ]
 
@@ -203,8 +205,8 @@ class AddsUser(Signature):
 
     def on_complete(self):
         for cmdline in self.get_command_lines():
-                if cmdline.lower().startswith("net") and "user /add" in cmdline.lower():
-                    self.mark_ioc("cmdline", cmdline)
+            if cmdline.lower().startswith("net") and "user /add" in cmdline.lower():
+                self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
 
@@ -218,7 +220,57 @@ class AddsUserAdmin(Signature):
 
     def on_complete(self):
         for cmdline in self.get_command_lines():
-                if cmdline.lower().startswith("net") and "localgroup administrators" in cmdline.lower():
+            if cmdline.lower().startswith("net") and "localgroup administrators" in cmdline.lower():
+                self.mark_ioc("cmdline", cmdline)
+
+        return self.has_marks()
+
+class ScriptNoLogo(Signature):
+    name = "script_nologo"
+    description = "Wscript or Cscript was executed with the nologo option"
+    severity = 2
+    categories = ["commands", "stealth"]
+    authors = ["Kevin"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        for cmdline in self.get_command_lines():
+            if ("wscript" in cmdline.lower() or "cscript" in cmdline.lower()) and "nologo" in cmdline.lower():
+                self.mark_ioc("cmdline", cmdline)
+
+        return self.has_marks()
+
+class LateralMovementCommands(Signature):
+    name = "lateral_movement_commands"
+    description = "Executed a Windows remote command which may be used for lateral movement"
+    severity = 3
+    categories = ["commands"]
+    authors = ["Kevin"]
+    minimum = "2.0"
+
+    lateral_utilities = [
+    "psexec",
+    "winrm",
+    "winrs",
+    ]
+
+    def on_complete(self):
+        for cmdline in self.get_command_lines():
+            # Check for commands which are used solely for remote management
+            for utility in lateral_utilities:
+                if utility in cmdline.lower():
                     self.mark_ioc("cmdline", cmdline)
+
+            # Remote WMI command execution
+            if "wmic" in cmdline.lower() and "/node:" in cmdline.lower():
+                self.mark_ioc("cmdline", cmdline)
+
+            # Remote AT
+            if "at \\\\" in cmdline.lower() or "at.exe \\\\" in cmdline.lower()):
+                self.mark_ioc("cmdline", cmdline)
+
+            # Remote Service Interaction
+            if "sc \\\\" in cmdline.lower() or "sc.exe \\\\" in cmdline.lower()):
+                self.mark_ioc("cmdline", cmdline)           
 
         return self.has_marks()
