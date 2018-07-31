@@ -57,7 +57,7 @@ class CmdlineChracterObfsucation(Signature):
         
 class CmdlineConcatenationObfsucation(Signature):
     name = "cmdline_concatenation_obfuscation"
-    description = "Appears to use adjacent environment variables for concatenation reassembly obfuscation in command line"
+    description = "Appears to use adjacent environment variables for concatenation reassembly obfuscation in a command line"
     severity = 3
     categories = ["commands"]
     authors = ["Kevin Ross"]
