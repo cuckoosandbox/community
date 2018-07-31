@@ -42,7 +42,7 @@ class CmdlineChracterObfsucation(Signature):
 
     def on_complete(self):
         for cmdline in self.get_command_lines():
-            if "cmd" in cmdline.lower() and (cmdline.count("^") > 3 or cmdline.count("&") > 6):
+            if "cmd" in cmdline.lower() and (cmdline.count("^") > 3 or cmdline.count("&") > 6 or cmdline.count("+") > 4 or cmdline.count("\"") > 8):
                 self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
