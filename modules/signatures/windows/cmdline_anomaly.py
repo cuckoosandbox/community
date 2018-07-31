@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class CmdlineCompsecEvasion(Signature):
     name = "cmdline_comspec_evasion"
-    description = "Uses the %COMSPEC% environment variable to access command line interpreter to evade detection"
+    description = "Uses the %COMSPEC% environment variable to access the command line interpreter to evade detection"
     severity = 3
     categories = ["commands"]
     authors = ["Kevin Ross"]
