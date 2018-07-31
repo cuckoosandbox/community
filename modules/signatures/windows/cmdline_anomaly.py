@@ -70,3 +70,19 @@ class CmdlineConcatenationObfsucation(Signature):
                 self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
+
+class CmdlineSetObfsucation(Signature):
+    name = "cmdline_set_obfuscation"
+    description = "Appears to use multiple set variables in command line likely for obfsucation"
+    severity = 3
+    categories = ["commands"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+    references = ["www.fireeye.com/content/dam/fireeye-www/blog/pdfs/dosfuscation-report.pdf"]
+
+    def on_complete(self):
+        for cmdline in self.get_command_lines():
+            if "cmd" in cmdline.lower() and cmdline.lower().count("set ") > 2:
+                self.mark_ioc("cmdline", cmdline)
+
+        return self.has_marks()
