@@ -42,7 +42,7 @@ class CmdlineChracterObfsucation(Signature):
 
     def on_complete(self):
         for cmdline in self.get_command_lines():
-            if "cmd" in cmdline.lower() and (cmdline.count("^") > 3 or cmdline.count("&") > 6 or cmdline.count("+") > 4 or cmdline.count("\"") > 8):
+            if "cmd" in cmdline.lower() and (cmdline.count("^") > 3 or cmdline.count("&") > 6 or cmdline.count("+") > 4 or cmdline.count("\"") > 8 or cmdline.count(";") > 6):
                 self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
@@ -65,7 +65,7 @@ class CmdlineConcatenationObfsucation(Signature):
 
 class CmdlineSetObfsucation(Signature):
     name = "cmdline_set_obfuscation"
-    description = "Appears to use set to define variables in command line likely for obfsucation"
+    description = "Appears to use set to define variables in a command line likely for obfuscation"
     severity = 3
     categories = ["commands"]
     authors = ["Kevin Ross"]
@@ -75,6 +75,38 @@ class CmdlineSetObfsucation(Signature):
     def on_complete(self):
         for cmdline in self.get_command_lines():
             if "cmd" in cmdline.lower() and cmdline.lower().count("set ") > 2:
+                self.mark_ioc("cmdline", cmdline)
+
+        return self.has_marks()
+
+class CmdlineSetCallObfsucation(Signature):
+    name = "cmdline_setcall_obfuscation"
+    description = "Appears to use set and call to define a variable in a command line likely for obfuscation"
+    severity = 3
+    categories = ["commands"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+    references = ["www.fireeye.com/content/dam/fireeye-www/blog/pdfs/dosfuscation-report.pdf"]
+
+    def on_complete(self):
+        for cmdline in self.get_command_lines():
+            if "cmd" in cmdline.lower() and "set " in cmdline.lower() and "call " in cmdline.lower():
+                self.mark_ioc("cmdline", cmdline)
+
+        return self.has_marks()
+
+class CmdlineSetForLoopObfsucation(Signature):
+    name = "cmdline_set_forloop_obfuscation"
+    description = "Appears to use a for loop in a command line likely for obfuscation"
+    severity = 3
+    categories = ["commands"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+    references = ["www.fireeye.com/content/dam/fireeye-www/blog/pdfs/dosfuscation-report.pdf"]
+
+    def on_complete(self):
+        for cmdline in self.get_command_lines():
+            if "cmd" in cmdline.lower() and "set " in cmdline.lower() and "for " in cmdline.lower():
                 self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
