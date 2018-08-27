@@ -29,8 +29,9 @@ class RaisesException(Signature):
     def on_call(self, call, process):
         """Prettify the display of the call in the Signature."""
         call["raw"] = "stacktrace",
-        call["arguments"]["stacktrace"] = \
-            "\n".join(call["arguments"]["stacktrace"])
+        if isinstance(call["arguments"]["stacktrace"], (tuple, list)):
+            call["arguments"]["stacktrace"] = \
+                "\n".join(call["arguments"]["stacktrace"])
 
         exception_code = call["arguments"]["exception"]["exception_code"]
         if exception_code in self.exception_codes:
@@ -82,8 +83,9 @@ class ApplicationExceptionCrash(Signature):
     def on_call(self, call, process):
         """Prettify the display of the call in the Signature."""
         call["raw"] = "stacktrace",
-        call["arguments"]["stacktrace"] = \
-            "\n".join(call["arguments"]["stacktrace"])
+        if isinstance(call["arguments"]["stacktrace"], (tuple, list)):
+            call["arguments"]["stacktrace"] = \
+                "\n".join(call["arguments"]["stacktrace"])
 
         exception_code = call["arguments"]["exception"]["exception_code"]
         if exception_code in self.exception_codes:
