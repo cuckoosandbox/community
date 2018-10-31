@@ -4,106 +4,65 @@
 
 from lib.cuckoo.common.abstracts import Signature
 
-class VolMalfind1(Signature):
-    name = "volatility_malfind_2"
-    description = "Malfind detects one or more injected processes"
-    severity = 3
-    categories = ["generic"]
-    authors = ["Thorsten Sick"]
-    minimum = "2.0"
 
-    def on_complete(self):
-        pids = set()
-        for row in self.get_volatility("malfind").get("data", []):
-            pids.add(row["process_id"])
-
-        if pids:
-            self.mark_vol("malfind", pidcount=len(pids))
-
-        return self.has_marks()
-
-class VolLdrModules1(Signature):
-    name = "volatility_ldrmodules_1"
-    description = "PEB modified to hide loaded modules. " \
-        "Dll very likely not loaded by LoadLibrary"
-    severity = 3
-    categories = ["generic"]
-    authors = ["Thorsten Sick"]
-    minimum = "2.0"
-
-    # http://mnin.blogspot.de/2011/06/examining-stuxnets-footprint-in-memory.html
-
-    def on_complete(self):
-        exceptions = ["csrss.exe"]
-
-        for row in self.get_volatility("ldrmodules").get("data", []):
-            if not row["dll_in_init"] and not row["dll_in_load"] and \
-                    not row["dll_in_mem"] and \
-                    not row["process_name"].lower() in exceptions:
-                self.mark_vol("unlinked", dll=row)
-
-        return self.has_marks()
-
-class VolLdrModules2(Signature):
-    name = "volatility_ldrmodules_2"
-    description = "PEB modified to hide loaded modules.\
-         Not path name. Dll very likely not loaded by LoadLibrary"
-    severity = 3
-    categories = ["generic"]
-    authors = ["Thorsten Sick"]
-    minimum = "2.0"
-
-    # http://mnin.blogspot.de/2011/06/examining-stuxnets-footprint-in-memory.html
-
-    def on_complete(self):
-        for row in self.get_volatility("ldrmodules").get("data", []):
-            if not row["process_name"]:
-                self.mark_vol("unlinked", dll=row)
-
-        return self.has_marks()
-
-class VolDevicetree1(Signature):
-    name = "volatility_devicetree_1"
-    description = "Device driver without name"
-    severity = 3
-    categories = ["generic"]
-    authors = ["Thorsten Sick"]
-    families = ["Zero access"]
-    minimum = "2.0"
-
-    # http://mnin.blogspot.de/2011/10/zeroaccess-volatility-and-kernel-timers.html
-
-    def on_complete(self):
-        for row in self.get_volatility("devicetree").get("data", []):
-            if not row["driver_name"]:
-                self.mark_vol("unnamed_driver", driver=row)
-
-        return self.has_marks()
-
-class VolSvcscan1(Signature):
-    name = "volatility_svcscan_1"
+class VolFirewallStopped(Signature):
+    name = "volatility_firewal_stopped"
     description = "Stopped Firewall service"
     severity = 3
     categories = ["generic"]
-    authors = ["Thorsten Sick"]
-    families = ["Zero access"]
+    authors = ["Thorsten Sick", "Sean Whalen"]
     minimum = "2.0"
 
     def on_complete(self):
+        win7_or_higher = False
+        shared_access_service_stopped = False
+        modern_firewall_service_stopped = False
+        shared_access_row = None
+        modern_firewall_row = None
         for row in self.get_volatility("svcscan").get("data", []):
-            if row["service_name"] == "SharedAccess" and \
-                    row["service_state"] == "SERVICE_STOPPED":
-                self.mark_vol("stopped_service", service=row)
+            if row["service_name"] == "SharedAccess":
+                shared_access_row = row
+                shared_access_service_stopped = True
+            if row["service_name"] == "MpsSvc":
+                win7_or_higher = True
+                shared_access_row = row
+                if row["service_state"] == "SERVICE_STOPPED":
+                    modern_firewall_service_stopped = True
+        if not win7_or_higher and shared_access_service_stopped ==True:
+                self.mark_vol("stopped_service", service=shared_access_row)
+        if modern_firewall_service_stopped:
+            self.mark_vol("stopped_service", service=modern_firewall_row)
 
         return self.has_marks()
 
-class VolSvcscan2(Signature):
-    name = "volatility_svcscan_2"
+class VolALGStopped(Signature):
+    name = "volatility_ALG_stopped"
+    description = "Stopped Application Layer Gateway service"
+    severity = 3
+    categories = ["generic"]
+    authors = ["Thorsten Sick", "Sean Whalen"]
+    minimum = "2.0"
+
+    def on_complete(self):
+        win7_or_higher = False
+        alg_service_stopped = False
+        alg_row = None
+        for row in self.get_volatility("svcscan").get("data", []):
+            if row["service_name"] == "ALG":
+                alg_row = row
+                if row["service_state"] == "SERVICE_STOPPED":
+                    alg_service_stopped = True
+            if row["service_name"] == "MpsSvc":
+                win7_or_higher = True
+        if not win7_or_higher and alg_service_stopped == True:
+                self.mark_vol("stopped_service", service=alg_row)
+
+class SecurityCenterStopped(Signature):
+    name = "volatility_security_center_stopped"
     description = "Stopped Security Center service"
     severity = 3
     categories = ["generic"]
     authors = ["Thorsten Sick"]
-    families = ["Zero access"]
     minimum = "2.0"
 
     def on_complete(self):
@@ -114,38 +73,6 @@ class VolSvcscan2(Signature):
 
         return self.has_marks()
 
-class VolSvcscan3(Signature):
-    name = "volatility_svcscan_3"
-    description = "Stopped Application Layer Gateway service"
-    severity = 3
-    categories = ["generic"]
-    authors = ["Thorsten Sick"]
-    families = ["Zero access"]
-    minimum = "2.0"
-
-    def on_complete(self):
-        for row in self.get_volatility("svcscan").get("data", []):
-            if row["service_name"] == "ALG" and \
-                    row["service_state"] == "SERVICE_STOPPED":
-                self.mark_vol("stopped_service", service=row)
-
-        return self.has_marks()
-
-class VolModscan1(Signature):
-    name = "volatility_modscan_1"
-    description = "Kernel module without a name"
-    severity = 3
-    categories = ["generic"]
-    authors = ["Thorsten Sick"]
-    families = ["Zero access"]
-    minimum = "2.0"
-
-    def on_complete(self):
-        for row in self.get_volatility("modscan").get("data", []):
-            if not row["kernel_module_name"]:
-                self.mark_vol("mysterious_kernel_module", kernel_module=row)
-
-        return self.has_marks()
 
 class VolHandles1(Signature):
     name = "volatility_handles_1"
