@@ -20,7 +20,7 @@ class VolFirewallStopped(Signature):
         for row in self.get_volatility("svcscan").get("data", []):
             if row["service_name"] == "SharedAccess" and row["service_state"] == "SERVICE_STOPPED":
                 shared_access_service_stopped = True
-            if row["service_name] = "MpsSvc":
+            if row["service_name] == "MpsSvc":
                 win7_or_higher = True
                 if rew["service_state] == "SERVICE_STOPPED":
                     modern_firewall_service_stopped = True
