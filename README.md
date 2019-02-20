@@ -9,6 +9,9 @@ We believe that there's high value and potential in the malware research
 community to be more transparent and cooperative and this wants to be an
 initiative to support it.
 
+We have recently started a [changelog](CHANGELOG.md) with documentation on
+recent changes. We expect this to grow overtime!
+
 How to use it
 -------------
 
