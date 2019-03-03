@@ -24,9 +24,9 @@ class ProcMemDumpURLs(Signature):
 
         return self.has_marks()
 
-class ProcMemDumpTORURLs(Signature):
+class ProcMemDumpTorURLs(Signature):
     name = "memdump_tor_urls"
-    description = "Found TOR related URLs in process memory dump indicative of C2 or ransomware domains/messages"
+    description = "Found URLs related to Tor in process memory dump (e.g. onion services, Tor2Web, and Ransomware)"
     severity = 3
     categories = ["unpacking", "ransomware", "c2"]
     authors = ["Kevin Ross"]
