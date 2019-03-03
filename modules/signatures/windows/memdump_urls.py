@@ -71,7 +71,7 @@ class ProcMemDumpTorURLs(Signature):
 
 class ProcMemDumpIPURLs(Signature):
     name = "memdump_ip_urls"
-    description = "Found IP Address URLs in process memory dump potentially indicative of C2 as normally domain names would be used"
+    description = "Found URLs in memory pointing to an IP address rather than a domain (potentially indicative of Command & Control traffic)"
     severity = 3
     categories = ["unpacking", "c2"]
     authors = ["Kevin Ross"]
