@@ -11,7 +11,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class ProcessMartian(Signature):
     name = "process_martian"
-    description = "One or more martian processes was created"
+    description = "One or more non-whitelisted processes were created"
     severity = 3
     categories = ["martian", "exploit", "dropper"]
     authors = ["Cuckoo Technologies", "Will Metcalf", "Kevin Ross"]
