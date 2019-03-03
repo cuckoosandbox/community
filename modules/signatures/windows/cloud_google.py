@@ -6,7 +6,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class CloudGoogle(Signature):
     name = "cloud_google"
-    description = "Looks up documents from one of Google's services"
+    description = "Downloads a file or document from Google Drive"
     severity = 2
     categories = ["cloud"]
     authors = ["Cuckoo Technologies"]
