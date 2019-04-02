@@ -61,6 +61,7 @@ class PEUnknownResourceName(Signature):
     categories = ["packer"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1045"]
 
     names = [
         "RT_ACCELERATOR",

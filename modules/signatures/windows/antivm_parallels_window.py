@@ -22,6 +22,7 @@ class ParallelsDetectWindow(Signature):
     categories = ["anti-vm"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1057"]
 
     filter_categories = "ui",
 

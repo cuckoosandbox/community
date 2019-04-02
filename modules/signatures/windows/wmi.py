@@ -81,6 +81,7 @@ class WMIPersistance(Signature):
     categories = ["persistance"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1047"]
 
     persistance = [
         "win32_startupcommand",

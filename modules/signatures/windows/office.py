@@ -350,6 +350,7 @@ class OfficeVulnModules(Signature):
     categories = ["office"]
     authors = ["Niels Warnars @ Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["T1203"]
 
     bad_modules = {
         "ogl.dll": "CVE-2013-3906",

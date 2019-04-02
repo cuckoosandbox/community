@@ -59,6 +59,7 @@ class ExeAppData(Signature):
     categories = ["dropper", "persistence"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1129"]
 
     def on_complete(self):
         for dropped in self.get_results("dropped", []):
