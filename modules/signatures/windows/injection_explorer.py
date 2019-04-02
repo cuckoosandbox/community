@@ -22,6 +22,7 @@ class InjectionExplorer(Signature):
     categories = ["injection"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1055"]
     references = ["www.endgame.com/blog/technical-blog/ten-process-injection-techniques-technical-survey-common-and-trending-process"]
 
     filter_apinames = [

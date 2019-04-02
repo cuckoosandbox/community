@@ -150,6 +150,7 @@ class UsesWindowsUtilities(Signature):
     categories = ["commands", "lateral"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["T1053"]
     references = ["http://blog.jpcert.or.jp/2016/01/windows-commands-abused-by-attackers.html"]
 
     def on_complete(self):
@@ -200,6 +201,7 @@ class AddsUser(Signature):
     categories = ["commands"]
     authors = ["Kevin"]
     minimum = "2.0"
+    ttp = ["T1136"]
 
     def on_complete(self):
         for cmdline in self.get_command_lines():
@@ -215,6 +217,7 @@ class AddsUserAdmin(Signature):
     categories = ["commands"]
     authors = ["Kevin"]
     minimum = "2.0"
+    ttp = ["T1098"]
 
     def on_complete(self):
         for cmdline in self.get_command_lines():

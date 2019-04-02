@@ -22,6 +22,7 @@ class XenDetectKeys(Signature):
     categories = ["anti-vm"]
     authors = ["Brad Spengler"]
     minimum = "2.0"
+    ttp = ["T1057", "T1012"]
 
     regkeys_re = [
         ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\ACPI\\\\XEN0000.*",

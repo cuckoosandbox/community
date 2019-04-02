@@ -23,6 +23,7 @@ class ProcessNeeded(Signature):
     authors = ["Optiv"]
     minimum = "2.0"
     evented = True
+    ttp = ["T1057"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

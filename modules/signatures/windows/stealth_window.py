@@ -27,6 +27,7 @@ class Hidden_Window(Signature):
     categories = ["stealth"]
     authors = ["KillerInstinct"]
     minimum = "2.0"
+    ttp = ["T1143"]
 
     filter_apinames = set(["ShellExecuteExW", "CreateProcessInternalW"])
 

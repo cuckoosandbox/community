@@ -13,6 +13,7 @@ class ExecBitsAdmin(Signature):
     categories = ["script", "dropper"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["T1197"]
 
     def on_complete(self):
         lower = "".join(self.get_command_lines()).lower()

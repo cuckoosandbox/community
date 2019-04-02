@@ -22,6 +22,7 @@ class VBoxDetectWindow(Signature):
     categories = ["anti-vm"]
     authors = ["nex"]
     minimum = "2.0"
+    ttp = ["T1057"]
 
     filter_categories = "ui",
 

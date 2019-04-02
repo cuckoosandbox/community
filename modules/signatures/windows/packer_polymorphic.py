@@ -20,6 +20,7 @@ class Polymorphic(Signature):
     categories = ["packer"]
     authors = ["lordr"]
     minimum = "2.0"
+    ttp = ["T1045"]
 
     def on_complete(self):
         if not HAVE_SSDEEP:

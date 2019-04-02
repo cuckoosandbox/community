@@ -11,6 +11,7 @@ class DisablesBrowserWarn(Signature):
     categories = ["generic", "banker", "clickfraud"]
     authors = ["Optiv", "Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1089"]
 
     regkeys_re = [
         ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet\\ Settings\\\\WarnOnBadCertRecving",

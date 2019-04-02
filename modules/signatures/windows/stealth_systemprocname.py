@@ -22,6 +22,7 @@ class StealthSystemProcName(Signature):
     categories = ["stealth"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1036"]
 
     filter_apinames = "CreateProcessInternalW", "ShellExecuteExW",
 

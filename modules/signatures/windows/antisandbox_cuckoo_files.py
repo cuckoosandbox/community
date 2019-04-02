@@ -22,6 +22,7 @@ class CuckooDetectFiles(Signature):
     categories = ["anti-sandbox"]
     authors = ["Brad Spengler"]
     minimum = "2.0"
+    ttp = ["T1083", "T1057"]
 
     file_indicators = [
         ".*\\\\agent\\.py$",
