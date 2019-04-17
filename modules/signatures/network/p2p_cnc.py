@@ -25,8 +25,6 @@ class P2PCnC(Signature):
 
     filter_analysistypes = set(["file"])
 
-    servers = []
-
     ignoreports = [
         "5938",
         "9001",
@@ -38,18 +36,20 @@ class P2PCnC(Signature):
     ]
 
     def on_complete(self):
+        servers = []
+        
         for tcp in self.get_results("network", {}).get("tcp", []):
             if tcp["dport"] > 1023 and tcp["dport"] not in self.ignoreports:
-                if tcp["dst"] not in self.servers and not tcp["dst"].startswith(("0.", "127.", "169.254.", "10.", "220.", "224.", "239.", "240.", "172.16.", "192.168.", "255.255.255.255")):
-                    self.servers.append(tcp["dst"])
+                if tcp["dst"] not in servers and not tcp["dst"].startswith(("0.", "127.", "169.254.", "10.", "220.", "224.", "239.", "240.", "172.16.", "192.168.", "255.255.255.255")):
+                    servers.append(tcp["dst"])
 
         for udp in self.get_results("network", {}).get("udp", []):
             if udp["dport"] > 1023 and udp["dport"] not in self.ignoreports:
-                if udp["dst"] not in self.servers and not udp["dst"].startswith(("0.", "127.", "169.254.", "10.", "220.", "224.", "239.", "240.", "172.16.", "192.168.", "255.255.255.255")):
-                    self.servers.append(udp["dst"])
+                if udp["dst"] not in servers and not udp["dst"].startswith(("0.", "127.", "169.254.", "10.", "220.", "224.", "239.", "240.", "172.16.", "192.168.", "255.255.255.255")):
+                    servers.append(udp["dst"])
 
-        if len(self.servers) > 4:
-            for server in self.servers:
+        if len(servers) > 4:
+            for server in servers:
                 self.mark_ioc("ip", server)
 
         return self.has_marks()
