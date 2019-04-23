@@ -11,6 +11,7 @@ class InstalledApps(Signature):
     categories = ["recon"]
     authors = ["Optiv"]
     minimum = "2.0"
+    ttp = ["T1012", "T1082"]
 
     filter_apinames = "RegQueryValueExA", "RegQueryValueExW"
 
@@ -32,6 +33,7 @@ class QueriesInstalledApps(Signature):
     categories = ["recon"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1012"]
 
     filter_apinames = "RegOpenKeyExA", "RegOpenKeyExW"
 

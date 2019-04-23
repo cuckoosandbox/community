@@ -11,6 +11,7 @@ class SandboxieDetect(Signature):
     categories = ["anti-vm"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["T1057"]
 
     mutexes_re = [
         ".*Sandboxie_SingleInstanceMutex_Control",

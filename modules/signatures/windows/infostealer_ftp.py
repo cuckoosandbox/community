@@ -22,6 +22,7 @@ class FTPStealer(Signature):
     categories = ["infostealer"]
     authors = ["nex", "RedSocks", "Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["T1081", "T1003", "T1005"]
 
     files_re = [
         ".*\\\\CuteFTP\\\\sm\\.dat$",

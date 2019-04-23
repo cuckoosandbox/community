@@ -22,6 +22,7 @@ class FortinetDetectFiles(Signature):
     categories = ["anti-sandbox"]
     authors = ["Brad Spengler"]
     minimum = "2.0"
+    ttp = ["T1083", "T1057"]
 
     files_re = [
         "C:\\\\tracer\\\\mdare32_0\\.sys",

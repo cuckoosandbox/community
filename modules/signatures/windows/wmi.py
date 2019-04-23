@@ -13,6 +13,7 @@ class HasWMI(Signature):
     categories = ["wmi"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["T1047"]
 
     blacklist = "(AntivirusProduct|FirewallProduct)"
 
@@ -32,6 +33,7 @@ class Win32ProcessCreate(Signature):
     categories = ["wmi"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["T1047"]
 
     filter_apinames = [
         "IWbemServices_ExecMethod",
@@ -51,6 +53,7 @@ class WMIAntiVM(Signature):
     categories = ["wmi", "anti-vm"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1047"]
 
     antivm = [
         "win32_processor",
@@ -78,6 +81,7 @@ class WMIPersistance(Signature):
     categories = ["persistance"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1047"]
 
     persistance = [
         "win32_startupcommand",
@@ -98,6 +102,7 @@ class WMIService(Signature):
     categories = ["persistance"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1047"]
 
     persistance = [
         "win32_service",

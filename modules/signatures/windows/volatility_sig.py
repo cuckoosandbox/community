@@ -11,6 +11,7 @@ class VolMalfind1(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     minimum = "2.0"
+    ttp = ["T1055"]
 
     def on_complete(self):
         pids = set()
@@ -88,6 +89,7 @@ class VolSvcscan1(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "2.0"
+    ttp = ["T1031"]
 
     def on_complete(self):
         for row in self.get_volatility("svcscan").get("data", []):
@@ -105,6 +107,7 @@ class VolSvcscan2(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "2.0"
+    ttp = ["T1031", "T1089"]
 
     def on_complete(self):
         for row in self.get_volatility("svcscan").get("data", []):
@@ -122,6 +125,7 @@ class VolSvcscan3(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "2.0"
+    ttp = ["T1031"]
 
     def on_complete(self):
         for row in self.get_volatility("svcscan").get("data", []):
@@ -154,6 +158,7 @@ class VolHandles1(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     minimum = "2.0"
+    ttp = ["T1055"]
 
     def on_complete(self):
         threads = set()

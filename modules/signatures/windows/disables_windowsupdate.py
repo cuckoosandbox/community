@@ -11,6 +11,7 @@ class DisablesWindowsUpdate(Signature):
     categories = ["generic"]
     authors = ["Optiv"]
     minimum = "2.0"
+    ttp = ["T1112"]
 
     regkeys_re = [
         ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Policies\\\\Microsoft\\\\Windows\\\\WindowsUpdate\\\\(AU\\\\NoAutoUpdate|Auto\\ Update\\\\AUOptions)$",

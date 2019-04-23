@@ -23,6 +23,7 @@ class ProcessInterest(Signature):
     authors = ["Optiv", "Kevin Ross"]
     minimum = "2.0"
     evented = True
+    ttp = ["T1057"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -86,6 +87,7 @@ class InjectionProcessSearch(Signature):
     categories = ["generic"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1057"]
 
     pids = []
 

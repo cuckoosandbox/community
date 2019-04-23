@@ -23,6 +23,7 @@ class PersistenceRegistryJavaScript(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
     evented = True
+    ttp = ["T1112"]
 
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey"])
 
@@ -44,6 +45,7 @@ class PersistenceRegistryEXE(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
     evented = True
+    ttp = ["T1112"]
 
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey"])
 
@@ -65,6 +67,7 @@ class PersistenceRegistryPowershell(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
     evented = True
+    ttp = ["T1112"]
 
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey"])
 

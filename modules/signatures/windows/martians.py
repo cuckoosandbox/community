@@ -82,6 +82,7 @@ class MartianCommandProcess(Signature):
     categories = ["martian", "exploit", "dropper"]
     authors = ["Cuckoo Technologies", "Will Metcalf", "Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1059"]
 
     whitelist_procs = [
         "acrord32.exe",

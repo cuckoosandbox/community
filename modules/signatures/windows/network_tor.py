@@ -22,6 +22,7 @@ class Tor(Signature):
     categories = ["network", "anonimity", "tor"]
     authors = ["nex"]
     minimum = "2.0"
+    ttp = ["T1188"]
 
     filter_apinames = "CreateServiceA", "CreateServiceW"
 

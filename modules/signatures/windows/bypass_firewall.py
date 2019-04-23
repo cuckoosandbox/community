@@ -24,7 +24,7 @@ class BypassFirewall(Signature):
     categories = ["bypass"]
     authors = ["Anderson Tamborim", "nex", "Kevin Ross"]
     minimum = "2.0"
-
+    ttp = ["T1031"]
     indicator = ".*\\\\SYSTEM\\\\CurrentControlSet\\\\Services\\\\SharedAccess\\\\Parameters\\\\FirewallPolicy\\\\.*"
 
     def on_complete(self):

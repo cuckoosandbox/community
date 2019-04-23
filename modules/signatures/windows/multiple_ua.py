@@ -23,6 +23,7 @@ class Multiple_UA(Signature):
     authors = ["KillerInstinct"]
     minimum = "2.0"
     evented = True
+    ttp = ["T1071"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

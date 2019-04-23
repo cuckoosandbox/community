@@ -22,6 +22,7 @@ class BochsDetectKeys(Signature):
     categories = ["anti-vm"]
     authors = ["Brad Spengler"]
     minimum = "2.0"
+    ttp = ["T1057", "T1012"]
 
     regkeys_re = [
         ".*\\\\HARDWARE\\\\ACPI\\\\(DSDT|FADT|RSDT)\\\\BOCHS_.*",
