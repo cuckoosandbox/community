@@ -18,3 +18,11 @@ class TrojanLethic(Signature):
         ".*jK1dDfggS",
         ".*zBIYku2BMUdN9unB87sa2sa",
     ]
+
+    def on_complete(self):
+        for indicator in self.mutexes_re:
+            mutex = self.check_mutex(pattern=indicator, regex=True)
+            if mutex:
+                self.mark_ioc("mutex", mutex)
+
+        return self.has_marks()
