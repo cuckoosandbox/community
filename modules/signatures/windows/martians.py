@@ -38,7 +38,7 @@ class ProcessMartian(Signature):
         "\\\"C:\\\\\Program\\ Files(\\ \\(x86\\))?\\\\Internet\\ Explorer\\\\iexplore\\.exe\\\"\\ SCODEF:\\d+ CREDAT:\\d+",
         "^[A-Z]\:\\Program Files(?:\s\(x86\))?\\Microsoft Office\\(?:Office1[1-5]\\)?(?:WINWORD|OUTLOOK|POWERPNT|EXCEL|WORDVIEW)\.EXE",
         "C\\:\\\\Windows\\\\System32\\\\wscript\\.exe",
-        "C\\:\\\\Program Files(?:\s\\(x86\\))?\\\\Adobe\\\\Reader\\ \\d+\\.\\d+\\\\Reader\\\\AcroRd64\\.exe",
+        "C\\:\\\\Program Files(?:\s\\(x86\\))?\\\\Adobe\\\\Reader\\ \\d+\\.\\d+\\\\Reader\\\\AcroRd32\\.exe",
         "C\\:\\\\Program Files(?:\s\\(x86\\))?\\\\Adobe\\\\Reader\\ \\d+\\.\\d+\\\\Reader\\\\AcroRd64\\.exe",
         "C\\:\\\\Program Files(?:\s\\(x86\\))?\\\\Java\\\\jre\\d+\\\\bin\\\\j(?:avaw?|p2launcher)\\.exe",
         "C\\:\\\\Program Files(?:\s\\(x86\\))?\\\\Microsoft SilverLight\\\\(?:\\d+\\.)+\\d\\\\agcp\\.exe",
@@ -58,7 +58,8 @@ class ProcessMartian(Signature):
 
     def on_complete(self):
         for process in self.get_results("behavior", {}).get("generic", []):
-            if process["process_name"].lower() not in self.whitelist_procs:
+            # Don't keep processing if the process_name is in the list of processes to whitelist
+            if process["process_name"].lower() in self.whitelist_procs:
                 continue
 
             for cmdline in process.get("summary", {}).get("command_line", []):
