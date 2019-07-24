@@ -3,11 +3,15 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
+from __future__ import unicode_literals
+from builtins import str
 from lib.cuckoo.common.abstracts import Signature
+
 
 class CreatesNullRegistryEntry(Signature):
     name = "creates_null_reg_entry"
-    description = "Creates a registry value with a null byte to avoid detection"
+    description = ("Creates a registry value with a null byte to "
+                   "avoid detection")
     authors = ["Cuckoo Technologies"]
     severity = 2
     categories = ["stealth"]
@@ -21,24 +25,16 @@ class CreatesNullRegistryEntry(Signature):
     def on_call(self, call, process):
         api = call["api"]
         arg = call["arguments"]
-        regkey = arg["regkey"]
         null_byte = "\\x00"
         regkey_r = ""
-        value = ""
         if "SetValue" in api:
-            regvalue = arg["value"]
-            if not isinstance(regvalue, (str, unicode)):
-                regvalue = str(regvalue)
-            regvalue = regvalue.encode('utf-8')
+            regvalue = str(arg["value"])
             if regvalue.startswith(null_byte):
                 self.mark_call()
         if "RegSetValue" in api:
-            regkey_r = arg["regkey_r"]
-            if not isinstance(regkey_r, (str, unicode)):
-                regvalue = str(regkey_r)
-            regkey_r = regkey_r.encode('utf-8')
+            regkey_r = str(arg["regkey_r"])
         else:
-            regkey_r = str(regkey).split("\\")[-1]
+            regkey_r = str(arg["regkey"]).split("\\")[-1]
         if regkey_r.startswith(null_byte):
             self.mark_call()
         return self.has_marks()
