@@ -1,9 +1,6 @@
 # Copyright (C) 2010-2015 Cuckoo Foundation.
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
-from cuckoo.misc import cwd
-import os
-from urlparse import urlsplit
 
 try:
     import re2 as re
@@ -11,6 +8,8 @@ except ImportError:
     import re
 
 from lib.cuckoo.common.abstracts import Signature
+from cuckoo.misc import cwd
+from urlparse import urlsplit
 
 class ProcMemDumpURLs(Signature):
     name = "memdump_urls"
