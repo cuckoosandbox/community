@@ -1,6 +1,9 @@
 # Copyright (C) 2010-2015 Cuckoo Foundation.
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
+from cuckoo.misc import cwd
+import os
+from urlparse import urlsplit
 
 try:
     import re2 as re
@@ -17,10 +20,26 @@ class ProcMemDumpURLs(Signature):
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
 
+    whitelist_file = cwd("whitelist", "domain.txt")
+    whitelist = open(whitelist_file, "r")
+
+
     def on_complete(self):
         for procmem in self.get_results("procmemory", []):
             for url in procmem.get("urls", []):
-                self.mark_ioc("url", url)
+                #Extract top level domain from Procmem results
+                parts = urlsplit(url)
+                if parts[1]:
+                    url = parts[1]
+                else:
+                    pass
+                is_whitelisted = False
+                for white in ProcMemDumpURLs.whitelist:
+                    if re.match(white, url, re.IGNORECASE):
+                        is_whitelisted = True
+                        break
+                if not is_whitelisted:
+                    self.mark_ioc("url", url)
 
         return self.has_marks()
 
@@ -60,7 +79,6 @@ class ProcMemDumpTorURLs(Signature):
             ".vivavtpaymaster.com",
             ".fraspartypay.com",
         ]
-
         for procmem in self.get_results("procmemory", []):
             for url in procmem.get("urls", []):
                 for indicator in indicators:
