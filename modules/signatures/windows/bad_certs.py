@@ -77,7 +77,7 @@ class BadCerts(Signature):
         for sig in self.get_results("static", {}).get("signature", []):
             if sig["sha1"] in self.sha1_sigs:
                 self.mark(cert=sig, reference=self.sha1_sigs[sig["sha1"]])
-            elif sig["common_name"] in self.cn_sigs:
-                self.mark(cert=sig, reference=self.cn_sigs[sig["common_name"]])
+            elif sig["subject_commonName"] in self.cn_sigs:
+                self.mark(cert=sig, reference=self.cn_sigs[sig["subject_commonName"]])
 
         return self.has_marks()
