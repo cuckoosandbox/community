@@ -1,2 +1,5 @@
 *.pyc
 *.pytest_cache/
+
+# OS generated files
+.DS_Store*
