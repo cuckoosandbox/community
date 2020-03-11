@@ -23,6 +23,7 @@ class ChecksDebugger(Signature):
     categories = ["anti-debug"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["M0001"]
 
     filter_apinames = [
         "CheckRemoteDebuggerPresent",
@@ -42,6 +43,7 @@ class ChecksKernelDebugger(Signature):
     categories = ["anti-debug"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["M0001"]
 
     filter_apinames = [
         "SystemKernelDebuggerInformation",

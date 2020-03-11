@@ -21,7 +21,7 @@ class VMWareDetectKeys(Signature):
     categories = ["anti-vm"]
     authors = ["Cuckoo Technologies", "Optiv"]
     minimum = "2.0"
-    ttp = ["T1057", "T1012"]
+    ttp = ["M0009", "T1012"]
 
     regkeys_re = [
         ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?VMWare,\\ Inc\..*",

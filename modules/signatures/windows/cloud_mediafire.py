@@ -12,6 +12,7 @@ class cloud_mediafire(Signature):
     categories = ["cloud"]
     authors = ["RedSocks"]
     minimum = "2.0"
+    ttp = ["T1102"]
 
     ipaddrs = [
         "205.196.120.6",

@@ -11,6 +11,7 @@ class CloudGoogle(Signature):
     categories = ["cloud"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["T1105", "T1102"]
 
     domains = [
         "docs.google.com",

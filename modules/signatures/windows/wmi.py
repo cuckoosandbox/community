@@ -53,7 +53,7 @@ class WMIAntiVM(Signature):
     categories = ["wmi", "anti-vm"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1047"]
+    ttp = ["M0009", "T1047", "T1497"]
 
     antivm = [
         "win32_processor",

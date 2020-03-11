@@ -22,6 +22,7 @@ class P2PCnC(Signature):
     categories = ["p2p", "cnc"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1094"]
 
     filter_analysistypes = set(["file"])
 

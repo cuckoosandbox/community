@@ -11,6 +11,7 @@ class AndroidPrivateInfoQuery(Signature):
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
     minimum = "2.0"
+    ttp = ["T1409"]
 
     def on_complete(self):
         if "ContentResolver_queries" in self.get_droidmon():

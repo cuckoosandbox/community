@@ -11,7 +11,8 @@ class BitcoinWallet(Signature):
     categories = ["infostealer"]
     authors = ["Kevin Ross", "Optiv"]
     minimum = "2.0"
-    ttp = ["T1005"]
+    ttp = ["E1409"]
+
 
     file_indicators = [
          ".*\\\\wallet\.dat$",

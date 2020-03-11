@@ -15,7 +15,7 @@ class AntiAVDetectFile(Signature):
     categories = ["anti-av"]
     authors = ["Optiv"]
     minimum = "2.0"
-    ttp = ["T1063"]
+    ttp = ["T1063", "T1083"]
 
     file_indicators = [
         ".*\\\\AVAST\\ Software",

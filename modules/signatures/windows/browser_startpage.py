@@ -22,6 +22,7 @@ class browser_startpage(Signature):
     categories = ["browser", "adware"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["E1478"]
 
     regkeys_re = [
         ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\Main\\\\Start\\ Page",

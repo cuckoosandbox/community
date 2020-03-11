@@ -13,6 +13,7 @@ class RansomwareShadowcopy(Signature):
     categories = ["ransomware"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["T1490"]
 
     cmdline_re = (
         "wmic.*shadowcopy.*delete.*(/nointeractive)?",

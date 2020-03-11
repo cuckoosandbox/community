@@ -22,6 +22,7 @@ class CheckIP(Signature):
     categories = ["recon"]
     authors = ["nex", "RedSocks"]
     minimum = "2.0"
+    ttp = ["T1016"]
 
     domains = [
         "checkip.dyndns.com",

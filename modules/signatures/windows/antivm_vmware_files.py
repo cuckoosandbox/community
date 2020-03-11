@@ -11,7 +11,7 @@ class VMWareDetectFiles(Signature):
     categories = ["anti-vm"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1083", "T1057"]
+    ttp = ["M0009"]
 
     files_re = [
         ".*vmmouse\\.sys",

@@ -11,6 +11,7 @@ class AndroidInstalledApps(Signature):
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
     minimum = "2.0"
+    ttp = ["M0023"]
 
     def on_complete(self):
         if "android/app/ApplicationPackageManager->installPackage" in self.get_droidmon():

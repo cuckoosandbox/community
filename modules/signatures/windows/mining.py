@@ -12,6 +12,7 @@ class miningpool(Signature):
     categories = ["mining"]
     authors = ["RedSocks"]
     minimum = "2.0"
+    ttp = ["M0018"]
 
     ipaddrs = [
         "144.76.102.176",

@@ -19,6 +19,7 @@ class RamsomwareFileMoves(Signature):
     severity = 3
     categories = ["ransomware"]
     minimum = "2.0"
+    ttp = ["E1486"]
 
     filter_apinames = "MoveFileWithProgressW", "MoveFileWithProgressTransactedW"
 
@@ -52,6 +53,7 @@ class RansomwareAppendsExtension(Signature):
     categories = ["ransomware"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["E1486"]
 
     filter_apinames = "MoveFileWithProgressW", "MoveFileWithProgressTransactedW"
 
@@ -87,6 +89,7 @@ class RansomwareDroppedFiles(Signature):
     categories = ["ransomware"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["E1486"]
 
     def on_complete(self):
         count = 0
@@ -116,6 +119,7 @@ class RansomwareMassFileDelete(Signature):
     categories = ["ransomware", "wiper"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1488"]
     evented = True
 
     def on_complete(self):

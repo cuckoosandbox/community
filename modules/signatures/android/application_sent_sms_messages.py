@@ -11,6 +11,7 @@ class AndroidSMS(Signature):
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
     minimum = "2.0"
+    ttp = ["E1472"]
 
     def on_complete(self):
         if "sms" in self.get_droidmon():

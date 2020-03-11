@@ -31,7 +31,7 @@ class Autorun(Signature):
     categories = ["persistence"]
     authors = ["Michael Boman", "nex", "securitykitten", "Cuckoo Technologies", "Optiv", "KillerInstinct", "Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1060", "T1053"]
+    ttp = ["E1060", "T1050", "E1112"]
 
     regkeys_re = [
         ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\.*",

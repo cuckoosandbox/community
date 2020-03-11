@@ -11,6 +11,7 @@ class AndroidNativeCode(Signature):
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
     minimum = "2.0"
+    ttp = ["E1203"]
 
     def on_complete(self):
         if self.get_apkinfo("static_method_calls").get("is_native_code"):

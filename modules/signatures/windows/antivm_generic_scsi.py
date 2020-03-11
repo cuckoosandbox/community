@@ -22,7 +22,7 @@ class AntiVMSCSI(Signature):
     categories = ["anti-vm"]
     authors = ["nex"]
     minimum = "2.0"
-    ttp = ["T1057", "T1012"]
+    ttp = ["M0009", "T1012"]
 
     regkeys_re = [
         ".*\\\\HARDWARE\\\\DEVICEMAP\\\\Scsi\\\\Scsi Port \\d+\\\\Scsi Bus \\d+\\\\Target Id \\d+\\\\Logical Unit Id \\d+\\\\Identifier",

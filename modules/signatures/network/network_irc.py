@@ -22,6 +22,7 @@ class NetworkIRC(Signature):
     categories = ["irc"]
     authors = ["nex"]
     minimum = "2.0"
+    ttp = ["T1102"]
 
     def on_complete(self):
         if self.get_net_irc():

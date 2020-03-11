@@ -11,6 +11,7 @@ class AndroidDeletedApp(Signature):
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
     minimum = "2.0"
+    ttp = ["E1485"]
 
     def on_complete(self):
         if "android/app/ApplicationPackageManager->deletePackage" in self.get_droidmon():

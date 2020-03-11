@@ -9,7 +9,8 @@ class LocatesBrowser(Signature):
     description = "Tries to locate where the browsers are installed"
     severity = 1
     authors = ["Cuckoo Technologies"]
-    minimum = "2.0"
+    minimum = "2.0
+    ttp = ["T1518"]
 
     files_re = [
         "C:\\\\Program\\ Files(\\ \\(x86\\))?\\\\Google\\\\Chrome\\\\Application",

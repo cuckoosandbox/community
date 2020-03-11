@@ -13,7 +13,7 @@ class RansomwareBcdedit(Signature):
     categories = ["ransomware"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1047"]
+    ttp = ["T1490"]
 
     indicator = (
         "bcdedit.*/set.*(bootems|optionsedit|advancedoptions|bootstatuspolicy|recoveryenabled)"

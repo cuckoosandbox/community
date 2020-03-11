@@ -11,7 +11,7 @@ class DisablesSPDYFirefox(Signature):
     categories = ["infostealer", "banker"]
     authors = ["Optiv"]
     minimum = "2.0"
-    ttp = ["T1089"]
+    ttp = ["E1478"]
 
     filter_apinames = [
         "NtWriteFile",
@@ -32,7 +32,7 @@ class DisablesSPDYIE(Signature):
     categories = ["infostealer", "banker"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1089"]
+    ttp = ["E1478"]
     references = ["www.windows-security.org/65bb16b8e4a8cda95159541fcf31fcd7/allow-internet-explorer-to-use-the-spdy3-network-protocol"]
 
     filter_apinames = [
@@ -59,7 +59,7 @@ class DisablesSPDYChrome(Signature):
     categories = ["infostealer", "banker"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1089"]
+    ttp = ["E1478"]
 
     def on_complete(self):
         for cmdline in self.get_command_lines():
@@ -75,7 +75,7 @@ class ModifiesFirefoxConfiguration(Signature):
     categories = ["infostealer", "banker"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1089"]
+    ttp = ["E1478"]
 
     filter_apinames = [
         "NtWriteFile",
@@ -98,7 +98,7 @@ class DisablesIEHTTP2(Signature):
     categories = ["infostealer", "banker"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1089"]
+    ttp = ["E1478", "E1112"]
 
     http2keys = [
         "enablehttp2tls",

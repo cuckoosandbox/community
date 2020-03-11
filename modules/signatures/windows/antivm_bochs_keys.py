@@ -16,13 +16,13 @@
 from lib.cuckoo.common.abstracts import Signature
 
 class BochsDetectKeys(Signature):
-    name = "antivm_xen_keys"
+    name = "antivm_bochs_keys"
     description = "Detects Bochs through the presence of a registry key"
     severity = 3
     categories = ["anti-vm"]
     authors = ["Brad Spengler"]
     minimum = "2.0"
-    ttp = ["T1057", "T1012"]
+    ttp = ["M0009", "T1012"]
 
     regkeys_re = [
         ".*\\\\HARDWARE\\\\ACPI\\\\(DSDT|FADT|RSDT)\\\\BOCHS_.*",

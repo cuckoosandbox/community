@@ -43,6 +43,7 @@ class RansomwareMessage(Signature):
     categories = ["ransomware"]
     authors = ["Kevin Ross"]
     minimum = "2.0.4"
+    ttp = ["E1486"]
 
     whitelistprocs = [
         "iexplore.exe", "firefox.exe", "chrome.exe", "safari.exe",
@@ -70,6 +71,7 @@ class RansomwareMessageOCR(Signature):
     categories = ["ransomware", "ocr"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["E1486"]
 
     # NOTE: This requires OCR analysis to be correctly setup.
     # Enable in processing.conf after following this guide for Ubuntu or

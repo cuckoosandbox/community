@@ -22,7 +22,7 @@ class DeletesExecutedFiles(Signature):
     categories = ["persistence", "stealth"]
     authors = ["Optiv", "Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1070"]
+    ttp = ["E1007"]
     evented = True
 
     def on_complete(self):

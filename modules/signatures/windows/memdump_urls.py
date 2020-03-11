@@ -16,6 +16,7 @@ class ProcMemDumpURLs(Signature):
     categories = ["unpacking"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["T1188"]
 
     def on_complete(self):
         for procmem in self.get_results("procmemory", []):

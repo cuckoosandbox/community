@@ -22,7 +22,7 @@ class AntiVMServices(Signature):
     categories = ["anti-vm"]
     authors = ["nex"]
     minimum = "2.0"
-    ttp = ["T1007"]
+    ttp = ["M0009", "T1007"]
 
     filter_apinames = "EnumServicesStatusA", "EnumServicesStatusW"
 

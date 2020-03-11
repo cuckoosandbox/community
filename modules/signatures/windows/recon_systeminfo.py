@@ -24,6 +24,7 @@ class SystemInfo(Signature):
     categories = ["recon"]
     authors = ["nex"]
     minimum = "2.0"
+    ttp = ["T1016", "T1082"]
 
     def on_complete(self):
         for cmdline in self.get_command_lines():

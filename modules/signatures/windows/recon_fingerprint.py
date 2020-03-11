@@ -22,6 +22,7 @@ class Fingerprint(Signature):
     categories = ["recon"]
     authors = ["nex"]
     minimum = "2.0"
+    ttp = ["T1082"]
 
     indicators = [
         ".*\\\\MachineGuid$",

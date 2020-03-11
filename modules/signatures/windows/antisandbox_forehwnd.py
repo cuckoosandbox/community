@@ -20,6 +20,7 @@ class AntiSandboxForegroundWindow(Signature):
     severity = 2
     categories = ["anti-sandbox"]
     minimum = "2.0"
+    ttp = ["M0007"]
 
     references = [
         "https://www.virusbtn.com/virusbulletin/archive/2015/09/vb201509-custom-packer.dkb",

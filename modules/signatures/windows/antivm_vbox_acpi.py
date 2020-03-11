@@ -22,6 +22,7 @@ class VBoxDetectACPI(Signature):
     categories = ["anti-vm"]
     authors = ["nex"]
     minimum = "2.0"
+    ttp = ["M0009", "T1012"]
 
     def on_complete(self):
         for regkey in self.check_key("HARDWARE\\\\ACPI\\\\.*vbox_", regex=True, all=True):

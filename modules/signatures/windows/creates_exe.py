@@ -16,7 +16,7 @@ class CreatesExe(Signature):
     categories = ["generic"]
     authors = ["Cuckoo Developers"]
     minimum = "2.0"
-    ttp = ["T1129"]
+    ttp = ["T1105"]
 
     pattern = (
         ".*\\.(bat|cmd|com|cpl|dll|exe|js|jse|lnk|msi|msh|msh1|msh2|mshxml|"
@@ -37,7 +37,7 @@ class CreatesUserFolderEXE(Signature):
     families = ["persistance"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1129"]
+    ttp = ["T1105"]
 
     directories_re = [
         "^[a-zA-Z]:\\\\Users\\\\[^\\\\]+\\\\AppData\\\\.*",

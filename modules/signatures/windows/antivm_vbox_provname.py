@@ -23,6 +23,7 @@ class VBoxDetectProvname(Signature):
     authors = ["Optiv"]
     minimum = "2.0"
     evented = True
+    ttp = ["M0009"]
 
     filter_apinames = "WNetGetProviderNameW",
 

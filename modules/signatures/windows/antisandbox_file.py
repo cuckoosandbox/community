@@ -11,6 +11,7 @@ class AntiSandboxFile(Signature):
     categories = ["anti-sandbox"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["M0007"]
 
     files_re = [
         "[a-zA-Z]:\\\\sample\\.exe",

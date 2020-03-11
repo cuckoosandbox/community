@@ -11,6 +11,7 @@ class AndroidRegisteredReceiver(Signature):
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
     minimum = "2.0"
+    ttp = ["E1203"]
 
     def on_complete(self):
         if "registered_receivers" in self.get_droidmon():

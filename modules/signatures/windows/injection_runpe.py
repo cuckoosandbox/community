@@ -26,6 +26,7 @@ class InjectionRunPE(Signature):
     categories = ["injection"]
     authors = ["glysbaysb", "Accuvant"]
     minimum = "2.0"
+    ttp = ["E1055"]
 
     filter_apinames = [
         "CreateProcessInternalW",

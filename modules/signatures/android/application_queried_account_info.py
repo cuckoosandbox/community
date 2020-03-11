@@ -11,6 +11,7 @@ class AndroidAccountInfo(Signature):
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
     minimum = "2.0"
+    ttp = ["T1087"]
 
     def on_complete(self):
         if "getAccounts" in self.get_droidmon("data_leak"):

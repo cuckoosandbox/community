@@ -22,6 +22,7 @@ class BitcoinOpenCL(Signature):
     categories = ["bitcoin"]
     authors = ["nex"]
     minimum = "2.0"
+    ttp = ["M0018"]
 
     def on_complete(self):
         filepath = self.check_file(pattern=".*OpenCL\.dll$", regex=True)

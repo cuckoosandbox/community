@@ -22,7 +22,7 @@ class Unhook(Signature):
     categories = ["anti-sandbox"]
     authors = ["nex"]
     minimum = "2.0"
-    ttp = ["T1089"]
+    ttp = ["M0003"]
 
     filter_apinames = "__anomaly__",
 

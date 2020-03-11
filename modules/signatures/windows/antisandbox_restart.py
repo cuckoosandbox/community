@@ -12,6 +12,7 @@ class AntiSandboxRestart(Signature):
     categories = ["anti-sandbox"]
     authors = ["Cuckoo Technologies", "Brad Spengler"]
     minimum = "2.0"
+    ttp = ["M0003"]
 
     filter_apinames = (
         "InitiateSystemShutdownExW", "InitiateSystemShutdownExA",

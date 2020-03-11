@@ -21,6 +21,7 @@ class RansomwareExtensions(Signature):
     severity = 3
     categories = ["ransomware"]
     authors = ["Kevin Ross"]
+    ttp = ["E1486"]
 
     indicators = [
         (".*\.(?:R5A|R4A)$", ["7ev3n"]),

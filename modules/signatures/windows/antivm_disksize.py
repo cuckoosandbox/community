@@ -23,6 +23,7 @@ class AntiVMDiskSize(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
     evented = True
+    ttp = ["M0009"]
 
     filter_apinames = [
         "GetDiskFreeSpaceA",

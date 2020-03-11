@@ -11,6 +11,7 @@ class AndroidAudio(Signature):
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
     minimum = "2.0"
+    ttp = ["T1123"]
 
     def on_complete(self):
         if "mediaRecorder" in self.get_droidmon("events"):

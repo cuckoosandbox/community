@@ -11,6 +11,7 @@ class AndroidPhoneNumber(Signature):
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
     minimum = "2.0"
+    ttp = ["T1082"]
 
     def on_complete(self):
         if "getLine1Number" in self.get_droidmon("fingerprint"):

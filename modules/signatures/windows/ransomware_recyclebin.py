@@ -11,6 +11,7 @@ class RansomwareRecyclebin(Signature):
     categories = ["ransomware"]
     authors = ["Optiv"]
     minimum = "2.0"
+    ttp = ["E1485"]
 
     def on_complete(self):
         for deleted in self.check_file("C:\\\\RECYCLER\\\\.*", actions=["file_deleted"], regex=True, all=True):

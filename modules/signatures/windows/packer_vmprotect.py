@@ -22,7 +22,7 @@ class VMPPacked(Signature):
     categories = ["packer"]
     authors = ["Jeremy Hedges"]
     minimum = "2.0"
-    ttp = ["T1045"]
+    ttp = ["E1045"]
 
     def on_complete(self):
         for section in self.get_results("static", {}).get("pe_sections", []):

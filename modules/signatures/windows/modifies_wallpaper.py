@@ -22,6 +22,7 @@ class ModifiesDesktopWallpaper(Signature):
     categories = ["ransomware"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["E1478", "E1112"]
 
     regkeys_re = [
         ".*\\\\Control\\ Panel\\\\Desktop\\\\Wallpaper",

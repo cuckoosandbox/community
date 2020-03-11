@@ -12,6 +12,7 @@ class im_btb(Signature):
     categories = ["im"]
     authors = ["RedSocks"]
     minimum = "2.0"
+    ttp = ["T1102"]
 
     ipaddrs = [
         "23.21.70.220",

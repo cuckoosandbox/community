@@ -24,6 +24,7 @@ class RansomwareWbadmin(Signature):
     categories = ["ransomware"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1490"]
 
     cmdline_re = (
         "wbadmin.*delete.*",
