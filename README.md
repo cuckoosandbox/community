@@ -1,50 +1,107 @@
-Community Repository
-====================
+# <a name="mbc"></a>Cuckoo Community Signature-MBC Mappings #
 
-This is an open repository dedicated to **contributions from the commmunity**.
-Here you are able to submit the custom modules that you wrote for your Cuckoo
-Sandbox setup and that you want to share with the rest of the community.
+The MBC team has mapped [Cuckoo community signatures](https://github.com/cuckoosandbox/community) into MBC. Of the 560+ signatures available in the community repository, approximately 275 are appropriate for mapping into MBC (the others are anti-virus related signatures that identify specific threats). 
 
-We believe that there's high value and potential in the malware research
-community to be more transparent and cooperative and this wants to be an
-initiative to support it.
+Approximately 140 of the signatures were already mapped into ATT&CK. We added new signatures, possible because MBC includes malware-related behaviors that ATT&CK doesn't. We also revised 80 of the ATT&CK mappings according to MBC's malware-focused content.
 
-We have recently started a [changelog](CHANGELOG.md) with documentation on
-recent changes. We expect this to grow overtime!
+Below, we explain how these signatures are used. We begin with an example Python signature and then show report output.
 
-How to use it
--------------
+Example Cuckoo Signature
+------------------------
 
-You will find that all the directories here share the same structure of our
-latest Cuckoo Sandbox release. Potentially you could just download the whole
-repository and extract it in Cuckoo's root directory, but we suggest you to
-manually take care of copying just the modules you are interested in.
+This signature example (antisandbox_sleep.py) was not mapped to an ATT&CK technique. We map it to **Dynamic Analysis Evasion [M0003]** as shown below (see the ttp variable).
+
+```python
+from lib.cuckoo.common.abstracts import Signature
+
+class AntiSandboxSleep(Signature):
+    name = "antisandbox_sleep"
+    description = "A process attempted to delay the analysis task."
+    severity = 2
+    categories = ["anti-sandbox"]
+    authors = ["KillerInstinct"]
+    minimum = "2.0"
+    ttp = ["M0003"]
+
+    filter_apinames = "NtDelayExecution",
+
+    whitelist = [
+        "dwm.exe",
+        "adobearm.exe",
+        "iexplore.exe",
+        "acrord32.exe",
+        "winword.exe",
+        "excel.exe",
+    ]
+
+    def init(self):
+        self.sleeps = {}
+
+    def on_call(self, call, process):
+        procname = process["process_name"]
+        if procname not in self.sleeps:
+            self.sleeps[procname] = {
+                "attempt": 0,
+                "actual": 0,
+            }
+
+        milliseconds = call["arguments"]["milliseconds"]
+
+        self.sleeps[procname]["attempt"] += milliseconds
+
+        if not call["arguments"]["skipped"]:
+            self.sleeps[procname]["actual"] += milliseconds
+
+    def on_complete(self):
+        for process_name, info in self.sleeps.items():
+            if process_name.lower() in self.whitelist:
+                continue
+
+            if info["attempt"] >= 120000:
+                attempted = info["attempt"] / 1000
+                actual = info["actual"] / 1000
+                self.mark(description="%s tried to sleep %s seconds, actually delayed analysis time by %s seconds" % (process_name, attempted, actual))
+
+            if info["attempt"] >= 1200000:
+                self.severity = 3
+
+        return self.has_marks()
+```
+
+Cuckoo Reports
+--------------
+
+The signature section of a Cuckoo report specifies associated MBC behavior as shown in the example below (Dynamic Analysis Evasion [M0003] behavior is shown).
+
+```json
+"signatures": [
+  {
+      "families": [],
+      "description": "A process attempted to delay the analysis task.",
+      "severity": 1,
+      "ttp": {
+        "M0003": {
+          "short": "Dynamic Analysis Evasion",
+          "long": "Malware may obstruct dynamic analysis in a sandbox, emulator, or virtual <snip>"
+        }
+      },
+      "markcount": 1,
+      "references": "...",
+      "marks": "...",
+      "name": "antisandbox_sleep"
+  }
+]
+```
+
+How to Use the Repository
+-------------------------
+
+The open repository is dedicated to contributions from the commmunity.
+Users can submit custom modules for sharing with the rest of the community. Please see the [Cuckoo community signatures](https://github.com/cuckoosandbox/community) for more information.
+
+All the directories here share the same structure as the
+latest Cuckoo Sandbox release. While it's possible to download the whole
+repository and extract it in Cuckoo's root directory, it is suggested that only the modules of interest are copied.
 
 Cuckoo also provides an utility to automatically download and install
 latest modules. You can do so by running the `cuckoo community` command.
-
-Being a community-driven repository we, as the Cuckoo Sandbox developers,
-do not take any responsibility for the validity of the code submitted.
-We will try to keep this place in order, but we can't guarantee the
-quality of the modules here available and therefore do not provide any
-assistance on eventual malfunctions.
-
-Contributing
-------------
-
-If you have one or more Signatures you'd like to share, please make a pull
-request and we'll take care of it eventually.
-
-Before submitting your request make sure that:
-* You take a look at the [community guidelines](https://cuckoo.sh/docs/introduction/community.html)
-* Your code is working.
-* Your code is unique: don't reinvent the wheel and check whether someone already provided a similar solution.
-* Your code is relevant to the project and actually adds some value.
-* Your code is placed in the correct directory.
-
-There are many factors that make it easier for us to merge your pull request.
-Inclusion of `sample hashes`, before and after results, and tested
-environment(s) really help us with evaluating your potential contributions,
-and as such make the merge it more quickly.
-
-We take the discretion to approve or reject submissions at our will.
