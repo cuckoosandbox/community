@@ -31,6 +31,7 @@ class VolLdrModules1(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     minimum = "2.0"
+    ttp = ["E1055"]
 
     # http://mnin.blogspot.de/2011/06/examining-stuxnets-footprint-in-memory.html
 
@@ -53,6 +54,7 @@ class VolLdrModules2(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     minimum = "2.0"
+    ttp = ["E1105"]
 
     # http://mnin.blogspot.de/2011/06/examining-stuxnets-footprint-in-memory.html
 
@@ -71,6 +73,7 @@ class VolDevicetree1(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "2.0"
+    ttp = ["E1215"]
 
     # http://mnin.blogspot.de/2011/10/zeroaccess-volatility-and-kernel-timers.html
 
@@ -143,6 +146,7 @@ class VolModscan1(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "2.0"
+    ttp = ["E1215"]
 
     def on_complete(self):
         for row in self.get_volatility("modscan").get("data", []):

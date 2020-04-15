@@ -22,7 +22,7 @@ class BrowserSecurity(Signature):
     categories = ["browser", "clickfraud", "banker"]
     authors = ["Kevin Ross", "Optiv"]
     minimum = "2.0"
-    ttp = ["T1089"]
+    ttp = ["E1112", "E1478"]
 
     regkeys_re = [
         ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\Privacy\\\\EnableInPrivateMode",

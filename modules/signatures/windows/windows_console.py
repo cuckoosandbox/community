@@ -22,6 +22,7 @@ class ConsoleOutput(Signature):
     categories = ["command"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1059"]
 
     filter_apinames = [
         "WriteConsoleA",

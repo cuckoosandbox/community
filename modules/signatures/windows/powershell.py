@@ -149,7 +149,7 @@ class PowershellDI(Signature):
     categories = ["script", "dropper", "downloader", "malware", "powershell"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
-    ttp = ["T1086"]
+    ttp = ["T1086", "T1105"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "PowershellDI":
@@ -246,7 +246,7 @@ class PowershellRequest(Signature):
     categories = ["downloader"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1086", "T1071"]
+    ttp = ["T1086"]
 
     filter_apinames = [
         "send",

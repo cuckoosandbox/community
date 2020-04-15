@@ -58,6 +58,7 @@ class OfficeCheckProjectName(Signature):
     categories = ["vba"]
     authors = ["FDD", "Cuckoo Sandbox"]
     minimum = "2.0"
+    ttp = ["M0038", "M0007"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -93,6 +94,7 @@ class OfficeCheckVersion(Signature):
     categories = ["vba"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["M0009", "T1518"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -116,6 +118,7 @@ class OfficeCheckWindow(Signature):
     categories = ["vba"]
     authors = ["FDD @ Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["M0009", "T1010"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -218,6 +221,7 @@ class OfficeCheckName(Signature):
     categories = ["office"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["M0038", "M0007", "T1064"]
 
     patterns = [
         "[^\n\r;']*Me.Name[^\n\r;']*",

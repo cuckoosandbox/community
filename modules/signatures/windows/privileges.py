@@ -21,6 +21,7 @@ class PrivilegeLUIDCheck(Signature):
     categories = ["privileges"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1134"]
 
     filter_apinames = [
         "LookupPrivilegeValueA",

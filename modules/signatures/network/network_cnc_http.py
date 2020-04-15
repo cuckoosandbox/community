@@ -58,6 +58,7 @@ class NetworkCnCHTTP(Signature):
     categories = ["http", "cnc"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1071", "M0030"]
 
     filter_analysistypes = set(["file"])
 

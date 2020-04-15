@@ -10,6 +10,7 @@ class RaisesException(Signature):
     severity = 1
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["T1082"]
 
     filter_apinames = "__exception__",
 
@@ -52,6 +53,7 @@ class ApplicationExceptionCrash(Signature):
     categories = ["exploit", "crash"]
     authors = ["Cuckoo Technologies", "Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1082"]
 
     filter_apinames = "__exception__",
 

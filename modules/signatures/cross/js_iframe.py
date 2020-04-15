@@ -13,6 +13,7 @@ class JsIframe(Signature):
     categories = ["obfuscation"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["T1064"]
 
     filter_apinames = "CIFrameElement_CreateElement",
 

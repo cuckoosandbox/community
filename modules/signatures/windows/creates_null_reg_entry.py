@@ -12,7 +12,7 @@ class CreatesNullRegistryEntry(Signature):
     severity = 2
     categories = ["stealth"]
     minimum = "2.0"
-    ttp = ["T1054", "T1112"]
+    ttp = ["E1054", "E1112"]
     filter_apinames = (
         "NtSetValueKey", "NtCreateKey", "RegCreateKeyExA",
         "RegCreateKeyExW", "RegSetValueExA", "RegSetValueExW",

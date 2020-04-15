@@ -11,7 +11,7 @@ class InstallsBHO(Signature):
     categories = ["browser"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1176","E1112"]
+    ttp = ["T1176", "E1112"]
 
     regkeys_re = [
         ".*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Browser\\ Helper\\ Objects",

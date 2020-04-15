@@ -22,7 +22,7 @@ class OfficePackager(Signature):
     categories = ["dropper", "office"]
     authors = ["nex"]
     minimum = "2.0"
-    ttp = ["T1203"]
+    ttp = ["E1203"]
 
     filter_apinames = [
         "CreateProcessInternalW",
