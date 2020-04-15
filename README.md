@@ -4,7 +4,7 @@ The MBC team has mapped [Cuckoo community signatures](https://github.com/cuckoos
 
 Approximately 140 of the signatures were already mapped into ATT&CK. We added new signatures, possible because MBC includes malware-related behaviors that ATT&CK doesn't. We also revised 80 of the ATT&CK mappings according to MBC's malware-focused content.
 
-Below, we explain how these signatures are used. We begin with an example Python signature and then show report output.
+Below, we explain how these signatures are used. We begin with an example Python signature and then show report output. We end with information on how to use the signature repository.
 
 Example Cuckoo Signature
 ------------------------
@@ -96,8 +96,8 @@ The signature section of a Cuckoo report specifies associated MBC behavior as sh
 How to Use the Repository
 -------------------------
 
-The open repository is dedicated to contributions from the commmunity.
-Users can submit custom modules for sharing with the rest of the community. Please see the [Cuckoo community signatures](https://github.com/cuckoosandbox/community) for more information.
+The [Cuckoo community repository](https://github.com/cuckoosandbox/community) is open and dedicated to contributions from the commmunity.
+Users can submit custom modules for sharing with the rest of the community.
 
 All the directories here share the same structure as the
 latest Cuckoo Sandbox release. While it's possible to download the whole
