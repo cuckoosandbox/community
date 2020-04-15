@@ -43,7 +43,7 @@ class ClearPermissionEventLogs(Signature):
     categories = ["commands", "stealth"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1070", "T1222"]
+    ttp = ["T1222", "T1070"]
     utilities = [
         "wevtutil sl",
         "wevtutil.exe sl"

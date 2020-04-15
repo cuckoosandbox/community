@@ -12,7 +12,7 @@ class DropBox(Signature):
     categories = ["cloud"]
     authors = ["RedSocks"]
     minimum = "2.0"
-    ttp = ["T1102", "T1135"]
+    ttp = ["T1135", "T1102"]
 
     domains = [
         "dropbox.com",

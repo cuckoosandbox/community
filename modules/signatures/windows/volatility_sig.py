@@ -54,7 +54,7 @@ class VolLdrModules2(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     minimum = "2.0"
-    ttp = ["E1105"]
+    ttp = ["E1055"]
 
     # http://mnin.blogspot.de/2011/06/examining-stuxnets-footprint-in-memory.html
 
