@@ -15,7 +15,16 @@ class CreatesDocument(Signature):
     pattern = ".*\\.(doc|docm|dotm|docx|ppt|pptm|pptx|potm|ppam|ppsm|xls|xlsm|xlsx|pdf)$"
 
     def on_complete(self):
+        if self.get_results("target", {}).get("category") != "file":
+            return
+
+        f = self.get_results("target", {}).get("file", {})
+        filename = f.get("name")
+        if not filename:
+            return
+
         for filepath in self.check_file(pattern=self.pattern, actions=["file_written"], regex=True, all=True):
-            self.mark_ioc("file", filepath)
+            if filename not in filepath:
+                self.mark_ioc("file", filepath)
 
         return self.has_marks()
