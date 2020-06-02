@@ -25,7 +25,7 @@ class AntiSandboxSleep(Signature):
 
     filter_apinames = "NtDelayExecution",
 
-    whitelist = [
+    safelist = [
         "dwm.exe",
         "adobearm.exe",
         "iexplore.exe",
@@ -54,7 +54,7 @@ class AntiSandboxSleep(Signature):
 
     def on_complete(self):
         for process_name, info in self.sleeps.items():
-            if process_name.lower() in self.whitelist:
+            if process_name.lower() in self.safelist:
                 continue
 
             if info["attempt"] >= 120000:

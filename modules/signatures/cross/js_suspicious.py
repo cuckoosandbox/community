@@ -49,7 +49,7 @@ class AntiAnalysisJavascript(Signature):
         "Kaspersky.IeVirtualKeyboardPlugin.JavascriptApi.4_5_0.1",
     ]
 
-    image_blacklisted = [
+    image_blocklisted = [
         "Fiddler2",
         "VMware",
         "Oracle",
@@ -69,7 +69,7 @@ class AntiAnalysisJavascript(Signature):
         if not src.startswith("res://"):
             return
 
-        for blacklist in self.image_blacklisted:
-            if blacklist.lower() in src:
+        for blocklist in self.image_blocklisted:
+            if blocklist.lower() in src:
                 self.mark_call()
                 return True

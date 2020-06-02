@@ -25,7 +25,7 @@ class SuricataAlert(Signature):
     minimum = "2.0"
 
     et_trojan = "ET TROJAN", "ETPRO TROJAN"
-    blacklist = (
+    blocklist = (
         "executable", "potential", "likely", "rogue", "supicious", "generic",
         "possible", "known", "common", "troj", "trojan", "team", "probably",
         "w2km", "http", "abuse", "win32", "unknown", "single", "filename",
@@ -44,7 +44,7 @@ class SuricataAlert(Signature):
         if family in self.family_next and len(words) > 3:
             family = words[3].lower()
 
-        if family in self.blacklist or len(family) < 4:
+        if family in self.blocklist or len(family) < 4:
             return
 
         # If it exists in our mapping, normalize the name.

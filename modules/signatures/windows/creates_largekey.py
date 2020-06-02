@@ -34,7 +34,7 @@ class CreatesLargeKey(Signature):
 
     filter_apinames = set(["NtSetValueKey", "RegSetValueExA", "RegSetValueExW"])
 
-    whitelist = [
+    safelist = [
         ".*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\StartPage2\\\\ProgramsCache$",
     ]
 
@@ -44,8 +44,8 @@ class CreatesLargeKey(Signature):
             if vallen:
                 length = int(vallen)
                 if length > 16 * 1024:
-                    for whitelist in self.whitelist:
-                        if not re.match(whitelist, call["arguments"]["regkey"]):    
+                    for safelist in self.safelist:
+                        if not re.match(safelist, call["arguments"]["regkey"]):    
                             self.mark_call()
 
     def on_complete(self):

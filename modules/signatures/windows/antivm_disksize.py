@@ -32,7 +32,7 @@ class AntiVMDiskSize(Signature):
         "DeviceIoControl"
     ]
 
-    whitelistprocs = [
+    safelistprocs = [
         "iexplore.exe",
         "firefox.exe",
         "chrome.exe",
@@ -48,7 +48,7 @@ class AntiVMDiskSize(Signature):
     ]
 
     def on_call(self, call, process):
-        if process["process_name"].lower() not in self.whitelistprocs:
+        if process["process_name"].lower() not in self.safelistprocs:
             if call["api"] == "DeviceIoControl":
                 if call["arguments"]["control_code"] == 475228:
                     self.mark_call()

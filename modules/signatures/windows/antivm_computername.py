@@ -30,7 +30,7 @@ class AntiVMComputernameQuery(Signature):
         "GetComputerNameExW",
     ]
     
-    whitelistprocs = [
+    safelistprocs = [
         "iexplore.exe",
         "firefox.exe",
         "chrome.exe",
@@ -46,7 +46,7 @@ class AntiVMComputernameQuery(Signature):
     ]
 
     def on_call(self, call, process):
-        if process["process_name"].lower() not in self.whitelistprocs:
+        if process["process_name"].lower() not in self.safelistprocs:
             self.mark_call()
 
     def on_complete(self):

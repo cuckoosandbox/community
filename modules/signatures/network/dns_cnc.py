@@ -23,19 +23,19 @@ class NetworkDNSTXTLookup(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
 
-    whitelist = [
+    safelist = [
             "google.com",
             "abobe.com",
         ]
 
     def on_complete(self):
         for dns in self.get_results("network", {}).get("dns", []):
-            is_whitelisted = False
-            for whitelisted in self.whitelist:
-                if whitelisted in dns["request"]:
-                    is_whitelisted = True
+            is_safelisted = False
+            for safelisted in self.safelist:
+                if safelisted in dns["request"]:
+                    is_safelisted = True
 
-            if not is_whitelisted:
+            if not is_safelisted:
                 if dns["type"] == "TXT":
                     self.mark_ioc("domain", dns["request"])
 

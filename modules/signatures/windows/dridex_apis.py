@@ -47,7 +47,7 @@ class Dridex_APIs(Signature):
         self.ret = False
         self.isdridex = False
         self.cncstart = False
-        self.whitelist_ports = ["80", "8080", "443", "8443"]
+        self.safelist_ports = ["80", "8080", "443", "8443"]
 
     filter_apinames = set(["RegQueryValueExA", "CryptHashData", "connect", "send", "recv",
                            "RtlDecompressBuffer", "InternetConnectW", "HttpOpenRequestW",
@@ -154,7 +154,7 @@ class Dridex_APIs(Signature):
                 if not any(char.isalpha() for char in ip):
                     self.ip_check = ip
                     self.port_check = str(call["arguments"]["port"])
-            elif call["arguments"]["port"] not in self.whitelist_ports:
+            elif call["arguments"]["port"] not in self.safelist_ports:
                 self.cncstart = True
                 self.mark_call()
 
