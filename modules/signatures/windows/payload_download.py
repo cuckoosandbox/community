@@ -137,8 +137,8 @@ class SuspiciousWriteEXE(Signature):
                 filepath = call["arguments"]["filepath"]
                 buff = call["arguments"]["buffer"]
                 if filepath.endswith(".exe") or (buff and len(buff) > 2 and buff.startswith("MZ") and "This program" in buff) and "powershell_ise.exe" not in filepath:
-                    for white in self.safelist:
-                        if white in filepath:
+                    for safe in self.safelist:
+                        if safe in filepath:
                             return
 
                     if pname not in self.pname:
@@ -149,8 +149,8 @@ class SuspiciousWriteEXE(Signature):
             elif call["api"] == "NtCreateFile" and call["arguments"].get("filepath"):
                 filepath = call["arguments"]["filepath"]
                 if filepath.endswith(".exe") and "powershell_ise.exe" not in filepath:
-                    for white in self.safelist:
-                        if white in filepath:
+                    for safe in self.safelist:
+                        if safe in filepath:
                             return
 
                     if pname not in self.pname:
