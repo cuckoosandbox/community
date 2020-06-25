@@ -14,13 +14,15 @@ class UroburosFile(Signature):
     authors = ["RedSocks"]
     minimum = "2.0"
 
-    mutexes_re = [
-        ".*turla10",
-        ".*msdata\\\\.*",
-        ".*1396695624",
+    files_re = [
+        ".*\\\\drivers\\\\wo2ifsl.sys",
+        ".*\\\\drivers\\\\acpied.sys",
+        ".*\\\\drivers\\\\atmarpd.sys",
+        ".*\\\\temp\\\\msmsgsmon.exe",
+        ".*\\\\temp\\\\msdattst.ocx",
     ]
 
     def on_complete(self):
-        for mutex in self.mutexes_re:
-            if self.check_mutex(pattern=mutex, regex=True):
+        for indicator in self.files_re:
+            if self.check_file(pattern=indicator, regex=True):
                 return True

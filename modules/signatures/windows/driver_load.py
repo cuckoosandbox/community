@@ -16,7 +16,7 @@
 from lib.cuckoo.common.abstracts import Signature
 
 class DriverLoad(Signature):
-    name = "shutdown_system"
+    name = "load_driver"
     description = "Loads a driver"
     severity = 3
     categories = ["stealth"]
