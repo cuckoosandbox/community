@@ -1,7 +1,7 @@
 Community Repository
 ====================
 
-This is an open repository dedicated to **contributions from the commmunity**.
+This is an open repository dedicated to **contributions from the community**.
 Here you are able to submit the custom modules that you wrote for your Cuckoo
 Sandbox setup and that you want to share with the rest of the community.
 
