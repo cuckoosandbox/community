@@ -30,8 +30,9 @@ class AntiVirusIRMA(Signature):
                 results = results.get("probe_results")
                 for result in results:
                     engine = result["name"]
-                    verdict = result["results"]
-                    if verdict:
-                        self.mark_ioc(engine, verdict)
+                    if result.get("results"):
+                        verdict = result["results"]
+                        if verdict:
+                            self.mark_ioc(engine, verdict)
 
         return self.has_marks()
