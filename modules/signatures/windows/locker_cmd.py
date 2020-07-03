@@ -11,6 +11,7 @@ class DisableCmd(Signature):
     categories = ["locker"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["T1112"]
 
     indicator = ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion" \
         "\\\\Policies\\\\System\\DisableCmd$"

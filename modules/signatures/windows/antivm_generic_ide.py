@@ -22,9 +22,10 @@ class AntiVMIDE(Signature):
     categories = ["anti-vm"]
     authors = ["nex"]
     minimum = "2.0"
+    ttp = ["T1057", "T1012"]
 
     def on_complete(self):
-        regkey = self.check_key(pattern=".*\\\\SYSTEM\\\\CurrentControlSet\\\\Enum\\\\IDE$", regex=True)
-        if regkey:
+        for regkey in self.check_key(pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\IDE", regex=True, all=True):
             self.mark_ioc("registry", regkey)
-            return True
+
+        return self.has_marks()

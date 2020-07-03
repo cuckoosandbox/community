@@ -11,6 +11,7 @@ class InstallsAppInit(Signature):
     categories = ["persistence"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["T1103"]
 
     regkeys_re = [
         ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Windows\\\\Appinit_Dlls",

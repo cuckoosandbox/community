@@ -18,5 +18,6 @@ class InstallsBHO(Signature):
 
     def on_complete(self):
         for indicator in self.regkeys_re:
-            if self.check_key(pattern=indicator, actions=["regkey_written"], regex=True):
-                return True
+            for regkey in self.check_key(pattern=indicator, actions=["regkey_written"], regex=True, all=True):
+                self.mark_ioc("bho_regkey", regkey)
+        return self.has_marks()

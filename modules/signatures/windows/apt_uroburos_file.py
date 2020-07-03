@@ -22,5 +22,5 @@ class UroburosFile(Signature):
 
     def on_complete(self):
         for mutex in self.mutexes_re:
-            if self.check_mutex(pattern=mutex):
+            if self.check_mutex(pattern=mutex, regex=True):
                 return True

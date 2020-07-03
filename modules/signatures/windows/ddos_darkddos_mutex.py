@@ -16,10 +16,10 @@ class DarkddosMutexes(Signature):
 
     mutexes_re = [
         "DARKDDOSER",
-        "\xc3\x81G\xc3\x9bP\xc3\xb2y\xc3\xbdF\xc3\x80N\xc3\x96S",
+        u"\xc3\x81G\xc3\x9bP\xc3\xb2y\xc3\xbdF\xc3\x80N\xc3\x96S",
     ]
 
     def on_complete(self):
         for indicator in self.mutexes_re:
-            if self.check_mutex(pattern=indicator):
+            if self.check_mutex(pattern=indicator, regex=True):
                 return True

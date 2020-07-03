@@ -17,11 +17,12 @@ from lib.cuckoo.common.abstracts import Signature
 
 class PackerEntropy(Signature):
     name = "packer_entropy"
-    description = "The binary likely contains encrypted or compressed data."
+    description = "The binary likely contains encrypted or compressed data indicative of a packer"
     severity = 2
     categories = ["packer"]
     authors = ["Robby Zeitfuchs", "nex"]
     minimum = "2.0"
+    ttp = ["T1045"]
     references = [
         "http://www.forensickb.com/2013/03/file-entropy-explained.html",
         "http://virii.es/U/Using%20Entropy%20Analysis%20to%20Find%20Encrypted%20and%20Packed%20Malware.pdf",
@@ -41,3 +42,6 @@ class PackerEntropy(Signature):
         if total_pe_data and float(total_compressed) / total_pe_data > .2:
             self.mark(entropy=float(total_compressed) / total_pe_data,
                       description="Overall entropy of this PE file is high")
+                      
+        return self.has_marks()
+

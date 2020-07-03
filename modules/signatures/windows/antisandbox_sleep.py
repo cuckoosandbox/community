@@ -25,43 +25,44 @@ class AntiSandboxSleep(Signature):
 
     filter_apinames = "NtDelayExecution",
 
+    safelist = [
+        "dwm.exe",
+        "adobearm.exe",
+        "iexplore.exe",
+        "acrord32.exe",
+        "winword.exe",
+        "excel.exe",
+    ]
+
     def init(self):
-        self.sleeps = []
+        self.sleeps = {}
 
     def on_call(self, call, process):
-        sleep = call["arguments"]["milliseconds"]
-        skip = call["arguments"]["skipped"]
-        self.sleeps.append((process["process_name"], sleep, skip))
+        procname = process["process_name"]
+        if procname not in self.sleeps:
+            self.sleeps[procname] = {
+                "attempt": 0,
+                "actual": 0,
+            }
+
+        milliseconds = call["arguments"]["milliseconds"]
+
+        self.sleeps[procname]["attempt"] += milliseconds
+
+        if not call["arguments"]["skipped"]:
+            self.sleeps[procname]["actual"] += milliseconds
 
     def on_complete(self):
-        proc_whitelist = [
-            "dwm.exe",
-            "adobearm.exe",
-            "iexplore.exe",
-            "acrord32.exe",
-        ]
-        procs = dict()
-        for pname, sleep, skip in self.sleeps:
-            if pname.lower() not in proc_whitelist:
-                if pname not in procs:
-                    procs[pname] = {
-                        "attempted": 0,
-                        "actual": 0,
-                    }
+        for process_name, info in self.sleeps.items():
+            if process_name.lower() in self.safelist:
+                continue
 
-                procs[pname]["attempted"] += sleep
-
-                if not skip:
-                    procs[pname]["actual"] += sleep
-
-        for process_name, info in procs.items():
-            if info["attempted"] >= 120000:
+            if info["attempt"] >= 120000:
+                attempted = info["attempt"] / 1000
                 actual = info["actual"] / 1000
-                attempted = info["attempted"] / 1000
                 self.mark(description="%s tried to sleep %s seconds, actually delayed analysis time by %s seconds" % (process_name, attempted, actual))
 
-            if info["attempted"] >= 1200000:
+            if info["attempt"] >= 1200000:
                 self.severity = 3
-                self.mark(sleep_attempt=info["attempted"])
 
         return self.has_marks()

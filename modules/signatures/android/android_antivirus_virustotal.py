@@ -13,7 +13,7 @@ class KnownVirustotal(Signature):
     authors = ["Check Point Software Technologies LTD"]
     minimum = "2.0"
 
-    av_whitelist = [
+    av_safelist = [
         "Kingsoft",
         "NANO-Antivirus",
         "F-Prot",
@@ -42,7 +42,7 @@ class KnownVirustotal(Signature):
     def on_complete(self):
         count = 0
         for av, scan in self.get_virustotal().get("scans", {}).items():
-            if av in self.av_whitelist and scan["detected"]:
+            if av in self.av_safelist and scan["detected"]:
                 count += 1
 
         if count:

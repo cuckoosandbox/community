@@ -22,6 +22,7 @@ class VBoxDetectWindow(Signature):
     categories = ["anti-vm"]
     authors = ["nex"]
     minimum = "2.0"
+    ttp = ["T1057"]
 
     filter_categories = "ui",
 
@@ -29,6 +30,8 @@ class VBoxDetectWindow(Signature):
     indicators = [indicator.lower() for indicator in [
         "VBoxTrayToolWndClass",
         "VBoxTrayToolWnd",
+        "VBoxTray.exe",
+        "VBoxService.exe",
     ]]
 
     def on_call(self, call, process):
@@ -38,4 +41,6 @@ class VBoxDetectWindow(Signature):
 
             if indicator == window_name or indicator == class_name:
                 self.mark_call()
-                return True
+
+    def on_complete(self):
+        return self.has_marks()

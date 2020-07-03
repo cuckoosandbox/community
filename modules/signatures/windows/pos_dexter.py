@@ -14,22 +14,14 @@ class Dexter(Signature):
     authors = ["RedSocks"]
     minimum = "2.0"
 
-    regkeys_re = [
-        ".*\\\\SOFTWARE\\\\MICROSOFT\\\\WINDOWS\\\\CURRENTVERSION\\\\POLICIES\\\\ASSOCIATIONS",
-    ]
-
     mutexes_re = [
         ".*WindowsResilienceServiceMutex",
     ]
 
     def on_complete(self):
-        for indicator in self.regkeys_re:
-            match = self.check_key(pattern=indicator, regex=True)
-            if match:
-                self.mark_ioc("regkey", match)
 
         for indicator in self.mutexes_re:
-            match = self.check_mutex(pattern=indicator)
+            match = self.check_mutex(pattern=indicator, regex=True)
             if match:
                 self.mark_ioc("mutex", match)
 

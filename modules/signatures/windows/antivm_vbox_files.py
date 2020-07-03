@@ -22,28 +22,32 @@ class VBoxDetectFiles(Signature):
     categories = ["anti-vm"]
     authors = ["nex"]
     minimum = "2.0"
+    ttp = ["T1083", "T1057"]
 
     indicators = [
-        ".*VBoxDisp\\.dll$",
-        ".*VBoxHook\\.dll$",
-        ".*VBoxMRXNP\\.dll$",
-        ".*VBoxOGL\\.dll$",
-        ".*VBoxOGLarrayspu\\.dll$",
-        ".*VBoxOGLcrutil\\.dll$",
-        ".*VBoxOGLerrorspu\\.dll$",
-        ".*VBoxOGLfeedbackspu\\.dll$",
-        ".*VBoxOGLpackspu\\.dll$",
-        ".*VBoxOGLpassthroughspu\\.dll$"
-        ".*VBoxDisp\\.dll$",
-        ".*VBoxSF\\.sys$",
-        ".*VBoxControl\\.exe$",
-        ".*VBoxService\\.exe$",
-        ".*VBoxTray\\.exe$",
-        ".*VBoxDrvInst\\.exe$",
-        ".*VBoxWHQLFake\\.exe$",
-        ".*VBoxGuest\\.[a-zA-Z]{3}$",
-        ".*VBoxMouse\\.[a-zA-Z]{3}$",
-        ".*VBoxVideo\\.[a-zA-Z]{3}$",
+        ".*VBoxDisp\\.dll",
+        ".*VBoxHook\\.dll",
+        ".*VBoxMRXNP\\.dll",
+        ".*VBoxOGL\\.dll",
+        ".*VBoxOGLarrayspu\\.dll",
+        ".*VBoxOGLcrutil\\.dll",
+        ".*VBoxOGLerrorspu\\.dll",
+        ".*VBoxOGLfeedbackspu\\.dll",
+        ".*VBoxOGLpackspu\\.dll",
+        ".*VBoxOGLpassthroughspu\\.dll"
+        ".*VBoxDisp\\.dll",
+        ".*VBoxSF\\.sys",
+        ".*VBoxControl\\.exe",
+        ".*VBoxService\\.exe",
+        ".*VBoxTray\\.exe",
+        ".*VBoxDrvInst\\.exe",
+        ".*VBoxWHQLFake\\.exe",
+        ".*VBoxGuest\\.[a-zA-Z]{3}",
+        ".*VBoxMouse\\.[a-zA-Z]{3}",
+        ".*VBoxVideo\\.[a-zA-Z]{3}",
+        ".*\\\\VirtualBox\\ Guest\\ Additions\\\\uninst\.exe",
+        ".*\\\\VirtualBox\\ Guest\\ Additions\\\\uninst\.exe\.dll",
+        ".*\\\\vboxmrxnp\.dll"
     ]
 
     def on_complete(self):

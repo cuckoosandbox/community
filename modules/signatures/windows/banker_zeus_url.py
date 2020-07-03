@@ -40,4 +40,4 @@ class ZeusURL(Signature):
         for indicator in self.indicators:
             url = self.check_url(pattern=indicator, regex=True)
             if url:
-                self.match(None, "url", url=url)
+                self.mark_ioc("url", url)

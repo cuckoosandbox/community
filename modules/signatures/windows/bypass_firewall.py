@@ -22,9 +22,9 @@ class BypassFirewall(Signature):
     description = "Operates on local firewall's policies and settings"
     severity = 3
     categories = ["bypass"]
-    authors = ["Anderson Tamborim", "nex"]
+    authors = ["Anderson Tamborim", "nex", "Kevin Ross"]
     minimum = "2.0"
-
+    ttp = ["T1031"]
     indicator = ".*\\\\SYSTEM\\\\CurrentControlSet\\\\Services\\\\SharedAccess\\\\Parameters\\\\FirewallPolicy\\\\.*"
 
     def on_complete(self):
@@ -32,3 +32,9 @@ class BypassFirewall(Signature):
         if regkey:
             self.mark_ioc("registry", regkey)
             return True
+
+        for cmdline in self.get_command_lines():
+            if "netsh" in cmdline.lower() and "advfirewall" in cmdline.lower():
+                self.mark_ioc("cmdline", cmdline)
+
+        return self.has_marks()

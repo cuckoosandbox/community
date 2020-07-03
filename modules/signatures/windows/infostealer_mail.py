@@ -11,21 +11,56 @@ class MailStealer(Signature):
     categories = ["infostealer"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["T1081", "T1003", "T1005"]
 
     regkeys_re = [
-        ".*\\\\Software\\\\IncrediMail",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?IncrediMail"
         ".*\\\\RIT\\\\The\\ Bat\\!",
         ".*\\\\Microsoft\\\\Internet\\ Account\\ Manager\\\\Accounts",
         ".*\\\\Software\\\\Microsoft\\\\Windows\\ Mail",
-        ".*\\\\Software\\\\Microsoft\\\\Windows\\ Live\\ Mail",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\ Live\\ Mail",
+        ".*\\\\Microsoft\\\\Windows\\ Messaging\\ Subsystem\\\\MSMapiApps",
+        ".*\\\\Microsoft\\\\Windows\\ Messaging\\ Subsystem\\\\Profiles.*",
         ".*\\\\Software\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Windows\\ Messaging\\ Subsystem",
         ".*\\\\Software\\\\Microsoft\\\\Internet\\ Account\\ Manager",
         ".*\\\\Software\\\\Microsoft\\\\Office\\\\Outlook\\\\OMI\\ Account\\ Manager",
         ".*\\\\Software\\\\RimArts\\\\B2\\\\Settings",
         ".*\\\\Software\\\\Poco\\ Systems\\ Inc",
+        ".*\\\\Software\\\\Mozilla\\\\Mozilla\\ Thunderbird",
+        ".*\\\\Software\\\\(Wow6432Node\\\\)?Clients\\\\Mail",
+        ".*\\\\Microsoft\\\\Office\\\\.*\\\\Outlook\\\\Profiles\\\\Outlook",
+        # Well, strictly speaking..
+        ".*\\\\Software\\\\Google\\\\Google\\ Talk",
+    ]
+
+    files_re = [
+        ".*\\\\The\\ Bat!\\\\",
+        ".*\\\\ICQ\\\\",
+        ".*\\\\Miranda\\\\",
+        ".*\\\\SmartFTP\\\\",
+        ".*\\\\QIP\\\\",
+        ".*\.pst$",
+        ".*\\\\Microsoft\\\\Windows\\ Live\\ Mail.*",
+        ".*\\\\Microsoft\\\\Address\\ Book\\\\.*\.wab$",
+        ".*\\\\Microsoft\\\\Outlook\\ Express\\\\.*\.dbx$",
+        ".*\\\\Foxmail\\\\mail\\\\.*\\\\Account\.stg$",
+        ".*\\\\Foxmail.*\\\\Accounts\.tdat$",
+        ".*\\\\Thunderbird\\\\Profiles\\\\.*\.default$",
+        ".*\\\\AppData\\\\Roaming\\\\Thunderbird\\\\profiles.ini$",
+    ]
+
+    # To be replaced by a check_file(dirs=True) whenever we can do that in a
+    # backwards compatible way. Even better if we can provide an ioc=True to
+    # check_file() etc functions to return the IOC type for each result.
+    file_actions = [
+        "file_opened", "file_exists", "file_failed", "directory_enumerated",
     ]
 
     def on_complete(self):
+        for indicator in self.files_re:
+            for filepath in self.check_file(pattern=indicator, regex=True, all=True):
+                self.mark_ioc("file", filepath)
+
         for indicator in self.regkeys_re:
             registry = self.check_key(pattern=indicator, regex=True)
             if registry:

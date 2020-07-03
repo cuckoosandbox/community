@@ -22,6 +22,7 @@ class TorHiddenService(Signature):
     categories = ["network", "anonimity", "tor"]
     authors = ["nex"]
     minimum = "2.0"
+    ttp = ["T1188"]
 
     indicators = [
         ".*\\\\tor\\\\hidden_service\\\\private_key$",

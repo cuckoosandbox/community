@@ -28,7 +28,7 @@ class RBot(Signature):
 
     def on_complete(self):
         for indicator in self.mutexes_re:
-            match = self.check_mutex(pattern=indicator)
+            match = self.check_mutex(pattern=indicator, regex=True)
             if match:
                 self.mark_ioc("mutex", match)
 
