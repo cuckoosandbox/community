@@ -28,12 +28,10 @@ class NetworkHTTP(Signature):
     ]
 
     def on_complete(self):
-        for http in getattr(self, "get_net_http_ex", lambda: [])():
+        for http in self.get_net_http():
             if http["host"] in self.host_safelist:
                 continue
 
-            self.mark_ioc("request", "%s %s://%s%s" % (
-                http["method"], http["protocol"], http["host"], http["uri"],
-            ))
+            self.mark_ioc("request", "%s %s" % (http["method"], http["uri"]))
 
         return self.has_marks()
