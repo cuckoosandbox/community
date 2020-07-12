@@ -25,5 +25,10 @@ class StopsService(Signature):
             self.mark_ioc("service", "%s (regkey %s)" % (x.group(1), regkey))
             self.severity += 1
 
+        for cmdline in self.get_command_lines():
+            if "sc stop" in cmdline.lower() or "sc.exe stop" in cmdline.lower():
+                self.severity += 1
+                self.mark_ioc("cmdline", cmdline)  
+
         self.severity = min(self.severity, 5)
         return self.has_marks()
