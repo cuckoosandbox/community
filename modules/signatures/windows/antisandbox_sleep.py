@@ -66,3 +66,35 @@ class AntiSandboxSleep(Signature):
                 self.severity = 3
 
         return self.has_marks()
+
+class AntiSandboxSystemTime(Signature):
+    name = "antisandbox_systemtime"
+    description = "A process repeatedly queried for the system time potentially as a sleep evasion"
+    severity = 2
+    categories = ["anti-sandbox"]
+    authors = ["Kevin Ross"]
+    minimum = "2.0"
+
+    filter_apinames = "GetLocalTime", "GetSystemTime", "GetSystemTimeAsFileTime", "NtQuerySystemTime", "timeGetTime",
+
+    whitelistprocs = [
+        "iexplore.exe",
+        "firefox.exe",
+        "chrome.exe",
+        "safari.exe",
+        "acrord32.exe",
+        "acrord64.exe",
+        "wordview.exe",
+        "winword.exe",
+        "excel.exe",
+        "powerpnt.exe",
+        "outlook.exe",
+        "mspub.exe"
+    ]
+
+    def on_call(self, call, process):
+        if process["process_name"].lower() not in self.whitelistprocs:
+            self.mark_call()
+
+    def on_complete(self):
+        return self.has_marks(50)
