@@ -32,6 +32,8 @@ class AntiSandboxSleep(Signature):
         "acrord32.exe",
         "winword.exe",
         "excel.exe",
+        "powerpnt.exe",
+        "mspub.exe",
     ]
 
     def init(self):
