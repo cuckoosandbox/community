@@ -19,3 +19,4 @@ class AndroidDangerousPermissions(Signature):
             if "dangerous" in perm["severity"] and \
                     "Unknown" not in perm["action"]:
                 self.mark(permission=perm["action"])
+        return self.has_marks()
