@@ -11,7 +11,7 @@ class IMStealer(Signature):
     categories = ["infostealer"]
     authors = ["Optiv"]
     minimum = "2.0"
-    ttp = ["T1003", "T1081"]
+    ttp = ["T1003", "T1552.001"]
 
     file_indicators = [
          ".*\\\\AIM\\\\aimx\.bin$",

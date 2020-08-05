@@ -22,7 +22,7 @@ class Dropper(Signature):
     categories = ["dropper"]
     authors = ["Optiv"]
     minimum = "2.0"
-    ttp = ["M0023", "E1105"]
+    ttp = ["M0023"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

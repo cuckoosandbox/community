@@ -33,7 +33,7 @@ class Win32ProcessCreate(Signature):
     categories = ["wmi"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1047"]
+    ttp = ["T1047", "X0017.002"]
 
     filter_apinames = [
         "IWbemServices_ExecMethod",

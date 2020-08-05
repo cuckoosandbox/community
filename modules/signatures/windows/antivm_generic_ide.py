@@ -22,7 +22,7 @@ class AntiVMIDE(Signature):
     categories = ["anti-vm"]
     authors = ["nex"]
     minimum = "2.0"
-    ttp = ["M0009", "T1012"]
+    ttp = ["M0009.005", "T1012"]
 
     def on_complete(self):
         for regkey in self.check_key(pattern=".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\IDE", regex=True, all=True):

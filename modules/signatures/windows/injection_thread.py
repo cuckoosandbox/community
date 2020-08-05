@@ -22,7 +22,7 @@ class InjectionCreateRemoteThread(Signature):
     categories = ["injection"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["E1055"]
+    ttp = ["E1055.001"]
     references = ["www.endgame.com/blog/technical-blog/ten-process-injection-techniques-technical-survey-common-and-trending-process"]
 
     filter_apinames = [
@@ -53,7 +53,7 @@ class InjectionQueueApcThread(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
     references = ["www.endgame.com/blog/technical-blog/ten-process-injection-techniques-technical-survey-common-and-trending-process"]
-    ttp = ["E1055"]
+    ttp = ["E1055.004"]
 
     filter_apinames = [
         "NtQueueApcThread",
@@ -107,7 +107,7 @@ class NtSetContextThreadRemote(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
     references = ["www.endgame.com/blog/technical-blog/ten-process-injection-techniques-technical-survey-common-and-trending-process"]
-    ttp = ["E1055"]
+    ttp = ["E1055.003"]
 
     filter_apinames = [
         "NtSetContextThread",

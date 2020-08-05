@@ -11,7 +11,7 @@ class AndroidAbortBroadcast(Signature):
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
     minimum = "2.0"
-    ttp = ["E1054"]
+    ttp = ["S0006"]
 
     def on_complete(self):
         if "abortBroadcast" in self.get_droidmon("events", []):

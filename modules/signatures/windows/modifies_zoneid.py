@@ -23,7 +23,7 @@ class ZoneID(Signature):
     categories = [""]
     authors = ["nex"]
     minimum = "2.0"
-    ttp = ["T1070", "T1096"]
+    ttp = ["T1070", "T1564.004"]
 
     filter_apinames = "NtCreateFile", "NtWriteFile"
 

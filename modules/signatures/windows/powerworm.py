@@ -11,7 +11,7 @@ class Powerworm(Signature):
     categories = ["script", "malware", "powershell", "worm"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
-    ttp = ["T1086"]
+    ttp = ["E1059.001"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "PowerWorm":

@@ -11,7 +11,7 @@ class MailStealer(Signature):
     categories = ["infostealer"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1003", "T1081"]
+    ttp = ["T1003", "T1552.001"]
 
     regkeys_re = [
         ".*\\\\Software\\\\(Wow6432Node\\\\)?IncrediMail"

@@ -23,7 +23,7 @@ class InjectionModifiesMemory(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
     references = ["www.endgame.com/blog/technical-blog/ten-process-injection-techniques-technical-survey-common-and-trending-process"]
-    ttp = ["E1055"]
+    ttp = ["E1055.009"]
 
     filter_apinames = [
         "NtAllocateVirtualMemory",

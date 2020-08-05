@@ -11,7 +11,7 @@ class AndroidShellCommands(Signature):
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
     minimum = "2.0"
-    ttp = ["T1059"]
+    ttp = ["E1059"]
 
     def on_complete(self):
         if self.get_droidmon("commands", []):

@@ -29,7 +29,7 @@ class CreatesLargeKey(Signature):
     categories = ["stealth"]
     authors = ["Optiv"]
     minimum = "2.0"
-    ttp = ["M0040", "E1112"]
+    ttp = ["M0040.001", "E1112"]
     evented = True
 
     filter_apinames = set(["NtSetValueKey", "RegSetValueExA", "RegSetValueExW"])

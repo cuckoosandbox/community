@@ -11,7 +11,7 @@ class MaliciousDocumentURLs(Signature):
     categories = ["downloader"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["M0023", "T1064"]
+    ttp = ["M0023", "E1059.007", "E1059.005"]
 
     filter_apinames = [
         "InternetCrackUrlW",

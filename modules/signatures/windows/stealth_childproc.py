@@ -11,7 +11,7 @@ class StealthChildProc(Signature):
     categories = ["stealth"]
     authors = ["Optiv"]
     minimum = "2.0"
-    ttp = ["T1502"]
+    ttp = ["T1134.004"]
 
     filter_apinames = [
         "NtCreateProcess",

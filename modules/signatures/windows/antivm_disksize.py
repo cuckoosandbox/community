@@ -22,7 +22,7 @@ class AntiVMDiskSize(Signature):
     categories = ["anti-vm"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["M0009"]
+    ttp = ["M0009.015"]
 
     evented = True
 

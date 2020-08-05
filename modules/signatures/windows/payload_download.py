@@ -23,7 +23,7 @@ class NetworkDocumentFile(Signature):
     categories = ["exploit", "downloader"]
     authors = ["Kevin Ross", "Will Metcalf"]
     minimum = "2.0"
-    ttp = ["T1071", "T1105"]
+    ttp = ["T1071", "E1105"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

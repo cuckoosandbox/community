@@ -11,7 +11,7 @@ class AndroidDynamicCode(Signature):
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
     minimum = "2.0"
-    ttp = ["E1129"]
+    ttp = ["T1129"]
 
     def on_complete(self):
         if self.get_apkinfo("static_method_calls").get("is_dynamic_code"):

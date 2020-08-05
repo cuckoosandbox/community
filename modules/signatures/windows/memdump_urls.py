@@ -16,7 +16,6 @@ class ProcMemDumpURLs(Signature):
     categories = ["unpacking"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1188"]
 
     def on_complete(self):
         for procmem in self.get_results("procmemory", []):
@@ -32,7 +31,7 @@ class ProcMemDumpTorURLs(Signature):
     categories = ["unpacking", "ransomware", "c2"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1188"]
+    ttp = ["T1090.003"]
 
     def on_complete(self):
         # List based on https://github.com/cuckoosandbox/community/blob/master/modules/signatures/network/network_torgateway.py

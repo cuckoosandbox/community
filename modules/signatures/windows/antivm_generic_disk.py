@@ -22,7 +22,7 @@ class DiskInformation(Signature):
     categories = ["anti-vm"]
     authors = ["nex"]
     minimum = "2.0"
-    ttp = ["M0009", "T1012"]
+    ttp = ["M0009.005", "T1012"]
 
     filter_apinames = [
         "NtCreateFile",

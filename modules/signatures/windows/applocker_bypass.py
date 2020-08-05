@@ -13,7 +13,7 @@ class AppLockerBypass(Signature):
     categories = ["applocker", "bypass"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
-    ttp = ["T1117", "T1086"]
+    ttp = ["T1218.010", "E1059.001"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "ApplockerBypass":
