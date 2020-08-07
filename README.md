@@ -1,6 +1,6 @@
 # <a name="mbc"></a>Cuckoo Community Signature-MBC Mappings #
 
-The MBC team has mapped [Cuckoo community signatures](https://github.com/cuckoosandbox/community) into MBC. Of the 565 signatures available, 313 were mapped into MBC (the others are anti-virus related signatures that identify specific threats). Prior to this MBC-oriented mapping, 165 of the signatures were mapped into ATT&CK. We added new signatures, which was possible because MBC includes malware-related behaviors that ATT&CK doesn't. We also used MBC's malware-focused content to revise and/or extend the existing ATT&CK mappings.
+The MBC team has mapped [Cuckoo community signatures](https://github.com/cuckoosandbox/community) into MBC. Of the 565 signatures available, 313 have been mapped into MBC (the others are anti-virus related signatures that identify specific threats). Prior to this MBC-oriented mapping, 165 of the signatures were mapped into ATT&CK. We added new signatures, which was possible because MBC includes malware-related behaviors that ATT&CK doesn't. We also used MBC's malware-focused content to revise and/or extend the existing ATT&CK mappings.
 
 |Description|Number|
 |-----------|------|
