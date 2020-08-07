@@ -1,15 +1,21 @@
 # <a name="mbc"></a>Cuckoo Community Signature-MBC Mappings #
 
-The MBC team has mapped [Cuckoo community signatures](https://github.com/cuckoosandbox/community) into MBC. Of the 560+ signatures available, approximately 275 are appropriate for mapping into MBC (the others are anti-virus related signatures that identify specific threats). 
+The MBC team has mapped [Cuckoo community signatures](https://github.com/cuckoosandbox/community) into MBC. Of the 565 signatures available, 313 were mapped into MBC (the others are anti-virus related signatures that identify specific threats). Prior to this MBC-oriented mapping, 165 of the signatures were mapped into ATT&CK. We added new signatures, which was possible because MBC includes malware-related behaviors that ATT&CK doesn't. We also used MBC's malware-focused content to revise and/or extend the existing ATT&CK mappings.
 
-Approximately 140 of the signatures were already mapped into ATT&CK. We added new signatures, which was possible because MBC includes malware-related behaviors that ATT&CK doesn't. We also used MBC's malware-focused content to revise 80 of the existing ATT&CK mappings.
+|Description|Number|
+|-----------|------|
+|New mappings|148|
+|Updated mappings|83|
+|Extended mappings|21|
+|Unchanged mappings|61|
+|**TOTAL MAPPINGS**|**313**|
 
 Below, we explain how these signatures are used. We begin with an example Python signature and then show example Cuckoo report output. We conclude with information on using the signature repository.
 
 Example Cuckoo Signature
 ------------------------
 
-This signature example (antisandbox_sleep.py) was not mapped to an ATT&CK technique. We map it to **Dynamic Analysis Evasion [M0003]** as shown below (see the ttp variable).
+This signature example (antisandbox_sleep.py) was not mapped to an ATT&CK technique. We map it to **Dynamic Analysis Evasion::Delayed Execution [M0003.003]** as shown below (see the ttp variable).
 
 ```python
 from lib.cuckoo.common.abstracts import Signature
@@ -21,14 +27,14 @@ class AntiSandboxSleep(Signature):
     categories = ["anti-sandbox"]
     authors = ["KillerInstinct"]
     minimum = "2.0"
-    ttp = ["M0003"]
+    ttp = ["M0003.003"]
     ...
 ```
 
 Cuckoo Reports
 --------------
 
-The signature section of a Cuckoo report specifies associated MBC behavior as shown in the example below (Dynamic Analysis Evasion [M0003] behavior is shown).
+The signature section of a Cuckoo report specifies associated MBC behavior as shown in the example below (Dynamic Analysis Evasion [M0003.003] behavior is shown).
 
 ```json
 {
@@ -38,7 +44,7 @@ The signature section of a Cuckoo report specifies associated MBC behavior as sh
       "description": "A process attempted to delay the analysis task.",
       "severity": 1,
       "ttp": {
-        "M0003": {
+        "M0003.003": {
           "short": "Dynamic Analysis Evasion",
           "long": "Malware may obstruct dynamic analysis in a sandbox, emulator, or virtual <snip>"
         }
