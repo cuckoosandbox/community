@@ -13,6 +13,7 @@ class RdpMutexes(Signature):
     families = ["rdp"]
     authors = ["RedSocks"]
     minimum = "2.0"
+    ttp = ["X0022.001"]
 
     mutexes_re = [
         "msrdp*",

@@ -58,7 +58,7 @@ class OfficeCheckProjectName(Signature):
     categories = ["vba"]
     authors = ["FDD", "Cuckoo Sandbox"]
     minimum = "2.0"
-    ttp = ["M0038", "M0007"]
+    ttp = ["M0038", "M0007.007"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -76,7 +76,7 @@ class OfficeCountDirectories(Signature):
     categories = ["vba"]
     authors = ["FDD @ Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["M0007", "T1083"]
+    ttp = ["M0007.003", "T1083"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -94,7 +94,7 @@ class OfficeCheckVersion(Signature):
     categories = ["vba"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["M0009", "T1518"]
+    ttp = ["M0009.007", "T1518"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -118,7 +118,7 @@ class OfficeCheckWindow(Signature):
     categories = ["vba"]
     authors = ["FDD @ Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["M0009", "T1010"]
+    ttp = ["M0009.020", "T1010"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -142,7 +142,7 @@ class OfficeHttpRequest(Signature):
     categories = ["vba"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1203", "T1071"]
+    ttp = ["X0002.003"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -168,7 +168,7 @@ class OfficeRecentFiles(Signature):
     categories = ["vba"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["M0007", "T1083"]
+    ttp = ["M0007.003", "T1083"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -197,7 +197,7 @@ class OfficeIndirectCall(Signature):
     categories = ["office"]
     authors = ["FDD @ Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1064"]
+    ttp = ["E1059"]
 
     patterns = [
         "CallByName[^\r\n;']*",
@@ -221,7 +221,7 @@ class OfficeCheckName(Signature):
     categories = ["office"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["M0038", "M0007", "T1064"]
+    ttp = ["M0038", "M0007.007", "E1059"]
 
     patterns = [
         "[^\n\r;']*Me.Name[^\n\r;']*",
@@ -245,7 +245,7 @@ class OfficePlatformDetect(Signature):
     categories = ["office"]
     authors = ["FDD @ Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1082", "T1064"]
+    ttp = ["T1082", "E1059"]
 
     patterns = [
         "#If\s+(?:Not\s+)?Win32",
@@ -270,7 +270,7 @@ class DocumentClose(Signature):
     categories = ["office"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1064"]
+    ttp = ["E1059"]
 
     def on_complete(self):
         office = self.get_results("static", {}).get("office", {})
@@ -286,7 +286,7 @@ class DocumentOpen(Signature):
     categories = ["office"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1064"]
+    ttp = ["E1059"]
 
     def on_complete(self):
         office = self.get_results("static", {}).get("office", {})

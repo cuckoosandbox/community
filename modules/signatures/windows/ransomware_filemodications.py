@@ -53,7 +53,7 @@ class RansomwareAppendsExtension(Signature):
     categories = ["ransomware"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["E1486"]
+    ttp = ["E1486", "X0015.001"]
 
     filter_apinames = "MoveFileWithProgressW", "MoveFileWithProgressTransactedW"
 
@@ -119,7 +119,7 @@ class RansomwareMassFileDelete(Signature):
     categories = ["ransomware", "wiper"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1488"]
+    ttp = ["T1561.001"]
     evented = True
 
     def on_complete(self):

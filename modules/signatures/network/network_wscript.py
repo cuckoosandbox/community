@@ -22,7 +22,7 @@ class WscriptDownloader(Signature):
     categories = ["downloader"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1064", "T1105"]
+    ttp = ["T1059", "E1105"]
 
     filter_apinames = [
         "InternetCrackUrlW",

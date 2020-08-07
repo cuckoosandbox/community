@@ -22,7 +22,7 @@ class VBoxDetectFiles(Signature):
     categories = ["anti-vm"]
     authors = ["nex"]
     minimum = "2.0"
-    ttp = ["M0009"]
+    ttp = ["M0009.001"]
 
     indicators = [
         ".*VBoxDisp\\.dll",

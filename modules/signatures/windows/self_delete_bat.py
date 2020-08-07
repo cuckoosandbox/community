@@ -13,7 +13,7 @@ class SelfDeleteBat(Signature):
     categories = ["trojan"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["E1007"]
+    ttp = ["S0007"]
 
     indicator = (
         "@echo.*off.*"

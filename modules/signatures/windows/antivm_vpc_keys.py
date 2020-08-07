@@ -22,7 +22,7 @@ class VPCDetectKeys(Signature):
     categories = ["anti-vm"]
     authors = ["Optiv"]
     minimum = "2.0"
-    ttp = ["M0009", "T1012"]
+    ttp = ["M0009.005", "T1012"]
 
     regkeys_re = [
         ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\PCI\\\\VEN_5333&DEV_8811&SUBSYS_00000000&REV_00",

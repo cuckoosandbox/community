@@ -12,6 +12,7 @@ class dnsserver_dynamic(Signature):
     categories = ["dns"]
     authors = ["RedSocks"]
     minimum = "2.0"
+    ttp = ["X0011.003"]
 
     ipaddrs = [
         "221.228.198.216",

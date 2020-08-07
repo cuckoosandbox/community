@@ -22,7 +22,7 @@ class AntiVMCPU(Signature):
     categories = ["anti-vm"]
     authors = ["Optiv"]
     minimum = "2.0"
-    ttp = ["M0009", "T1012"]
+    ttp = ["M0009.026", "M0009.005", "T1012"]
 
     regkeys_re = [
         ".*\\\\HARDWARE\\\\DESCRIPTION\\\\System\\\\CentralProcessor\\\\.*\\\\ProcessorNameString",

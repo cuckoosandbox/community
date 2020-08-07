@@ -11,7 +11,7 @@ class StealthHideNotifications(Signature):
     categories = ["stealth"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["E1054", "E1112"]
+    ttp = ["S0006", "E1112"]
 
     regkeys_re = [
         ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\HideSCAHealth$",

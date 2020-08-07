@@ -22,7 +22,7 @@ class JavaScriptCommandline(Signature):
     categories = ["javascript", "persistence", "downloader"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1064"]
+    ttp = ["E1059.007"]
 
     def on_complete(self):
         for cmdline in self.get_command_lines():

@@ -11,7 +11,7 @@ class AntiSandboxIdleTime(Signature):
     categories = ["anti-sandbox"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["M0003"]
+    ttp = ["M0007.009"]
 
     filter_apinames = "NtQuerySystemInformation",
 

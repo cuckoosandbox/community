@@ -12,6 +12,7 @@ class MemoryProtectionRX(Signature):
     severity = 2
     categories = ["unpacking"]
     minimum = "2.0"
+    ttp = ["X0008"]
 
     filter_apinames = (
         "NtAllocateVirtualMemory", "NtProtectVirtualMemory",

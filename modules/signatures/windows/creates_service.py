@@ -11,7 +11,7 @@ class CreatesService(Signature):
     categories = ["service", "persistence"]
     authors = ["Cuckoo Technologies", "Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1050"]
+    ttp = ["T1543.003"]
 
     filter_apinames = [
         "CreateServiceA", "CreateServiceW",

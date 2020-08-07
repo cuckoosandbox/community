@@ -13,7 +13,7 @@ class Bootkit(Signature):
     authors = ["Optiv"]
     minimum = "2.0"
     evented = True
-    ttp = ["M0028"]
+    ttp = ["S0013"]
     BasicFileInformation = 4
 
     def __init__(self, *args, **kwargs):

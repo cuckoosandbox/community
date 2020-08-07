@@ -22,7 +22,7 @@ class VBoxDetectKeys(Signature):
     categories = ["anti-vm"]
     authors = ["nex", "Brad Spengler"]
     minimum = "2.0"
-    ttp = ["M0009", "T1012"]
+    ttp = ["M0009.005", "T1012"]
 
     regkeys_re = [
         ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Oracle\\\\VirtualBox\\ Guest\\ Additions",

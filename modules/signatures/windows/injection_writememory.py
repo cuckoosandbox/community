@@ -22,7 +22,7 @@ class InjectionWriteMemory(Signature):
     categories = ["injection"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["E1055"]
+    ttp = ["E1055.012"]
 
     filter_apinames = [
         "NtWriteVirtualmemory",
@@ -56,7 +56,7 @@ class InjectionWriteMemoryEXE(Signature):
     categories = ["injection", "unpacking"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["E1055"]
+    ttp = ["E1055.012"]
 
     filter_apinames = [
         "NtWriteVirtualmemory",

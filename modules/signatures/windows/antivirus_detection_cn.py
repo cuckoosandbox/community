@@ -13,7 +13,7 @@ class AVDetectionChinaKey(Signature):
     families = ["china"]
     authors = ["RedSocks"]
     minimum = "2.0"
-    ttp = ["T1012", "T1063"]
+    ttp = ["T1012", "T1518.001"]
 
     indicators = [
         ".*360Safe",

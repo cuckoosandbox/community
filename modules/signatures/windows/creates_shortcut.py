@@ -22,7 +22,7 @@ class CreatesShortcut(Signature):
     categories = ["persistance"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1023", "T1204"]
+    ttp = ["T1547.009", "T1204"]
     files_re = [
         ".*\\.lnk$",
     ]

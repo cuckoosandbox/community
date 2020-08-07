@@ -22,7 +22,7 @@ class HyperVDetectKeys(Signature):
     categories = ["anti-vm"]
     authors = ["Brad Spengler"]
     minimum = "2.0"
-    ttp = ["M0009", "T1012"]
+    ttp = ["M0009.005", "T1012"]
 
     regkeys_re = [
         ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\ACPI\\\\Hyper_V_Gen_Counter_V1",
