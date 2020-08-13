@@ -15,7 +15,7 @@ Below, we explain how these signatures are used. We begin with an example Python
 Example Cuckoo Signature
 ------------------------
 
-This signature example (antisandbox_sleep.py) was not mapped to an ATT&CK technique. We map it to **Dynamic Analysis Evasion::Delayed Execution [M0003.003]** as shown below (see the ttp variable).
+This signature example (antisandbox_sleep.py) was not mapped to an ATT&CK technique. We map it to **Dynamic Analysis Evasion::Delayed Execution [B0003.003]** as shown below (see the ttp variable).
 
 ```python
 from lib.cuckoo.common.abstracts import Signature
@@ -34,7 +34,7 @@ class AntiSandboxSleep(Signature):
 Cuckoo Reports
 --------------
 
-The signature section of a Cuckoo report specifies associated MBC behavior as shown in the example below (Dynamic Analysis Evasion [M0003.003] behavior is shown).
+The signature section of a Cuckoo report specifies associated MBC behavior as shown in the example below (Dynamic Analysis Evasion [B0003.003] behavior is shown).
 
 ```json
 {
@@ -44,7 +44,7 @@ The signature section of a Cuckoo report specifies associated MBC behavior as sh
       "description": "A process attempted to delay the analysis task.",
       "severity": 1,
       "ttp": {
-        "M0003.003": {
+        "B0003.003": {
           "short": "Dynamic Analysis Evasion",
           "long": "Malware may obstruct dynamic analysis in a sandbox, emulator, or virtual <snip>"
         }
