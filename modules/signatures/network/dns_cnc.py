@@ -22,7 +22,7 @@ class NetworkDNSTXTLookup(Signature):
     categories = ["dns", "cnc"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["X0011"]
+    ttp = ["C0011"]
 
     whitelist = [
             "google.com",

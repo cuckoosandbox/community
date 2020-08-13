@@ -22,7 +22,7 @@ class ThreatTrackDetectFiles(Signature):
     categories = ["anti-sandbox"]
     authors = ["Brad Spengler"]
     minimum = "2.0"
-    ttp = ["M0007.002"]
+    ttp = ["B0007.002"]
 
     files_re = [
         "C:\\\\cwsandbox",

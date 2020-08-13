@@ -22,7 +22,7 @@ class VBoxDetectDevices(Signature):
     categories = ["anti-vm"]
     authors = ["nex"]
     minimum = "2.0"
-    ttp = ["M0009"]
+    ttp = ["B0009"]
 
     # TODO Might as well just do a generic ".*VBox.*" regex?
     indicators = [

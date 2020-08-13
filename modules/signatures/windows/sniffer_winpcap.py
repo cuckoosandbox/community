@@ -22,7 +22,7 @@ class InstallsWinpcap(Signature):
     categories = ["sniffer"]
     authors = ["Thomas Birn", "nex"]
     minimum = "2.0"
-    ttp = ["M0023", "T1040"]
+    ttp = ["B0023", "T1040"]
 
     indicators = [
         ".*\\\\packet\\.dll$",

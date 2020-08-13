@@ -11,7 +11,7 @@ class AllocatesRWX(Signature):
     categories = ["unpacking"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["X0007"]
+    ttp = ["C0007"]
 
     filter_apinames = (
         "NtAllocateVirtualMemory", "NtProtectVirtualMemory",

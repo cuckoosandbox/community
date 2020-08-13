@@ -22,7 +22,7 @@ class NetworkBIND(Signature):
     categories = ["bind"]
     authors = ["nex", "Accuvant"]
     minimum = "2.0"
-    ttp = ["X0001.002"]
+    ttp = ["C0001.002"]
 
     filter_apinames = "bind", "listen", "accept"
 

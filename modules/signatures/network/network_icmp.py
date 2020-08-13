@@ -22,7 +22,7 @@ class NetworkICMP(Signature):
     categories = ["icmp"]
     authors = ["David Maciejak"]
     minimum = "2.0"
-    ttp = ["X0014.001"]
+    ttp = ["C0014.001"]
 
     def on_complete(self):
         if self.get_net_icmp():

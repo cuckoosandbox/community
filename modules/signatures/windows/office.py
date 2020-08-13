@@ -58,7 +58,7 @@ class OfficeCheckProjectName(Signature):
     categories = ["vba"]
     authors = ["FDD", "Cuckoo Sandbox"]
     minimum = "2.0"
-    ttp = ["M0038", "M0007.007"]
+    ttp = ["B0038", "B0007.007"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -76,7 +76,7 @@ class OfficeCountDirectories(Signature):
     categories = ["vba"]
     authors = ["FDD @ Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["M0007.003", "T1083"]
+    ttp = ["B0007.003", "T1083"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -94,7 +94,7 @@ class OfficeCheckVersion(Signature):
     categories = ["vba"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["M0009.007", "T1518"]
+    ttp = ["B0009.007", "T1518"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -118,7 +118,7 @@ class OfficeCheckWindow(Signature):
     categories = ["vba"]
     authors = ["FDD @ Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["M0009.020", "T1010"]
+    ttp = ["B0009.020", "T1010"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -142,7 +142,7 @@ class OfficeHttpRequest(Signature):
     categories = ["vba"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["X0002.003"]
+    ttp = ["C0002.003"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -168,7 +168,7 @@ class OfficeRecentFiles(Signature):
     categories = ["vba"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["M0007.003", "T1083"]
+    ttp = ["B0007.003", "T1083"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -221,7 +221,7 @@ class OfficeCheckName(Signature):
     categories = ["office"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["M0038", "M0007.007", "E1059"]
+    ttp = ["B0038", "B0007.007", "E1059"]
 
     patterns = [
         "[^\n\r;']*Me.Name[^\n\r;']*",

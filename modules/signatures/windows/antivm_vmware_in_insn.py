@@ -11,7 +11,7 @@ class VMWareInInstruction(Signature):
     categories = ["anti-vm"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["M0009"]
+    ttp = ["B0009"]
 
     filter_apinames = "__exception__",
 

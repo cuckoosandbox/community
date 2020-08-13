@@ -77,7 +77,7 @@ class ProcMemDumpIPURLs(Signature):
     categories = ["unpacking", "c2"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["M0030"]
+    ttp = ["B0030"]
 
     def on_complete(self):
         ip = re.compile("^(http|https)\:\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}")

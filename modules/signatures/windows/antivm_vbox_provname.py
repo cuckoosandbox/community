@@ -22,7 +22,7 @@ class VBoxDetectProvname(Signature):
     categories = ["anti-vm"]
     authors = ["Optiv"]
     minimum = "2.0"
-    ttp = ["M0009.001"]
+    ttp = ["B0009.001"]
 
     evented = True
 

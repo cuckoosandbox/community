@@ -33,7 +33,7 @@ class Win32ProcessCreate(Signature):
     categories = ["wmi"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1047", "X0017.002"]
+    ttp = ["T1047", "C0017.002"]
 
     filter_apinames = [
         "IWbemServices_ExecMethod",
@@ -53,7 +53,7 @@ class WMIAntiVM(Signature):
     categories = ["wmi", "anti-vm"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["M0009", "T1047", "T1497"]
+    ttp = ["B0009", "T1047", "T1497"]
 
     antivm = [
         "win32_processor",

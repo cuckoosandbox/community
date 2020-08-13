@@ -73,7 +73,7 @@ class VolDevicetree1(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "2.0"
-    ttp = ["S0010.001"]
+    ttp = ["F0010.001"]
 
     # http://mnin.blogspot.de/2011/10/zeroaccess-volatility-and-kernel-timers.html
 
@@ -92,7 +92,7 @@ class VolSvcscan1(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "2.0"
-    ttp = ["S0004"]
+    ttp = ["F0004"]
 
     def on_complete(self):
         for row in self.get_volatility("svcscan").get("data", []):
@@ -110,7 +110,7 @@ class VolSvcscan2(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "2.0"
-    ttp = ["S0004"]
+    ttp = ["F0004"]
 
     def on_complete(self):
         for row in self.get_volatility("svcscan").get("data", []):
@@ -128,7 +128,7 @@ class VolSvcscan3(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "2.0"
-    ttp = ["S0004"]
+    ttp = ["F0004"]
 
     def on_complete(self):
         for row in self.get_volatility("svcscan").get("data", []):
@@ -146,7 +146,7 @@ class VolModscan1(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "2.0"
-    ttp = ["S0010"]
+    ttp = ["F0010"]
 
     def on_complete(self):
         for row in self.get_volatility("modscan").get("data", []):

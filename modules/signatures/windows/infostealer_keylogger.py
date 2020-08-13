@@ -23,7 +23,7 @@ class Keylogger(Signature):
     categories = ["generic"]
     authors = ["Thomas Birn", "nex"]
     minimum = "2.0"
-    ttp = ["S0002.001", "S0003.003"]
+    ttp = ["F0002.001", "F0003.003"]
 
     filter_apinames = "SetWindowsHookExA", "SetWindowsHookExW"
 

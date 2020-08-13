@@ -27,7 +27,7 @@ class NetworkHTTPPOST(Signature):
     categories = ["http", "cnc"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["X0002.005"]
+    ttp = ["C0002.005"]
 
     filter_analysistypes = set(["file"])
 
@@ -58,7 +58,7 @@ class NetworkCnCHTTP(Signature):
     categories = ["http", "cnc"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1071.001", "M0030"]
+    ttp = ["T1071.001", "B0030"]
 
     filter_analysistypes = set(["file"])
 

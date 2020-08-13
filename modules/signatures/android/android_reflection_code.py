@@ -11,7 +11,7 @@ class AndroidReflectionCode(Signature):
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
     minimum = "2.0"
-    ttp = ["M0032"]
+    ttp = ["B0032"]
 
     def on_complete(self):
         if self.get_apkinfo("static_method_calls").get("is_reflection_code"):

@@ -22,7 +22,7 @@ class ModifiesBootConfig(Signature):
     categories = ["persistance", "ransomware"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["S0013"]
+    ttp = ["F0013"]
     filter_apinames = "ShellExecuteExW", "CreateProcessInternalW",
 
     def on_call(self, call, process):
