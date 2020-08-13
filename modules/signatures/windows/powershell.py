@@ -64,7 +64,7 @@ class AmsiBypass(Signature):
     categories = ["script", "malware", "powershell", "amsi"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
-    ttp = ["S0004.004", "E1059.001"]
+    ttp = ["F0004.004", "E1059.001"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "PowershellAMSI":

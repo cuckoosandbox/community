@@ -22,7 +22,7 @@ class ParallelsDetectKeys(Signature):
     categories = ["anti-vm"]
     authors = ["Brad Spengler"]
     minimum = "2.0"
-    ttp = ["M0009.005", "T1012"]
+    ttp = ["B0009.005", "T1012"]
 
     regkeys_re = [
         ".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\Enum\\\\PCI\\\\VEN_1AB8&DEV_4000&SUBSYS_04001AB8&REV_00",

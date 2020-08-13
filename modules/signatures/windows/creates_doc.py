@@ -11,7 +11,7 @@ class CreatesDocument(Signature):
     categories = ["generic"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["X0016.001"]
+    ttp = ["C0016.001"]
 
     pattern = ".*\\.(doc|docm|dotm|docx|ppt|pptm|pptx|potm|ppam|ppsm|xls|xlsm|xlsx|pdf)$"
 

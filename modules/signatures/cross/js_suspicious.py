@@ -41,7 +41,7 @@ class AntiAnalysisJavascript(Signature):
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
     on_call_dispatch = True
-    ttp = ["M0013", "M0009"]
+    ttp = ["B0013", "B0009"]
 
     filter_apinames = "ActiveXObjectFncObj_Construct", "CImgElement_put_src"
 

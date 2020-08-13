@@ -11,7 +11,7 @@ class SunBeltSandboxDetect(Signature):
     categories = ["anti-vm"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["M0007"]
+    ttp = ["B0007"]
 
     dlls_re = [
         ".*api_log(\\.dll)?$",

@@ -97,7 +97,7 @@ class DisablesProxy(Signature):
     categories = ["infostealer"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["S0004", "E1112"]
+    ttp = ["F0004", "E1112"]
     evented = True
 
     filter_apinames = [

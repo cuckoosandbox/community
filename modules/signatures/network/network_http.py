@@ -22,7 +22,7 @@ class NetworkHTTP(Signature):
     categories = ["http"]
     authors = ["nex"]
     minimum = "2.0"
-    ttp = ["X0002.003"]
+    ttp = ["C0002.003"]
 
     host_whitelist = [
         "www.msftncsi.com"

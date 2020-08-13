@@ -45,7 +45,7 @@ class PersistenceRegistryEXE(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
     evented = True
-    ttp = ["M0040.001", "E1112"]
+    ttp = ["B0040.001", "E1112"]
 
     filter_apinames = set(["RegSetValueExA", "RegSetValueExW", "NtSetValueKey"])
 

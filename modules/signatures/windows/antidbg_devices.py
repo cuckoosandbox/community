@@ -22,7 +22,7 @@ class AntiDBGDevices(Signature):
     categories = ["anti-debug"]
     authors = ["nex"]
     minimum = "2.0"
-    ttp = ["M0001", "M0013"]
+    ttp = ["B0001", "B0013"]
 
     indicators = [
         ".*SICE$",

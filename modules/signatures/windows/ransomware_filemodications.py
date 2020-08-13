@@ -53,7 +53,7 @@ class RansomwareAppendsExtension(Signature):
     categories = ["ransomware"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["E1486", "X0015.001"]
+    ttp = ["E1486", "C0015.001"]
 
     filter_apinames = "MoveFileWithProgressW", "MoveFileWithProgressTransactedW"
 

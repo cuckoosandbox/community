@@ -22,7 +22,7 @@ class WineDetect(Signature):
     categories = ["anti-emulation"]
     authors = ["nex"]
     minimum = "2.0"
-    ttp = ["M0004"]
+    ttp = ["B0004"]
 
     filter_apinames = "LdrGetProcedureAddress",
 

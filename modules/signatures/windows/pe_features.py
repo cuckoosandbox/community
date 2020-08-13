@@ -13,7 +13,7 @@ class PEFeatures(Signature):
     categories = ["packer"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["S0001"]
+    ttp = ["F0001"]
 
     section_names = [
         ".text", ".rdata", ".data", ".pdata", ".DATA", ".reloc", ".idata",
@@ -45,7 +45,7 @@ class PEIDPacker(Signature):
     categories = ["packer"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["S0001.002"]
+    ttp = ["F0001.002"]
 
     def on_complete(self):
         if self.get_results("static", {}).get("peid_signatures", []):
@@ -61,7 +61,7 @@ class PEUnknownResourceName(Signature):
     categories = ["packer"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["S0001"]
+    ttp = ["F0001"]
 
     names = [
         "RT_ACCELERATOR",

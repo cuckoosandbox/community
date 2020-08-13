@@ -66,7 +66,7 @@ class NetworkEXE(Signature):
     categories = ["exploit", "downloader"]
     authors = ["Kevin Ross", "Will Metcalf"]
     minimum = "2.0"
-    ttp = ["M0023"]
+    ttp = ["B0023"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -107,7 +107,7 @@ class SuspiciousWriteEXE(Signature):
     categories = ["exploit", "downloader", "virus"]
     authors = ["Will Metcalf", "Kevin Ross"]
     minimum = "2.0"
-    ttp = ["M0023"]
+    ttp = ["B0023"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

@@ -12,7 +12,7 @@ class Smtp_GMail(Signature):
     categories = ["smtp"]
     authors = ["RedSocks"]
     minimum = "2.0"
-    ttp = ["X0012.001"]
+    ttp = ["C0012.001"]
 
     domains = [
         "smtp.gmail.com",

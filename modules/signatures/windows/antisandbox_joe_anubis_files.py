@@ -22,7 +22,7 @@ class SandboxJoeAnubisDetectFiles(Signature):
     categories = ["anti-sandbox"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["M0007.002"]
+    ttp = ["B0007.002"]
 
     file_indicators = [
         "C:\\\\sample\\.exe",

@@ -22,7 +22,7 @@ class NetworkAdapters(Signature):
     categories = ["anti-vm"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["M0009.023"]
+    ttp = ["B0009.023"]
 
     filter_apinames = set(["GetAdaptersAddresses"])
 

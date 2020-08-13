@@ -22,7 +22,7 @@ class NetworkSMTP(Signature):
     categories = ["smtp", "spam"]
     authors = ["nex", "RicoVZ"]
     minimum = "2.0.0"
-    ttp = ["S0012.002"]
+    ttp = ["F0012.002"]
 
     def on_complete(self):
         for s in getattr(self, "get_net_smtp_ex", lambda: [])():

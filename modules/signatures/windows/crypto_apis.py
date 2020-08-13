@@ -22,7 +22,7 @@ class CryptGenKey(Signature):
     families = ["generic"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["X0021.003"]
+    ttp = ["C0021.003"]
 
     filter_apinames = "CryptGenKey", "CryptExportKey",
 
