@@ -18,6 +18,9 @@ class EvalJS(Signature):
         if call["arguments"]["type"] == "eval code":
             self.severity = 3
             self.description = "Executed javascript and unpacks itself"
+		
+        if "VBScript" in call["arguments"]["type"]:
+            self.description = "Executes VBScript"
 
         self.mark_call()
         return True

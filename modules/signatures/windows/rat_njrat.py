@@ -23,5 +23,10 @@ class NjRat(Signature):
             match = self.check_file(pattern=indicator, regex=True)
             if match:
                 self.mark_ioc("file", match)
-
+        if self.has_marks():
+            self.mark_config({
+                "family": "njRAT (also known as Bladabindi)",
+                "type": "Samples creates artifacts known to be associated with the njRAT Trojan",
+                "url": "https://blog.malwarebytes.com/detections/backdoor-njrat/"
+            }) 
         return self.has_marks()
