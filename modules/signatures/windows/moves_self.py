@@ -18,9 +18,12 @@ class MovesSelf(Signature):
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
-        self.initial_process = self.get_results("target", {}).get("file", {}).get("name", [])
+        self.initial_process = self.get_results("target", {}).get("file", {}).get("name", "")
 
     def on_call(self, call, process):
+        if not self.initial_process:
+            return
+
         oldpath = call["arguments"]["oldfilepath"]
         if self.initial_process in oldpath:
             self.mark_call()
