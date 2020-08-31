@@ -115,3 +115,18 @@ class WMIService(Signature):
                     self.mark_ioc("wmi", query)
 
         return self.has_marks()
+
+class WinmgmtsProcessCreate(Signature):
+    name = "winmgmts_process_create"
+    description = "Uses winmgmts to manipulate WMI."
+    severity = 2
+    categories = ["wmi"]
+    minimum = "2.0"
+    ttp = ["T1047"]
+
+    def on_call(self, call, process):
+        if call["flags"].get("clsid") == "winmgmts" and call["api"] == "CoCreateInstance":
+            self.mark_call()
+
+    def on_complete(self):
+        return self.has_marks()
