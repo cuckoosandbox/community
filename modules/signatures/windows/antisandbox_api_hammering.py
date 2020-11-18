@@ -28,7 +28,7 @@ class ApiHammering(Signature):
             for api_call in process_apistats:
                 process_api_call_count = process_apistats[api_call]
                 if process_api_call_count > 100000:
-                    description = "%s was called %d" % (api_call, process_api_call_count)
+                    description = "%s was called %d times" % (api_call, process_api_call_count)
                     self.mark_ioc("call", api_call, description=description)
         return self.has_marks()
 
