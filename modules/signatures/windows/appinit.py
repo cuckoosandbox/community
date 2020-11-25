@@ -14,7 +14,7 @@ class InstallsAppInit(Signature):
     ttp = ["T1103"]
 
     regkeys_re = [
-        ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Windows\\\\Appinit_Dlls",
+         ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Windows\\\\Appinit_Dlls",
     ]
 
     def on_complete(self):
