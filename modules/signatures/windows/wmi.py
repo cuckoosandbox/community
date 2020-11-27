@@ -125,7 +125,7 @@ class WinmgmtsProcessCreate(Signature):
     ttp = ["T1047"]
 
     def on_call(self, call, process):
-        if call["flags"].get("clsid") == "winmgmts" and call["api"] == "CoCreateInstance":
+        if call.get("flags") and call["flags"].get("clsid") == "winmgmts" and call["api"] == "CoCreateInstance":
             self.mark_call()
 
     def on_complete(self):
