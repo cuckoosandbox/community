@@ -26,6 +26,7 @@ class DllLoadUncommonFileTypes(Signature):
         "winspool.drv",
         "C:\Python27\DLLs\_socket.pyd",
         "C:\Program Files (x86)\Adobe\Reader 11.0\Reader\plug_ins\Annots.api",
+        "C:\Program Files (x86)\Microsoft Office\Office14\mscss7wre_EN.dub",
     ]
 
     def on_complete(self):
