@@ -16,7 +16,7 @@ from lib.cuckoo.common.abstracts import Signature
 class DllLoadUncommonFileTypes(Signature):
     name = "dll_load_uncommon_file_types"
     description = "A file with an unusual extension was attempted to be loaded as a DLL."
-    severity = 3
+    severity = 1
     categories = ["dll"]
     minimum = "2.0"
     ttp = ["T1574"]
@@ -24,6 +24,7 @@ class DllLoadUncommonFileTypes(Signature):
     indicator = ".+\.(?!dll).{1,4}$"
     safelist = [
         "winspool.drv",
+        "Winspool.DRV",
         "C:\Python27\DLLs\_socket.pyd",
         "C:\Program Files (x86)\Adobe\Reader 11.0\Reader\plug_ins\Annots.api",
         "C:\Program Files (x86)\Microsoft Office\Office14\mscss7wre_EN.dub",
