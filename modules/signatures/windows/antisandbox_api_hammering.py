@@ -15,8 +15,8 @@ from lib.cuckoo.common.abstracts import Signature
 
 class ApiHammering(Signature):
     name = "api_hammering"
-    description = "Makes an unusually high volume of API calls in the attempt to crash the sandbox."
-    severity = 4
+    description = "Makes an unusually high volume of API calls, possibly in the attempt to crash the sandbox."
+    severity = 1
     categories = ["anti-sandbox"]
     minimum = "2.0"
     ttp = ["T1106", "T1497"]
