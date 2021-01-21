@@ -33,6 +33,7 @@ class AntiSandboxSleep(Signature):
         "winword.exe",
         "excel.exe",
         "splwow64.exe",
+        "powershell.exe",
     ]
 
     def init(self):
