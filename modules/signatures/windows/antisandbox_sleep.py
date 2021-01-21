@@ -34,6 +34,7 @@ class AntiSandboxSleep(Signature):
         "excel.exe",
         "splwow64.exe",
         "powershell.exe",
+        "outlook.exe",
     ]
 
     def init(self):
