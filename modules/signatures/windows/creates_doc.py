@@ -31,7 +31,7 @@ class CreatesDocument(Signature):
             temp_truncated_filename = filename[-11:]
 
         for filepath in self.check_file(pattern=self.pattern, actions=["file_written"], regex=True, all=True):
-            if filename in filepath or ("~$" in filepath and (temp_truncated_filename and temp_truncated_filename in filepath)):
+            if filename in filepath or ("~$" in filepath and temp_truncated_filename and temp_truncated_filename in filepath):
                 continue
             self.mark_ioc("file", filepath)
 
