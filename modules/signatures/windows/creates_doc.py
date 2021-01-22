@@ -23,8 +23,16 @@ class CreatesDocument(Signature):
         if not filename:
             return
 
+        # Office files, when opened, create temporary backup files whose naming follows
+        # the convention \path\to\file\~$(final 11 chars of filename if length of filename > 12|filename)
+        # These files are false positives for this signature.
+        temp_truncated_filename = None
+        if len(filename) > 12:
+            temp_truncated_filename = filename[-11:]
+
         for filepath in self.check_file(pattern=self.pattern, actions=["file_written"], regex=True, all=True):
-            if filename not in filepath:
-                self.mark_ioc("file", filepath)
+            if filename in filepath or ("~$" in filepath and (temp_truncated_filename and temp_truncated_filename in filepath)):
+                continue
+            self.mark_ioc("file", filepath)
 
         return self.has_marks()
