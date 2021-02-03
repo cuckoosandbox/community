@@ -15,13 +15,13 @@ class HasWMI(Signature):
     minimum = "2.0"
     ttp = ["T1047"]
 
-    blacklist = "(AntivirusProduct|FirewallProduct)"
+    blocklist = "(AntivirusProduct|FirewallProduct)"
 
     def on_complete(self):
         for query in self.get_wmi_queries():
             self.mark_ioc("wmi", query)
 
-            if re.search(self.blacklist, query, re.I):
+            if re.search(self.blocklist, query, re.I):
                 self.severity = 3
 
         return self.has_marks()

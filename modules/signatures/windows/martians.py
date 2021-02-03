@@ -11,13 +11,13 @@ from lib.cuckoo.common.abstracts import Signature
 
 class ProcessMartian(Signature):
     name = "process_martian"
-    description = "One or more non-whitelisted processes were created"
+    description = "One or more non-safelisted processes were created"
     severity = 3
     categories = ["martian", "exploit", "dropper"]
     authors = ["Cuckoo Technologies", "Will Metcalf", "Kevin Ross"]
     minimum = "2.0"
 
-    whitelist_procs = [
+    safelist_procs = [
         "acrord32.exe",
         "acrord64.exe",
         "chrome.exe",
@@ -34,7 +34,7 @@ class ProcessMartian(Signature):
         "wspub.exe"
     ]
 
-    whitelist_re = [
+    safelist_re = [
         "\\\"C:\\\\\Program\\ Files(\\ \\(x86\\))?\\\\Internet\\ Explorer\\\\iexplore\\.exe\\\"\\ SCODEF:\\d+ CREDAT:\\d+",
         "^[A-Z]\:\\Program Files(?:\s\(x86\))?\\Microsoft Office\\(?:Office1[1-5]\\)?(?:WINWORD|OUTLOOK|POWERPNT|EXCEL|WORDVIEW)\.EXE",
         "C\\:\\\\Windows\\\\System32\\\\wscript\\.exe",
@@ -58,11 +58,11 @@ class ProcessMartian(Signature):
 
     def on_complete(self):
         for process in self.get_results("behavior", {}).get("generic", []):
-            if process["process_name"].lower() not in self.whitelist_procs:
+            if process["process_name"].lower() not in self.safelist_procs:
                 continue
 
             for cmdline in process.get("summary", {}).get("command_line", []):
-                for regex in self.whitelist_re:
+                for regex in self.safelist_re:
                     if re.match(regex, cmdline, re.I):
                         break
                 else:
@@ -84,7 +84,7 @@ class MartianCommandProcess(Signature):
     minimum = "2.0"
     ttp = ["T1059"]
 
-    whitelist_procs = [
+    safelist_procs = [
         "acrord32.exe",
         "acrord64.exe",
         "chrome.exe",
@@ -111,7 +111,7 @@ class MartianCommandProcess(Signature):
 
     def on_complete(self):
         for process in self.get_results("behavior", {}).get("generic", []):
-            if process["process_name"].lower() not in self.whitelist_procs:
+            if process["process_name"].lower() not in self.safelist_procs:
                 continue
 
             for cmdline in process.get("summary", {}).get("command_line", []):

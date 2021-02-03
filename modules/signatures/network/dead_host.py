@@ -15,13 +15,13 @@ class DeadHost(Signature):
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
 
-    whitelist = [
+    safelist = [
         "13.107.4.50",
     ]
 
     def on_complete(self):
         for ip, port in self.get_results("network", {}).get("dead_hosts", []):
-            if ip not in self.whitelist:
+            if ip not in self.safelist:
                 self.mark_ioc("dead_host", "%s:%s" % (ip, port))
                 self.severity += 2
 

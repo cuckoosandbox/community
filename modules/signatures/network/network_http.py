@@ -24,13 +24,13 @@ class NetworkHTTP(Signature):
     minimum = "2.0"
     ttp = ["C0002.003"]
 
-    host_whitelist = [
+    host_safelist = [
         "www.msftncsi.com"
     ]
 
     def on_complete(self):
         for http in getattr(self, "get_net_http_ex", lambda: [])():
-            if http["host"] in self.host_whitelist:
+            if http["host"] in self.host_safelist:
                 continue
 
             self.mark_ioc("request", "%s %s://%s%s" % (

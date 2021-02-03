@@ -17,7 +17,7 @@ class JsIframe(Signature):
 
     filter_apinames = "CIFrameElement_CreateElement",
 
-    whitelist = [
+    safelist = [
         "https?://googleads\\.g\\.doubleclick\\.net/pagead/",
         "https?://ad\\.doubleclick\\.net/ddm/",
     ]
@@ -27,8 +27,8 @@ class JsIframe(Signature):
         if not iframe:
             return
 
-        for whitelist in self.whitelist:
-            if re.match(whitelist, iframe):
+        for safelist in self.safelist:
+            if re.match(safelist, iframe):
                 return
 
         self.mark_call()

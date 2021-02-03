@@ -33,19 +33,19 @@ class NetworkHTTPPOST(Signature):
 
     def on_complete(self):
 
-        whitelist = [
+        safelist = [
             "microsoft.com",
             "windowsupdate\.com",
             "adobe.com",
             ]
 
         for http in getattr(self, "get_net_http_ex", lambda: [])():
-            is_whitelisted = False
-            for whitelisted in whitelist:
-                if whitelisted in http["host"]:
-                    is_whitelisted = True
+            is_safelisted = False
+            for safelisted in safelist:
+                if safelisted in http["host"]:
+                    is_safelisted = True
 
-            if not is_whitelisted and http["method"] == "POST":
+            if not is_safelisted and http["method"] == "POST":
                 request = "%s %s://%s%s" % (http["method"], http["protocol"], http["host"], http["uri"])
                 self.mark_ioc("request", request)
 
@@ -64,7 +64,7 @@ class NetworkCnCHTTP(Signature):
 
     def on_complete(self):
 
-        whitelist = [
+        safelist = [
             "microsoft.com",
             "windowsupdate\.com",
             "adobe.com",
@@ -73,27 +73,27 @@ class NetworkCnCHTTP(Signature):
         suspectrequests = []
 
         for http in getattr(self, "get_net_http_ex", lambda: [])():
-            is_whitelisted = False
-            for whitelisted in whitelist:
-                if whitelisted in http["host"]:
-                    is_whitelisted = True
+            is_safelisted = False
+            for safelisted in safelist:
+                if safelisted in http["host"]:
+                    is_safelisted = True
 
             # Check HTTP features
             reasons = []
             ip = re.compile("^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}")
-            if not is_whitelisted and http["method"] == "POST" and "Referer:" not in http["request"]:
+            if not is_safelisted and http["method"] == "POST" and "Referer:" not in http["request"]:
                 reasons.append("POST method with no referer header")
 
-            if not is_whitelisted and http["method"] == "POST" and "User-Agent:" not in http["request"]:
+            if not is_safelisted and http["method"] == "POST" and "User-Agent:" not in http["request"]:
                 reasons.append("POST method with no useragent header")
 
-            if not is_whitelisted and http["method"] == "GET" and "User-Agent:" not in http["request"]:
+            if not is_safelisted and http["method"] == "GET" and "User-Agent:" not in http["request"]:
                 reasons.append("GET method with no useragent header")
 
-            if not is_whitelisted and "HTTP/1.0" in http["request"]:
+            if not is_safelisted and "HTTP/1.0" in http["request"]:
                 reasons.append("HTTP version 1.0 used")
 
-            if not is_whitelisted and ip.match(http["host"]):
+            if not is_safelisted and ip.match(http["host"]):
                 reasons.append("Connection to IP address")
 
             if len(reasons) > 0:

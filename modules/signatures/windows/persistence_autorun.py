@@ -68,7 +68,7 @@ class Autorun(Signature):
         ".*schtasks.*/create.*/sc",
     ]
 
-    whitelists = [
+    safelists = [
         ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\{CAFEEFAC-0017-0000-FFFF-ABCDEFFEDCBA}\\\\InprocServer32\\\\.*",
         ".*\\\\Software\\\\(Wow6432Node\\\\)?Classes\\\\clsid\\\\[^\\\\]*\\\\InprocServer32\\\\ThreadingModel$"
     ]
@@ -95,12 +95,12 @@ class Autorun(Signature):
         elif call["status"]:
             regkey = call["arguments"]["regkey"]
             regvalue = call["arguments"]["value"]
-            in_whitelist = False
-            for whitelist in self.whitelists:
-                if re.match(whitelist, regkey, re.IGNORECASE):
-                    in_whitelist = True
+            in_safelist = False
+            for safelist in self.safelists:
+                if re.match(safelist, regkey, re.IGNORECASE):
+                    in_safelist = True
                     break
-            if not in_whitelist:
+            if not in_safelist:
                 for indicator in self.regkeys_re:
                     if re.match(indicator, regkey, re.IGNORECASE) and regvalue != "c:\\program files\\java\\jre7\\bin\jp2iexp.dll":
                         self.mark(
