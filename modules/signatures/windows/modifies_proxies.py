@@ -107,7 +107,7 @@ class DisablesProxy(Signature):
     ]
 
     def on_call(self, call, process):
-        if process["process_name"] not in ["chrome.exe", "iexplore.exe", "firefox.exe"]:
+        if process["process_name"] not in ["chrome.exe", "iexplore.exe", "firefox.exe", "outlook.exe"]:
             key = call["arguments"]["regkey"].lower()
             if key and "\\software\\microsoft\\windows\\currentversion\\internet settings\\proxyenable" in key and call["arguments"]["value"] == 0:
                 self.mark_call()
