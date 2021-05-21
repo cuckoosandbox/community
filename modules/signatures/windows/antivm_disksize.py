@@ -44,7 +44,9 @@ class AntiVMDiskSize(Signature):
         "excel.exe",
         "powerpnt.exe",
         "outlook.exe",
-        "mspub.exe"
+        "mspub.exe",
+        "msiexec.exe",
+        "mshta.exe",
     ]
 
     def on_call(self, call, process):
