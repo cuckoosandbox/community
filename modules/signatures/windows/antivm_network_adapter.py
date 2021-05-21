@@ -29,7 +29,8 @@ class NetworkAdapters(Signature):
         "iexplore.exe",
         "firefox.exe",
         "chrome.exe",
-        "safari.exe"
+        "safari.exe",
+        "outlook.exe",
     ]
 
     def on_call(self, call, process):
