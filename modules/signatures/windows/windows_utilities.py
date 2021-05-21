@@ -54,7 +54,6 @@ risk_utilities = [
     "cacls",
     "csvde",
     "dsquery",
-    "icacls",
     "nltest",
     "rexec",
     "sdbinst",
@@ -168,13 +167,11 @@ class SuspiciousCommandTools(Signature):
     categories = ["commands", "lateral"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    safelist_processes = ["icacls.exe"]
 
     def on_complete(self):
         for cmdline in self.get_command_lines():
             for utility in risk_utilities:
-                if utility in cmdline.lower() and \
-                        not any(process in cmdline.lower() for process in self.safelist_processes):
+                if utility in cmdline.lower():
                     self.mark_ioc("cmdline", cmdline)
 
         return self.has_marks()
