@@ -128,6 +128,9 @@ class SuspiciousWriteEXE(Signature):
     safelist = [
         "\\Windows\\System32\\wscript.exe",
         "\\Windows\\hh.exe",
+        "\\windows\\installer\\{90140000-0011-0000-0000-0000000ff1ce}\\xlicons.exe",
+        "\\windows\\installer\\{90140000-0011-0000-0000-0000000ff1ce}\\wordicon.exe",
+        "\\internet explorer\\iexplore.exe",
     ]
 
     def on_call(self, call, process):
@@ -138,7 +141,7 @@ class SuspiciousWriteEXE(Signature):
                 buff = call["arguments"]["buffer"]
                 if filepath.endswith(".exe") or (buff and len(buff) > 2 and buff.startswith("MZ") and "This program" in buff) and "powershell_ise.exe" not in filepath:
                     for safe in self.safelist:
-                        if safe in filepath:
+                        if safe in filepath.lower():
                             return
 
                     if pname not in self.pname:
