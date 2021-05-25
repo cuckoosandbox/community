@@ -24,15 +24,17 @@ class DllLoadUncommonFileTypes(Signature):
     indicator = ".+\.(?!dll).{1,4}$"
     safelist = [
         "winspool.drv",
-        "Winspool.DRV",
-        "C:\Python27\DLLs\_socket.pyd",
-        "C:\Program Files (x86)\Adobe\Reader 11.0\Reader\plug_ins\Annots.api",
-        "C:\Program Files (x86)\Microsoft Office\Office14\mscss7wre_EN.dub",
+        "_socket.pyd",
+        "annots.api",
+        "mscss7wre_en.dub",
+        "outlook.exe",
+        "wpft632.cnv",
     ]
 
     def on_complete(self):
-        dll = self.check_dll_loaded(pattern=self.indicator, regex=True)
-        if dll and dll not in self.safelist:
-            self.mark_ioc("dll", dll)
+        dlls = self.check_dll_loaded(pattern=self.indicator, regex=True, all=True)
+        for dll in dlls:
+            if not any(item in dll.lower() for item in self.safelist):
+                self.mark_ioc("dll", dll)
 
         return self.has_marks()
