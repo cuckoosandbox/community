@@ -23,6 +23,7 @@ class BrowserSecurity(Signature):
     authors = ["Kevin Ross", "Optiv"]
     minimum = "2.0"
     ttp = ["T1089"]
+    safelist = ["zoom.exe"]
 
     regkeys_re = [
         ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Internet\\ Explorer\\\\Privacy\\\\EnableInPrivateMode",
@@ -41,6 +42,7 @@ class BrowserSecurity(Signature):
     def on_complete(self):
         for indicator in self.regkeys_re:
             for regkey in self.check_key(pattern=indicator, regex=True, actions=["regkey_written"], all=True):
-                self.mark_ioc("registry", regkey)
+                if not any(item in regkey.lower() for item in self.safelist):
+                    self.mark_ioc("registry", regkey)
 
         return self.has_marks()
