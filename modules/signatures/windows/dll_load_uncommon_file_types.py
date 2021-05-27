@@ -28,7 +28,7 @@ class DllLoadUncommonFileTypes(Signature):
         "annots.api",
         "mscss7wre_en.dub",
         "outlook.exe",
-        "wpft632.cnv",
+        ".cnv",
     ]
 
     def on_complete(self):
