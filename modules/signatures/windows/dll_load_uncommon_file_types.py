@@ -24,11 +24,13 @@ class DllLoadUncommonFileTypes(Signature):
     indicator = ".+\.(?!dll).{1,4}$"
     safelist = [
         "winspool.drv",
+        "wdmaud.drv",
         "_socket.pyd",
         "annots.api",
         "mscss7wre_en.dub",
         "outlook.exe",
-        ".cnv",
+        ".cnv",  # Word
+        ".api",  # Adobe Reader
     ]
 
     def on_complete(self):
