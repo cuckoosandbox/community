@@ -31,6 +31,7 @@ class DllLoadUncommonFileTypes(Signature):
         "outlook.exe",
         ".cnv",  # Word
         ".api",  # Adobe Reader
+        ".dub",  # Word
     ]
 
     def on_complete(self):
