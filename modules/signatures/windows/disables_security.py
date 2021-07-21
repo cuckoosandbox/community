@@ -26,7 +26,9 @@ class DisablesSecurity(Signature):
         ("HKEY_LOCAL_MACHINE\\\\SYSTEM\\\\ControlSet001\\\\services\\\\SharedAccess\\\\Parameters\\\\FirewallPolicy\\\\StandardProfile\\\\DisableNotifications", "attempts to disable firewall notifications"),
         (".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Windows\\ Defender\\\\.*", "attempts to disable windows defender"),
         (".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Policies\\\\Microsoft\\\\Windows\\ Defender\\\\.*", "attempts to modify windows defender policies"),
-        (".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\services\\\\WinDefend\\\\.*", "attempts to disable windows defender"),        
+        (".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Notifications\\\\Settings\\\\Windows\\.Defender\\.SecurityCenter\\\\.*", "attempts to modify windows defender notifications"),
+        (".*\\\\SYSTEM\\\\(CurrentControlSet|ControlSet001)\\\\services\\\\WinDefend\\\\.*", "attempts to disable windows defender"),
+        (".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Policies\\\\Microsoft\\\\Windows\\\\System\\\\EnableSmartScreen", "attempts to modify windows system-level smart-screen"),
     ]
 
     def on_complete(self):

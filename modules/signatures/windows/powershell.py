@@ -83,6 +83,30 @@ class PowershellBitsTransfer(Signature):
     minimum = "2.0.4"
     ttp = ["T1197"]
 
+    def on_complete(self):
+        for cmdline in self.get_command_lines():
+            lower = cmdline.lower()
+
+            if "powershell" not in lower:
+                continue
+
+            bits_reg = re.compile("start-bitstransfer", re.IGNORECASE)
+            m = bits_reg.search(lower)
+            if m:
+                url_regex = re.compile("(https?|ftp)://[^\s/$.?#].[^\s\"']*", re.IGNORECASE)
+                url = url_regex.search(lower)
+                if url:
+                    self.mark_config({
+                        "family": "Powershell BITS Transfer Dropper",
+                        "url": url.group(0)
+                    })
+                else:
+                    self.mark_config({
+                        "family": "Powershell BITS Transfer Dropper",
+                    })
+                self.mark(value="Powershell BITS Transfer Dropper", option=m.group(0))
+        return self.has_marks()
+
     def on_yara(self, category, filepath, match):
         if match.name != "PowershellBitsTransfer":
             return
