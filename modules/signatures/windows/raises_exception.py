@@ -25,6 +25,14 @@ class RaisesException(Signature):
             "binary only runs on Windows 7 and your Virtual Machine is "
             "running Windows XP)",
     }
+    
+    exception_codes_ignore = {
+        "0xc004f012":
+            "Software License API (SLAPI) Error (SL_E_VALUE_NOT_FOUND): "
+            "The specified name-value pair was not found. "
+            "May indicates that the Microsoft Licensing Store files are "
+            "corrupted or overwritten",
+    }
 
     def on_call(self, call, process):
         """Prettify the display of the call in the Signature."""
@@ -37,6 +45,9 @@ class RaisesException(Signature):
         if exception_code in self.exception_codes:
             self.severity = 5
             self.description = self.exception_codes[exception_code]
+        elif exception_code in self.exception_codes_ignore:
+            self.description = self.exception_codes_ignore[exception_code]
+            return False
         else:
             # There's no point in keeping track of the API call for the
             # exception documented above.
