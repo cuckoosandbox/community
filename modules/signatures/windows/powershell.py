@@ -13,9 +13,18 @@ class SuspiciousPowershell(Signature):
     categories = ["script", "dropper", "downloader", "packer"]
     authors = ["Kevin Ross", "Cuckoo Technologies", "FDD"]
     minimum = "2.0"
+    ps1_package_cmd = "-NoProfile -ExecutionPolicy unrestricted -File"
 
     def on_complete(self):
         for cmdline in self.get_command_lines():
+            # We can afford to try to match the substring in a case-sensitive way since this is how Cuckoo's
+            # PowerShell package runs PowerShell files.
+            if self.ps1_package_cmd in cmdline:
+                f = self.get_results("target", {}).get("file", {})
+                filename = f.get("name")
+                if filename and filename in cmdline:
+                    # False Positive found
+                    continue
             lower = cmdline.lower()
 
             if "powershell" not in lower:

@@ -14,8 +14,11 @@ class AntiSandboxIdleTime(Signature):
     ttp = ["T1082"]
 
     filter_apinames = "NtQuerySystemInformation",
+    process_safelist = ["powershell.exe"]
 
-    def on_call(self, call, processs):
+    def on_call(self, call, process):
+        if process["process_name"] in self.process_safelist:
+            return
         if call["flags"]["information_class"] == \
                 "SystemProcessorPerformanceInformation":
             self.mark_call()

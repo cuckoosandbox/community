@@ -24,8 +24,11 @@ class CryptGenKey(Signature):
     minimum = "2.0"
 
     filter_apinames = "CryptGenKey", "CryptExportKey",
+    process_safelist = ["powershell.exe"]
 
     def on_call(self, call, process):
+        if process["process_name"] in self.process_safelist:
+            return
         self.mark_call()
 
     def on_complete(self):

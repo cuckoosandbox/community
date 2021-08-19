@@ -16,10 +16,17 @@ class CreatesSuspiciousProcess(Signature):
         "svchost", "powershell", "regsvr32", "bcdedit", "mshta", "schtasks",
         "wmic", "cmd.exe",
     ]
+    ps1_package_cmd = "-NoProfile -ExecutionPolicy unrestricted -File"
 
     def on_complete(self):
         for cmdline in self.get_command_lines():
             for process in self.processes:
+                if process == "powershell" and self.ps1_package_cmd in cmdline:
+                    f = self.get_results("target", {}).get("file", {})
+                    filename = f.get("name")
+                    if filename and filename in cmdline:
+                        # False Positive found
+                        continue
                 if process in cmdline.lower():
                     self.mark_ioc("cmdline", cmdline)
                     break
