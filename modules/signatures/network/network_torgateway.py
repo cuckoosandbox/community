@@ -22,6 +22,7 @@ class TorGateway(Signature):
     categories = ["network"]
     authors = ["nex", "Optiv"]
     minimum = "2.0"
+    ttp = ["T1090.003"]
 
     domains_re = [
         ".*\\.tor2web\\.[a-z]{2,20}$",

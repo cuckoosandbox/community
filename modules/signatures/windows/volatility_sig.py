@@ -11,7 +11,7 @@ class VolMalfind1(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     minimum = "2.0"
-    ttp = ["T1055"]
+    ttp = ["E1055"]
 
     def on_complete(self):
         pids = set()
@@ -31,6 +31,7 @@ class VolLdrModules1(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     minimum = "2.0"
+    ttp = ["E1055"]
 
     # http://mnin.blogspot.de/2011/06/examining-stuxnets-footprint-in-memory.html
 
@@ -53,6 +54,7 @@ class VolLdrModules2(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     minimum = "2.0"
+    ttp = ["E1055"]
 
     # http://mnin.blogspot.de/2011/06/examining-stuxnets-footprint-in-memory.html
 
@@ -71,6 +73,7 @@ class VolDevicetree1(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "2.0"
+    ttp = ["F0010.001"]
 
     # http://mnin.blogspot.de/2011/10/zeroaccess-volatility-and-kernel-timers.html
 
@@ -89,7 +92,7 @@ class VolSvcscan1(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "2.0"
-    ttp = ["T1031"]
+    ttp = ["F0004"]
 
     def on_complete(self):
         for row in self.get_volatility("svcscan").get("data", []):
@@ -107,7 +110,7 @@ class VolSvcscan2(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "2.0"
-    ttp = ["T1031", "T1089"]
+    ttp = ["F0004"]
 
     def on_complete(self):
         for row in self.get_volatility("svcscan").get("data", []):
@@ -125,7 +128,7 @@ class VolSvcscan3(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "2.0"
-    ttp = ["T1031"]
+    ttp = ["F0004"]
 
     def on_complete(self):
         for row in self.get_volatility("svcscan").get("data", []):
@@ -143,6 +146,7 @@ class VolModscan1(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "2.0"
+    ttp = ["F0010"]
 
     def on_complete(self):
         for row in self.get_volatility("modscan").get("data", []):
@@ -158,7 +162,7 @@ class VolHandles1(Signature):
     categories = ["generic"]
     authors = ["Thorsten Sick"]
     minimum = "2.0"
-    ttp = ["T1055"]
+    ttp = ["E1055"]
 
     def on_complete(self):
         threads = set()

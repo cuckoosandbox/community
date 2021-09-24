@@ -12,7 +12,7 @@ class DisablesSystemRestore(Signature):
     categories = ["ransomware", "persistance"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1112"]
+    ttp = ["T1490", "E1112"]
 
     regkeys_re = [
         ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\SystemRestore\\\\DisableSR$",

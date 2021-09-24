@@ -22,7 +22,7 @@ class ModifiesCertificates(Signature):
     categories = ["infostealer", "banker"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1112"]
+    ttp = ["T1553.004", "E1112"]
 
     regkeys_re = [
         ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\SystemCertificates\\\\.*\\\\Certificates\\\\.*",

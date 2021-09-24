@@ -11,6 +11,7 @@ class AndroidCamera(Signature):
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
     minimum = "2.0"
+    ttp = ["T1429"]
 
     def on_complete(self):
         if "camera" in self.get_droidmon("events"):

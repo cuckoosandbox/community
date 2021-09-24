@@ -22,7 +22,7 @@ class AntisandboxClipboard(Signature):
     categories = ["anti-sandbox"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1115"]	
+    ttp = ["B0007.001"]	
 
     filter_apinames = set(["GetClipboardData"])
 

@@ -11,6 +11,7 @@ class AllocatesRWX(Signature):
     categories = ["unpacking"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["C0007"]
 
     filter_apinames = (
         "NtAllocateVirtualMemory", "NtProtectVirtualMemory",
@@ -34,6 +35,7 @@ class AllocatesExecuteRemoteProccess(Signature):
     categories = ["injection", "shellcode"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["E1055"]
 
     filter_apinames = "NtAllocateVirtualMemory", "NtProtectVirtualMemory"
     process_handles = ["0xffffffff", "0xffffffffffffffff"]

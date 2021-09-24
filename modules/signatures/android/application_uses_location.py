@@ -11,6 +11,7 @@ class ApplicationUsesLocation(Signature):
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
     minimum = "2.0"
+    ttp = ["T1430"]
 
     def on_complete(self):
         if "location" in self.get_droidmon("data_leak"):

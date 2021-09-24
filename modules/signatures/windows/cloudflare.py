@@ -12,6 +12,7 @@ class CloudFlare(Signature):
     categories = ["Cloudflare"]
     authors = ["RedSocks"]
     minimum = "2.0"
+    ttp = ["T1049"]
 
     domains = [
         "cloudflare.com",

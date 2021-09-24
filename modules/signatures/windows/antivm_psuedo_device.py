@@ -22,7 +22,7 @@ class AntiVMSharedDevice(Signature):
     categories = ["anti-vm"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1082"]
+    ttp = ["B0009"]
 
     filter_apinames = "NtCreateFile",
 

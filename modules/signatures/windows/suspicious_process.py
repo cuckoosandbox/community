@@ -11,6 +11,7 @@ class CreatesSuspiciousProcess(Signature):
     categories = ["packer"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["C0017"]
 
     processes = [
         "svchost", "powershell", "regsvr32", "bcdedit", "mshta", "schtasks",

@@ -22,7 +22,7 @@ class AntiDBGWindows(Signature):
     categories = ["anti-debug"]
     authors = ["nex", "KillerInstinct", "Brad Spengler"]
     minimum = "2.0"
-    ttp = ["T1057"]
+    ttp = ["B0013.009", "B0001.004"]
 
     filter_categories = "ui",
 

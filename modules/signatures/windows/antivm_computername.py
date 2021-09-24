@@ -22,6 +22,7 @@ class AntiVMComputernameQuery(Signature):
     categories = ["AntiVM"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["B0009", "T1082"]
 
     filter_apinames = [
         "GetComputerNameA",

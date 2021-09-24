@@ -12,6 +12,7 @@ class NetworkDynDNS(Signature):
     categories = ["dyndns"]
     authors = ["RedSocks"]
     minimum = "2.0"
+    ttp = ["C0011.003"]
 
     domains_re = [
         ".*\\.no-ip\\.",

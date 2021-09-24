@@ -13,6 +13,7 @@ class ExecWaitFor(Signature):
     categories = ["script", "bypass"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["B0003.003"]
 
     def on_complete(self):
         lower = "".join(self.get_command_lines()).lower()

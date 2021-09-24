@@ -12,7 +12,7 @@ class CreatesHiddenFile(Signature):
     severity = 2
     categories = ["stealth"]
     minimum = "2.0"
-    ttp = ["T1158"]
+    ttp = ["T1564.001"]
     filter_apinames = "NtCreateFile", "SetFileAttributesW"
 
     def __init__(self, *args, **kwargs):

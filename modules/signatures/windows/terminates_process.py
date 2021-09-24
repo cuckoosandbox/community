@@ -23,6 +23,7 @@ class TerminatesRemoteProcess(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
     evented = True
+    ttp = ["C0018"]
 
     filter_apinames = "NtTerminateProcess",
 

@@ -12,6 +12,7 @@ class Smtp_Mail_Ru(Signature):
     categories = ["smtp"]
     authors = ["RedSocks"]
     minimum = "2.0"
+    ttp = ["C0012.001"]
 
     ipaddrs = [
         "94.100.180.160",

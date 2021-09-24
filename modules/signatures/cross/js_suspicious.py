@@ -13,6 +13,7 @@ class SuspiciousJavascript(Signature):
     categories = ["unpacking"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["E1059.007"]
 
     filter_apinames = "COleScript_Compile",
 
@@ -40,6 +41,7 @@ class AntiAnalysisJavascript(Signature):
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
     on_call_dispatch = True
+    ttp = ["B0013", "B0009"]
 
     filter_apinames = "ActiveXObjectFncObj_Construct", "CImgElement_put_src"
 

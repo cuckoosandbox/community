@@ -22,6 +22,8 @@ class AntiVMDiskSize(Signature):
     categories = ["anti-vm"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["B0009.015"]
+
     evented = True
 
     filter_apinames = [

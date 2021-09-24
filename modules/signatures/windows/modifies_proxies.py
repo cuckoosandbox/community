@@ -22,7 +22,7 @@ class ModifiesProxyWPAD(Signature):
     categories = ["infostealer"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1040"]
+    ttp = ["T1040", "E1112"]
     evented = True
 
     filter_apinames = [
@@ -47,7 +47,7 @@ class ModifiesProxyOverride(Signature):
     categories = ["infostealer"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1040"]
+    ttp = ["T1040", "E1112"]
     evented = True
 
     filter_apinames = [
@@ -72,7 +72,7 @@ class ModifiesProxyAutoConfig(Signature):
     categories = ["infostealer"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1040"]
+    ttp = ["T1040", "E1112"]
     evented = True
 
     filter_apinames = [
@@ -97,7 +97,7 @@ class DisablesProxy(Signature):
     categories = ["infostealer"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1040"]
+    ttp = ["F0004", "E1112"]
     evented = True
 
     filter_apinames = [

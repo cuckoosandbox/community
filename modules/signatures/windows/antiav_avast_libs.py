@@ -22,7 +22,7 @@ class AvastDetectLibs(Signature):
     categories = ["anti-av"]
     authors = ["Optiv"]
     minimum = "2.0"
-    ttp = ["T1063"]
+    ttp = ["T1518.001"]
 
     filter_apinames = set(["LdrLoadDll", "LdrGetDllHandle"])
 

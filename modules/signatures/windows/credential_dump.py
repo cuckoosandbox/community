@@ -24,6 +24,7 @@ class CredentialDumpingLsass(Signature):
     minimum = "2.0"
     evented = True
     references = ["cyberwardog.blogspot.co.uk/2017/03/chronicles-of-threat-hunter-hunting-for_22.html", "cyberwardog.blogspot.co.uk/2017/04/chronicles-of-threat-hunter-hunting-for.html"]
+    ttp = ["T1003.001"]
 
     lsasspid = []
     lsasshandle = []
@@ -61,6 +62,7 @@ class CredentialDumpingLsassAccess(Signature):
     minimum = "2.0"
     evented = True
     references = ["cyberwardog.blogspot.co.uk/2017/03/chronicles-of-threat-hunter-hunting-for_22.html", "cyberwardog.blogspot.co.uk/2017/04/chronicles-of-threat-hunter-hunting-for.html"]
+    ttp = ["T1003.001"]
 
     lsasspid = []
     creddump = False

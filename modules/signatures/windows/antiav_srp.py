@@ -11,7 +11,7 @@ class AntiAVSRP(Signature):
     categories = ["anti-av"]
     authors = ["Optiv"]
     minimum = "2.0"
-    ttp = ["T1089"]
+    ttp = ["F0004.005", "E1478"]
 
     regkeys_re = [
         ".*\\\\Policies\\\\Microsoft\\\\Windows\\\\Safer\\\\\CodeIdentifiers\\\\0\\\\Paths\\\\.*",

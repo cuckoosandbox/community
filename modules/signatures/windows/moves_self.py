@@ -11,6 +11,7 @@ class MovesSelf(Signature):
     severity = 2
     categories = ["stealth"]
     minimum = "2.0"
+    ttp = ["E1564.001"]
 
     filter_apinames = (
         "MoveFileWithProgressW", "MoveFileWithProgressTransactedW",

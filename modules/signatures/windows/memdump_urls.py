@@ -31,6 +31,7 @@ class ProcMemDumpTorURLs(Signature):
     categories = ["unpacking", "ransomware", "c2"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["T1090.003"]
 
     def on_complete(self):
         # List based on https://github.com/cuckoosandbox/community/blob/master/modules/signatures/network/network_torgateway.py
@@ -76,6 +77,7 @@ class ProcMemDumpIPURLs(Signature):
     categories = ["unpacking", "c2"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["B0030"]
 
     def on_complete(self):
         ip = re.compile("^(http|https)\:\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}")

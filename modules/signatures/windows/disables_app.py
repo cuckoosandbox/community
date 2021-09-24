@@ -11,7 +11,7 @@ class DisablesAppLaunch(Signature):
     categories = ["stealth"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1112"]
+    ttp = ["E1478", "E1112"]
 
     regkeys_re = [
         ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\DisallowRun$",

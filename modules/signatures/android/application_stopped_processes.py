@@ -11,6 +11,7 @@ class AndroidStopProcess(Signature):
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
     minimum = "2.0"
+    ttp = ["T1489"]
 
     def on_complete(self):
         if "killed_process" in self.get_droidmon():

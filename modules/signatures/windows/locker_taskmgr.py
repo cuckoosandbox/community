@@ -22,7 +22,7 @@ class DisableTaskMgr(Signature):
     categories = ["locker"]
     authors = ["Thomas Birn", "nex"]
     minimum = "2.0"
-    ttp = ["T1112"]
+    ttp = ["T1499", "E1112"]
 
     indicator = ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion" \
         "\\\\Policies\\\\System\\\\DisableTaskMgr$"

@@ -11,7 +11,7 @@ class AntiAVDetectReg(Signature):
     categories = ["anti-av"]
     authors = ["Optiv"]
     minimum = "2.0"
-    ttp = ["T1063", "T1012"]
+    ttp = ["T1518.001", "T1012"]
 
     reg_indicators = [
         ".*\\\\Software\\\\(Wow6432Node\\\\)?Avg",

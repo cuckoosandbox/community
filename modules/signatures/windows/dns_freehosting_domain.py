@@ -12,6 +12,7 @@ class Dns_Freehosting_Domain(Signature):
     categories = ["freehosting"]
     authors = ["RedSocks"]
     minimum = "2.0"
+    ttp = ["C0011.005"]
 
     domains_re = [
         ".*\.yzi\.me",

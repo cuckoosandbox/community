@@ -22,6 +22,8 @@ class VBoxDetectProvname(Signature):
     categories = ["anti-vm"]
     authors = ["Optiv"]
     minimum = "2.0"
+    ttp = ["B0009.001"]
+
     evented = True
 
     filter_apinames = "WNetGetProviderNameW",

@@ -13,6 +13,7 @@ class MircFile(Signature):
     families = ["mirc"]
     authors = ["RedSocks"]
     minimum = "2.0"
+    ttp = ["T1418"]
 
     files_re = [
         "C:\\mIRC\\mirc.ini",

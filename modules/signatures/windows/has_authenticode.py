@@ -8,6 +8,7 @@ class HasAuthenticode(Signature):
     name = "has_authenticode"
     description = "This executable is signed"
     severity = 1
+    ttp = ["T1553.002"]
 
     def on_complete(self):
         if self.get_results("static", {}).get("signature"):

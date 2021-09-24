@@ -12,6 +12,7 @@ class Smtp_Yahoo(Signature):
     categories = ["smtp"]
     authors = ["RedSocks"]
     minimum = "2.0"
+    ttp = ["C0012.001"]
 
     domains = [
         "smtp.mail.yahoo.com",

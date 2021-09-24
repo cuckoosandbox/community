@@ -11,6 +11,7 @@ class ClickfraudCookies(Signature):
     categories = ["clickfraud"]
     authors = ["Optiv"]
     minimum = "2.0"
+    ttp = ["E1472", "E1478"]
 
     filter_apinames = "InternetSetOptionA"
 

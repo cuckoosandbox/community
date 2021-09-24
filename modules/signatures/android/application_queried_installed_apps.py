@@ -11,6 +11,7 @@ class AndroidAppInfo(Signature):
     categories = ["android"]
     authors = ["Check Point Software Technologies LTD"]
     minimum = "2.0"
+    ttp = ["T1518"]
 
     def on_complete(self):
         if "getInstalledPackages" in self.get_droidmon("data_leak"):

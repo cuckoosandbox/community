@@ -22,6 +22,7 @@ class AntiSandboxSleep(Signature):
     categories = ["anti-sandbox"]
     authors = ["KillerInstinct"]
     minimum = "2.0"
+    ttp = ["B0003.003"]
 
     filter_apinames = "NtDelayExecution",
 

@@ -17,6 +17,7 @@ class HtmlFlash(Signature):
     categories = ["exploit"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["E1203"]
 
     filter_apinames = "CElement_put_innerHTML",
 

@@ -12,7 +12,7 @@ class ReadsUserAgent(Signature):
     severity = 2
     categories = ["stealth"]
     minimum = "2.0"
-    ttp = ["T1071"]
+    ttp = ["T1518", "T1082"]
 
     filter_apinames = "ObtainUserAgentString", "InternetOpenA", "InternetOpenW"
 

@@ -11,7 +11,7 @@ class ModifySecurityCenterWarnings(Signature):
     categories = ["stealth"]
     authors = ["Kevin Ross", "Optiv"]
     minimum = "2.0"
-    ttp = ["T1031", "T1089"]
+    ttp = ["F0004", "E1112"]
 
     regkeys_re = [
         ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Security\\ Center\\\\.*",

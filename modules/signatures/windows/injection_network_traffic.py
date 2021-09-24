@@ -21,7 +21,7 @@ class InjectionNetworkTraffic(Signature):
     categories = ["injection", "cnc", "stealth"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1071"]
+    ttp = ["E1055"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)

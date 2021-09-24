@@ -22,7 +22,7 @@ class SunbeltDetectFiles(Signature):
     categories = ["anti-sandbox"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1083", "T1057"]
+    ttp = ["B0007.002"]
 
     file_indicators = [
         ".*\\\\SandboxStarter\\.exe$",

@@ -22,7 +22,7 @@ class MemoryAvailable(Signature):
     categories = ["anti-vm"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1082"]
+    ttp = ["B0009.014"]
 
     filter_apinames = [
         "GlobalMemoryStatusEx", "GetPhysicallyInstalledSystemMemory",

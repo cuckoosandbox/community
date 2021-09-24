@@ -11,6 +11,7 @@ class VMFirmware(Signature):
     categories = ["anti-vm"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["B0009.023"]
 
     filter_apinames = "NtQuerySystemInformation",
 

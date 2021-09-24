@@ -12,6 +12,7 @@ class Suspicious_TLD(Signature):
     categories = ["tldwatch", "network"]
     authors = ["RedSocks", "Kevin Ross"]
     minimum = "2.0"
+    ttp = ["C0011.004"]
 
     domains_re = [
         (".*\\.by$", "Belarus domain TLD"),

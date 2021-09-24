@@ -13,6 +13,7 @@ class SuspiciousPowershell(Signature):
     categories = ["script", "dropper", "downloader", "packer"]
     authors = ["Kevin Ross", "Cuckoo Technologies", "FDD"]
     minimum = "2.0"
+    ttp = ["E1059.001"]
 
     def on_complete(self):
         for cmdline in self.get_command_lines():
@@ -63,7 +64,7 @@ class AmsiBypass(Signature):
     categories = ["script", "malware", "powershell", "amsi"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
-    ttp = ["T1086", "T1089"]
+    ttp = ["F0004.004", "E1059.001"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "PowershellAMSI":
@@ -81,7 +82,7 @@ class PowershellBitsTransfer(Signature):
     categories = ["script", "dropper", "downloader", "malware", "powershell"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
-    ttp = ["T1197"]
+    ttp = ["E1059.001", "T1197"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "PowershellBitsTransfer":
@@ -100,7 +101,7 @@ class PowershellDdiRc4(Signature):
     categories = ["script", "dropper", "downloader", "malware", "powershell"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
-    ttp = ["T1112", "T1086"]
+    ttp = ["E1105", "E1059.001"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "PowershellDdiRc4":
@@ -129,7 +130,7 @@ class PowershellDFSP(Signature):
     categories = ["script", "dropper", "downloader", "malware"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
-    ttp = ["T1112", "T1086"]
+    ttp = ["E1105", "E1059.001"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "PowershellDFSP":
@@ -148,7 +149,7 @@ class PowershellDI(Signature):
     categories = ["script", "dropper", "downloader", "malware", "powershell"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
-    ttp = ["T1086"]
+    ttp = ["E1059.001", "E1105"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "PowershellDI":
@@ -180,7 +181,7 @@ class PowershellDownload(Signature):
     categories = ["downloader"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1112", "T1086"]
+    ttp = ["E1059.001", "E1105"]
 
     filter_apinames = [
         "recv",
@@ -203,7 +204,7 @@ class PowershellEmpire(Signature):
     categories = ["script", "dropper", "downloader", "malware"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
-    ttp = ["T1086"]
+    ttp = ["E1059.001"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "PowershellEmpire":
@@ -221,7 +222,7 @@ class PowershellMeterpreter(Signature):
     categories = ["script", "meterpreter", "powershell", "malware"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
-    ttp = ["T1086"]
+    ttp = ["E1059.001"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "PowershellMeterpreter":
@@ -245,7 +246,7 @@ class PowershellRequest(Signature):
     categories = ["downloader"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1086", "T1071"]
+    ttp = ["E1059.001"]
 
     filter_apinames = [
         "send",
@@ -265,7 +266,7 @@ class PowershellCcDns(Signature):
     categories = ["script", "bot", "dns", "malware"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
-    ttp = ["T1086", "T1071"]
+    ttp = ["E1059.001", "T1071.004"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "PowershellCcDns":
@@ -285,7 +286,7 @@ class PowershellUnicorn(Signature):
     categories = ["script", "dropper", "downloader", "malware"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
-    ttp = ["T1086"]
+    ttp = ["E1059.001", "E1055"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "UnicornGen":

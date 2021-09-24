@@ -12,6 +12,7 @@ class RapidShare(Signature):
     categories = ["recon"]
     authors = ["RedSocks"]
     minimum = "2.0"
+    ttp = ["T1135", "T1102"]
 
     domains = [
         "rapidshare.com",

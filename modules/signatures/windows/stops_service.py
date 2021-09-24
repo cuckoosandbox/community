@@ -13,7 +13,7 @@ class StopsService(Signature):
     categories = ["anti-av"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1031", "T1089"]
+    ttp = ["T1489", "E1112"]
 
     indicator = (
         "HKEY_LOCAL_MACHINE\\\\SYSTEM\\\\ControlSet001\\\\services\\\\(.*)\\\\Start"

@@ -12,6 +12,7 @@ class cloud_wetransfer(Signature):
     categories = ["cloud"]
     authors = ["RedSocks"]
     minimum = "2.0"
+    ttp = ["T1102"]
 
     ipaddrs = [
         "176.34.228.190",

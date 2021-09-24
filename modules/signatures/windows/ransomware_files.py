@@ -23,6 +23,7 @@ class RansomwareFiles(Signature):
     categories = ["ransomware"]
     authors = ["KillerInstinct", "Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["E1486", "C0016.002"]
 
     indicators = [
         (".*\\\\help_decrypt\.html$", ["CryptoWall"]),

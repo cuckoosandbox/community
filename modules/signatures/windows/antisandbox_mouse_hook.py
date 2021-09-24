@@ -22,6 +22,7 @@ class HookMouse(Signature):
     categories = ["hooking", "anti-sandbox"]
     authors = ["nex"]
     minimum = "2.0"
+    ttp = ["B0007.003", "F0003.003"]
 
     filter_apinames = "SetWindowsHookExA", "SetWindowsHookExW"
 

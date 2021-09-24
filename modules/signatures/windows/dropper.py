@@ -22,7 +22,7 @@ class Dropper(Signature):
     categories = ["dropper"]
     authors = ["Optiv"]
     minimum = "2.0"
-    ttp = ["T1129"]
+    ttp = ["B0023"]
 
     def __init__(self, *args, **kwargs):
         Signature.__init__(self, *args, **kwargs)
@@ -59,7 +59,7 @@ class ExeAppData(Signature):
     categories = ["dropper", "persistence"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1129"]
+    ttp = ["B0023"]
 
     def on_complete(self):
         for dropped in self.get_results("dropped", []):

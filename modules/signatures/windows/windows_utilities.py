@@ -150,7 +150,7 @@ class UsesWindowsUtilities(Signature):
     categories = ["commands", "lateral"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1053"]
+    ttp = ["E1203.m06"]
     references = ["http://blog.jpcert.or.jp/2016/01/windows-commands-abused-by-attackers.html"]
 
     def on_complete(self):
@@ -168,6 +168,7 @@ class SuspiciousCommandTools(Signature):
     categories = ["commands", "lateral"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
+    ttp = ["E1203.m06"]
 
     def on_complete(self):
         for cmdline in self.get_command_lines():
@@ -185,6 +186,7 @@ class SysInternalsToolsUsage(Signature):
     authors = ["Kevin Ross"]
     minimum = "2.0"
     references = ["docs.microsoft.com/en-us/sysinternals/downloads/"]
+    ttp = ["E1203.m05"]
 
     def on_complete(self):
         for cmdline in self.get_command_lines():

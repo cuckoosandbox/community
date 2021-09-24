@@ -10,6 +10,7 @@ class LocatesBrowser(Signature):
     severity = 1
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["T1518"]
 
     files_re = [
         "C:\\\\Program\\ Files(\\ \\(x86\\))?\\\\Google\\\\Chrome\\\\Application",

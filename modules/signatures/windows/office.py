@@ -58,6 +58,7 @@ class OfficeCheckProjectName(Signature):
     categories = ["vba"]
     authors = ["FDD", "Cuckoo Sandbox"]
     minimum = "2.0"
+    ttp = ["B0038", "B0007.007"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -75,7 +76,7 @@ class OfficeCountDirectories(Signature):
     categories = ["vba"]
     authors = ["FDD @ Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1203"]
+    ttp = ["B0007.003", "T1083"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -93,6 +94,7 @@ class OfficeCheckVersion(Signature):
     categories = ["vba"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["B0009.007", "T1518"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -116,6 +118,7 @@ class OfficeCheckWindow(Signature):
     categories = ["vba"]
     authors = ["FDD @ Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["B0009.020", "T1010"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -139,7 +142,7 @@ class OfficeHttpRequest(Signature):
     categories = ["vba"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1203", "T1071"]
+    ttp = ["C0002.003"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -165,6 +168,7 @@ class OfficeRecentFiles(Signature):
     categories = ["vba"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["B0007.003", "T1083"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -193,7 +197,7 @@ class OfficeIndirectCall(Signature):
     categories = ["office"]
     authors = ["FDD @ Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1203"]
+    ttp = ["E1059"]
 
     patterns = [
         "CallByName[^\r\n;']*",
@@ -217,6 +221,7 @@ class OfficeCheckName(Signature):
     categories = ["office"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["B0038", "B0007.007", "E1059"]
 
     patterns = [
         "[^\n\r;']*Me.Name[^\n\r;']*",
@@ -240,6 +245,7 @@ class OfficePlatformDetect(Signature):
     categories = ["office"]
     authors = ["FDD @ Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["T1082", "E1059"]
 
     patterns = [
         "#If\s+(?:Not\s+)?Win32",
@@ -264,7 +270,7 @@ class DocumentClose(Signature):
     categories = ["office"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1179"]
+    ttp = ["E1059"]
 
     def on_complete(self):
         office = self.get_results("static", {}).get("office", {})
@@ -280,7 +286,7 @@ class DocumentOpen(Signature):
     categories = ["office"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1179"]
+    ttp = ["E1059"]
 
     def on_complete(self):
         office = self.get_results("static", {}).get("office", {})
@@ -296,6 +302,7 @@ class OfficeEpsStrings(Signature):
     categories = ["office"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["E1203"]
 
     keywords = [
         "longjmp", "NtCreateEvent", "NtProtectVirtualMemory",
@@ -316,7 +323,7 @@ class OfficeVulnerableGuid(Signature):
     categories = ["office"]
     authors = ["Niels Warnars @ Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1203"]
+    ttp = ["E1203"]
 
     bad_guids = {
         "BDD1F04B-858B-11D1-B16A-00C0F0283628": "CVE-2012-0158",
@@ -350,7 +357,7 @@ class OfficeVulnModules(Signature):
     categories = ["office"]
     authors = ["Niels Warnars @ Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1203"]
+    ttp = ["E1203"]
 
     bad_modules = {
         "ogl.dll": "CVE-2013-3906",

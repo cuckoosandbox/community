@@ -11,6 +11,7 @@ class EvalJS(Signature):
     categories = ["unpacking"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["T1059.007"]
 
     filter_apinames = "COleScript_Compile",
 

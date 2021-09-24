@@ -10,6 +10,7 @@ class LocatesSniffer(Signature):
     severity = 2
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    ttp = ["B0013"]
 
     regkeys_re = [
         ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\App\\ Paths\\\\Wireshark.exe",

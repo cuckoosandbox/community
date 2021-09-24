@@ -22,6 +22,7 @@ class DriverLoad(Signature):
     categories = ["stealth"]
     authors = ["Optiv"]
     minimum = "2.0"
+    ttp = ["C0023"]
 
     filter_apinames = set(["NtLoadDriver"])
 

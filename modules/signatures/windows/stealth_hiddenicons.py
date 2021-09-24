@@ -22,7 +22,7 @@ class StealthHiddenIcons(Signature):
     categories = ["stealth"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1158", "T1054"]
+    ttp = ["E1112", "E1478"]
 
     regkeys_re = [
         ".*\\\\Software\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Advanced\\\\HideIcons$",
