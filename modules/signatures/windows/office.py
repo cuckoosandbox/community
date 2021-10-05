@@ -367,3 +367,30 @@ class OfficeVulnModules(Signature):
             if module.lower() in self.bad_modules:
                 self.mark_ioc("cve", self.bad_modules[module.lower()])
         return self.has_marks()
+
+
+class OfficeUsesWMI(Signature):
+    name = "office_uses_wmi"
+    description = "Office uses WMI"
+    severity = 5
+    categories = ["wmi", "office"]
+    minimum = "2.0"
+    ttp = ["T1047"]
+    office_file_keywords = ["word", "excel", "powerpoint", "office"]
+    ignore = False
+
+    def init(self):
+        if self.get_results("target", {}).get("category") == "file":
+            f = self.get_results("target", {}).get("file", {})
+            if not any(file_type.lower() in f.get("type", "").lower() for file_type in self.office_file_keywords):
+                self.ignore = True
+
+    def on_complete(self):
+        if self.ignore:
+            return
+        for query in self.get_wmi_queries():
+            self.mark_ioc("wmi", query)
+        matches = self.check_command_line("\s*wmi(c)?(\.exe)?\s*", regex=True, all=True)
+        for match in matches:
+            self.mark_ioc("command", match)
+        return self.has_marks()
