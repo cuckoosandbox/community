@@ -17,7 +17,7 @@ from lib.cuckoo.common.abstracts import Signature
 
 class InjectionModifiesMemory(Signature):
     name = "injection_modifies_memory"
-    description = "Manipulates memory of a non-child process indicative of process injection"
+    description = "Manipulates memory of a remote process indicative of process injection"
     severity = 3
     categories = ["injection"]
     authors = ["Kevin Ross"]
@@ -39,7 +39,7 @@ class InjectionModifiesMemory(Signature):
             if not call_process or call_process["ppid"] != process["pid"]:
                 self.mark_ioc(
                     "Process injection",
-                    "Process %s manipulating memory of non-child process %s" % (process["pid"],
+                    "Process %s manipulating memory of remote process %s" % (process["pid"],
                                                                injected_pid)
                 )
                 self.mark_call()
