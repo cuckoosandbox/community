@@ -11,7 +11,7 @@ class DisablesSecurity(Signature):
     categories = ["anti-av"]
     authors = ["Cuckoo Technologies", "Brad Spengler"]
     minimum = "2.0"
-    ttp = ["T1089", "T1112"]
+    ttp = ["T1562_001", "T1112"]
 
     regkeys_re = [
         ("HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\EnableLUA", "attempts to disable user access control"),

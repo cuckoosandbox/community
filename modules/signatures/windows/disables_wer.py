@@ -11,7 +11,7 @@ class DisablesWER(Signature):
     categories = ["stealth"]
     authors = ["Kevin Ross"]
     minimum = "2.0"
-    ttp = ["T1054", "T1112"]
+    ttp = ["T1562_006", "T1112"]
 
     regkeys_re = [
         ".*\\\\SOFTWARE\\\\(Wow6432Node\\\\)?Microsoft\\\\Windows\\\\Windows\\ Error\\ Reporting\\\\Disabled$",

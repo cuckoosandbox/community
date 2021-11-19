@@ -11,7 +11,7 @@ class RemovesZoneIdADS(Signature):
     categories = ["generic"]
     authors = ["Optiv"]
     minimum = "2.0"
-    ttp = ["T1070", "T1096"]
+    ttp = ["T1070", "T1564_004"]
 
     def on_complete(self):
         for deletedfile in self.get_files(actions=["file_deleted"]):

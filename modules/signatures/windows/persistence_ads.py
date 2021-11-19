@@ -27,7 +27,7 @@ class ADS(Signature):
     categories = ["persistence", "ads"]
     authors = ["nex", "Optiv"]
     minimum = "2.0"
-    ttp = ["T1096"]
+    ttp = ["T1564_004"]
 
     def on_complete(self):
         for filepath in self.get_files():
