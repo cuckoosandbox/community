@@ -139,7 +139,7 @@ class OfficeHttpRequest(Signature):
     categories = ["vba"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1203", "T1071"]
+    ttp = ["T1203", "T1071_001"]
 
     filter_apinames = "vbe6_Invoke",
 
@@ -264,7 +264,7 @@ class DocumentClose(Signature):
     categories = ["office"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1179"]
+    ttp = ["T1056_004"]
 
     def on_complete(self):
         office = self.get_results("static", {}).get("office", {})
@@ -280,7 +280,7 @@ class DocumentOpen(Signature):
     categories = ["office"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1179"]
+    ttp = ["T1056_004"]
 
     def on_complete(self):
         office = self.get_results("static", {}).get("office", {})
