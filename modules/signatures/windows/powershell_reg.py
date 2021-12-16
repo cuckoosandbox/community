@@ -14,7 +14,7 @@ class PowershellRegAdd(Signature):
     categories = ["script", "powershell"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
-    ttp = ["T1086"]
+    ttp = ["T1059_001"]
 
     def on_complete(self):
         lower = "".join(self.get_command_lines()).lower()

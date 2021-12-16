@@ -11,7 +11,7 @@ class AntiAnalysisDetectFile(Signature):
     categories = ["anti-analysis"]
     authors = ["KillerInstinct"]
     minimum = "2.0"
-    ttp = ["T1063"]
+    ttp = ["T1518_001"]
 
     file_indicators = [
         "[A-Za-z]:\\\\analysis",

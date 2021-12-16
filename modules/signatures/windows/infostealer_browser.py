@@ -22,7 +22,7 @@ class BrowserStealer(Signature):
     categories = ["infostealer"]
     authors = ["nex", "Cuckoo Technologies"]
     minimum = "2.0"
-    ttp = ["T1081", "T1003", "T1005"]
+    ttp = ["T1552_001", "T1003", "T1005"]
 
     files_re = [
         ".*\\\\Mozilla\\\\Firefox\\\\Profiles\\\\.*\\\\.default\\\\signons\\.sqlite$",

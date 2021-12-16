@@ -22,7 +22,7 @@ class UPXCompressed(Signature):
     categories = ["packer"]
     authors = ["Michael Boman", "nex"]
     minimum = "2.0"
-    ttp = ["T1045"]
+    ttp = ["T1027_002"]
 
     def on_complete(self):
         for section in self.get_results("static", {}).get("pe_sections", []):

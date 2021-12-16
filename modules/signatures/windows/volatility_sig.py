@@ -89,7 +89,7 @@ class VolSvcscan1(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "2.0"
-    ttp = ["T1031"]
+    ttp = ["T1543_003"]
 
     def on_complete(self):
         for row in self.get_volatility("svcscan").get("data", []):
@@ -107,7 +107,7 @@ class VolSvcscan2(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "2.0"
-    ttp = ["T1031", "T1089"]
+    ttp = ["T1543_003", "T1562_001"]
 
     def on_complete(self):
         for row in self.get_volatility("svcscan").get("data", []):
@@ -125,7 +125,7 @@ class VolSvcscan3(Signature):
     authors = ["Thorsten Sick"]
     families = ["Zero access"]
     minimum = "2.0"
-    ttp = ["T1031"]
+    ttp = ["T1543_003"]
 
     def on_complete(self):
         for row in self.get_volatility("svcscan").get("data", []):
