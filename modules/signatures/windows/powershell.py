@@ -82,6 +82,7 @@ class PowershellBitsTransfer(Signature):
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
     ttp = ["T1197"]
+    families = ["Powershell BITS Transfer Dropper"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "PowershellBitsTransfer":
@@ -101,6 +102,7 @@ class PowershellDdiRc4(Signature):
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
     ttp = ["T1112", "T1086"]
+    families = ["Powershell DDI RC4 (downloader)"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "PowershellDdiRc4":
@@ -130,6 +132,7 @@ class PowershellDFSP(Signature):
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
     ttp = ["T1112", "T1086"]
+    families = ["Powershell Downloader DFSP"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "PowershellDFSP":
@@ -149,6 +152,7 @@ class PowershellDI(Signature):
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
     ttp = ["T1086"]
+    families = ["Powershell Download & Invoke"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "PowershellDI":
@@ -204,6 +208,7 @@ class PowershellEmpire(Signature):
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
     ttp = ["T1086"]
+    families = ["Powershell Empire"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "PowershellEmpire":
@@ -222,6 +227,7 @@ class PowershellMeterpreter(Signature):
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
     ttp = ["T1086"]
+    families = ["Powershell Meterpreter"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "PowershellMeterpreter":
@@ -266,6 +272,7 @@ class PowershellCcDns(Signature):
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
     ttp = ["T1086", "T1071"]
+    families = ["Powershell DNS TXT Dropper"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "PowershellCcDns":
@@ -286,6 +293,7 @@ class PowershellUnicorn(Signature):
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
     ttp = ["T1086"]
+    families = ["Unicorn by trustedsec.com"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "UnicornGen":

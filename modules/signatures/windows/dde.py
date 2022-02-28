@@ -10,6 +10,7 @@ class OfficeDDE(Signature):
     severity = 3
     categories = ["dropper"]
     minimum = "2.0.5"
+    families = ["Office DDE"]
 
     def on_extract(self, match):
         if match.category != "office":

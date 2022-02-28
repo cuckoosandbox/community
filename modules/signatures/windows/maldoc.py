@@ -11,6 +11,7 @@ class MaliciousDocumentURLs(Signature):
     categories = ["downloader"]
     authors = ["Cuckoo Technologies"]
     minimum = "2.0"
+    families = ["Dropper/wscript.exe"]
 
     filter_apinames = [
         "InternetCrackUrlW",

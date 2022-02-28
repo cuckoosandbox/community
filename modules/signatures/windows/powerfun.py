@@ -12,6 +12,7 @@ class Powerfun(Signature):
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
     ttp = ["T1086"]
+    families = ["Powerfun injector"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "Powerfun":

@@ -14,6 +14,7 @@ class AppLockerBypass(Signature):
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
     ttp = ["T1086", "T1117"]
+    families = ["Powershell-based AppLocker Bypass"]
 
     def on_yara(self, category, filepath, match):
         if match.name != "ApplockerBypass":

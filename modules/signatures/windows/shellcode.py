@@ -14,6 +14,7 @@ class MetasploitShellcode(Signature):
     categories = ["shellcode"]
     authors = ["FDD", "Cuckoo Technologies"]
     minimum = "2.0.4"
+    families = ["Metasploit Payload"]
 
     def init(self):
         self.family = None
