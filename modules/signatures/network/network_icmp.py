@@ -27,6 +27,7 @@ class NetworkICMP(Signature):
          icmp_traffic = self.get_net_icmp()
          if icmp_traffic:
              src = None
+             network_sink = self.get_net_generic("dns_servers")
              for icmp_call in icmp_traffic:
                  # This will be the IP of the victim VM
                  if not src:
@@ -35,6 +36,6 @@ class NetworkICMP(Signature):
                 # This will be either the IP of the victim VM or the IP of the
                 #  machine it is trying to reach. We are interested in the latter.
                  dst = icmp_call["dst"]
-                 if dst != src:
+                 if dst != src and dst not in network_sink:
                      self.mark_ioc("ip", dst)
          return self.has_marks()
