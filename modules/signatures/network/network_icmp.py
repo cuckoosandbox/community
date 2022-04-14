@@ -24,5 +24,17 @@ class NetworkICMP(Signature):
     minimum = "2.0"
 
     def on_complete(self):
-        if self.get_net_icmp():
-            return True
+         icmp_traffic = self.get_net_icmp()
+         if icmp_traffic:
+             src = None
+             for icmp_call in icmp_traffic:
+                 # This will be the IP of the victim VM
+                 if not src:
+                    src = icmp_call["src"]
+
+                # This will be either the IP of the victim VM or the IP of the
+                #  machine it is trying to reach. We are interested in the latter.
+                 dst = icmp_call["dst"]
+                 if dst != src:
+                     self.mark_ioc("ip", dst)
+         return self.has_marks()
