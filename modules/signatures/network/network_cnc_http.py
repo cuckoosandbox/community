@@ -95,7 +95,10 @@ class NetworkCnCHTTP(Signature):
                 reasons.append("Connection to IP address")
 
             if len(reasons) > 0:
-                request = "%s %s://%s%s" % (http["method"], http["protocol"], http["host"], http["uri"])
+                if http["host"] not in http["uri"]:
+                    request = "%s %s://%s%s" % (http["method"], http["protocol"], http["host"], http["uri"])
+                else:
+                    request = "%s %s://%s" % (http["method"], http["protocol"], http["host"])
                 if request not in suspectrequests:
                     features = ', '.join(reasons)
                     suspectrequests.append(request)
